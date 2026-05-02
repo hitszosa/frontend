@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+@config "@hitszosa/ui/tailwind/preset";
+
+:root {
+  font-smooth: subpixel-antialiased;
+}
+
+.console-easter-egg:hover {
+  cursor: none;
+  animation: hover-jitter 0.24s linear infinite;
+}
