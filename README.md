@@ -1,46 +1,38 @@
-# HITSZ OSA - Landing Page
+# HITSZ OSA 落地页
 
-## Website
+## 网站地址
 
 [osa.moe](https://www.osa.moe)
 
-## Development Guide
+## 开发说明
 
-### Prerequisites
+### 前置要求
 
 - Node.js
-- pnpm
+- bun
 
-### Set up
+### 安装
 
-1. Use command `pnpm install` to install dependencies.
-2. You're up!
+运行 `bun install` 安装依赖。
 
-_Recommended IDE: WebStorm_
+### 本地运行
 
-### Deploy
+- `bun run dev`：启动 Astro 开发服务器
+- `bun run preview`：本地预览生产构建结果
 
-Use `pnpm build` to generate the static site. The built output is in `dist/`.
-Everything in the `main` branch will be built and deployed to production by Netlify, and every PR will trigger a preview deployment.
+### 构建
 
-### Run locally
+运行 `bun run build` 生成静态站点，输出目录为 `dist/`。
 
-- `pnpm dev`: start the Astro development server
-- `pnpm preview`: preview the production build locally
+### Lint 与格式化
 
-### Build
+- `bun run lint`：运行 ESLint
+- `bun run lint:fix`：自动修复 ESLint 问题
+- `bun run format`：使用 Prettier 格式化文件
+- `bun run format:check`：检查格式但不修改文件
 
-Use command `pnpm build` to build. The built product is in directory `dist`.
+### 项目结构
 
-### Lint and format
-
-- `pnpm lint`: run ESLint
-- `pnpm lint:fix`: auto-fix ESLint issues
-- `pnpm format`: format files with Prettier
-- `pnpm format:check`: verify formatting without changing files
-
-### Project structure
-
-- `src/`: Source code for pages, components, layouts, and styles.
-- `public/`: Static files served as-is.
-- `dist/`: Locally built output.
+- `src/`：页面、组件、布局和样式源码
+- `public/`：原样对外提供的静态资源
+- `dist/`：本地构建产物

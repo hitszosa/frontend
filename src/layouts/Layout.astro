@@ -13,7 +13,11 @@ const {
 ---
 
 <!doctype html>
-<html lang="zh">
+<html
+  lang="zh"
+  data-default-theme-mode="system"
+  data-theme-storage-key="theme-preference"
+>
   <head>
     <meta charset="utf-8" />
     <meta
@@ -100,6 +104,9 @@ const {
     <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png" />
     <meta name="theme-color" content="#ffffff" />
     <meta name="description" content={description} />
+    <script>
+      import '@hitszosa/ui/client/theme-init';
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -108,7 +115,7 @@ const {
     />
   </head>
   <body
-    class="bg-white m-0"
+    class="bg-page-bg text-page-fg m-0 transition-colors duration-300 ease-in-out"
     style="font-family: Ubuntu, 'Noto Sans SC', Arial, Helvetica, sans-serif;"
   >
     <main class="max-w-[700px] mx-auto py-12 z-0">

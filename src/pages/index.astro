@@ -1,5 +1,10 @@
 ---
-import { osaLogoAlt, osaLogoPub, osaLogoVtuber } from '@hitszosa/ui';
+import {
+  osaLogoAlt,
+  osaLogoPub,
+  osaLogoVtuber,
+  ThemeToggle,
+} from '@hitszosa/ui';
 import LinkButton from '../components/LinkButton.astro';
 import Logo from '../components/Logo.astro';
 import Layout from '../layouts/Layout.astro';
@@ -48,6 +53,10 @@ const footerLinks = [
 ---
 
 <Layout>
+  <div class="fixed top-4 right-4 z-50 sm:top-6 sm:right-6">
+    <ThemeToggle size="md" />
+  </div>
+
   <Logo
     logos={logos}
     defaultLogo={defaultLogo}
@@ -56,7 +65,7 @@ const footerLinks = [
   />
 
   <h1
-    class="group font-bold will-change-transform transition-all duration-300 ease-in-out mt-[1.2em] mb-[3em] mx-auto text-[1.8em] text-osa-300 drop-shadow-[0px_8px_9px_rgba(0,0,0,0.2)] whitespace-nowrap w-fit text-center hover:text-secondary hover:translate-y-[3px] hover:drop-shadow-[0px_12px_6px_rgba(0,0,0,0.25)]"
+    class="group font-bold will-change-transform transition-all duration-300 ease-in-out mt-[1.2em] mb-[3em] mx-auto text-[1.8em] text-osa-fg drop-shadow-[0px_8px_9px_rgba(0,0,0,0.2)] whitespace-nowrap w-fit text-center hover:text-osa-hover hover:translate-y-[3px] hover:drop-shadow-[0px_12px_6px_rgba(0,0,0,0.25)]"
   >
     HITSZ <ruby
       >开源技术协会<rp> </rp><rt
@@ -69,7 +78,7 @@ const footerLinks = [
   {
     linkSections.map((section, index) => (
       <>
-        <h2 class="mt-[2em] mb-[1.6em] mx-auto text-[1.2em] font-bold text-osa-300 w-fit">
+        <h2 class="mt-[2em] mb-[1.6em] mx-auto text-[1.2em] font-bold text-osa-fg w-fit">
           {section.title}
         </h2>
         <div class="flex flex-wrap justify-center text-base">
@@ -78,20 +87,20 @@ const footerLinks = [
           ))}
         </div>
         {index < linkSections.length - 1 && (
-          <hr class="will-change-transform transition-[border-color] duration-300 border-t-2 border-dotted border-slate-200 mt-[2.8em] mb-[3.8em] hover:border-accent-100" />
+          <hr class="will-change-transform transition-[border-color] duration-300 border-t-2 border-dotted border-surface-border mt-[2.8em] mb-[3.8em] hover:border-accent-100" />
         )}
       </>
     ))
   }
 
-  <footer class="mt-[8em] mb-[2em] text-center text-[0.76em] text-slate-400">
+  <footer class="mt-[8em] mb-[2em] text-center text-[0.76em] text-muted-fg">
     <p class="my-[1em] leading-normal">HITSZ OSA Copyleft 2024</p>
     <p class="my-[1em] leading-normal">
       {
         footerLinks.map(({ name, href }, idx) => (
           <>
             <a
-              class="will-change-transform transition-all duration-300 ease-in-out text-inherit no-underline hover:text-osa-300"
+              class="will-change-transform transition-all duration-300 ease-in-out text-inherit no-underline hover:text-osa-fg"
               href={href}
             >
               {name}

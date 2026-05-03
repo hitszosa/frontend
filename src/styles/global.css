@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 @config "@hitszosa/ui/tailwind/preset";
+@source '../../node_modules/@hitszosa/ui/dist/components';
+@import '@hitszosa/ui/styles/theme.css';
 
 :root {
   font-smooth: subpixel-antialiased;

@@ -21,9 +21,10 @@
     ]
   },
   "dependencies": {
-    "@hitszosa/ui": "github:hitszosa/ui#main",
+    "@hitszosa/ui": "^0.1.0",
     "@tailwindcss/vite": "^4.2.4",
     "astro": "^6.2.1",
+    "iconify-icon": "^3.0.2",
     "tailwindcss": "^4.2.4"
   },
   "repository": {
