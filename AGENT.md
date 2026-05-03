@@ -5,7 +5,7 @@
 - Project: `osa-moe-landing-page`
 - Site: `https://www.osa.moe`
 - Stack: Astro 6, Tailwind CSS v4, pnpm
-- Shared UI package: `@hitszosa/ui` via local file dependency during development
+- Shared UI package: `@hitszosa/ui` via GitHub dependency in `package.json`
 
 ## Commands
 
@@ -29,7 +29,7 @@
 ## Conventions
 
 - Use `pnpm`, not npm or yarn
-- Prefer single quotes and no semicolons
+- Prefer single quotes and semicolons, matching Prettier config
 - Keep data in frontmatter and rendering in the template
 - Prefer consuming shared logo metadata from `@hitszosa/ui`
 - Keep site-specific visuals here; move reusable assets and tokens to `@hitszosa/ui`

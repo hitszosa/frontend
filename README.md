@@ -9,28 +9,38 @@
 ### Prerequisites
 
 - Node.js
-- Yarn Package Manager
+- pnpm
 
 ### Set up
 
-1. Use command `yarn` to install all required Node modules.
+1. Use command `pnpm install` to install dependencies.
 2. You're up!
 
 _Recommended IDE: WebStorm_
 
 ### Deploy
 
-You can either use the already existed `Run Configuration` in WebStorm, or use command `yarn start`.
-Everything in the `main` branch will be built and deployed to production environment by Netlify bot, and every PR will trigger the bot to build a preview website.
+Use `pnpm build` to generate the static site. The built output is in `dist/`.
+Everything in the `main` branch will be built and deployed to production by Netlify, and every PR will trigger a preview deployment.
+
+### Run locally
+
+- `pnpm dev`: start the Astro development server
+- `pnpm preview`: preview the production build locally
 
 ### Build
 
-Use command `yarn build` to build. The built product is in directory `dist`.
+Use command `pnpm build` to build. The built product is in directory `dist`.
+
+### Lint and format
+
+- `pnpm lint`: run ESLint
+- `pnpm lint:fix`: auto-fix ESLint issues
+- `pnpm format`: format files with Prettier
+- `pnpm format:check`: verify formatting without changing files
 
 ### Project structure
 
-- `src/`: Most of the source code.
-- `static/`: Most of the static website files.
-- `dist/`: Locally built product.
-- `.parcel_cache/`: Cache files for Parcel. If something goes wrong, you might need to delete the directory and try again.
-- `.parcelrc`: Parcel configuration file.
+- `src/`: Source code for pages, components, layouts, and styles.
+- `public/`: Static files served as-is.
+- `dist/`: Locally built output.

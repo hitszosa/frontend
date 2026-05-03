@@ -1,14 +1,49 @@
 ---
-interface Props {
-  logos: {
-    src: string;
-    alt: string;
-  }[];
-  defaultLogo?: number;
+interface LogoItem {
+  src: string;
+  alt: string;
 }
 
-const { logos, defaultLogo = 0 } = Astro.props;
+interface Props {
+  logos: LogoItem[];
+  defaultLogo?: number;
+  href: string;
+  ariaLabel: string;
+}
+
+const { logos, defaultLogo = 0, href, ariaLabel } = Astro.props;
 ---
+
+<osa-logo-switcher
+  class="group logo-view flex items-center justify-center gap-[1em]"
+  data-default-logo={defaultLogo}
+>
+  <button
+    class="opacity-0 group-hover:opacity-100 group-hover:cursor-pointer rounded-full w-8 h-8 text-slate-400 bg-transparent border-none transition-all duration-300 ease-in-out"
+  >
+    ⏴
+  </button>
+  <a
+    class="grid grid-cols-[224px] grid-rows-[224px]"
+    href={href}
+    aria-label={ariaLabel}
+  >
+    {
+      logos.map((logo, index) => (
+        <img
+          class:list={['logo', { primary: index === defaultLogo }]}
+          src={logo.src}
+          alt={logo.alt}
+        />
+      ))
+    }
+  </a>
+  <button
+    class="opacity-0 group-hover:opacity-100 group-hover:cursor-pointer rounded-full w-8 h-8 text-slate-400 bg-transparent border-none transition-all duration-300 ease-in-out"
+  >
+    ⏵
+  </button>
+</osa-logo-switcher>
 
 <style>
   img.logo {
@@ -29,35 +64,43 @@ const { logos, defaultLogo = 0 } = Astro.props;
     transform: rotate(8deg);
     filter: drop-shadow(0px 12px 6px rgba(0, 0, 0, 0.07));
   }
-
-  @keyframes hover-jitter {
-    0% {
-      transform: translate(0, 0);
-    }
-    20% {
-      transform: translate(-1px, 1px);
-    }
-    40% {
-      transform: translate(1px, -1px);
-    }
-    60% {
-      transform: translate(-1px, -1px);
-    }
-    80% {
-      transform: translate(1px, 1px);
-    }
-    100% {
-      transform: translate(0, 0);
-    }
-  }
 </style>
 
-{
-  logos.map((logo, index) => (
-    <img
-      class:list={['logo', { primary: index === defaultLogo }]}
-      src={logo.src}
-      alt={logo.alt}
-    />
-  ))
-}
+<script>
+  class OsaLogoSwitcher extends HTMLElement {
+    connectedCallback() {
+      const defaultLogo = Number(this.dataset.defaultLogo ?? '0');
+      let logoIndex = Number.isNaN(defaultLogo) ? 0 : defaultLogo;
+
+      const logos = this.querySelectorAll('img.logo');
+      const buttons = this.querySelectorAll('button');
+      const [prevButton, nextButton] = buttons;
+
+      const updateLogos = () => {
+        logos.forEach((logo, index) => {
+          if (index === logoIndex) {
+            logo.classList.add('primary');
+          } else {
+            logo.classList.remove('primary');
+          }
+        });
+      };
+
+      updateLogos();
+
+      prevButton?.addEventListener('click', () => {
+        logoIndex = (logoIndex - 1 + logos.length) % logos.length;
+        updateLogos();
+      });
+
+      nextButton?.addEventListener('click', () => {
+        logoIndex = (logoIndex + 1) % logos.length;
+        updateLogos();
+      });
+    }
+  }
+
+  if (!customElements.get('osa-logo-switcher')) {
+    customElements.define('osa-logo-switcher', OsaLogoSwitcher);
+  }
+</script>

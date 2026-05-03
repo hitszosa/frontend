@@ -6,7 +6,7 @@ import Layout from '../layouts/Layout.astro';
 
 const logos = [osaLogoPub, osaLogoAlt, osaLogoVtuber];
 const defaultLogo =
-  Math.random() < 0.1 ? Math.floor(Math.random() * (logos.length - 1) + 1) : 0; // 小概率切换到其他logo
+  Math.random() < 0.1 ? Math.floor(Math.random() * (logos.length - 1) + 1) : 0; // 小概率切换到其他 logo
 
 const linkSections = [
   {
@@ -38,7 +38,7 @@ const linkSections = [
 ];
 
 const footerLinks = [
-  { name: 'Github', href: 'https://github.com/hitszosa' },
+  { name: 'GitHub', href: 'https://github.com/hitszosa' },
   {
     name: 'QQ Group',
     href: 'https://qm.qq.com/cgi-bin/qm/qr?k=EmOyWeZrOaOeSoVrVLoozyKYdvjOia_t',
@@ -48,30 +48,19 @@ const footerLinks = [
 ---
 
 <Layout>
-  <div class="group logo-view flex items-center justify-center gap-[1em]">
-    <button
-      class="opacity-0 group-hover:opacity-100 group-hover:cursor-pointer rounded-full w-8 h-8 text-slate-400 bg-transparent border-none transition-all duration-300 ease-in-out"
-      >⏴</button
-    >
-    <a
-      class="grid grid-cols-[224px] grid-rows-[224px]"
-      href="https://www.osa.moe/"
-      aria-label="HITSZ OSA Homepage"
-    >
-      <Logo logos={logos} defaultLogo={defaultLogo} />
-    </a>
-    <button
-      class="opacity-0 group-hover:opacity-100 group-hover:cursor-pointer rounded-full w-8 h-8 text-slate-400 bg-transparent border-none transition-all duration-300 ease-in-out"
-      >⏵</button
-    >
-  </div>
+  <Logo
+    logos={logos}
+    defaultLogo={defaultLogo}
+    href="https://www.osa.moe/"
+    ariaLabel="HITSZ OSA Homepage"
+  />
 
   <h1
     class="group font-bold will-change-transform transition-all duration-300 ease-in-out mt-[1.2em] mb-[3em] mx-auto text-[1.8em] text-osa-300 drop-shadow-[0px_8px_9px_rgba(0,0,0,0.2)] whitespace-nowrap w-fit text-center hover:text-secondary hover:translate-y-[3px] hover:drop-shadow-[0px_12px_6px_rgba(0,0,0,0.25)]"
   >
     HITSZ <ruby
       >开源技术协会<rp> </rp><rt
-        class="opacity-0 group-hover:opacity-100 transition-all duration-600 ease-out"
+        class="opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out"
         >Open Source Association</rt
       ></ruby
     >
@@ -113,37 +102,7 @@ const footerLinks = [
       }
     </p>
     <p class="console-easter-egg my-[1em] leading-normal">
-      More infomation in browser console
+      More information in browser console
     </p>
   </footer>
 </Layout>
-
-<script>
-  console.info('Welcome to the pub!');
-  console.info('Check out TXT record of tg.osa.moe');
-
-  let logoIndex = 0;
-  const $logos = document.querySelectorAll<HTMLImageElement>('img.logo');
-  const [$prevButton, $nextButton] =
-    document.querySelectorAll<HTMLButtonElement>('.logo-view > button');
-
-  const updateLogos = () => {
-    $logos.forEach((logo, index) => {
-      if (index === logoIndex) {
-        logo.classList.add('primary');
-      } else {
-        logo.classList.remove('primary');
-      }
-    });
-  };
-
-  $prevButton.addEventListener('click', () => {
-    logoIndex = (logoIndex - 1 + $logos.length) % $logos.length;
-    updateLogos();
-  });
-
-  $nextButton.addEventListener('click', () => {
-    logoIndex = (logoIndex + 1) % $logos.length;
-    updateLogos();
-  });
-</script>
