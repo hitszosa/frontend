@@ -87,7 +87,7 @@ const footerLinks = [
           ))}
         </div>
         {index < linkSections.length - 1 && (
-          <hr class="will-change-transform transition-[border-color] duration-300 border-t-2 border-dotted border-surface-border mt-[2.8em] mb-[3.8em] hover:border-accent-100" />
+          <hr class="will-change-transform transition-[border-color] duration-300 border-t-2 border-dotted border-surface-border mt-[2.8em] mb-[3.8em] hover:border-primary/40" />
         )}
       </>
     ))
@@ -100,7 +100,7 @@ const footerLinks = [
         footerLinks.map(({ name, href }, idx) => (
           <>
             <a
-              class="will-change-transform transition-all duration-300 ease-in-out text-inherit no-underline hover:text-osa-fg"
+              class="will-change-transform transition-all duration-300 ease-in-out text-inherit no-underline hover:text-primary"
               href={href}
             >
               {name}
