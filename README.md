@@ -6,6 +6,8 @@
 
 ## 开发说明
 
+项目使用 `Astro` + `TailwindCSS` 开发。
+
 ### 前置要求
 
 - Node.js
