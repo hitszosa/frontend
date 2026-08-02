@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HITSZ OSA 深圳城中村灯箱墙：校园开源服务、活动与社区入口。">
+  <title>HITSZ OSA · 城中村灯箱墙</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: dark;
+      --night:#080b19;
+      --night-raised:#101329;
+      --wall:#17182d;
+      --wall-deep:#0d1021;
+      --ink:#f8f0db;
+      --muted:#ada9bb;
+      --osa-500:#576edb;
+      --osa-700:#373da9;
+      --accent-500:#8762d3;
+      --red:#ff4057;
+      --red-deep:#8d1226;
+      --yellow:#ffd64a;
+      --yellow-deep:#7a5410;
+      --cyan:#55f4ef;
+      --cyan-deep:#086b75;
+      --pink:#ff73c6;
+      --pink-deep:#7d1757;
+      --green:#70efac;
+      --orange:#ff913f;
+      --line:#34364e;
+      --black:#050612;
+      --tube:#fff7dd;
+      --shadow:rgba(0,0,0,.58);
+      --font-sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+      --font-serif:"Noto Serif SC","Songti SC",serif;
+      --font-mono:"JetBrains Mono","Cascadia Code",ui-monospace,monospace;
+      --s1:.25rem;
+      --s2:.5rem;
+      --s3:.75rem;
+      --s4:1rem;
+      --s5:1.5rem;
+      --s6:2rem;
+      --s7:3rem;
+      --s8:4rem;
+      --edge:clamp(1rem,4vw,3.5rem);
+      --content:78rem;
+      --radius-sm:.25rem;
+      --radius-md:.75rem;
+      --ease:cubic-bezier(.16,1,.3,1);
+    }
+
+    *,*::before,*::after { box-sizing:border-box; }
+    html { scroll-behavior:smooth; background:var(--night); }
+    body {
+      min-width:20rem;
+      margin:0;
+      overflow-x:hidden;
+      background:
+        radial-gradient(circle at 78% 8%, rgba(87,110,219,.16), transparent 25rem),
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px),
+        var(--night);
+      background-size:auto,3rem 1.5rem,3rem 1.5rem,auto;
+      color:var(--ink);
+      font-family:var(--font-sans);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+    body::before {
+      position:fixed;
+      z-index:-1;
+      inset:0;
+      background:linear-gradient(112deg,transparent 0 46%,rgba(255,255,255,.025) 46.1% 46.3%,transparent 46.4% 100%);
+      content:"";
+      pointer-events:none;
+    }
+    a { color:inherit; }
+    button,a { -webkit-tap-highlight-color:transparent; }
+    :focus-visible { outline:.1875rem solid var(--yellow); outline-offset:.25rem; }
+    ::selection { background:var(--osa-500); color:var(--ink); }
+    .shell { width:min(calc(100% - 2 * var(--edge)),var(--content)); margin-inline:auto; }
+    .skip-link {
+      position:fixed;
+      z-index:100;
+      top:var(--s2);
+      left:var(--s2);
+      padding:var(--s2) var(--s3);
+      border:.125rem solid var(--yellow);
+      background:var(--black);
+      color:var(--yellow);
+      font:800 .75rem/1 var(--font-mono);
+      text-decoration:none;
+      transform:translateY(-5rem);
+    }
+    .skip-link:focus { transform:translateY(0); }
+
+    .site-header {
+      position:relative;
+      z-index:40;
+      border-bottom:.0625rem solid var(--line);
+      background:rgba(8,11,25,.94);
+    }
+    .nav-wrap {
+      display:flex;
+      min-height:4.5rem;
+      align-items:center;
+      justify-content:space-between;
+      gap:var(--s5);
+      padding-block:var(--s3);
+    }
+    .brand {
+      display:inline-flex;
+      flex:0 0 auto;
+      align-items:center;
+      gap:var(--s3);
+      font:900 .9rem/1 var(--font-mono);
+      letter-spacing:.08em;
+      text-decoration:none;
+    }
+    .brand-mark { width:2.5rem; height:2.5rem; filter:drop-shadow(0 0 .45rem rgba(85,244,239,.42)); }
+    .brand b { color:var(--cyan); text-shadow:0 0 .6rem rgba(85,244,239,.7); }
+    .brand small { display:block; margin-top:var(--s1); color:var(--muted); font-size:.58rem; font-weight:600; letter-spacing:.04em; }
+    .nav-list {
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      gap:var(--s1) var(--s4);
+      margin:0;
+      padding:0;
+      list-style:none;
+    }
+    .nav-list a {
+      position:relative;
+      display:inline-flex;
+      min-height:2.75rem;
+      align-items:center;
+      color:var(--muted);
+      font-size:.78rem;
+      font-weight:700;
+      text-decoration:none;
+      transition:color .18s ease,text-shadow .18s ease;
+    }
+    .nav-list a::after {
+      position:absolute;
+      right:0;
+      bottom:.35rem;
+      left:0;
+      height:.125rem;
+      background:var(--red);
+      box-shadow:0 0 .5rem var(--red);
+      content:"";
+      transform:scaleX(0);
+      transform-origin:left;
+      transition:transform .28s var(--ease);
+    }
+    .nav-list a:hover,.nav-list a[aria-current="page"] { color:var(--ink); text-shadow:0 0 .5rem rgba(255,240,219,.45); }
+    .nav-list a:hover::after,.nav-list a[aria-current="page"]::after { transform:scaleX(1); }
+    .nav-list .external::before { margin-right:.25rem; color:var(--cyan); content:"↗"; font-family:var(--font-mono); }
+
+    .hero { position:relative; padding:clamp(3rem,8vw,7rem) 0 var(--s7); }
+    .hero::before,.hero::after {
+      position:absolute;
+      z-index:-1;
+      height:.25rem;
+      background:var(--black);
+      box-shadow:0 .125rem .25rem var(--shadow);
+      content:"";
+      transform-origin:left;
+    }
+    .hero::before { top:14%; left:-2%; width:43%; transform:rotate(4deg); }
+    .hero::after { top:18%; right:-3%; width:39%; transform:rotate(-5deg); }
+    .hero-grid { display:grid; grid-template-columns:minmax(0,8fr) minmax(15rem,4fr); gap:clamp(2rem,6vw,6rem); align-items:center; }
+    .sign-main {
+      position:relative;
+      isolation:isolate;
+      padding:clamp(1.4rem,4vw,3.25rem);
+      border:.5rem solid var(--red-deep);
+      border-radius:var(--radius-md);
+      background:
+        linear-gradient(135deg,rgba(255,255,255,.07),transparent 32%),
+        repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 .0625rem,transparent .0625rem .25rem),
+        var(--wall-deep);
+      box-shadow:
+        0 0 0 .1875rem var(--black),
+        0 0 0 .3125rem var(--red),
+        0 0 1.25rem rgba(255,64,87,.55),
+        0 2rem 4rem var(--shadow);
+      transform:rotate(-.65deg);
+    }
+    .sign-main::before {
+      position:absolute;
+      z-index:-1;
+      inset:-.75rem;
+      border:.0625rem dashed rgba(255,214,74,.35);
+      border-radius:1rem;
+      content:"";
+    }
+    .sign-kicker { margin:0 0 var(--s3); color:var(--yellow); font:800 clamp(.72rem,1.4vw,.9rem)/1.3 var(--font-mono); letter-spacing:.22em; text-transform:uppercase; }
+    .sign-main h1 {
+      margin:0;
+      color:var(--tube);
+      font-size:clamp(2.7rem,7vw,6.6rem);
+      font-weight:900;
+      line-height:1.02;
+      letter-spacing:-.065em;
+      text-wrap:balance;
+      text-shadow:
+        0 0 .0625rem var(--tube),
+        0 0 .25rem var(--tube),
+        0 0 .65rem var(--red),
+        0 0 1.4rem var(--red),
+        0 0 2.6rem var(--red-deep);
+    }
+    .sign-main h1 .cool {
+      color:var(--tube);
+      text-shadow:0 0 .0625rem var(--tube),0 0 .25rem var(--tube),0 0 .65rem var(--cyan),0 0 1.4rem var(--cyan),0 0 2.6rem var(--cyan-deep);
+    }
+    .sign-main h1 .faint { animation:soft-flicker 9s steps(1,end) infinite; }
+    .sign-subline { display:flex; flex-wrap:wrap; gap:var(--s2) var(--s4); margin:var(--s5) 0 0; color:var(--muted); font:700 .68rem/1.5 var(--font-mono); letter-spacing:.08em; }
+    .sign-subline span::before { margin-right:var(--s2); color:var(--green); content:"●"; text-shadow:0 0 .5rem var(--green); }
+
+    .penguin-box {
+      position:relative;
+      display:grid;
+      min-height:23rem;
+      place-items:center;
+      padding:var(--s5);
+      border:.375rem double var(--yellow);
+      background:
+        radial-gradient(circle at 50% 48%,rgba(255,214,74,.17),transparent 45%),
+        var(--wall-deep);
+      box-shadow:0 0 1rem rgba(255,214,74,.45),inset 0 0 1.5rem rgba(255,214,74,.1),0 1.5rem 3rem var(--shadow);
+      transform:rotate(1.3deg);
+    }
+    .penguin-box::before {
+      position:absolute;
+      top:-1.65rem;
+      right:12%;
+      padding:.35rem .7rem;
+      border:.125rem solid var(--pink);
+      background:var(--pink-deep);
+      color:var(--tube);
+      box-shadow:0 0 .7rem rgba(255,115,198,.75);
+      content:"欢迎光临";
+      font:900 .72rem/1 var(--font-sans);
+      letter-spacing:.2em;
+      transform:rotate(-4deg);
+    }
+    .penguin-art { width:min(100%,15rem); height:auto; overflow:visible; filter:drop-shadow(0 0 .7rem rgba(135,98,211,.55)); }
+    .penguin-copy { margin-top:var(--s2); color:var(--cyan); font:800 .72rem/1.4 var(--font-mono); letter-spacing:.14em; text-align:center; text-shadow:0 0 .5rem var(--cyan); }
+
+    .intro {
+      display:grid;
+      grid-template-columns:minmax(0,8fr) minmax(16rem,4fr);
+      gap:var(--s6);
+      align-items:start;
+      margin-top:var(--s7);
+      padding:var(--s5) var(--s6);
+      border-left:.25rem solid var(--osa-500);
+      background:linear-gradient(90deg,rgba(87,110,219,.15),transparent);
+    }
+    .intro p { margin:0; max-width:56rem; color:#d8d4df; font-size:clamp(.95rem,1.25vw,1.08rem); line-height:1.95; }
+    .actions { display:grid; grid-template-columns:1fr; gap:var(--s2); }
+    .button {
+      display:flex;
+      min-height:3rem;
+      align-items:center;
+      justify-content:space-between;
+      gap:var(--s3);
+      padding:var(--s3) var(--s4);
+      border:.125rem solid var(--line);
+      background:var(--wall-deep);
+      color:var(--ink);
+      font-size:.8rem;
+      font-weight:800;
+      text-decoration:none;
+      transition:transform .22s var(--ease),border-color .18s ease,box-shadow .18s ease,color .18s ease;
+    }
+    .button::after { content:"→"; font-family:var(--font-mono); }
+    .button:hover { transform:translateX(.25rem); border-color:var(--cyan); color:var(--cyan); box-shadow:0 0 .65rem rgba(85,244,239,.3); }
+    .button.primary { border-color:var(--red); background:var(--red-deep); box-shadow:0 0 .65rem rgba(255,64,87,.4); }
+    .button.primary:hover { border-color:var(--yellow); color:var(--yellow); box-shadow:0 0 .8rem rgba(255,214,74,.45); }
+
+    .section { padding-block:var(--s8); }
+    .section-head { display:flex; align-items:end; justify-content:space-between; gap:var(--s4); margin-bottom:var(--s6); }
+    .section-title { margin:0; font-size:clamp(1.5rem,3vw,2.6rem); font-weight:900; line-height:1; letter-spacing:-.04em; }
+    .section-title span { display:block; margin-bottom:var(--s2); color:var(--muted); font:700 .65rem/1 var(--font-mono); letter-spacing:.18em; text-transform:uppercase; }
+    .section-note { margin:0; color:var(--muted); font:600 .68rem/1.4 var(--font-mono); text-align:right; }
+
+    .led-frame {
+      overflow:hidden;
+      padding:.65rem 0;
+      border:.3rem solid var(--black);
+      outline:.125rem solid var(--red-deep);
+      background:
+        radial-gradient(circle,var(--red) 0 .08rem,transparent .1rem) 0 0/.38rem .38rem,
+        var(--black);
+      box-shadow:0 0 .9rem rgba(255,64,87,.35),inset 0 0 1rem var(--black);
+    }
+    .led-track {
+      display:flex;
+      width:max-content;
+      align-items:center;
+      gap:3rem;
+      padding-left:100%;
+      color:var(--red);
+      font:800 clamp(.82rem,1.4vw,1.02rem)/1.4 var(--font-mono);
+      letter-spacing:.04em;
+      text-shadow:0 0 .25rem var(--red),0 0 .7rem var(--red-deep);
+      animation:marquee 42s linear infinite;
+      will-change:transform;
+    }
+    .led-frame:hover .led-track,.led-frame:focus-within .led-track { animation-play-state:paused; }
+    .news-item { display:inline-flex; flex:0 0 auto; align-items:center; gap:var(--s3); white-space:nowrap; }
+    .news-item time { color:var(--yellow); }
+    .news-item b { padding:.12rem .4rem; border:.0625rem solid currentColor; color:var(--cyan); font-size:.68rem; }
+    .news-item .pin { color:var(--yellow); }
+    .news-item .warn { color:var(--orange); }
+    .news-item .soon { color:var(--pink); }
+    .news-help { margin:var(--s3) 0 0; color:var(--muted); font:.65rem/1.5 var(--font-mono); }
+
+    .services-wall {
+      position:relative;
+      display:grid;
+      grid-template-columns:repeat(12,minmax(0,1fr));
+      gap:var(--s5);
+      padding:var(--s6);
+      border:.0625rem solid var(--line);
+      background:
+        linear-gradient(90deg,transparent 49.8%,rgba(255,255,255,.025) 50%,transparent 50.2%),
+        linear-gradient(var(--wall),var(--wall-deep));
+      box-shadow:inset 0 0 3rem var(--shadow);
+    }
+    .services-wall::before {
+      position:absolute;
+      top:-1rem;
+      left:5%;
+      width:88%;
+      height:.18rem;
+      background:var(--black);
+      box-shadow:0 .125rem .25rem var(--shadow);
+      content:"";
+      transform:rotate(-1deg);
+    }
+    .lightbox {
+      position:relative;
+      min-height:13rem;
+      padding:var(--s5);
+      color:var(--ink);
+      text-decoration:none;
+      transition:transform .26s var(--ease),filter .2s ease;
+    }
+    .lightbox::after {
+      position:absolute;
+      top:-1.35rem;
+      left:50%;
+      width:.125rem;
+      height:1.35rem;
+      background:var(--black);
+      box-shadow:4rem 0 0 var(--black),-4rem 0 0 var(--black);
+      content:"";
+    }
+    .lightbox:hover { z-index:2; transform:translateY(-.35rem) rotate(0); filter:brightness(1.12); }
+    .lightbox h3 { margin:0 0 var(--s3); font-weight:900; line-height:1.15; }
+    .lightbox p { margin:0; font-size:.78rem; line-height:1.65; opacity:.86; }
+    .lightbox .status { display:inline-flex; align-items:center; gap:var(--s2); margin-top:var(--s4); font:800 .6rem/1 var(--font-mono); letter-spacing:.1em; text-transform:uppercase; }
+    .lightbox .status::before { width:.45rem; height:.45rem; border-radius:50%; background:currentColor; box-shadow:0 0 .5rem currentColor; content:""; }
+
+    .mirror { grid-column:span 7; border:.35rem solid var(--red); background:var(--red-deep); box-shadow:0 0 1.1rem rgba(255,64,87,.55),inset 0 0 1rem rgba(255,64,87,.18); transform:rotate(-.7deg); }
+    .mirror h3 { color:var(--tube); font-size:clamp(1.7rem,4vw,3.2rem); letter-spacing:-.06em; text-shadow:0 0 .2rem var(--tube),0 0 .8rem var(--red); }
+    .mirror .status { color:var(--yellow); }
+    .help { grid-column:span 5; border:.4rem double var(--yellow); background:var(--yellow-deep); box-shadow:0 0 1rem rgba(255,214,74,.55),inset 0 0 1rem rgba(255,214,74,.12); transform:rotate(.8deg); }
+    .help h3 { color:var(--yellow); font:900 clamp(1.35rem,3vw,2.35rem)/1 var(--font-serif); letter-spacing:.08em; text-shadow:0 0 .65rem rgba(255,214,74,.8); }
+    .help .status { color:var(--green); }
+    .wiki { grid-column:span 4; border:.3rem solid var(--cyan); background:var(--cyan-deep); box-shadow:0 0 1rem rgba(85,244,239,.5); transform:rotate(.5deg); }
+    .wiki h3 { color:var(--cyan); font:900 clamp(1.5rem,3vw,2.4rem)/1 var(--font-mono); text-shadow:0 0 .65rem var(--cyan); }
+    .wiki .status { color:var(--green); }
+    .weekly { grid-column:span 4; border:.25rem solid var(--pink); background:var(--pink-deep); box-shadow:0 0 1rem rgba(255,115,198,.5); transform:rotate(-.8deg); }
+    .weekly h3 { color:var(--tube); font:900 clamp(1.4rem,3vw,2.2rem)/1.1 var(--font-serif); text-shadow:0 0 .65rem var(--pink); }
+    .weekly .status { color:var(--yellow); }
+    .gitea { grid-column:span 4; border:.45rem ridge var(--orange); background:#5d2816; box-shadow:0 0 .9rem rgba(255,145,63,.45); transform:rotate(.65deg); }
+    .gitea h3 { color:var(--orange); font:900 clamp(1.4rem,3vw,2.2rem)/1 var(--font-mono); text-shadow:0 0 .6rem var(--orange); }
+    .gitea .status { color:var(--green); }
+    .gateway { grid-column:span 12; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:var(--s5); align-items:center; min-height:9rem; border:.3rem solid var(--osa-500); background:var(--osa-700); box-shadow:0 0 1rem rgba(87,110,219,.6); transform:rotate(-.2deg); }
+    .gateway h3 { color:var(--tube); font:900 clamp(1.6rem,4vw,3rem)/1 var(--font-mono); letter-spacing:.04em; text-shadow:0 0 .7rem var(--accent-500); }
+    .gateway .status { color:var(--yellow); }
+    .gateway .seal { padding:var(--s3); border:.125rem dashed var(--yellow); color:var(--yellow); font:900 .72rem/1.2 var(--font-mono); letter-spacing:.12em; text-align:center; transform:rotate(3deg); }
+
+    .friends-section { border-top:.0625rem solid var(--line); }
+    .sticker-wall {
+      display:grid;
+      grid-template-columns:repeat(12,minmax(0,1fr));
+      gap:var(--s5);
+      align-items:start;
+      padding:clamp(1.5rem,5vw,4rem);
+      border:.7rem solid #33271f;
+      background:
+        radial-gradient(circle at 20% 30%,rgba(255,255,255,.05),transparent 18rem),
+        repeating-linear-gradient(92deg,transparent 0 2.7rem,rgba(0,0,0,.06) 2.75rem 2.82rem),
+        #594334;
+      box-shadow:inset 0 0 3rem var(--shadow),0 1.5rem 3rem var(--shadow);
+    }
+    .sticker {
+      position:relative;
+      display:grid;
+      min-height:7.5rem;
+      place-items:center;
+      padding:var(--s4);
+      color:var(--black);
+      font-size:clamp(.82rem,1.35vw,1rem);
+      font-weight:900;
+      line-height:1.35;
+      text-align:center;
+      text-decoration:none;
+      transition:transform .24s var(--ease),box-shadow .2s ease;
+    }
+    .sticker::before { position:absolute; top:-.65rem; left:42%; width:3.5rem; height:1.2rem; background:rgba(235,222,185,.62); content:""; transform:rotate(-5deg); }
+    .sticker:hover { z-index:2; transform:rotate(0) translateY(-.35rem) scale(1.025); box-shadow:0 .8rem 1.5rem var(--shadow); }
+    .sticker span { display:block; margin-top:var(--s2); font:700 .57rem/1 var(--font-mono); letter-spacing:.08em; opacity:.68; }
+    .sticker:nth-child(1) { grid-column:span 4; background:#f5e9c7; transform:rotate(-2deg); }
+    .sticker:nth-child(2) { grid-column:span 3; margin-top:var(--s5); border-radius:50%; background:var(--cyan); transform:rotate(3deg); }
+    .sticker:nth-child(3) { grid-column:span 5; border:.2rem solid var(--black); background:var(--yellow); transform:rotate(-1deg); }
+    .sticker:nth-child(4) { grid-column:span 3; border:.2rem dashed var(--tube); background:var(--red); color:var(--tube); transform:rotate(2deg); }
+    .sticker:nth-child(5) { grid-column:span 4; background:var(--pink); transform:rotate(-3deg); }
+    .sticker:nth-child(6) { grid-column:span 5; border-left:.6rem solid var(--osa-700); background:#e7e4ff; color:var(--osa-700); transform:rotate(1.5deg); }
+
+    .site-footer { padding:var(--s7) 0 var(--s6); }
+    .footer-sign {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:var(--s5);
+      align-items:center;
+      padding:var(--s5);
+      border-top:.1875rem solid var(--cyan);
+      border-bottom:.1875rem solid var(--pink);
+      background:var(--wall-deep);
+      box-shadow:0 0 .8rem rgba(85,244,239,.2),0 0 1.2rem rgba(255,115,198,.15);
+    }
+    .footer-sign p { margin:0; color:var(--muted); font-size:.72rem; }
+    .footer-sign strong { display:block; margin-bottom:var(--s2); color:var(--ink); }
+    .footer-links { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:var(--s2) var(--s4); }
+    .footer-links a { color:var(--cyan); font:800 .68rem/1 var(--font-mono); text-decoration:none; }
+    .footer-links a:hover { color:var(--yellow); text-shadow:0 0 .45rem var(--yellow); }
+    .console-note { grid-column:1/-1; padding-top:var(--s3); border-top:.0625rem dashed var(--line); color:var(--muted); font:.62rem/1.4 var(--font-mono); }
+
+    @keyframes soft-flicker {
+      0%,7%,7.8%,8.6%,53%,53.8%,54.4%,100% { opacity:1; }
+      7.4%,8.2%,53.4%,54% { opacity:.58; }
+    }
+    @keyframes marquee { to { transform:translateX(-100%); } }
+
+    @media (max-width:56rem) {
+      .nav-wrap { align-items:flex-start; }
+      .nav-list { gap:0 var(--s3); }
+      .hero-grid,.intro { grid-template-columns:1fr; }
+      .penguin-box { min-height:18rem; }
+      .penguin-art { width:min(70%,13rem); }
+      .services-wall { padding:var(--s5); }
+      .mirror,.help,.wiki,.weekly,.gitea { grid-column:span 6; }
+      .gateway { grid-column:span 12; }
+      .sticker:nth-child(n) { grid-column:span 6; }
+    }
+
+    @media (max-width:40rem) {
+      .nav-wrap { display:block; }
+      .brand { margin-bottom:var(--s2); }
+      .nav-list { justify-content:flex-start; }
+      .nav-list a { min-height:2.25rem; font-size:.7rem; }
+      .hero { padding-top:var(--s7); }
+      .sign-main { border-width:.32rem; }
+      .sign-main h1 { font-size:clamp(2.45rem,14vw,4rem); letter-spacing:-.075em; }
+      .intro { padding:var(--s4); }
+      .section { padding-block:var(--s7); }
+      .section-head { display:block; }
+      .section-note { margin-top:var(--s3); text-align:left; }
+      .services-wall { gap:var(--s4); padding:var(--s4); }
+      .mirror,.help,.wiki,.weekly,.gitea,.gateway { grid-column:1/-1; }
+      .gateway { grid-template-columns:1fr; }
+      .gateway .seal { justify-self:start; }
+      .lightbox { min-height:11rem; }
+      .lightbox::after { display:none; }
+      .sticker-wall { gap:var(--s4); border-width:.4rem; }
+      .sticker:nth-child(n) { grid-column:1/-1; margin-top:0; }
+      .footer-sign { grid-template-columns:1fr; }
+      .footer-links { justify-content:flex-start; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      html { scroll-behavior:auto; }
+      *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+      .led-track { width:auto; flex-wrap:wrap; padding:var(--s3) var(--s4); transform:none; }
+      .news-item { white-space:normal; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header">
+    <div class="nav-wrap shell">
+      <a class="brand" href="#top" aria-label="HITSZ OSA 首页">
+        <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+          <path fill="#f8f0db" d="M31.8 8c-12.4 0-21 10.4-21 25.8 0 6 2.1 11.5 5.7 15.5-3 .7-5.9 2.4-8.5 5.2 7.2 1.9 14 .9 18.5-2.2 1.7.5 3.5.7 5.3.7s3.6-.2 5.3-.7c4.5 3.1 11.3 4.1 18.5 2.2-2.6-2.8-5.5-4.5-8.5-5.2 3.6-4 5.7-9.5 5.7-15.5C52.8 18.4 44.2 8 31.8 8Z"/>
+          <path fill="#080b19" d="M31.8 9.5c-9.2 0-15.3 8.7-15.3 21.7 0 4.8 1.1 8.8 3.2 12.2 2.6 4.1 7 6.4 12.1 6.4s9.5-2.3 12.1-6.4c2.1-3.4 3.2-7.4 3.2-12.2 0-13-6.1-21.7-15.3-21.7Z"/>
+          <ellipse cx="31.8" cy="35.2" rx="11.8" ry="14.8" fill="#f8f0db"/>
+          <circle cx="25.5" cy="25.3" r="2.2" fill="#55f4ef"/><circle cx="38.1" cy="25.3" r="2.2" fill="#55f4ef"/>
+          <path fill="#ffd64a" d="m31.8 27.2-6.1 5.1 6.1 2.7 6.1-2.7-6.1-5.1Z"/>
+          <path fill="#576edb" d="M21.8 44.8c3 3.3 6.2 5 10 5s7-1.7 10-5c-2.3-3.4-5.7-5.1-10-5.1s-7.7 1.7-10 5.1Z"/>
+        </svg>
+        <span><b>HITSZ OSA</b><small>深圳 · 开源街坊</small></span>
+      </a>
+      <nav aria-label="主导航">
+        <ul class="nav-list">
+          <li><a href="#top" aria-current="page">首页</a></li>
+          <li><a href="#news">活动</a></li>
+          <li><a href="#friends">友链</a></li>
+          <li><a href="#about">关于</a></li>
+          <li><a class="external" href="https://mirrors.osa.moe/">镜像站</a></li>
+          <li><a class="external" href="https://wiki.osa.moe/">Wiki</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero shell" id="top" aria-labelledby="hero-title">
+      <div class="hero-grid">
+        <div class="sign-main">
+          <p class="sign-kicker">OPEN SOURCE · SHENZHEN · SINCE 2018</p>
+          <h1 id="hero-title"><span class="cool">HITSZ</span> 开源技术<span class="faint">协</span>会</h1>
+          <p class="sign-subline"><span>Linux 用户</span><span>开源爱好者</span><span>校园基础设施</span></p>
+        </div>
+        <aside class="penguin-box" aria-label="OSA 企鹅欢迎招牌">
+          <div>
+            <svg class="penguin-art" viewBox="0 0 260 280" role="img" aria-label="戴着紫色耳机、举着欢迎牌的企鹅">
+              <path d="M63 223c-24 5-40 17-48 35 29 7 55 2 74-12m108-23c24 5 40 17 48 35-29 7-55 2-74-12" fill="#ffd64a" stroke="#080b19" stroke-width="8" stroke-linejoin="round"/>
+              <ellipse cx="130" cy="139" rx="86" ry="113" fill="#080b19" stroke="#8762d3" stroke-width="8"/>
+              <ellipse cx="130" cy="158" rx="62" ry="82" fill="#f8f0db"/>
+              <path d="M60 71c-14 18-20 39-17 62M200 71c14 18 20 39 17 62" fill="none" stroke="#8762d3" stroke-width="15" stroke-linecap="round"/>
+              <rect x="36" y="105" width="29" height="56" rx="12" fill="#576edb" stroke="#55f4ef" stroke-width="5"/><rect x="195" y="105" width="29" height="56" rx="12" fill="#576edb" stroke="#55f4ef" stroke-width="5"/>
+              <circle cx="99" cy="112" r="8" fill="#55f4ef"/><circle cx="161" cy="112" r="8" fill="#55f4ef"/>
+              <path d="m130 121-26 20 26 13 26-13-26-20Z" fill="#ffd64a" stroke="#080b19" stroke-width="5" stroke-linejoin="round"/>
+              <path d="M66 183c-20 11-32 24-36 40m164-40c20 11 32 24 36 40" fill="none" stroke="#080b19" stroke-width="20" stroke-linecap="round"/>
+              <g transform="rotate(-2 130 210)"><rect x="52" y="179" width="156" height="65" rx="5" fill="#373da9" stroke="#ff73c6" stroke-width="6"/><text x="130" y="207" fill="#f8f0db" font-family="Noto Sans SC, sans-serif" font-size="21" font-weight="900" text-anchor="middle">欢迎来玩</text><text x="130" y="230" fill="#55f4ef" font-family="JetBrains Mono, monospace" font-size="13" font-weight="800" text-anchor="middle">sudo make friends</text></g>
+            </svg>
+            <div class="penguin-copy">24H 开源茶档 · 有空常来</div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="intro" id="about">
+        <p>我们是 HITSZ 开源技术协会（a.k.a. HITSZ OSA），由哈尔滨工业大学（深圳）学生中的 Linux 用户和开源软件爱好者自发组建的学生社团。我们致力于维护学校的开源基础建设，提升学校开源氛围，为开源技术爱好者提供交流平台。</p>
+        <div class="actions" aria-label="快捷入口">
+          <a class="button primary" href="https://mirrors.osa.moe/">访问镜像站</a>
+          <a class="button" href="#news">社团活动</a>
+          <a class="button" href="#about">了解协会</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell" id="news" aria-labelledby="news-title">
+      <div class="section-head">
+        <h2 class="section-title" id="news-title"><span>LED BULLETIN · 今晚播报</span>街坊动态</h2>
+        <p class="section-note">鼠标悬停可暂停 · 共 5 条</p>
+      </div>
+      <div class="led-frame" tabindex="0" aria-label="协会动态滚动公告">
+        <div class="led-track">
+          <span class="news-item"><time datetime="2026-07-20">07/20</time><b class="pin">置顶公告</b><span>协会门户网站改版测试中，欢迎通过 GitHub 反馈建议。</span></span>
+          <span class="news-item"><time datetime="2026-07-15">07/15</time><b class="warn">公告 · warn</b><span>本周镜像站例行维护窗口：周日 02:00–03:00，期间部分同步任务可能延迟。</span></span>
+          <span class="news-item"><time datetime="2026-08-08">08/08</time><b class="soon">沙龙 · 即将举行</b><span>暑期开源分享夜：如何参与上游社区</span></span>
+          <span class="news-item"><time datetime="2026-05-20">05/20</time><b>讲座</b><span>HPC 入门：从登录集群到提交第一个作业</span></span>
+          <span class="news-item"><time datetime="2026-04-12">04/12</time><b>沙龙</b><span>Linux Install Party 2026 春季场</span></span>
+        </div>
+      </div>
+      <p class="news-help">LED DISPLAY / 使用 Tab 聚焦公告也可暂停滚动；系统偏好“减少动态”时自动静止展示。</p>
+    </section>
+
+    <section class="section shell" id="services" aria-labelledby="services-title">
+      <div class="section-head">
+        <h2 class="section-title" id="services-title"><span>SERVICE ALLEY · 营业中</span>开源服务灯箱</h2>
+        <p class="section-note">六间铺面 · 一条开源巷</p>
+      </div>
+      <div class="services-wall">
+        <a class="lightbox mirror" href="https://mirrors.osa.moe/">
+          <h3>开源软件镜像站</h3>
+          <p>主流 Linux 发行版与开源软件镜像，校园网内高速下载。</p>
+          <span class="status">online</span>
+        </a>
+        <a class="lightbox help" href="https://mirrors.osa.moe/help/">
+          <h3>镜像使用帮助</h3>
+          <p>一键换源。</p>
+          <span class="status">online</span>
+        </a>
+        <a class="lightbox wiki" href="https://wiki.osa.moe/">
+          <h3>OSA Wiki</h3>
+          <p>Linux 入门、HPC 文档。</p>
+          <span class="status">online</span>
+        </a>
+        <a class="lightbox weekly" href="#services">
+          <h3>Weekly 周报</h3>
+          <p>技术新闻与群聊精华。</p>
+          <span class="status">online</span>
+        </a>
+        <a class="lightbox gitea" href="#services">
+          <h3>Gitea 代码托管</h3>
+          <p>校内代码协作铺。</p>
+          <span class="status">online · 校内</span>
+        </a>
+        <a class="lightbox gateway" href="#services">
+          <div><h3>AI Gateway</h3><p>统一接入主流大模型 API。</p><span class="status">beta · 校内</span></div>
+          <span class="seal">OSA<br>INDIGO</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section friends-section" id="friends" aria-labelledby="friends-title">
+      <div class="shell">
+        <div class="section-head">
+          <h2 class="section-title" id="friends-title"><span>NEIGHBOUR CARDS · 隔壁街坊</span>友链贴纸墙</h2>
+          <p class="section-note">见字如面 · 欢迎串门</p>
+        </div>
+        <div class="sticker-wall">
+          <a class="sticker" href="https://tuna.moe/">清华大学 TUNA 协会<span>BEIJING / GNU &amp; LINUX</span></a>
+          <a class="sticker" href="https://mirrorz.org/">MirrorZ<span>MIRRORS AROUND YOU</span></a>
+          <a class="sticker" href="https://lug.ustc.edu.cn/">中科大 LUG<span>USTC LINUX USER GROUP</span></a>
+          <a class="sticker" href="https://sjtug.org/">上交大 SJTUG<span>SHANGHAI</span></a>
+          <a class="sticker" href="https://awesome-hitsz.github.io/">Awesome HITSZ<span>MADE IN UNIVERSITY TOWN</span></a>
+          <a class="sticker" href="https://www.hitsz.edu.cn/">哈尔滨工业大学（深圳）<span>HARBIN INSTITUTE OF TECHNOLOGY, SHENZHEN</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-sign shell">
+      <p><strong>HITSZ OSA · 哈尔滨工业大学（深圳）开源技术协会 · Copyleft 2026</strong>开源巷口，灯亮着就有人在。</p>
+      <nav class="footer-links" aria-label="社交媒体">
+        <a href="https://github.com/hitsz-osa">GitHub</a>
+        <a href="#top">QQ 群</a>
+        <a href="https://space.bilibili.com/">Bilibili</a>
+      </nav>
+      <div class="console-note">More information in browser console</div>
+    </div>
+  </footer>
+
+  <script>
+    console.log('%c HITSZ OSA %c 城中村灯箱通电中 ', 'background:#373da9;color:#f8f0db;padding:6px;font-weight:bold', 'background:#080b19;color:#55f4ef;padding:6px');
+    console.log('More information in browser console — https://github.com/hitsz-osa');
+  </script>
+</body>
+</html>

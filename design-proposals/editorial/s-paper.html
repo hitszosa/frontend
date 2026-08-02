@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="HITSZ 开源技术协会——由 Linux 用户和开源软件爱好者组成的学生社团。">
+  <title>HITSZ OSA — 学术论文页</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root{
+      color-scheme:light;
+      --desk:#d8d7d1;
+      --paper:#fbfaf5;
+      --ink:#181817;
+      --muted:#605f5a;
+      --hair:#aaa79d;
+      --rule:#292927;
+      --indigo:#373da9;
+      --indigo-bright:#576edb;
+      --accent:#8762d3;
+      --warn:#9a3d28;
+      --online:#23653c;
+      --serif:"Noto Serif SC","Songti SC",STSong,Georgia,"Times New Roman",serif;
+      --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+      --mono:"JetBrains Mono","Cascadia Code",ui-monospace,SFMono-Regular,Consolas,monospace;
+      --s1:.25rem;
+      --s2:.5rem;
+      --s3:.75rem;
+      --s4:1rem;
+      --s5:1.5rem;
+      --s6:2rem;
+      --s7:3rem;
+      --paper-shadow:0 1px 2px rgb(0 0 0 / .12),0 18px 48px rgb(31 30 26 / .18);
+      --focus:0 0 0 3px rgb(87 110 219 / .26);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--desk);color:var(--ink);font-family:var(--serif);font-size:15px;line-height:1.66;text-rendering:optimizeLegibility}
+    a{color:inherit;text-decoration:none}
+    a:focus-visible,button:focus-visible{outline:2px solid var(--indigo-bright);outline-offset:3px;box-shadow:var(--focus)}
+    .skip{position:fixed;z-index:20;left:var(--s4);top:var(--s4);padding:var(--s2) var(--s4);background:var(--ink);color:var(--paper);font-family:var(--sans);font-size:.8rem;transform:translateY(-180%);transition:transform .18s ease-out}
+    .skip:focus{transform:none}
+    .sheet{width:min(1120px,calc(100% - 48px));margin:32px auto;background:var(--paper);box-shadow:var(--paper-shadow);position:relative;overflow:hidden}
+    .sheet::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.16;background-image:repeating-linear-gradient(0deg,transparent 0,transparent 5px,rgb(40 39 34 / .045) 6px)}
+    .paper{position:relative;padding:34px clamp(40px,6vw,82px) 44px}
+    .journal-bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:var(--s4);padding-bottom:var(--s2);border-bottom:1.5px solid var(--rule);font:600 .68rem/1.3 var(--sans);letter-spacing:.08em;text-transform:uppercase}
+    .journal-bar span:nth-child(2){font-family:var(--mono);font-weight:500;letter-spacing:.03em}
+    .journal-bar span:last-child{text-align:right}
+    .nav{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0;margin:var(--s3) 0 var(--s6);font:500 .7rem/1 var(--sans);letter-spacing:.025em}
+    .nav a{padding:.45rem .7rem;border-right:1px solid var(--hair);transition:color .16s ease-out,background .16s ease-out}
+    .nav a:last-child{border-right:0}
+    .nav a:hover{color:var(--indigo);background:rgb(55 61 169 / .065)}
+    .nav .external::after{content:" ↗";font-family:var(--mono);color:var(--indigo)}
+    .paper-header{text-align:center;margin:0 auto var(--s6);max-width:860px}
+    .preprint{margin:0 0 var(--s2);color:var(--indigo);font:600 .67rem/1.4 var(--mono);letter-spacing:.13em;text-transform:uppercase}
+    h1{margin:0;font-size:clamp(2rem,4vw,3.35rem);font-weight:700;line-height:1.13;letter-spacing:.035em}
+    .subtitle{margin:var(--s2) 0 var(--s4);font-size:1rem;font-style:italic;letter-spacing:.02em}
+    .authors{display:flex;justify-content:center;flex-wrap:wrap;gap:var(--s3) var(--s6);margin:0;font-size:.83rem}
+    .author-name{font-variant:small-caps;letter-spacing:.06em}
+    .affiliation{display:block;color:var(--muted);font-size:.72rem}
+    .submitted{margin:var(--s3) 0 0;color:var(--muted);font-size:.72rem}
+    .abstract{max-width:870px;margin:0 auto var(--s7);padding:var(--s4) clamp(18px,3vw,38px);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);text-align:justify;font-size:.85rem;line-height:1.7}
+    .abstract h2{display:inline;margin:0 .45rem 0 0;font-size:.86rem;font-weight:700}
+    .abstract p{display:inline;margin:0}
+    .keywords{display:block;margin-top:var(--s2);font-size:.75rem;color:var(--muted)}
+    .keywords b{color:var(--ink)}
+    .paper-columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 clamp(36px,5vw,64px);position:relative}
+    .paper-columns::after{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:linear-gradient(transparent,var(--hair) 8%,var(--hair) 92%,transparent);opacity:.54}
+    .column{min-width:0}
+    .section{margin:0 0 var(--s6);scroll-margin-top:var(--s5)}
+    .section h2{margin:0 0 var(--s2);font-size:1.1rem;line-height:1.35;font-weight:700;letter-spacing:.02em}
+    .section h2 .number{font-variant-numeric:tabular-nums}
+    .section h3{margin:var(--s4) 0 var(--s1);font-size:.9rem;line-height:1.4}
+    .section p{margin:0 0 var(--s3);text-align:justify;hyphens:auto}
+    .lead::first-letter{float:left;margin:.08rem .24rem 0 0;color:var(--indigo);font-size:2.9rem;line-height:.75;font-weight:700}
+    .cite{color:var(--indigo);font-size:.75em;vertical-align:super}
+    .actions{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2);margin:var(--s4) 0 var(--s2);font-family:var(--sans);font-size:.72rem}
+    .action{border:1px solid var(--rule);padding:.48rem .68rem;transition:background .16s ease-out,color .16s ease-out,border-color .16s ease-out,transform .16s ease-out}
+    .action.primary{background:var(--indigo);border-color:var(--indigo);color:var(--paper)}
+    .action:hover{transform:translateY(-1px);background:var(--ink);border-color:var(--ink);color:var(--paper)}
+    .action.primary:hover{background:var(--indigo-bright);border-color:var(--indigo-bright)}
+    .figure{margin:var(--s5) 0 var(--s6);break-inside:avoid}
+    .figure-frame{border:1px solid var(--hair);padding:var(--s3);background:rgb(255 255 255 / .28)}
+    .figure svg{display:block;width:100%;height:auto;max-height:270px}
+    .figure figcaption,.table-wrap figcaption{margin-top:var(--s2);font-size:.74rem;line-height:1.5;text-align:justify}
+    .caption-label{font-weight:700}
+    .tikz-note{margin-top:var(--s1);color:var(--muted);font:500 .6rem/1.4 var(--mono);text-align:center}
+    .events{margin:var(--s3) 0 0;padding:0;list-style:none;border-top:1.5px solid var(--rule);border-bottom:1.5px solid var(--rule)}
+    .event{display:grid;grid-template-columns:3.4rem 1fr;gap:var(--s3);padding:.68rem 0;border-bottom:1px solid var(--hair);transition:padding-left .16s ease-out,background .16s ease-out}
+    .event:last-child{border-bottom:0}
+    .event:hover{padding-left:var(--s2);background:rgb(55 61 169 / .045)}
+    .date{font:600 .67rem/1.4 var(--mono);font-variant-numeric:tabular-nums;color:var(--muted)}
+    .event-title{font-size:.78rem;line-height:1.55}
+    .tag{display:inline-block;margin-right:.3rem;color:var(--indigo);font:700 .62rem/1.4 var(--sans)}
+    .tag.pinned::before{content:"◆ ";font-size:.55em}
+    .tag.warn{color:var(--warn)}
+    .tag.soon{padding:0 .28rem;background:var(--indigo);color:var(--paper)}
+    .table-wrap{margin:var(--s3) 0 var(--s6);break-inside:avoid}
+    table{width:100%;border-collapse:collapse;table-layout:fixed;border-top:1.8px solid var(--rule);border-bottom:1.8px solid var(--rule);font-size:.69rem;line-height:1.45}
+    thead{border-bottom:1px solid var(--rule)}
+    th{padding:.46rem .35rem;text-align:left;font-weight:700}
+    td{padding:.52rem .35rem;vertical-align:top;overflow-wrap:anywhere}
+    tbody tr{transition:background .14s ease-out}
+    tbody tr:hover{background:rgb(55 61 169 / .06)}
+    th:first-child,td:first-child{width:28%;padding-left:0}
+    th:nth-child(2),td:nth-child(2){width:52%}
+    th:last-child,td:last-child{width:20%;padding-right:0;text-align:right}
+    .service-name{font-weight:700}
+    .state{font:700 .56rem/1.4 var(--mono);letter-spacing:.02em;text-transform:uppercase;color:var(--online)}
+    .state.beta{color:var(--accent)}
+    .note{margin-top:var(--s3)!important;padding-left:var(--s4);border-left:2px solid var(--indigo);color:var(--muted);font-size:.72rem}
+    .references{margin-top:var(--s5);padding-top:var(--s4);border-top:1.5px solid var(--rule)}
+    .references ol{margin:var(--s2) 0 0;padding:0;list-style:none;counter-reset:ref}
+    .references li{counter-increment:ref;position:relative;margin:0 0 .52rem;padding-left:2.15rem;font-size:.72rem;line-height:1.5}
+    .references li::before{content:"[" counter(ref) "]";position:absolute;left:0;font-family:var(--mono);font-size:.65rem}
+    .references a{text-decoration:underline;text-decoration-thickness:.06em;text-underline-offset:.15em;transition:color .15s ease-out}
+    .references a:hover{color:var(--indigo)}
+    .ack{margin:var(--s6) 0 0;padding:var(--s3) 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);font-size:.7rem;text-align:center;color:var(--muted)}
+    .paper-footer{margin-top:var(--s6);display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:var(--s4);font-family:var(--sans);font-size:.65rem;line-height:1.55}
+    .footer-social{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--s3)}
+    .footer-social a{border-bottom:1px solid var(--hair)}
+    .footer-social a:hover{color:var(--indigo);border-color:var(--indigo)}
+    .console{text-align:right;color:var(--muted);font-family:var(--mono);font-size:.56rem}
+    .arxiv{display:block;margin-top:var(--s1);color:var(--indigo);letter-spacing:.025em}
+    @media (max-width:760px){
+      body{font-size:14px;background:var(--paper)}
+      .sheet{width:100%;margin:0;box-shadow:none}
+      .paper{padding:24px 20px 30px}
+      .journal-bar{grid-template-columns:1fr auto;font-size:.58rem}
+      .journal-bar span:nth-child(2){display:none}
+      .nav{margin-bottom:var(--s5);gap:var(--s1)}
+      .nav a{padding:.42rem .48rem;font-size:.65rem}
+      .paper-header{margin-bottom:var(--s5)}
+      h1{font-size:2.05rem}
+      .authors{gap:var(--s2) var(--s4)}
+      .abstract{margin-bottom:var(--s6);padding:var(--s3) 0}
+      .paper-columns{display:flex;flex-direction:column}
+      .column{display:contents}
+      #introduction{order:1}
+      #services{order:2}
+      .figure{order:3}
+      #events{order:4}
+      #references{order:5}
+      #about{order:6}
+      .paper-columns::after{display:none}
+      .figure-frame{padding:var(--s2)}
+      .event{grid-template-columns:3.15rem 1fr}
+      table{font-size:.63rem}
+      th,td{padding:.46rem .24rem}
+      .paper-footer{grid-template-columns:1fr;text-align:center;justify-items:center}
+      .console{text-align:center}
+    }
+    @media (max-width:390px){
+      .paper{padding-left:16px;padding-right:16px}
+      .nav a{padding-left:.34rem;padding-right:.34rem}
+      h1{font-size:1.83rem}
+      .subtitle{font-size:.86rem}
+      th:first-child,td:first-child{width:29%}
+      th:nth-child(2),td:nth-child(2){width:50%}
+      th:last-child,td:last-child{width:21%}
+    }
+    @media print{
+      body{background:white}
+      .sheet{width:auto;margin:0;box-shadow:none}
+      .paper{padding:0}
+      .nav,.actions{display:none}
+      a{color:inherit}
+    }
+    @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">跳到论文正文</a>
+  <div class="sheet">
+    <div class="paper">
+      <div class="journal-bar" aria-label="期刊信息">
+        <span>OSA Transactions on Open Systems</span>
+        <span>Vol. 1 · No. 0726 · 2026</span>
+        <span>HITSZ OSA</span>
+      </div>
+
+      <nav class="nav" aria-label="主导航">
+        <a href="#top" aria-current="page">首页</a>
+        <a href="#events">活动</a>
+        <a href="#references">友链</a>
+        <a href="#about">关于</a>
+        <a class="external" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer">镜像站</a>
+        <a class="external" href="https://wiki.osa.moe" target="_blank" rel="noreferrer">Wiki</a>
+      </nav>
+
+      <header class="paper-header" id="top">
+        <p class="preprint">Open Infrastructure · Student Community</p>
+        <h1>HITSZ 开源技术协会</h1>
+        <p class="subtitle">开放系统、校园基础设施与学生技术共同体</p>
+        <p class="authors">
+          <span><span class="author-name">HITSZ OSA Collective</span><span class="affiliation">哈尔滨工业大学（深圳）</span></span>
+          <span><span class="author-name">Linux User Group</span><span class="affiliation">Shenzhen, P. R. China</span></span>
+        </p>
+        <p class="submitted">Submitted 26 July 2026 · Revised continuously · Copyleft</p>
+      </header>
+
+      <aside class="abstract" aria-labelledby="abstract-title">
+        <h2 id="abstract-title">Abstract.</h2>
+        <p>我们是 HITSZ 开源技术协会（a.k.a. HITSZ OSA），由哈尔滨工业大学（深圳）学生中的 Linux 用户和开源软件爱好者自发组建的学生社团。我们致力于维护学校的开源基础建设，提升学校开源氛围，为开源技术爱好者提供交流平台。</p>
+        <span class="keywords"><b>Keywords:</b> open source · Linux · mirror infrastructure · student community · HITSZ</span>
+      </aside>
+
+      <main class="paper-columns" id="main">
+        <div class="column">
+          <section class="section" id="introduction" aria-labelledby="intro-title">
+            <h2 id="intro-title"><span class="number">1.</span> Introduction</h2>
+            <p class="lead">开源不只是许可证，而是一种共同维护公共技术空间的方法。HITSZ OSA 从校园里的 Linux 用户出发，把下载、文档、代码与每周的交流整理为可持续运行的开放基础设施。</p>
+            <p>我们的工作同时指向两端：一端是稳定、可复现的系统服务；另一端是愿意提问、分享与贡献的人。镜像站让软件离同学更近，Wiki 让经验不再散失，活动让初次接触开源的人找到同行者。协会也与国内高校开源社群保持联系<span class="cite">[1–4]</span>。</p>
+            <div class="actions" aria-label="主要行动">
+              <a class="action primary" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer">访问镜像站</a>
+              <a class="action" href="#events">社团活动</a>
+              <a class="action" href="#about">了解协会</a>
+            </div>
+          </section>
+
+          <figure class="figure" aria-labelledby="penguin-caption">
+            <div class="figure-frame">
+              <svg viewBox="0 0 430 280" role="img" aria-labelledby="penguin-title penguin-desc">
+                <title id="penguin-title">企鹅线条图</title>
+                <desc id="penguin-desc">以 TikZ 技术制图风格绘制的企鹅，伸出翅膀向访客问好。</desc>
+                <defs>
+                  <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <path d="M20 0H0V20" fill="none" stroke="#aaa79d" stroke-width=".45" opacity=".45"/>
+                  </pattern>
+                  <marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                    <path d="M0 0L7 3.5L0 7Z" fill="#373da9"/>
+                  </marker>
+                </defs>
+                <rect width="430" height="280" fill="url(#grid)"/>
+                <g fill="none" stroke="#181817" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M204 55C166 57 139 97 140 153C141 216 170 246 214 246C260 246 286 214 282 153C278 94 247 52 204 55Z"/>
+                  <path d="M185 59C181 33 194 20 212 31C229 17 243 35 237 60"/>
+                  <path d="M177 126C153 146 158 203 210 228C262 200 268 145 244 124C229 142 194 142 177 126Z"/>
+                  <path d="M143 114C108 124 86 150 73 181C94 181 120 169 142 152"/>
+                  <path d="M281 119C315 110 344 91 363 66C367 91 347 125 287 151"/>
+                  <path d="M193 97Q205 107 217 97L205 118Z" fill="#8762d3" stroke="#8762d3"/>
+                  <circle cx="184" cy="84" r="4" fill="#181817"/>
+                  <circle cx="228" cy="84" r="4" fill="#181817"/>
+                  <path d="M181 243L157 259M194 246L180 263M236 244L255 261M224 246L237 264"/>
+                </g>
+                <g fill="none" stroke="#373da9" stroke-width="1.5" marker-end="url(#arrow)">
+                  <path d="M334 43L281 76"/>
+                  <path d="M83 57L156 93"/>
+                </g>
+                <g fill="#373da9" font-family="ui-monospace,monospace" font-size="11">
+                  <text x="316" y="35">hello, world!</text>
+                  <text x="24" y="51">open source</text>
+                  <text x="301" y="228">\draw[osa-700]</text>
+                  <text x="301" y="244">penguin -- welcome;</text>
+                </g>
+                <g fill="#181817" font-family="Georgia,serif" font-size="10">
+                  <text x="12" y="272">(0,0)</text><text x="390" y="272">x →</text><text x="8" y="14">y ↑</text>
+                </g>
+              </svg>
+              <div class="tikz-note">\begin{tikzpicture}[line cap=round, osa/.style={draw=osa-700}]</div>
+            </div>
+            <figcaption id="penguin-caption"><span class="caption-label">Figure 1:</span> OSA 企鹅的参数化线条模型。右翅保持“welcome”姿态；辅助网格与坐标标注借用 TikZ 技术插图语言。</figcaption>
+          </figure>
+
+          <section class="section" id="events" aria-labelledby="events-title">
+            <h2 id="events-title"><span class="number">3.</span> Events</h2>
+            <p>表列之外，协会以公告、讲座和沙龙记录社区节奏。日期采用 <i>MM/DD</i> 记法，置顶与维护信息优先呈现。</p>
+            <ol class="events" aria-label="协会动态，共 5 条">
+              <li class="event"><time class="date" datetime="2026-07-20">07/20</time><div class="event-title"><span class="tag pinned">置顶公告</span>协会门户网站改版测试中，欢迎通过 GitHub 反馈建议。</div></li>
+              <li class="event"><time class="date" datetime="2026-07-15">07/15</time><div class="event-title"><span class="tag warn">公告 · warn</span>本周镜像站例行维护窗口：周日 02:00–03:00，期间部分同步任务可能延迟。</div></li>
+              <li class="event"><time class="date" datetime="2026-08-08">08/08</time><div class="event-title"><span class="tag soon">沙龙 · 即将举行</span>暑期开源分享夜：如何参与上游社区</div></li>
+              <li class="event"><time class="date" datetime="2026-05-20">05/20</time><div class="event-title"><span class="tag">讲座</span>HPC 入门：从登录集群到提交第一个作业</div></li>
+              <li class="event"><time class="date" datetime="2026-04-12">04/12</time><div class="event-title"><span class="tag">沙龙</span>Linux Install Party 2026 春季场</div></li>
+            </ol>
+          </section>
+        </div>
+
+        <div class="column">
+          <section class="section" id="services" aria-labelledby="services-title">
+            <h2 id="services-title"><span class="number">2.</span> Services</h2>
+            <p>协会维护六项面向校园或公众的服务。表 1 以三线表给出服务对象、简要功能与当前状态；状态为 <i>online</i> 的系统持续提供访问，<i>beta</i> 表示接口仍在演进。</p>
+            <figure class="table-wrap" aria-labelledby="services-caption">
+              <table>
+                <thead>
+                  <tr><th scope="col">服务</th><th scope="col">用途与范围</th><th scope="col">状态</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="service-name">开源软件镜像站</td><td>主流 Linux 发行版与开源软件镜像，校园网内高速下载。</td><td><span class="state">online</span></td></tr>
+                  <tr><td class="service-name">镜像使用帮助</td><td>一键换源。</td><td><span class="state">online</span></td></tr>
+                  <tr><td class="service-name">OSA Wiki</td><td>Linux 入门、HPC 文档。</td><td><span class="state">online</span></td></tr>
+                  <tr><td class="service-name">Weekly 周报</td><td>技术新闻与群聊精华。</td><td><span class="state">online</span></td></tr>
+                  <tr><td class="service-name">Gitea 代码托管</td><td>校内代码协作与版本管理。</td><td><span class="state">online · 校内</span></td></tr>
+                  <tr><td class="service-name">AI Gateway</td><td>统一接入主流大模型 API。</td><td><span class="state beta">beta · 校内</span></td></tr>
+                </tbody>
+              </table>
+              <figcaption id="services-caption"><span class="caption-label">Table 1:</span> HITSZ OSA 维护的开放技术服务。横线分别表示表顶、表头分隔与表底，不使用竖线。</figcaption>
+            </figure>
+            <p class="note"><b>Operational note.</b> 服务由学生志愿者共同维护；维护窗口与同步延迟会在动态中提前公告。使用文档见 OSA Wiki。</p>
+          </section>
+
+          <section class="section references" id="references" aria-labelledby="references-title">
+            <h2 id="references-title">References</h2>
+            <ol aria-label="友链，共 6 项">
+              <li><a href="https://tuna.moe" target="_blank" rel="noreferrer">清华大学 TUNA 协会</a>. 开源软件镜像与校园开源社区.</li>
+              <li><a href="https://mirrorz.org" target="_blank" rel="noreferrer">MirrorZ</a>. 中国大陆开源镜像站索引.</li>
+              <li><a href="https://lug.ustc.edu.cn" target="_blank" rel="noreferrer">中科大 LUG</a>. Linux User Group, USTC.</li>
+              <li><a href="https://sjtug.org" target="_blank" rel="noreferrer">上交大 SJTUG</a>. Shanghai Jiao Tong University Linux User Group.</li>
+              <li><a href="https://awesome-hitsz.github.io" target="_blank" rel="noreferrer">Awesome HITSZ</a>. 哈工深校园资源汇编.</li>
+              <li><a href="https://www.hitsz.edu.cn" target="_blank" rel="noreferrer">哈尔滨工业大学（深圳）</a>. Shenzhen Campus.</li>
+            </ol>
+          </section>
+
+          <section class="section" id="about" aria-labelledby="about-title">
+            <h2 id="about-title">Acknowledgements</h2>
+            <p>感谢每一位维护服务器、修订文档、组织分享与提交 issue 的贡献者。开放基础设施并非静态成果，而是由许多微小、可追溯的协作持续写成。</p>
+          </section>
+        </div>
+      </main>
+
+      <p class="ack">Manuscript source available in the spirit of reproducible research · Typeset for the open web.</p>
+
+      <footer class="paper-footer">
+        <div>HITSZ OSA · 哈尔滨工业大学（深圳）开源技术协会 · Copyleft 2026<span class="arxiv" title="Easter egg">arXiv:2026.0726 [cs.OS]</span></div>
+        <div class="footer-social" aria-label="社交媒体"><a href="https://github.com/hitszosa" target="_blank" rel="noreferrer">GitHub</a><a href="https://qm.qq.com" target="_blank" rel="noreferrer">QQ 群</a><a href="https://space.bilibili.com/1124374292" target="_blank" rel="noreferrer">Bilibili</a></div>
+        <div class="console">More information in browser console</div>
+      </footer>
+    </div>
+  </div>
+  <script>
+    console.info('HITSZ OSA · arXiv:2026.0726 [cs.OS]');
+    console.info('More information in browser console');
+  </script>
+</body>
+</html>

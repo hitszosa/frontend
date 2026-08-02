@@ -1,0 +1,1046 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="HITSZ 开源技术协会：维护校园开源基础设施，分享开放技术，连接开源爱好者。"
+    />
+    <meta name="theme-color" content="#f8fafc" />
+    <title>HITSZ 开源技术协会 · Split Index</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --page-bg: #f8fafc;
+        --page-fg: #1e293b;
+        --muted-fg: #64748b;
+        --primary: #576edb;
+        --secondary: #6f46bf;
+        --osa-fg: #373da9;
+        --surface: #ffffff;
+        --surface-fg: #161a4d;
+        --surface-border: #e2e8f0;
+        --inset: #f1f5f9;
+        --inset-fg: #1e293b;
+        --inset-border: #cbd5e1;
+        --activity: #d97706;
+        --activity-fg: #92400e;
+        --success: #059669;
+        --sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+        --mono: "JetBrains Mono", "Cascadia Code", ui-monospace, monospace;
+        --space-1: 0.25rem;
+        --space-2: 0.5rem;
+        --space-3: 0.75rem;
+        --space-4: 1rem;
+        --space-5: 1.25rem;
+        --space-6: 1.5rem;
+        --space-8: 2rem;
+        --space-10: 2.5rem;
+        --space-12: 3rem;
+        --space-16: 4rem;
+        --space-20: 5rem;
+        --radius-sm: 4px;
+        --radius-md: 8px;
+        --rail-width: 280px;
+        --content-width: 1040px;
+        --control-height: 44px;
+        --divider: 1px solid var(--surface-border);
+      }
+
+      html.dark {
+        color-scheme: dark;
+        --page-bg: #0f172a;
+        --page-fg: #f8fafc;
+        --muted-fg: #94a3b8;
+        --primary: #c2dbf9;
+        --secondary: #dad6f8;
+        --osa-fg: #97b9f0;
+        --surface: #1e293b;
+        --surface-fg: #f6f9fb;
+        --surface-border: #334155;
+        --inset: #020617;
+        --inset-fg: #cbd5e1;
+        --inset-border: #1e293b;
+        --activity: #fbbf24;
+        --activity-fg: #fcd34d;
+        --success: #34d399;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: var(--space-6);
+      }
+
+      body {
+        margin: 0;
+        min-width: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
+        background: var(--page-bg);
+        color: var(--page-fg);
+        font-family: var(--sans);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button,
+      a {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      a:focus-visible,
+      button:focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 3px;
+      }
+
+      .skip-link {
+        position: fixed;
+        z-index: 20;
+        top: var(--space-3);
+        left: var(--space-3);
+        transform: translateY(-160%);
+        border: var(--divider);
+        border-radius: var(--radius-sm);
+        background: var(--surface);
+        color: var(--surface-fg);
+        padding: var(--space-3) var(--space-4);
+      }
+
+      .skip-link:focus {
+        transform: translateY(0);
+      }
+
+      .page-shell {
+        min-height: 100vh;
+      }
+
+      .rail {
+        position: relative;
+        border-bottom: var(--divider);
+        background: var(--surface);
+      }
+
+      .rail-inner {
+        padding: var(--space-5) var(--space-5) var(--space-8);
+      }
+
+      .brand-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-4);
+      }
+
+      .brand {
+        display: inline-flex;
+        min-height: var(--control-height);
+        align-items: center;
+        gap: var(--space-3);
+        color: var(--surface-fg);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .brand-mark {
+        width: 36px;
+        height: 36px;
+        flex: 0 0 auto;
+        color: var(--osa-fg);
+      }
+
+      .brand-wordmark {
+        white-space: nowrap;
+      }
+
+      .brand-wordmark span {
+        color: var(--primary);
+      }
+
+      .theme-toggle {
+        display: inline-flex;
+        min-width: var(--control-height);
+        min-height: var(--control-height);
+        align-items: center;
+        justify-content: center;
+        border: var(--divider);
+        border-radius: var(--radius-sm);
+        background: transparent;
+        color: var(--muted-fg);
+        cursor: pointer;
+        font: 600 0.75rem/1 var(--sans);
+        transition: border-color 160ms ease-out, color 160ms ease-out, background 160ms ease-out;
+      }
+
+      .theme-toggle:hover {
+        border-color: var(--primary);
+        background: var(--inset);
+        color: var(--surface-fg);
+      }
+
+      .theme-toggle .when-dark {
+        display: none;
+      }
+
+      .dark .theme-toggle .when-light {
+        display: none;
+      }
+
+      .dark .theme-toggle .when-dark {
+        display: inline;
+      }
+
+      .intro {
+        padding: var(--space-8) 0 var(--space-6);
+        border-bottom: var(--divider);
+      }
+
+      .eyebrow,
+      .section-index,
+      .meta,
+      time,
+      .service-scope,
+      .service-state,
+      .status-line,
+      .doc-kicker {
+        font-family: var(--mono);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .eyebrow {
+        margin: 0 0 var(--space-3);
+        color: var(--osa-fg);
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 12ch;
+        margin: 0;
+        color: var(--surface-fg);
+        font-size: clamp(1.75rem, 7vw, 2.25rem);
+        line-height: 1.18;
+        letter-spacing: -0.045em;
+      }
+
+      .intro-copy {
+        max-width: 52rem;
+        margin: var(--space-4) 0 0;
+        color: var(--muted-fg);
+        font-size: 0.875rem;
+        line-height: 1.8;
+      }
+
+      .cta-group {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-2);
+        margin-top: var(--space-6);
+      }
+
+      .button {
+        display: inline-flex;
+        min-height: var(--control-height);
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--primary);
+        border-radius: var(--radius-sm);
+        padding: var(--space-2) var(--space-4);
+        font-size: 0.8125rem;
+        font-weight: 650;
+        text-align: center;
+        transition: background 160ms ease-out, color 160ms ease-out;
+      }
+
+      .button-primary {
+        background: var(--primary);
+        color: var(--surface);
+      }
+
+      .dark .button-primary {
+        color: var(--inset);
+      }
+
+      .button-primary:hover {
+        background: var(--osa-fg);
+        border-color: var(--osa-fg);
+      }
+
+      .button-secondary {
+        background: transparent;
+        color: var(--osa-fg);
+      }
+
+      .button-secondary:hover {
+        background: var(--inset);
+      }
+
+      .about-link {
+        display: inline-flex;
+        min-height: var(--control-height);
+        align-items: center;
+        margin-top: var(--space-2);
+        color: var(--osa-fg);
+        font-size: 0.8125rem;
+        font-weight: 650;
+      }
+
+      .about-link:hover {
+        text-decoration: underline;
+        text-underline-offset: var(--space-1);
+      }
+
+      .rail-nav {
+        border-bottom: var(--divider);
+      }
+
+      .rail-nav ul {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .rail-nav li {
+        min-width: 0;
+        border-right: var(--divider);
+        border-bottom: var(--divider);
+      }
+
+      .rail-nav li:nth-child(3n) {
+        border-right: 0;
+      }
+
+      .rail-nav li:nth-last-child(-n + 3) {
+        border-bottom: 0;
+      }
+
+      .rail-nav a {
+        display: flex;
+        min-height: var(--control-height);
+        align-items: center;
+        justify-content: center;
+        color: var(--muted-fg);
+        font-size: 0.8125rem;
+        font-weight: 600;
+        transition: background 160ms ease-out, color 160ms ease-out;
+      }
+
+      .rail-nav a:hover,
+      .rail-nav a[aria-current="page"] {
+        background: var(--inset);
+        color: var(--osa-fg);
+      }
+
+      .external-mark {
+        margin-left: var(--space-1);
+        font-family: var(--mono);
+        font-size: 0.625rem;
+      }
+
+      .rail-meta {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: var(--space-3);
+        padding: var(--space-5) 0;
+        border-bottom: var(--divider);
+      }
+
+      .rail-meta-label {
+        margin: 0 0 var(--space-1);
+        color: var(--muted-fg);
+        font-size: 0.75rem;
+      }
+
+      .status-line {
+        margin: 0;
+        color: var(--surface-fg);
+        font-size: 0.6875rem;
+      }
+
+      .status-figure {
+        display: flex;
+        align-items: baseline;
+        gap: var(--space-2);
+        white-space: nowrap;
+      }
+
+      .status-figure strong {
+        color: var(--success);
+        font-family: var(--mono);
+        font-size: 1.25rem;
+      }
+
+      .status-figure span {
+        color: var(--muted-fg);
+        font-size: 0.6875rem;
+      }
+
+      .social-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2) var(--space-5);
+        padding-top: var(--space-5);
+      }
+
+      .social-links a {
+        display: inline-flex;
+        min-height: var(--control-height);
+        align-items: center;
+        color: var(--muted-fg);
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .social-links a:hover {
+        color: var(--osa-fg);
+        text-decoration: underline;
+        text-underline-offset: var(--space-1);
+      }
+
+      .document {
+        min-width: 0;
+      }
+
+      .document-inner {
+        width: min(100%, var(--content-width));
+        margin: 0 auto;
+        padding: var(--space-10) var(--space-5) var(--space-12);
+      }
+
+      .doc-head {
+        display: grid;
+        gap: var(--space-6);
+        padding-bottom: var(--space-10);
+        border-bottom: var(--divider);
+      }
+
+      .doc-kicker {
+        margin: 0;
+        color: var(--osa-fg);
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+      }
+
+      .doc-title {
+        max-width: 15ch;
+        margin: var(--space-3) 0 0;
+        color: var(--surface-fg);
+        font-size: clamp(1.5rem, 6vw, 2.75rem);
+        line-height: 1.18;
+        letter-spacing: -0.04em;
+      }
+
+      .doc-note {
+        max-width: 34rem;
+        margin: 0;
+        color: var(--muted-fg);
+        font-size: 0.875rem;
+        line-height: 1.75;
+      }
+
+      .section {
+        padding: var(--space-12) 0;
+        border-bottom: var(--divider);
+        scroll-margin-top: var(--space-6);
+      }
+
+      .section-heading {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: baseline;
+        gap: var(--space-4);
+        margin-bottom: var(--space-8);
+      }
+
+      .section-index {
+        color: var(--osa-fg);
+        font-size: 0.6875rem;
+        font-weight: 700;
+      }
+
+      h2 {
+        margin: 0;
+        color: var(--surface-fg);
+        font-size: 1.25rem;
+        letter-spacing: -0.025em;
+      }
+
+      .section-count {
+        color: var(--muted-fg);
+        font-family: var(--mono);
+        font-size: 0.6875rem;
+      }
+
+      .updates,
+      .services,
+      .friends {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border-top: var(--divider);
+      }
+
+      .update-row {
+        display: grid;
+        grid-template-columns: 4.75rem 7rem minmax(0, 1fr);
+        align-items: baseline;
+        gap: var(--space-4);
+        min-height: 60px;
+        padding: var(--space-4) 0;
+        border-bottom: var(--divider);
+      }
+
+      .update-row time {
+        color: var(--muted-fg);
+        font-size: 0.75rem;
+      }
+
+      .category {
+        color: var(--osa-fg);
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+
+      .category.activity {
+        color: var(--activity-fg);
+      }
+
+      .update-title {
+        color: var(--surface-fg);
+        font-size: 0.9375rem;
+        line-height: 1.65;
+      }
+
+      .update-row a:hover {
+        color: var(--osa-fg);
+        text-decoration: underline;
+        text-underline-offset: var(--space-1);
+      }
+
+      .service-row {
+        display: grid;
+        grid-template-columns: 12rem minmax(14rem, 1fr) 5.25rem 4.5rem 1.25rem;
+        align-items: center;
+        gap: var(--space-4);
+        min-height: 84px;
+        border-bottom: var(--divider);
+        transition: background 160ms ease-out;
+      }
+
+      .service-row:hover {
+        background: var(--inset);
+      }
+
+      .service-name {
+        padding-left: var(--space-3);
+        color: var(--surface-fg);
+        font-size: 0.9375rem;
+        font-weight: 700;
+      }
+
+      .service-description {
+        color: var(--muted-fg);
+        font-size: 0.8125rem;
+        line-height: 1.65;
+      }
+
+      .service-scope,
+      .service-state {
+        font-size: 0.6875rem;
+      }
+
+      .service-scope {
+        color: var(--muted-fg);
+      }
+
+      .service-state {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+        color: var(--success);
+        font-weight: 700;
+      }
+
+      .service-state::before {
+        width: 6px;
+        height: 6px;
+        flex: 0 0 auto;
+        border-radius: 50%;
+        background: currentColor;
+        content: "";
+      }
+
+      .service-state.beta {
+        color: var(--activity-fg);
+      }
+
+      .arrow {
+        color: var(--muted-fg);
+        font-family: var(--mono);
+        transition: color 160ms ease-out, transform 160ms ease-out;
+      }
+
+      .service-row:hover .arrow,
+      .friend-link:hover .arrow {
+        color: var(--osa-fg);
+        transform: translateX(var(--space-1));
+      }
+
+      .friends {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        border-left: var(--divider);
+      }
+
+      .friend-link {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: var(--space-4);
+        min-height: 68px;
+        padding: var(--space-3) var(--space-4);
+        border-right: var(--divider);
+        border-bottom: var(--divider);
+        color: var(--surface-fg);
+        font-size: 0.875rem;
+        font-weight: 650;
+        transition: background 160ms ease-out, color 160ms ease-out;
+      }
+
+      .friend-link:hover {
+        background: var(--inset);
+        color: var(--osa-fg);
+      }
+
+      .footer {
+        display: grid;
+        gap: var(--space-3);
+        padding-top: var(--space-8);
+        color: var(--muted-fg);
+        font-size: 0.75rem;
+        line-height: 1.7;
+      }
+
+      .footer p {
+        margin: 0;
+      }
+
+      .console-note {
+        font-family: var(--mono);
+        font-size: 0.6875rem;
+      }
+
+      @media (min-width: 680px) {
+        .rail-inner,
+        .document-inner {
+          padding-left: var(--space-8);
+          padding-right: var(--space-8);
+        }
+
+        .doc-head {
+          grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.8fr);
+          align-items: end;
+        }
+      }
+
+      @media (min-width: 960px) {
+        .page-shell {
+          display: grid;
+          grid-template-columns: var(--rail-width) minmax(0, 1fr);
+        }
+
+        .rail {
+          position: sticky;
+          top: 0;
+          height: 100vh;
+          height: 100svh;
+          overflow-y: auto;
+          border-right: var(--divider);
+          border-bottom: 0;
+        }
+
+        .rail-inner {
+          display: flex;
+          min-height: 100%;
+          flex-direction: column;
+          padding: var(--space-6) var(--space-6) var(--space-5);
+        }
+
+        .theme-toggle {
+          min-width: 52px;
+        }
+
+        .intro {
+          padding: var(--space-8) 0 var(--space-6);
+        }
+
+        h1 {
+          font-size: 1.75rem;
+        }
+
+        .intro-copy {
+          font-size: 0.8125rem;
+          line-height: 1.75;
+        }
+
+        .cta-group {
+          grid-template-columns: 1fr;
+        }
+
+        .rail-nav ul {
+          display: block;
+        }
+
+        .rail-nav li,
+        .rail-nav li:nth-child(3n),
+        .rail-nav li:nth-last-child(-n + 3) {
+          border-right: 0;
+          border-bottom: var(--divider);
+        }
+
+        .rail-nav li:last-child {
+          border-bottom: 0;
+        }
+
+        .rail-nav a {
+          justify-content: space-between;
+          padding: 0 var(--space-2);
+        }
+
+        .rail-meta {
+          margin-top: auto;
+        }
+
+        .social-links {
+          justify-content: space-between;
+          gap: var(--space-2);
+        }
+
+        .document-inner {
+          padding: var(--space-16) clamp(var(--space-8), 6vw, var(--space-20)) var(--space-12);
+        }
+
+        .section {
+          padding: var(--space-16) 0;
+        }
+      }
+
+      @media (max-width: 719px) {
+        .update-row {
+          grid-template-columns: 4.25rem minmax(0, 1fr);
+          gap: var(--space-2) var(--space-3);
+        }
+
+        .update-title {
+          grid-column: 1 / -1;
+        }
+
+        .service-row {
+          grid-template-columns: minmax(0, 1fr) auto;
+          gap: var(--space-2) var(--space-4);
+          min-height: 0;
+          padding: var(--space-5) var(--space-3);
+        }
+
+        .service-name {
+          padding-left: 0;
+        }
+
+        .service-description {
+          grid-column: 1 / -1;
+          grid-row: 2;
+        }
+
+        .service-scope {
+          grid-column: 1;
+          grid-row: 3;
+        }
+
+        .service-state {
+          grid-column: 2;
+          grid-row: 3;
+          justify-self: end;
+        }
+
+        .service-row .arrow {
+          grid-column: 2;
+          grid-row: 1;
+        }
+      }
+
+      @media (max-width: 479px) {
+        .friends {
+          grid-template-columns: 1fr;
+        }
+
+        .section-heading {
+          gap: var(--space-3);
+        }
+
+        .section {
+          padding: var(--space-10) 0;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+    <script>
+      try {
+        if (localStorage.getItem("osa-theme") === "dark") {
+          document.documentElement.classList.add("dark");
+        }
+      } catch (_) {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+
+    <div class="page-shell" id="top">
+      <aside class="rail" aria-label="协会介绍与站点索引">
+        <div class="rail-inner">
+          <div class="brand-row">
+            <a class="brand" href="#top" aria-label="HITSZ OSA 首页">
+              <svg class="brand-mark" viewBox="0 0 40 40" role="img" aria-label="HITSZ OSA 标志占位图">
+                <rect x="1" y="1" width="38" height="38" rx="4" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="M1 14h38M14 1v38" fill="none" stroke="currentColor" stroke-width="1" />
+                <circle cx="27" cy="26" r="6" fill="none" stroke="currentColor" stroke-width="2" />
+              </svg>
+              <span class="brand-wordmark">HITSZ <span>OSA</span></span>
+            </a>
+            <button class="theme-toggle" type="button" aria-label="切换深色模式" aria-pressed="false">
+              <span class="when-light" aria-hidden="true">深色</span>
+              <span class="when-dark" aria-hidden="true">浅色</span>
+            </button>
+          </div>
+
+          <div class="intro" id="about">
+            <p class="eyebrow">Open Source Association</p>
+            <h1>HITSZ 开源技术协会</h1>
+            <p class="intro-copy">
+              我们是 HITSZ 开源技术协会（a.k.a. HITSZ OSA），由哈尔滨工业大学（深圳）学生中的 Linux 用户和开源软件爱好者自发组建的学生社团。我们致力于维护学校的开源基础建设，提升学校开源氛围，为开源技术爱好者提供交流平台。
+            </p>
+            <div class="cta-group" aria-label="常用入口">
+              <a class="button button-primary" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer noopener">访问镜像站</a>
+              <a class="button button-secondary" href="#updates">社团活动</a>
+            </div>
+            <a class="about-link" href="#about">了解协会&nbsp;→</a>
+          </div>
+
+          <nav class="rail-nav" aria-label="主导航">
+            <ul>
+              <li><a href="#top" aria-current="page">首页</a></li>
+              <li><a href="#updates">活动</a></li>
+              <li><a href="#links">友链</a></li>
+              <li><a href="#about">关于</a></li>
+              <li><a href="https://mirrors.osa.moe" target="_blank" rel="noreferrer noopener">镜像站 <span class="external-mark" aria-hidden="true">↗</span></a></li>
+              <li><a href="https://wiki.osa.moe" target="_blank" rel="noreferrer noopener">Wiki <span class="external-mark" aria-hidden="true">↗</span></a></li>
+            </ul>
+          </nav>
+
+          <div class="rail-meta" aria-label="服务状态摘要">
+            <div>
+              <p class="rail-meta-label">服务状态</p>
+              <p class="status-line">5 ONLINE · 1 BETA</p>
+            </div>
+            <div class="status-figure"><strong>5/6</strong><span>运行中</span></div>
+          </div>
+
+          <div class="social-links" aria-label="社交媒体">
+            <a href="https://github.com/hitszosa" target="_blank" rel="noreferrer noopener">GitHub</a>
+            <a href="https://qm.qq.com/cgi-bin/qm/qr?k=EmOyWeZrOaOeSoVrVLoozyKYdvjOia_t" target="_blank" rel="noreferrer noopener">QQ 群</a>
+            <a href="https://space.bilibili.com/1124374292" target="_blank" rel="noreferrer noopener">Bilibili</a>
+          </div>
+        </div>
+      </aside>
+
+      <main class="document" id="main-content">
+        <div class="document-inner">
+          <header class="doc-head">
+            <div>
+              <p class="doc-kicker">ASSOCIATION INDEX / 2026</p>
+              <p class="doc-title">开放技术，从校园基础设施开始。</p>
+            </div>
+            <p class="doc-note">
+              查阅近期动态、在校服务与社区伙伴。这里优先呈现可用入口和运行状态，让每一次访问都直接到达需要的地方。
+            </p>
+          </header>
+
+          <section class="section" id="updates" aria-labelledby="updates-heading">
+            <div class="section-heading">
+              <span class="section-index">01</span>
+              <h2 id="updates-heading">动态</h2>
+              <span class="section-count">5 ITEMS</span>
+            </div>
+            <ol class="updates">
+              <li class="update-row">
+                <time datetime="2026-07-20">07/20</time>
+                <span class="category">置顶公告</span>
+                <a class="update-title" href="https://github.com/hitszosa" target="_blank" rel="noreferrer noopener">协会门户网站改版测试中，欢迎通过 GitHub 反馈建议。</a>
+              </li>
+              <li class="update-row">
+                <time datetime="2026-07-15">07/15</time>
+                <span class="category">公告</span>
+                <span class="update-title">本周镜像站例行维护窗口：周日 02:00–03:00，期间部分同步任务可能延迟。</span>
+              </li>
+              <li class="update-row">
+                <time datetime="2026-08-08">08/08</time>
+                <span class="category activity">沙龙 · 即将举行</span>
+                <a class="update-title" href="#services">暑期开源分享夜：如何参与上游社区</a>
+              </li>
+              <li class="update-row">
+                <time datetime="2026-05-20">05/20</time>
+                <span class="category">讲座</span>
+                <span class="update-title">HPC 入门：从登录集群到提交第一个作业</span>
+              </li>
+              <li class="update-row">
+                <time datetime="2026-04-12">04/12</time>
+                <span class="category">沙龙</span>
+                <span class="update-title">Linux Install Party 2026 春季场</span>
+              </li>
+            </ol>
+          </section>
+
+          <section class="section" id="services" aria-labelledby="services-heading">
+            <div class="section-heading">
+              <span class="section-index">02</span>
+              <h2 id="services-heading">服务</h2>
+              <span class="section-count">6 SERVICES</span>
+            </div>
+            <ul class="services">
+              <li>
+                <a class="service-row" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer noopener">
+                  <span class="service-name">开源软件镜像站</span>
+                  <span class="service-description">主流 Linux 发行版与开源软件镜像，校园网内高速下载</span>
+                  <span class="service-scope">公开</span>
+                  <span class="service-state">在线</span>
+                  <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+              <li>
+                <a class="service-row" href="https://mirrors.osa.moe/help" target="_blank" rel="noreferrer noopener">
+                  <span class="service-name">镜像使用帮助</span>
+                  <span class="service-description">各发行版与工具的镜像配置指南，一键换源</span>
+                  <span class="service-scope">公开</span>
+                  <span class="service-state">在线</span>
+                  <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+              <li>
+                <a class="service-row" href="https://wiki.osa.moe" target="_blank" rel="noreferrer noopener">
+                  <span class="service-name">OSA Wiki</span>
+                  <span class="service-description">Linux 入门、HPC 文档、技术分享沉淀</span>
+                  <span class="service-scope">公开</span>
+                  <span class="service-state">在线</span>
+                  <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+              <li>
+                <a class="service-row" href="https://weekly.osa.moe" target="_blank" rel="noreferrer noopener">
+                  <span class="service-name">Weekly 周报</span>
+                  <span class="service-description">技术新闻、群聊精华、本周活动一览</span>
+                  <span class="service-scope">公开</span>
+                  <span class="service-state">在线</span>
+                  <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+              <li>
+                <a class="service-row" href="https://git.osa.moe" target="_blank" rel="noreferrer noopener">
+                  <span class="service-name">Gitea 代码托管</span>
+                  <span class="service-description">自托管 Git</span>
+                  <span class="service-scope">校内</span>
+                  <span class="service-state">在线</span>
+                  <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+              <li>
+                <a class="service-row" href="https://ai.osa.moe" target="_blank" rel="noreferrer noopener">
+                  <span class="service-name">AI Gateway</span>
+                  <span class="service-description">统一接入主流大模型 API</span>
+                  <span class="service-scope">校内</span>
+                  <span class="service-state beta">测试</span>
+                  <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            </ul>
+          </section>
+
+          <section class="section" id="links" aria-labelledby="links-heading">
+            <div class="section-heading">
+              <span class="section-index">03</span>
+              <h2 id="links-heading">友链</h2>
+              <span class="section-count">6 LINKS</span>
+            </div>
+            <ul class="friends">
+              <li><a class="friend-link" href="https://tuna.moe" target="_blank" rel="noreferrer noopener"><span>清华大学 TUNA 协会</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+              <li><a class="friend-link" href="https://mirrors.cernet.edu.cn" target="_blank" rel="noreferrer noopener"><span>MirrorZ</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+              <li><a class="friend-link" href="https://lug.ustc.edu.cn" target="_blank" rel="noreferrer noopener"><span>中科大 LUG</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+              <li><a class="friend-link" href="https://sjtug.org" target="_blank" rel="noreferrer noopener"><span>上交大 SJTUG</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+              <li><a class="friend-link" href="https://github.com/hitszosa/awesome-hitsz" target="_blank" rel="noreferrer noopener"><span>Awesome HITSZ</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+              <li><a class="friend-link" href="https://www.hitsz.edu.cn" target="_blank" rel="noreferrer noopener"><span>哈尔滨工业大学（深圳）</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+            </ul>
+          </section>
+
+          <footer class="footer">
+            <p>HITSZ OSA · 哈尔滨工业大学（深圳）开源技术协会 · Copyleft 2026</p>
+            <p>GitHub / QQ 群 / Bilibili</p>
+            <p class="console-note">More information in browser console</p>
+          </footer>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const root = document.documentElement;
+      const toggle = document.querySelector(".theme-toggle");
+      const themeColor = document.querySelector('meta[name="theme-color"]');
+
+      function syncTheme() {
+        const dark = root.classList.contains("dark");
+        toggle.setAttribute("aria-pressed", String(dark));
+        toggle.setAttribute("aria-label", dark ? "切换浅色模式" : "切换深色模式");
+        themeColor.setAttribute("content", dark ? "#0f172a" : "#f8fafc");
+      }
+
+      toggle.addEventListener("click", () => {
+        root.classList.toggle("dark");
+        try {
+          localStorage.setItem("osa-theme", root.classList.contains("dark") ? "dark" : "light");
+        } catch (_) {}
+        syncTheme();
+      });
+
+      syncTheme();
+      console.info("HITSZ OSA · Open source starts on campus.");
+      console.info("More information: https://github.com/hitszosa");
+    </script>
+  </body>
+</html>

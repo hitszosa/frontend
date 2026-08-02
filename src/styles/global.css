@@ -1,34 +1,35 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 @config "@hitszosa/ui/tailwind/preset";
-@source '../../node_modules/@hitszosa/ui/dist/components';
-@import '@hitszosa/ui/styles/theme.css';
+@source "../../node_modules/@hitszosa/ui/dist/components";
+@import "@hitszosa/ui/styles/theme.css";
 
 :root {
   font-smooth: subpixel-antialiased;
 }
 
-@keyframes hover-jitter {
-  0% {
-    transform: translate(0, 0);
-  }
-  20% {
-    transform: translate(-1px, 1px);
-  }
-  40% {
-    transform: translate(1px, -1px);
-  }
-  60% {
-    transform: translate(-1px, -1px);
-  }
-  80% {
-    transform: translate(1px, 1px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
+.ui-sans {
+  font-family: var(
+    --ui-font-sans,
+    "Noto Sans SC",
+    "Noto Sans",
+    "PingFang SC",
+    "Microsoft YaHei",
+    sans-serif
+  );
 }
 
-.console-easter-egg:hover {
-  cursor: none;
-  animation: hover-jitter 0.24s linear infinite;
+.ui-latin {
+  font-family: var(--ui-font-latin, "Ubuntu", "Noto Sans", sans-serif);
+}
+
+.ui-mono {
+  font-family: var(
+    --ui-font-mono,
+    "JetBrains Mono",
+    "Cascadia Code",
+    "SFMono-Regular",
+    "Noto Sans Mono CJK SC",
+    "Sarasa Mono SC",
+    monospace
+  );
 }

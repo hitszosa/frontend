@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HITSZ OSA 漫画分镜页：开源基础设施、社团活动与校园开源伙伴。">
+  <meta name="theme-color" content="#fffdf7">
+  <title>HITSZ OSA · 开源大作战！</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper:#fffdf7;
+      --ink:#17171f;
+      --ink-soft:#363640;
+      --osa-500:#576edb;
+      --osa-700:#373da9;
+      --osa-pale:#e8ebff;
+      --white:#fffefb;
+      --dot:rgba(55,61,169,.22);
+      --border:3px solid var(--ink);
+      --border-heavy:5px solid var(--ink);
+      --shadow:6px 6px 0 var(--ink);
+      --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+      --serif:"Noto Serif SC","Songti SC",serif;
+      --mono:"JetBrains Mono","Cascadia Code",ui-monospace,monospace;
+      --s1:.25rem;
+      --s2:.5rem;
+      --s3:.75rem;
+      --s4:1rem;
+      --s5:1.25rem;
+      --s6:1.5rem;
+      --s8:2rem;
+      --s10:2.5rem;
+      --s12:3rem;
+      --s16:4rem;
+      --ease:cubic-bezier(.16,1,.3,1);
+    }
+
+    *,*::before,*::after { box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top:6rem; background:var(--paper); }
+    body {
+      margin:0;
+      min-width:20rem;
+      overflow-x:hidden;
+      background:
+        radial-gradient(circle at 1px 1px,rgba(23,23,31,.06) 1px,transparent 1.2px) 0 0/20px 20px,
+        var(--paper);
+      color:var(--ink);
+      font-family:var(--sans);
+      font-size:16px;
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+    a { color:inherit; }
+    button,a { -webkit-tap-highlight-color:transparent; }
+    :focus-visible { outline:4px solid var(--osa-500); outline-offset:4px; }
+    ::selection { background:var(--osa-500); color:var(--white); }
+    .skip-link {
+      position:fixed;
+      z-index:1000;
+      top:var(--s3);
+      left:var(--s3);
+      transform:translateY(-7rem);
+      border:var(--border);
+      background:var(--white);
+      padding:var(--s2) var(--s4);
+      font-weight:900;
+      text-decoration:none;
+      box-shadow:3px 3px 0 var(--ink);
+    }
+    .skip-link:focus { transform:translateY(0); }
+    .shell { width:min(calc(100% - 2rem),78rem); margin-inline:auto; }
+
+    .site-header {
+      position:sticky;
+      z-index:50;
+      top:0;
+      border-bottom:var(--border);
+      background:color-mix(in srgb,var(--paper) 94%,transparent);
+      backdrop-filter:blur(8px);
+    }
+    .nav-shell {
+      display:flex;
+      min-height:4.5rem;
+      align-items:center;
+      justify-content:space-between;
+      gap:var(--s4);
+    }
+    .brand {
+      display:inline-flex;
+      flex:0 0 auto;
+      align-items:center;
+      gap:var(--s3);
+      font:1000 .98rem/1 var(--mono);
+      letter-spacing:-.04em;
+      text-decoration:none;
+    }
+    .brand-mark { width:2.75rem; height:2.75rem; flex:none; transition:transform .22s var(--ease); }
+    .brand:hover .brand-mark { transform:rotate(-8deg) scale(1.08); }
+    .brand span { display:grid; gap:.28rem; }
+    .brand small { color:var(--osa-700); font-size:.58rem; letter-spacing:.13em; }
+    .nav-groups { display:flex; min-width:0; align-items:center; gap:var(--s4); }
+    .nav-list { display:flex; align-items:center; gap:var(--s1); margin:0; padding:0; list-style:none; }
+    .nav-link,.jump-link {
+      display:inline-flex;
+      min-height:2.75rem;
+      align-items:center;
+      justify-content:center;
+      padding-inline:.72rem;
+      border:2px solid transparent;
+      font-size:.8rem;
+      font-weight:900;
+      text-decoration:none;
+      white-space:nowrap;
+      transition:background-color .18s ease,color .18s ease,transform .18s var(--ease),border-color .18s ease;
+    }
+    .nav-link:hover { border-color:var(--ink); background:var(--osa-pale); transform:rotate(-1deg); }
+    .nav-link[aria-current="page"] { text-decoration:underline 3px var(--osa-500); text-underline-offset:6px; }
+    .jump-links { display:flex; gap:var(--s2); }
+    .jump-link { border:2px solid var(--ink); background:var(--white); box-shadow:3px 3px 0 var(--ink); }
+    .jump-link:last-child { background:var(--osa-500); color:var(--white); }
+    .jump-link:hover { transform:translate(-2px,-2px); box-shadow:5px 5px 0 var(--ink); }
+
+    main { padding-block:var(--s6) var(--s16); }
+    .chapter-label {
+      display:flex;
+      align-items:center;
+      gap:var(--s3);
+      margin:var(--s12) 0 var(--s4);
+      font:1000 clamp(1.35rem,3vw,2.15rem)/1 var(--sans);
+      letter-spacing:-.06em;
+    }
+    .chapter-label::after { content:""; height:3px; flex:1; background:var(--ink); }
+    .chapter-label span { color:var(--osa-700); font:900 .7rem/1 var(--mono); letter-spacing:.1em; }
+    .panel {
+      position:relative;
+      isolation:isolate;
+      overflow:hidden;
+      border:var(--border-heavy);
+      background:var(--white);
+      box-shadow:var(--shadow);
+    }
+    .panel-no {
+      position:absolute;
+      z-index:20;
+      top:0;
+      left:0;
+      min-width:3.2rem;
+      border-right:var(--border);
+      border-bottom:var(--border);
+      background:var(--ink);
+      padding:.36rem .55rem;
+      color:var(--white);
+      font:900 .72rem/1 var(--mono);
+      letter-spacing:.08em;
+    }
+    .halftone {
+      background-image:radial-gradient(circle,var(--dot) 1.4px,transparent 1.6px);
+      background-size:8px 8px;
+    }
+    .caption {
+      display:inline-block;
+      border:2px solid var(--ink);
+      background:var(--osa-pale);
+      padding:.35rem .55rem;
+      font:800 .7rem/1.3 var(--mono);
+      transform:rotate(-1deg);
+    }
+
+    .hero-panel {
+      min-height:42rem;
+      background:var(--white);
+    }
+    .speed-lines {
+      position:absolute;
+      inset:-30%;
+      z-index:-1;
+      background:repeating-conic-gradient(from 207deg at 71% 55%,transparent 0 3deg,rgba(23,23,31,.15) 3.4deg 3.9deg,transparent 4.3deg 7deg);
+    }
+    .hero-panel::after {
+      content:"";
+      position:absolute;
+      z-index:-1;
+      width:36rem;
+      height:36rem;
+      right:-6rem;
+      bottom:-11rem;
+      border:4px solid var(--ink);
+      border-radius:50%;
+      background:radial-gradient(circle,var(--dot) 1.7px,transparent 1.9px) 0 0/9px 9px,var(--osa-pale);
+    }
+    .hero-title-box {
+      position:absolute;
+      z-index:5;
+      top:2.2rem;
+      left:clamp(1.2rem,4vw,3.5rem);
+      border:var(--border-heavy);
+      background:var(--osa-500);
+      padding:clamp(1rem,2.6vw,1.8rem) clamp(1rem,3.4vw,2.3rem);
+      color:var(--white);
+      box-shadow:7px 7px 0 var(--ink);
+      transform:rotate(-1.2deg);
+    }
+    .hero-eyebrow { display:block; margin-bottom:.65rem; font:900 .7rem/1 var(--mono); letter-spacing:.15em; }
+    .hero-title-box h1 {
+      max-width:12ch;
+      margin:0;
+      font-size:clamp(2.2rem,5vw,4.7rem);
+      font-weight:1000;
+      line-height:.94;
+      letter-spacing:-.09em;
+      text-wrap:balance;
+      text-shadow:3px 3px 0 var(--ink);
+    }
+    .speech {
+      position:absolute;
+      z-index:8;
+      left:clamp(1rem,5vw,4.5rem);
+      bottom:clamp(1.25rem,5vw,3.8rem);
+      width:min(48rem,63%);
+      border:var(--border-heavy);
+      border-radius:46% 44% 43% 42% / 34% 37% 38% 34%;
+      background:var(--white);
+      padding:clamp(1.3rem,3vw,2.2rem) clamp(1.3rem,3.5vw,2.7rem);
+      box-shadow:6px 6px 0 var(--ink);
+    }
+    .speech::before {
+      content:"";
+      position:absolute;
+      right:-3.1rem;
+      bottom:4.2rem;
+      width:4.8rem;
+      height:3.6rem;
+      border-right:var(--border-heavy);
+      border-bottom:var(--border-heavy);
+      background:var(--white);
+      clip-path:polygon(0 0,100% 100%,0 68%);
+      transform:rotate(-8deg);
+    }
+    .speech p { margin:0; font-family:var(--serif); font-size:clamp(.86rem,1.3vw,1rem); font-weight:700; line-height:1.75; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:var(--s3); margin-top:var(--s5); }
+    .comic-button {
+      position:relative;
+      display:inline-flex;
+      min-height:2.9rem;
+      align-items:center;
+      justify-content:center;
+      border:3px solid var(--ink);
+      background:var(--white);
+      padding:.55rem 1rem;
+      color:var(--ink);
+      font-size:.82rem;
+      font-weight:1000;
+      line-height:1;
+      text-decoration:none;
+      box-shadow:4px 4px 0 var(--ink);
+      transition:transform .18s var(--ease),box-shadow .18s var(--ease),background-color .18s ease;
+    }
+    .comic-button.primary { background:var(--osa-500); color:var(--white); }
+    .comic-button:hover { transform:translate(-3px,-3px) rotate(-1deg); box-shadow:7px 7px 0 var(--ink); background:var(--osa-pale); color:var(--ink); }
+    .comic-button.primary:hover { background:var(--osa-700); color:var(--white); }
+    .penguin-stage {
+      position:absolute;
+      z-index:6;
+      right:clamp(-1.8rem,1vw,1.5rem);
+      bottom:1.2rem;
+      width:clamp(16rem,33vw,28rem);
+      transform:rotate(3deg);
+      filter:drop-shadow(7px 8px 0 var(--ink));
+    }
+    .hero-sfx {
+      position:absolute;
+      z-index:7;
+      top:9rem;
+      right:clamp(1rem,5vw,5rem);
+      color:var(--osa-700);
+      font-size:clamp(3.5rem,8vw,7rem);
+      font-weight:1000;
+      line-height:1;
+      letter-spacing:-.12em;
+      -webkit-text-stroke:3px var(--ink);
+      text-shadow:5px 5px 0 var(--white),9px 9px 0 var(--ink);
+      transform:rotate(12deg);
+    }
+
+    .service-grid {
+      display:grid;
+      grid-template-columns:repeat(12,minmax(0,1fr));
+      grid-auto-rows:minmax(17rem,auto);
+      gap:var(--s4);
+    }
+    .service-panel {
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding:3.2rem var(--s5) var(--s5);
+      transition:transform .2s var(--ease),box-shadow .2s var(--ease);
+    }
+    .service-panel:hover { z-index:3; transform:translate(-3px,-3px) rotate(-.5deg); box-shadow:10px 10px 0 var(--ink); }
+    .service-panel:nth-child(1) { grid-column:span 5; }
+    .service-panel:nth-child(2) { grid-column:span 3; }
+    .service-panel:nth-child(3) { grid-column:span 4; }
+    .service-panel:nth-child(4) { grid-column:span 4; }
+    .service-panel:nth-child(5) { grid-column:span 5; }
+    .service-panel:nth-child(6) { grid-column:span 3; }
+    .service-panel:nth-child(2),.service-panel:nth-child(5) { background:var(--osa-pale); }
+    .scene-icon { width:100%; height:7.5rem; color:var(--ink); }
+    .service-panel:nth-child(3) .scene-icon,.service-panel:nth-child(6) .scene-icon { color:var(--osa-700); }
+    .service-copy { position:relative; z-index:2; }
+    .service-meta { display:flex; align-items:center; justify-content:space-between; gap:var(--s2); margin-bottom:var(--s2); }
+    .service-status { display:inline-flex; align-items:center; gap:.35rem; font:900 .65rem/1 var(--mono); text-transform:uppercase; }
+    .service-status::before { content:""; width:.55rem; height:.55rem; border:2px solid var(--ink); border-radius:50%; background:var(--osa-500); }
+    .service-status.beta::before { background:var(--white); }
+    .service-panel h3 { margin:0; font-size:clamp(1.18rem,2vw,1.6rem); font-weight:1000; line-height:1.15; letter-spacing:-.05em; }
+    .service-panel p { margin:.7rem 0 0; color:var(--ink-soft); font-size:.85rem; font-weight:700; line-height:1.55; }
+    .narration { border:2px solid var(--ink); background:var(--white); padding:.6rem .7rem; box-shadow:3px 3px 0 var(--ink); }
+    .service-panel:nth-child(2) .narration,.service-panel:nth-child(5) .narration { background:var(--white); }
+    .ding {
+      position:absolute;
+      top:2.3rem;
+      right:.8rem;
+      color:var(--osa-500);
+      font:1000 2.3rem/1 var(--sans);
+      letter-spacing:-.12em;
+      -webkit-text-stroke:1px var(--ink);
+      transform:rotate(10deg);
+    }
+
+    .news-panel {
+      display:grid;
+      grid-template-columns:1fr 2fr;
+      min-height:35rem;
+      background:var(--white);
+    }
+    .extra-side {
+      position:relative;
+      display:grid;
+      min-height:22rem;
+      place-items:center;
+      border-right:var(--border-heavy);
+      background:
+        radial-gradient(circle,var(--dot) 2px,transparent 2.2px) 0 0/10px 10px,
+        var(--osa-pale);
+      padding:var(--s8);
+    }
+    .burst {
+      display:grid;
+      width:min(20rem,95%);
+      aspect-ratio:1;
+      place-items:center;
+      background:var(--osa-500);
+      color:var(--white);
+      clip-path:polygon(50% 0,58% 24%,74% 5%,75% 30%,98% 19%,83% 41%,100% 50%,78% 57%,95% 76%,70% 71%,72% 98%,55% 76%,45% 100%,39% 75%,18% 94%,27% 68%,0 72%,20% 52%,1% 40%,27% 38%,14% 13%,40% 28%);
+      font-size:clamp(3rem,7vw,6rem);
+      font-weight:1000;
+      line-height:.85;
+      letter-spacing:-.13em;
+      text-align:center;
+      text-shadow:4px 4px 0 var(--ink);
+      transform:rotate(-7deg);
+      animation:burst-in .6s var(--ease) both;
+    }
+    .burst small { display:block; font:900 .65rem/1.2 var(--mono); letter-spacing:.08em; }
+    .extra-side .caption { position:absolute; right:var(--s4); bottom:var(--s4); }
+    .news-sheet { padding:3.5rem clamp(1rem,3.5vw,2.8rem) var(--s6); }
+    .news-masthead { display:flex; align-items:end; justify-content:space-between; gap:var(--s4); border-bottom:var(--border-heavy); padding-bottom:var(--s3); }
+    .news-masthead h2 { margin:0; font-size:clamp(2.3rem,5vw,4.8rem); font-weight:1000; line-height:.85; letter-spacing:-.09em; }
+    .news-masthead p { margin:0; font:800 .67rem/1.5 var(--mono); text-align:right; }
+    .news-list { margin:0; padding:0; list-style:none; }
+    .news-item {
+      display:grid;
+      grid-template-columns:4.2rem minmax(6rem,auto) 1fr;
+      align-items:start;
+      gap:var(--s3);
+      border-bottom:2px solid var(--ink);
+      padding:var(--s4) 0;
+    }
+    .news-date { font:1000 .78rem/1.4 var(--mono); }
+    .news-tag { justify-self:start; border:2px solid var(--ink); background:var(--osa-pale); padding:.18rem .45rem; font:900 .68rem/1.3 var(--mono); }
+    .news-tag.warn { background:var(--ink); color:var(--white); }
+    .news-item a { font-weight:850; line-height:1.5; text-decoration-thickness:2px; text-underline-offset:4px; }
+    .news-item a:hover { color:var(--osa-700); }
+
+    .friends-panel { padding:3.5rem clamp(1rem,3vw,2.5rem) var(--s6); }
+    .friends-panel::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:-1;
+      background:radial-gradient(circle,var(--dot) 1.4px,transparent 1.6px) 0 0/8px 8px;
+      mask-image:linear-gradient(90deg,#000,transparent 60%);
+    }
+    .friends-head { display:flex; align-items:end; justify-content:space-between; gap:var(--s4); margin-bottom:var(--s6); }
+    .friends-head h2 { margin:0; font-size:clamp(2rem,4vw,4rem); font-weight:1000; line-height:.9; letter-spacing:-.08em; }
+    .friends-head p { max-width:28rem; margin:0; font-family:var(--serif); font-weight:700; }
+    .friend-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:var(--s3); }
+    .friend-link {
+      display:flex;
+      min-height:8rem;
+      flex-direction:column;
+      justify-content:space-between;
+      border:3px solid var(--ink);
+      background:var(--white);
+      padding:var(--s4);
+      font-size:.86rem;
+      font-weight:1000;
+      line-height:1.35;
+      text-decoration:none;
+      box-shadow:3px 3px 0 var(--ink);
+      transition:transform .18s var(--ease),background-color .18s ease,box-shadow .18s var(--ease);
+    }
+    .friend-link span { color:var(--osa-700); font:900 .65rem/1 var(--mono); }
+    .friend-link:hover { transform:translate(-3px,-3px) rotate(-1deg); background:var(--osa-pale); box-shadow:6px 6px 0 var(--ink); }
+
+    .site-footer { border-top:var(--border-heavy); background:var(--ink); color:var(--white); }
+    .footer-inner {
+      display:grid;
+      grid-template-columns:1fr auto;
+      align-items:center;
+      gap:var(--s5);
+      min-height:9rem;
+      padding-block:var(--s6);
+    }
+    .footer-copy { margin:0; font:700 .76rem/1.7 var(--mono); }
+    .footer-copy small { display:block; color:#cbcde5; }
+    .footer-links { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:var(--s3); }
+    .footer-links a { border:2px solid var(--white); padding:.45rem .7rem; font-size:.75rem; font-weight:900; text-decoration:none; transition:background-color .18s ease,color .18s ease,transform .18s var(--ease); }
+    .footer-links a:hover { background:var(--osa-500); color:var(--white); transform:translateY(-2px); }
+
+    @keyframes burst-in { from { opacity:0; transform:scale(.5) rotate(-18deg); } to { opacity:1; transform:scale(1) rotate(-7deg); } }
+
+    @media (max-width:68rem) {
+      .nav-shell { align-items:flex-start; padding-block:var(--s3); }
+      .nav-groups { align-items:flex-end; flex-direction:column; gap:var(--s2); }
+      .hero-panel { min-height:46rem; }
+      .speech { width:69%; }
+      .friend-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    }
+
+    @media (max-width:48rem) {
+      html { scroll-padding-top:8rem; }
+      .shell { width:min(calc(100% - 1rem),78rem); }
+      .site-header { position:relative; }
+      .nav-shell { display:grid; grid-template-columns:1fr; }
+      .brand { justify-self:start; }
+      .nav-groups { width:100%; align-items:stretch; }
+      .nav-list { width:100%; justify-content:space-between; overflow-x:auto; scrollbar-width:none; }
+      .nav-list::-webkit-scrollbar { display:none; }
+      .nav-link { padding-inline:.5rem; }
+      .jump-links { display:grid; grid-template-columns:1fr 1fr; }
+      main { padding-top:var(--s3); }
+      .hero-panel { min-height:57rem; }
+      .hero-title-box { top:2rem; right:1rem; left:1rem; }
+      .hero-title-box h1 { max-width:none; font-size:clamp(2.2rem,12vw,3.6rem); }
+      .hero-sfx { top:13.5rem; right:1.4rem; }
+      .penguin-stage { right:-1rem; bottom:17.8rem; width:16.5rem; }
+      .speech { right:.9rem; bottom:1.2rem; left:.9rem; width:auto; border-radius:2.5rem; padding:1.35rem; }
+      .speech::before { top:-2.6rem; right:4.4rem; bottom:auto; transform:rotate(102deg); }
+      .hero-actions { display:grid; grid-template-columns:1fr; }
+      .comic-button { width:100%; }
+      .service-grid { grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:auto; }
+      .service-panel:nth-child(n) { grid-column:span 1; min-height:19rem; }
+      .news-panel { grid-template-columns:1fr; }
+      .extra-side { border-right:0; border-bottom:var(--border-heavy); }
+      .friends-head { align-items:start; flex-direction:column; }
+      .friend-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .footer-inner { grid-template-columns:1fr; }
+      .footer-links { justify-content:flex-start; }
+    }
+
+    @media (max-width:28rem) {
+      .nav-link { font-size:.73rem; }
+      .hero-panel { min-height:61rem; }
+      .hero-sfx { top:15rem; }
+      .penguin-stage { bottom:21.2rem; width:15.5rem; }
+      .speech { padding:1.15rem; }
+      .speech p { font-size:.82rem; line-height:1.65; }
+      .service-grid { grid-template-columns:1fr; }
+      .service-panel:nth-child(n) { min-height:17rem; }
+      .scene-icon { height:6rem; }
+      .news-item { grid-template-columns:3.6rem 1fr; }
+      .news-item a { grid-column:1 / -1; }
+      .friend-grid { grid-template-columns:1fr; }
+      .friend-link { min-height:6.5rem; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      html { scroll-behavior:auto; }
+      *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <div class="shell nav-shell">
+      <a class="brand" href="#top" aria-label="HITSZ OSA 首页">
+        <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M17 29C17 14 24 6 32 6s15 8 15 23v14c0 10-7 16-15 16S17 53 17 43V29Z" fill="#17171f"/>
+          <path d="M23 31c0-8 4-14 9-14s9 6 9 14v14c0 6-4 9-9 9s-9-3-9-9V31Z" fill="#fffdf7"/>
+          <circle cx="27" cy="25" r="2.4" fill="#fffdf7"/><circle cx="37" cy="25" r="2.4" fill="#fffdf7"/>
+          <path d="m27 31 5-4 5 4-5 4-5-4Z" fill="#576edb" stroke="#17171f" stroke-width="2"/>
+          <path d="M18 38 7 47l12 1M46 38l11 9-12 1" fill="#576edb" stroke="#17171f" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M22 56h-9M42 56h9" stroke="#576edb" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+        <span>HITSZ OSA<small>OPEN SOURCE! OPEN CAMPUS!</small></span>
+      </a>
+      <div class="nav-groups">
+        <nav aria-label="主要导航">
+          <ul class="nav-list">
+            <li><a class="nav-link" href="#top" aria-current="page">首页</a></li>
+            <li><a class="nav-link" href="#news">活动</a></li>
+            <li><a class="nav-link" href="#friends">友链</a></li>
+            <li><a class="nav-link" href="#about">关于</a></li>
+          </ul>
+        </nav>
+        <div class="jump-links" aria-label="外部服务">
+          <a class="jump-link" href="https://mirrors.osa.moe/">镜像站 ↗</a>
+          <a class="jump-link" href="https://wiki.osa.moe/">Wiki ↗</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="shell" id="top">
+      <section class="panel hero-panel" aria-labelledby="hero-title">
+        <span class="panel-no">01 / 登场</span>
+        <div class="speed-lines" aria-hidden="true"></div>
+        <div class="hero-title-box">
+          <span class="hero-eyebrow">EP. 2026 · THE OPEN SOURCE ADVENTURE</span>
+          <h1 id="hero-title">HITSZ 开源技术协会</h1>
+        </div>
+        <div class="hero-sfx" aria-hidden="true">哦!</div>
+        <svg class="penguin-stage" viewBox="0 0 420 500" role="img" aria-label="披着靛蓝围巾登场的企鹅主角">
+          <path d="M77 365c-47 13-67 44-54 63 17 24 78 0 103-24" fill="#576edb" stroke="#17171f" stroke-width="8" stroke-linejoin="round"/>
+          <path d="M343 365c47 13 67 44 54 63-17 24-78 0-103-24" fill="#576edb" stroke="#17171f" stroke-width="8" stroke-linejoin="round"/>
+          <path d="M101 205C101 82 149 24 210 24s109 58 109 181v153c0 79-43 124-109 124S101 437 101 358V205Z" fill="#17171f" stroke="#17171f" stroke-width="8"/>
+          <path d="M135 213c0-78 33-129 75-129s75 51 75 129v155c0 55-31 83-75 83s-75-28-75-83V213Z" fill="#fffdf7"/>
+          <ellipse cx="174" cy="178" rx="14" ry="18" fill="#fffdf7"/><ellipse cx="246" cy="178" rx="14" ry="18" fill="#fffdf7"/>
+          <circle cx="178" cy="181" r="6" fill="#17171f"/><circle cx="242" cy="181" r="6" fill="#17171f"/>
+          <path d="m168 217 42-31 42 31-42 34-42-34Z" fill="#576edb" stroke="#17171f" stroke-width="8" stroke-linejoin="round"/>
+          <path d="M113 275c62 32 130 35 195 0l-9 55c-59 24-120 24-179 0l-7-55Z" fill="#576edb" stroke="#17171f" stroke-width="8"/>
+          <path d="m286 316 76 97-53-17-31 36-17-108" fill="#373da9" stroke="#17171f" stroke-width="8" stroke-linejoin="round"/>
+          <path d="M164 466c-21 21-45 26-67 16 11-29 34-43 67-40M256 466c21 21 45 26 67 16-11-29-34-43-67-40" fill="#576edb" stroke="#17171f" stroke-width="8" stroke-linejoin="round"/>
+          <path d="M132 104c-29-9-48-28-57-58 31 12 51 26 66 45" fill="#576edb" stroke="#17171f" stroke-width="8" stroke-linecap="round"/>
+        </svg>
+        <div class="speech">
+          <p>我们是 HITSZ 开源技术协会（a.k.a. HITSZ OSA），由哈尔滨工业大学（深圳）学生中的 Linux 用户和开源软件爱好者自发组建的学生社团。我们致力于维护学校的开源基础建设，提升学校开源氛围，为开源技术爱好者提供交流平台。</p>
+          <div class="hero-actions">
+            <a class="comic-button primary" href="https://mirrors.osa.moe/">访问镜像站 →</a>
+            <a class="comic-button" href="#news">社团活动</a>
+            <a class="comic-button" href="#about">了解协会</a>
+          </div>
+        </div>
+      </section>
+
+      <h2 class="chapter-label" id="services"><span>CHAPTER 02—07</span>六项开源任务</h2>
+      <section class="service-grid" aria-label="协会服务六连格">
+        <article class="panel service-panel">
+          <span class="panel-no">02 / 加速</span>
+          <svg class="scene-icon" viewBox="0 0 280 120" aria-hidden="true">
+            <path d="M14 97h252M32 88l48-57 41 57M105 88l54-72 60 72" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/>
+            <path d="M170 28h64v42h-64z" fill="#576edb" stroke="#17171f" stroke-width="6"/><path d="m184 48 12 11 23-25" fill="none" stroke="#fffdf7" stroke-width="6"/>
+            <path d="M47 51 9 33M65 33 48 7M221 86l47-26" stroke="#17171f" stroke-width="4"/>
+          </svg>
+          <div class="service-copy narration"><div class="service-meta"><span class="service-status">online</span><span class="caption">校园高速!</span></div><h3>开源软件镜像站</h3><p>主流 Linux 发行版与开源软件镜像，校园网内高速下载。</p></div>
+        </article>
+        <article class="panel service-panel">
+          <span class="panel-no">03 / 换源</span><span class="ding" aria-hidden="true">叮!</span>
+          <svg class="scene-icon" viewBox="0 0 240 120" aria-hidden="true"><path d="M31 24h178v75H31z" fill="#fffdf7" stroke="currentColor" stroke-width="6"/><path d="M31 43h178M51 33h2M67 33h2M83 33h2" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><path d="m72 73 23 18 61-54" fill="none" stroke="#576edb" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="service-copy narration"><div class="service-meta"><span class="service-status">online</span></div><h3>镜像使用帮助</h3><p>一键换源。</p></div>
+        </article>
+        <article class="panel service-panel">
+          <span class="panel-no">04 / 知识</span>
+          <svg class="scene-icon" viewBox="0 0 260 120" aria-hidden="true"><path d="M18 18h96c21 0 31 11 31 31v54c-12-13-25-18-42-18H18V18ZM242 18h-66c-21 0-31 11-31 31v54c12-13 25-18 42-18h55V18Z" fill="#fffdf7" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/><path d="M45 41h54M45 57h54M187 41h33M187 57h33" stroke="#576edb" stroke-width="5"/></svg>
+          <div class="service-copy narration"><div class="service-meta"><span class="service-status">online</span></div><h3>OSA Wiki</h3><p>Linux 入门、HPC 文档。</p></div>
+        </article>
+        <article class="panel service-panel">
+          <span class="panel-no">05 / 周刊</span>
+          <svg class="scene-icon" viewBox="0 0 260 120" aria-hidden="true"><path d="M23 11h181v92H23zM204 32h33v71h-33" fill="#fffdf7" stroke="currentColor" stroke-width="6"/><path d="M42 30h70v36H42z" fill="#576edb" stroke="#17171f" stroke-width="5"/><path d="M127 31h56M127 47h56M127 63h38M42 82h141" stroke="currentColor" stroke-width="5"/></svg>
+          <div class="service-copy narration"><div class="service-meta"><span class="service-status">online</span><span class="caption">每周新鲜</span></div><h3>Weekly 周报</h3><p>技术新闻与群聊精华。</p></div>
+        </article>
+        <article class="panel service-panel">
+          <span class="panel-no">06 / 协作</span>
+          <svg class="scene-icon" viewBox="0 0 280 120" aria-hidden="true"><circle cx="55" cy="57" r="24" fill="#fffdf7" stroke="currentColor" stroke-width="6"/><circle cx="225" cy="29" r="19" fill="#576edb" stroke="#17171f" stroke-width="6"/><circle cx="225" cy="91" r="19" fill="#576edb" stroke="#17171f" stroke-width="6"/><path d="M79 57h69c30 0 45-12 58-28M148 57c30 0 45 15 58 34" fill="none" stroke="currentColor" stroke-width="7"/><path d="m45 57 8 8 15-18" fill="none" stroke="#576edb" stroke-width="6"/></svg>
+          <div class="service-copy narration"><div class="service-meta"><span class="service-status">online · 校内</span></div><h3>Gitea 代码托管</h3><p>校内开发协作阵地。</p></div>
+        </article>
+        <article class="panel service-panel">
+          <span class="panel-no">07 / 智能</span>
+          <svg class="scene-icon" viewBox="0 0 240 120" aria-hidden="true"><path d="M78 21h84c24 0 42 18 42 42s-18 42-42 42H78c-24 0-42-18-42-42s18-42 42-42Z" fill="#fffdf7" stroke="currentColor" stroke-width="6"/><circle cx="86" cy="58" r="8" fill="#576edb"/><circle cx="154" cy="58" r="8" fill="#576edb"/><path d="M91 82c17 9 41 9 58 0M120 21V5M111 5h18" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></svg>
+          <div class="service-copy narration"><div class="service-meta"><span class="service-status beta">beta · 校内</span></div><h3>AI Gateway</h3><p>统一接入主流大模型 API。</p></div>
+        </article>
+      </section>
+
+      <h2 class="chapter-label"><span>CHAPTER 08</span>校园开源号外</h2>
+      <section class="panel news-panel" id="news" aria-labelledby="news-title">
+        <span class="panel-no">08 / 号外</span>
+        <div class="extra-side">
+          <div class="burst" aria-hidden="true"><div>号外!<small>EXTRA! EXTRA!</small></div></div>
+          <span class="caption">刚刚传来的消息——</span>
+        </div>
+        <div class="news-sheet">
+          <header class="news-masthead"><h2 id="news-title">OSA 日报</h2><p>2026 / VOL. 07<br>开源人的校园情报</p></header>
+          <ol class="news-list">
+            <li class="news-item"><time class="news-date" datetime="2026-07-20">07/20</time><span class="news-tag">置顶公告</span><a href="#news">协会门户网站改版测试中，欢迎通过 GitHub 反馈建议。</a></li>
+            <li class="news-item"><time class="news-date" datetime="2026-07-15">07/15</time><span class="news-tag warn">公告 · WARN</span><a href="#news">本周镜像站例行维护窗口：周日 02:00–03:00，期间部分同步任务可能延迟。</a></li>
+            <li class="news-item"><time class="news-date" datetime="2026-08-08">08/08</time><span class="news-tag">沙龙 · 即将举行</span><a href="#news">暑期开源分享夜：如何参与上游社区</a></li>
+            <li class="news-item"><time class="news-date" datetime="2026-05-20">05/20</time><span class="news-tag">讲座</span><a href="#news">HPC 入门：从登录集群到提交第一个作业</a></li>
+            <li class="news-item"><time class="news-date" datetime="2026-04-12">04/12</time><span class="news-tag">沙龙</span><a href="#news">Linux Install Party 2026 春季场</a></li>
+          </ol>
+        </div>
+      </section>
+
+      <h2 class="chapter-label"><span>CHAPTER 09</span>下一话，伙伴集合</h2>
+      <section class="panel friends-panel" id="friends" aria-labelledby="friends-title">
+        <span class="panel-no">09 / 同盟</span>
+        <header class="friends-head"><h2 id="friends-title">开源同盟</h2><p>沿着这些链接继续冒险。向每一位建设开放校园、维护公共基础设施的伙伴致意。</p></header>
+        <div class="friend-grid">
+          <a class="friend-link" href="https://tuna.moe/"><span>ALLY 01 ↗</span>清华大学 TUNA 协会</a>
+          <a class="friend-link" href="https://mirrorz.org/"><span>ALLY 02 ↗</span>MirrorZ</a>
+          <a class="friend-link" href="https://lug.ustc.edu.cn/"><span>ALLY 03 ↗</span>中科大 LUG</a>
+          <a class="friend-link" href="https://sjtug.org/"><span>ALLY 04 ↗</span>上交大 SJTUG</a>
+          <a class="friend-link" href="https://awesome.hitsz.org/"><span>ALLY 05 ↗</span>Awesome HITSZ</a>
+          <a class="friend-link" href="https://www.hitsz.edu.cn/"><span>ALLY 06 ↗</span>哈尔滨工业大学（深圳）</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer" id="about">
+    <div class="shell footer-inner">
+      <p class="footer-copy">HITSZ OSA · 哈尔滨工业大学（深圳）开源技术协会 · Copyleft 2026<small>More information in browser console</small></p>
+      <nav class="footer-links" aria-label="社交媒体"><a href="https://github.com/hitsz-osa">GitHub</a><a href="#about">QQ 群</a><a href="https://space.bilibili.com/">Bilibili</a></nav>
+    </div>
+  </footer>
+
+  <script>
+    console.log('%c HITSZ OSA // OPEN SOURCE ADVENTURE ', 'background:#576edb;color:#fff;padding:6px 10px;font-weight:bold');
+    console.log('欢迎来到 HITSZ OSA！镜像站：https://mirrors.osa.moe/  Wiki：https://wiki.osa.moe/');
+  </script>
+</body>
+</html>

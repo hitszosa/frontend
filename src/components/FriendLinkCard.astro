@@ -1,0 +1,50 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  link: CollectionEntry<'friendLinks'>;
+}
+
+const { link } = Astro.props;
+const { name, href, description, logo } = link.data;
+---
+
+<a
+  href={href}
+  target="_blank"
+  rel="noreferrer noopener"
+  class="friend-link-card group flex items-center gap-4 rounded-xl border border-surface-border bg-surface p-4 no-underline shadow-sm transition-all duration-300 will-change-transform hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2"
+>
+  {logo ? (
+      <img src={logo} alt="" class="h-10 w-10 shrink-0 rounded-lg object-contain" loading="lazy" />
+    ) : (
+      <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-osa-fg/10 text-lg font-bold text-primary">
+        {name.charAt(0)}
+      </div>
+    )}
+  <div class="min-w-0">
+    <h3
+      class="friend-link-name truncate text-sm font-semibold text-surface-fg transition-colors"
+    >
+      {name}
+    </h3>
+    {description && <p class="mt-0.5 truncate text-xs text-muted-fg">{description}</p>}
+  </div>
+</a>
+
+<style>
+.friend-link-card:hover,
+.friend-link-card:focus-visible {
+  border-color: color-mix(
+    in srgb,
+    var(--ui-activity, var(--ui-secondary)) 60%,
+    transparent
+  );
+}
+.friend-link-card:focus-visible {
+  --tw-ring-color: var(--ui-activity, var(--ui-secondary));
+}
+.friend-link-card:hover .friend-link-name {
+  color: var(--ui-activity-fg, var(--ui-secondary));
+}
+</style>

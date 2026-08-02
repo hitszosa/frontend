@@ -1,0 +1,76 @@
+---
+import Badge from './Badge.astro';
+import type { UpdateEntry } from '../lib/updates';
+
+interface Props {
+  entry: UpdateEntry;
+}
+
+const { entry } = Astro.props;
+const dateLabel = new Intl.DateTimeFormat('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+}).format(entry.date);
+const accent = entry.warning
+  ? 'var(--ui-activity, var(--ui-secondary))'
+  : entry.kind === 'event'
+    ? 'var(--ui-secondary)'
+    : entry.kind === 'article'
+      ? 'var(--ui-success, var(--ui-primary))'
+      : 'var(--ui-primary)';
+const badgeTone = entry.warning
+  ? 'warning'
+  : entry.kind === 'event'
+    ? 'secondary'
+    : entry.kind === 'article'
+      ? 'success'
+      : 'primary';
+---
+
+<li class="relative pb-8 pl-8 last:pb-0">
+  <span
+    class="absolute top-1.5 left-[5px] h-full w-px bg-surface-border"
+    aria-hidden="true"
+  ></span>
+  <span
+    class="absolute top-1.5 left-0 h-[11px] w-[11px] rounded-full border-2 border-page-bg"
+    style={`background: ${accent};${entry.upcoming ? ` box-shadow: 0 0 0 4px color-mix(in srgb, ${accent} 25%, transparent);` : ''}`}
+    aria-hidden="true"
+  ></span>
+
+  <div class="flex flex-col gap-1.5">
+    <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+      <time
+        datetime={entry.date.toISOString()}
+        class="ui-mono text-xs tracking-wide text-muted-fg"
+      >
+        {dateLabel}
+      </time>
+      <Badge tone={badgeTone}>{entry.label}</Badge>
+      {entry.pinned && (
+          <Badge tone="primary" mono>
+            置顶
+          </Badge>
+        )}
+      {entry.upcoming && (
+          <Badge tone="warning" mono>
+            即将举行
+          </Badge>
+        )}
+      {entry.meta && <Badge tone="muted">{entry.meta}</Badge>}
+    </div>
+    <h2 class="text-base font-semibold text-surface-fg">
+      <a
+        href={entry.href}
+        class="no-underline transition-colors hover:text-primary"
+      >
+        {entry.title}
+      </a>
+    </h2>
+    <p class="max-w-3xl text-sm leading-relaxed text-muted-fg">
+      {entry.summary}
+    </p>
+  </div>
+</li>

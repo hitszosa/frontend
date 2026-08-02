@@ -1,0 +1,126 @@
+---
+import type { UpdateEntry } from '../lib/updates';
+import Badge from './Badge.astro';
+
+interface Props {
+  updates: UpdateEntry[];
+}
+
+type BadgeTone = 'primary' | 'secondary' | 'success' | 'warning';
+
+const { updates } = Astro.props;
+const importantUpdates = updates
+  .filter((entry) => entry.importance === 'important')
+  .sort((a, b) => b.date.getTime() - a.date.getTime())
+  .slice(0, 3);
+const primaryUpdate = importantUpdates[0];
+const secondaryUpdates = importantUpdates.slice(1);
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat('zh-CN', {
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
+const getTone = (entry: UpdateEntry): BadgeTone =>
+  entry.warning
+    ? 'warning'
+    : entry.kind === 'event'
+      ? 'secondary'
+      : entry.kind === 'article'
+        ? 'success'
+        : 'primary';
+---
+
+{primaryUpdate && (
+    <section id="featured" class="border-b border-surface-border py-14">
+      <article class="mt-7 grid overflow-hidden rounded-xl border border-surface-border bg-surface md:grid-cols-[minmax(0,1.45fr)_minmax(15rem,1fr)]">
+        <div class="relative min-h-56 bg-inset">
+          {primaryUpdate.cover ? (
+            <img
+              src={primaryUpdate.cover}
+              alt={primaryUpdate.coverAlt ?? primaryUpdate.title}
+              class="absolute inset-0 h-full w-full object-cover"
+              loading="eager"
+            />
+          ) : (
+            <div class="absolute inset-0 flex flex-col items-center justify-center border-b border-surface-border text-center md:border-b-0 md:border-r">
+              <span class="ui-mono text-xs tracking-widest text-muted-fg">
+                UPDATE IMAGE
+              </span>
+              <span class="mt-2 text-sm text-muted-fg">
+                动态配图上传后在此展示
+              </span>
+            </div>
+          )}
+        </div>
+        <div class="flex flex-col p-6 sm:p-8">
+          <div class="flex flex-wrap items-center gap-2 text-xs text-muted-fg">
+            <Badge tone={getTone(primaryUpdate)}>{primaryUpdate.label}</Badge>
+            {primaryUpdate.meta && (
+              <Badge tone="muted">{primaryUpdate.meta}</Badge>
+            )}
+            {primaryUpdate.upcoming && (
+              <Badge tone="warning" mono>
+                即将举行
+              </Badge>
+            )}
+            <time class="ui-mono" datetime={primaryUpdate.date.toISOString()}>
+              {formatDate(primaryUpdate.date)}
+            </time>
+          </div>
+          <h2 class="mt-5 text-2xl font-semibold tracking-tight text-surface-fg">
+            {primaryUpdate.title}
+          </h2>
+          <p class="mt-4 leading-7 text-muted-fg">{primaryUpdate.summary}</p>
+          <div class="mt-auto pt-8">
+            <a
+              href={primaryUpdate.href}
+              class="font-medium text-primary no-underline hover:underline"
+            >
+              查看详情 →
+            </a>
+          </div>
+        </div>
+      </article>
+
+      {secondaryUpdates.length > 0 && (
+        <div class="mt-4 grid gap-4 sm:grid-cols-2">
+          {secondaryUpdates.map((entry) => (
+            <a
+              href={entry.href}
+              class="group grid min-h-28 grid-cols-[6rem_minmax(0,1fr)] overflow-hidden rounded-lg border border-surface-border bg-surface no-underline hover:border-primary/50"
+            >
+              <div class="relative bg-inset">
+                {entry.cover ? (
+                  <img
+                    src={entry.cover}
+                    alt={entry.coverAlt ?? entry.title}
+                    class="absolute inset-0 h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <span class="ui-mono absolute inset-0 flex items-center justify-center text-[10px] text-muted-fg">
+                    UPDATE
+                  </span>
+                )}
+              </div>
+              <div class="p-4">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <Badge tone={getTone(entry)}>{entry.label}</Badge>
+                  {entry.meta && <Badge tone="muted">{entry.meta}</Badge>}
+                  <time
+                    class="ui-mono text-[11px] text-muted-fg"
+                    datetime={entry.date.toISOString()}
+                  >
+                    {formatDate(entry.date)}
+                  </time>
+                </div>
+                <h3 class="mt-2 line-clamp-2 font-medium text-surface-fg group-hover:text-primary">
+                  {entry.title}
+                </h3>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </section>
+  )}

@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HITSZ OSA — 哈尔滨工业大学（深圳）开源技术协会的 1998 风格个人主页。">
+  <meta name="theme-color" content="#e8d9ae">
+  <title>HITSZ OSA 的个人主页 ★ Open Source Forever!</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: light;
+      --cream-50:#fffbed;
+      --cream-100:#f7efcf;
+      --cream-200:#e8d9ae;
+      --cream-300:#d1bc80;
+      --cream-400:#aa915b;
+      --navy-700:#1d326e;
+      --navy-800:#112457;
+      --navy-900:#071638;
+      --red-500:#c62c34;
+      --red-700:#8f1720;
+      --green-700:#1f6b3b;
+      --amber-700:#91570a;
+      --ink:#191914;
+      --white:#fffff5;
+      --shadow:#756332;
+      --highlight:#fffbe7;
+      --link:#123a9d;
+      --visited:#643489;
+      --font-sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+      --font-serif:"Noto Serif SC","Songti SC",serif;
+      --font-mono:"JetBrains Mono","Cascadia Code",ui-monospace,monospace;
+      --s1:4px;
+      --s2:8px;
+      --s3:12px;
+      --s4:16px;
+      --s5:24px;
+      --s6:32px;
+      --frame:760px;
+      --badge-w:88px;
+      --badge-h:31px;
+      --border:2px;
+      --fast:120ms;
+      --slow:720ms;
+    }
+
+    *,*::before,*::after { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      min-width:0;
+      margin:0;
+      background-color:var(--cream-300);
+      background-image:
+        linear-gradient(45deg,var(--cream-200) 25%,transparent 25%,transparent 75%,var(--cream-200) 75%),
+        linear-gradient(45deg,var(--navy-800) 12.5%,transparent 12.5%,transparent 62.5%,var(--navy-800) 62.5%,var(--navy-800) 75%,transparent 75%),
+        linear-gradient(135deg,transparent 37.5%,color-mix(in srgb,var(--red-700) 44%,var(--cream-300)) 37.5%,color-mix(in srgb,var(--red-700) 44%,var(--cream-300)) 50%,transparent 50%);
+      background-position:0 0,var(--s2) var(--s2),0 0;
+      background-size:var(--s4) var(--s4);
+      color:var(--ink);
+      font-family:var(--font-sans);
+      font-size:14px;
+      line-height:1.55;
+      image-rendering:pixelated;
+    }
+    a { color:var(--link); text-decoration:underline; text-underline-offset:2px; }
+    a:visited { color:var(--visited); }
+    a:hover { background:var(--red-500); color:var(--white); text-decoration:none; }
+    a:focus-visible,button:focus-visible { outline:3px double var(--red-500); outline-offset:3px; }
+    ::selection { background:var(--navy-800); color:var(--cream-50); }
+
+    .skip-link {
+      position:fixed;
+      z-index:100;
+      top:var(--s2);
+      left:var(--s2);
+      translate:0 -160%;
+      border:var(--border) outset var(--cream-300);
+      background:var(--cream-50);
+      padding:var(--s2) var(--s3);
+      font-weight:700;
+    }
+    .skip-link:focus { translate:0; }
+
+    .page-frame {
+      width:min(calc(100% - var(--s5)),var(--frame));
+      margin:var(--s5) auto;
+      border:var(--s1) ridge var(--cream-50);
+      background:var(--cream-100);
+      box-shadow:var(--s2) var(--s2) 0 color-mix(in srgb,var(--navy-900) 62%,transparent);
+    }
+    .browser-strip {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:var(--s3);
+      border-bottom:var(--border) solid var(--navy-900);
+      background:var(--navy-800);
+      color:var(--cream-50);
+      padding:var(--s1) var(--s2);
+      font:700 11px/1.4 var(--font-mono);
+      letter-spacing:.04em;
+    }
+    .browser-lights { display:flex; gap:var(--s1); }
+    .browser-lights i {
+      display:block;
+      width:var(--s2);
+      height:var(--s2);
+      border:1px solid var(--cream-50);
+      background:var(--red-500);
+    }
+    .browser-lights i:nth-child(2) { background:var(--cream-300); }
+    .browser-lights i:nth-child(3) { background:var(--green-700); }
+
+    .masthead {
+      display:grid;
+      grid-template-columns:112px 1fr 112px;
+      align-items:center;
+      min-height:136px;
+      border-top:var(--border) solid var(--highlight);
+      border-bottom:var(--border) solid var(--shadow);
+      background:
+        radial-gradient(circle at 50% 50%,var(--cream-50) 0 2px,transparent 3px),
+        repeating-linear-gradient(0deg,var(--cream-100) 0 var(--s1),var(--cream-200) var(--s1) var(--s2));
+      padding:var(--s3);
+      text-align:center;
+    }
+    .penguin-seal { width:96px; height:112px; margin:auto; filter:drop-shadow(3px 3px 0 var(--cream-400)); }
+    .mast-copy small { display:block; color:var(--red-700); font:700 12px/1.3 var(--font-mono); letter-spacing:.12em; }
+    h1 {
+      margin:var(--s1) 0;
+      color:var(--navy-800);
+      font:900 30px/1.2 var(--font-serif);
+      text-shadow:2px 2px 0 var(--cream-50),4px 4px 0 var(--cream-300);
+    }
+    .rainbow-rule {
+      height:var(--s2);
+      margin:var(--s2) auto;
+      border:1px inset var(--cream-300);
+      background:repeating-linear-gradient(90deg,var(--navy-800) 0 var(--s4),var(--cream-300) var(--s4) var(--s5),var(--red-500) var(--s5) var(--s6));
+    }
+    .mast-copy b { color:var(--navy-700); font:700 12px/1.4 var(--font-mono); }
+    .new-burst {
+      display:inline-block;
+      rotate:-7deg;
+      border:2px dashed var(--cream-50);
+      outline:2px solid var(--red-700);
+      background:var(--red-500);
+      color:var(--white);
+      padding:var(--s1) var(--s2);
+      font:900 13px/1 var(--font-mono);
+      text-shadow:1px 1px 0 var(--navy-900);
+      animation:new-blink var(--slow) steps(1,end) infinite;
+    }
+    @keyframes new-blink { 0%,48% { opacity:1; } 49%,100% { opacity:.18; } }
+
+    .ticker {
+      overflow:hidden;
+      border-top:var(--border) solid var(--highlight);
+      border-bottom:var(--border) solid var(--shadow);
+      background:var(--navy-900);
+      color:var(--cream-50);
+      white-space:nowrap;
+    }
+    .ticker span {
+      display:inline-block;
+      min-width:100%;
+      padding:var(--s1) 0;
+      font:700 12px/1.4 var(--font-mono);
+      animation:scroll-left 16s linear infinite;
+    }
+    @keyframes scroll-left { from { translate:100% 0; } to { translate:-100% 0; } }
+
+    .nav-table { width:100%; border-collapse:separate; border-spacing:var(--s1); background:var(--cream-300); }
+    .nav-table td { padding:0; }
+    .nav-table a {
+      display:block;
+      border:var(--border) outset var(--cream-200);
+      background:var(--cream-100);
+      color:var(--navy-900);
+      padding:var(--s2) var(--s1);
+      font:800 12px/1 var(--font-sans);
+      text-align:center;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    .nav-table a:hover { border-style:inset; background:var(--red-500); color:var(--white); }
+    .nav-table a:active { translate:1px 1px; }
+    .nav-table a.external::after { content:" ↗"; color:var(--red-700); }
+    .nav-table a.external:hover::after { color:var(--white); }
+
+    .layout-table { width:100%; border-collapse:separate; border-spacing:var(--s2); table-layout:fixed; }
+    .layout-table > tbody > tr > td { vertical-align:top; }
+    .side-cell { width:196px; }
+    .panel {
+      margin-bottom:var(--s3);
+      border:var(--border) outset var(--cream-300);
+      background:var(--cream-50);
+    }
+    .panel-title {
+      margin:0;
+      border-bottom:var(--border) solid var(--cream-400);
+      background:var(--navy-800);
+      color:var(--cream-50);
+      padding:var(--s1) var(--s2);
+      font:800 13px/1.4 var(--font-mono);
+      letter-spacing:.03em;
+      text-shadow:1px 1px 0 var(--navy-900);
+    }
+    .panel-title::before { content:"◆ "; color:var(--cream-300); }
+    .panel-body { padding:var(--s3); }
+    .panel-body > :first-child { margin-top:0; }
+    .panel-body > :last-child { margin-bottom:0; }
+
+    .welcome-note {
+      border:1px dashed var(--red-700);
+      background:var(--cream-100);
+      padding:var(--s2);
+      color:var(--navy-900);
+      text-align:center;
+    }
+    .welcome-note strong { color:var(--red-700); }
+    .mini-penguin { display:block; width:72px; height:68px; margin:0 auto var(--s2); }
+    .quick-list { margin:0; padding:0; list-style:none; }
+    .quick-list li { border-bottom:1px dotted var(--cream-400); padding:var(--s2) 0; }
+    .quick-list li:last-child { border-bottom:0; }
+    .quick-list li::before { content:"▶"; margin-right:var(--s1); color:var(--red-500); font-size:10px; }
+    .counter-label { margin:0 0 var(--s2); font:700 11px/1.4 var(--font-mono); text-align:center; }
+    .counter { display:flex; justify-content:center; gap:2px; }
+    .digit {
+      overflow:hidden;
+      width:18px;
+      height:25px;
+      border:2px inset var(--cream-300);
+      background:var(--navy-900);
+      color:var(--cream-50);
+      font:700 18px/21px var(--font-mono);
+      text-align:center;
+    }
+    .digit-strip { display:block; animation:digit-flip var(--slow) steps(1,end) both; animation-delay:var(--delay); }
+    .digit-strip b { display:block; height:21px; font-weight:700; }
+    @keyframes digit-flip { 0%,55% { translate:0 0; } 56%,100% { translate:0 -21px; } }
+    .counter-caption { margin:var(--s2) 0 0; color:var(--shadow); font:700 10px/1.3 var(--font-mono); text-align:center; }
+    .webring { text-align:center; }
+    .webring-arrows { display:flex; justify-content:space-between; margin-top:var(--s2); font:700 11px/1 var(--font-mono); }
+
+    .hero-panel .panel-body { background:linear-gradient(90deg,var(--cream-50),var(--cream-100) 48%,var(--cream-50)); }
+    .intro {
+      margin:0;
+      color:var(--navy-900);
+      font-size:14px;
+      line-height:1.8;
+      text-align:justify;
+    }
+    .intro::first-letter { color:var(--red-700); font:900 30px/1 var(--font-serif); }
+    .cta-row { display:flex; flex-wrap:wrap; gap:var(--s2); margin-top:var(--s3); }
+    .retro-button {
+      display:inline-block;
+      border:var(--border) outset var(--cream-300);
+      background:var(--cream-100);
+      color:var(--navy-900) !important;
+      padding:var(--s2) var(--s3);
+      font-weight:800;
+      text-decoration:none;
+      box-shadow:1px 1px 0 var(--shadow);
+    }
+    .retro-button.primary { background:var(--navy-800); color:var(--cream-50) !important; }
+    .retro-button:hover { border-style:inset; background:var(--red-500); color:var(--white) !important; box-shadow:none; }
+    .retro-button:active { translate:1px 1px; }
+
+    .duotone-hr {
+      height:var(--s1);
+      margin:var(--s3) 0;
+      border:0;
+      border-top:2px solid var(--navy-800);
+      border-bottom:2px solid var(--red-500);
+    }
+    .news-list { margin:0; padding:0; list-style:none; }
+    .news-item {
+      display:grid;
+      grid-template-columns:48px 1fr;
+      gap:var(--s2);
+      border-bottom:1px dotted var(--cream-400);
+      padding:var(--s2) 0;
+    }
+    .news-item:last-child { border-bottom:0; }
+    .date { color:var(--navy-700); font:700 12px/1.6 var(--font-mono); }
+    .news-copy { min-width:0; }
+    .tag {
+      display:inline-block;
+      margin-right:var(--s1);
+      border:1px solid var(--navy-800);
+      background:var(--cream-100);
+      color:var(--navy-800);
+      padding:0 var(--s1);
+      font:700 10px/1.5 var(--font-mono);
+      vertical-align:.08em;
+    }
+    .tag.pinned,.tag.upcoming { border-color:var(--red-700); background:var(--red-500); color:var(--white); }
+    .tag.warn { border-color:var(--amber-700); color:var(--amber-700); }
+
+    .service-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:var(--s2);
+    }
+    .service {
+      min-width:0;
+      border:var(--border) inset var(--cream-300);
+      background:var(--cream-100);
+      padding:var(--s2);
+      transition:background-color var(--fast),translate var(--fast);
+    }
+    .service:hover { background:var(--cream-50); translate:0 -1px; }
+    .service h3 { margin:0 0 var(--s1); color:var(--navy-800); font-size:13px; }
+    .service p { margin:0; color:color-mix(in srgb,var(--ink) 75%,var(--cream-400)); font-size:12px; }
+    .status {
+      float:right;
+      margin-left:var(--s1);
+      color:var(--green-700);
+      font:700 9px/1.5 var(--font-mono);
+      text-transform:uppercase;
+    }
+    .status::before { content:"● "; }
+    .status.beta { color:var(--red-700); }
+
+    .friend-table { width:100%; border-collapse:collapse; }
+    .friend-table td { width:50%; border:1px dotted var(--cream-400); padding:var(--s2); }
+    .friend-table a::before { content:"★ "; color:var(--red-500); }
+
+    .signature {
+      margin:var(--s2) 0 0;
+      color:var(--shadow);
+      font:italic 12px/1.5 var(--font-serif);
+      text-align:right;
+    }
+    .signature b { color:var(--navy-800); }
+
+    .footer {
+      border-top:var(--border) solid var(--shadow);
+      background:var(--cream-200);
+      padding:var(--s3);
+      text-align:center;
+    }
+    .badge-row { display:flex; flex-wrap:wrap; justify-content:center; gap:var(--s2); margin-bottom:var(--s3); }
+    .web-badge {
+      display:block;
+      width:var(--badge-w);
+      height:var(--badge-h);
+      border:1px solid var(--ink);
+      background:var(--navy-900);
+      box-shadow:1px 1px 0 var(--highlight),2px 2px 0 var(--shadow);
+    }
+    .web-badge:hover { outline:2px solid var(--red-500); outline-offset:2px; }
+    .footer p { margin:var(--s1) 0; }
+    .footer-line { color:var(--navy-900); font:700 11px/1.6 var(--font-mono); }
+    .footer-links { font-weight:800; }
+    .console-note { color:var(--red-700); font:700 10px/1.5 var(--font-mono); }
+    .mail-line { font:700 11px/1.5 var(--font-mono); }
+
+    @media (max-width:620px) {
+      body { font-size:13px; }
+      .page-frame { width:calc(100% - var(--s3)); margin:var(--s2) auto; box-shadow:var(--s1) var(--s1) 0 color-mix(in srgb,var(--navy-900) 62%,transparent); }
+      .browser-strip { align-items:flex-start; font-size:9px; }
+      .browser-strip > span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+      .masthead { grid-template-columns:76px 1fr; min-height:116px; padding:var(--s2); }
+      .penguin-seal { width:70px; height:86px; }
+      .new-burst { grid-column:1 / -1; margin:var(--s1) auto 0; }
+      h1 { font-size:21px; text-shadow:1px 1px 0 var(--cream-50),2px 2px 0 var(--cream-300); }
+      .mast-copy small,.mast-copy b { font-size:10px; }
+      .nav-table,.nav-table tbody,.nav-table tr { display:block; }
+      .nav-table tr { display:grid; grid-template-columns:repeat(4,1fr); }
+      .nav-table td { min-width:0; }
+      .nav-table a { overflow:hidden; padding:var(--s2) 2px; font-size:11px; text-overflow:ellipsis; }
+      .layout-table,.layout-table tbody,.layout-table tr,.layout-table > tbody > tr > td { display:block; width:100%; }
+      .layout-table { border-spacing:var(--s2); }
+      .side-cell { display:grid !important; grid-template-columns:1fr 1fr; gap:var(--s2); }
+      .side-cell .panel { margin-bottom:0; }
+      .side-cell .panel:first-child { grid-column:1 / -1; }
+      .ticker span { animation-duration:12s; }
+      .service-grid { grid-template-columns:1fr; }
+      .friend-table,.friend-table tbody,.friend-table tr { display:block; }
+      .friend-table tr { display:grid; grid-template-columns:1fr; }
+      .friend-table td { display:block; width:100%; }
+      .cta-row { display:grid; grid-template-columns:1fr; }
+      .retro-button { text-align:center; }
+    }
+
+    @media (max-width:390px) {
+      .side-cell { display:block !important; }
+      .side-cell .panel { margin-bottom:var(--s2); }
+      .masthead { grid-template-columns:64px 1fr; }
+      .penguin-seal { width:60px; height:74px; }
+      h1 { font-size:19px; }
+      .panel-body { padding:var(--s2); }
+      .news-item { grid-template-columns:44px 1fr; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      html { scroll-behavior:auto; }
+      .ticker span,.new-burst { animation:none; }
+      .digit-strip { animation:none; translate:0 -21px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <div class="page-frame">
+    <div class="browser-strip">
+      <span>LOCATION: http://www.osa.moe/~homepage/index.html</span>
+      <span class="browser-lights" aria-hidden="true"><i></i><i></i><i></i></span>
+    </div>
+
+    <header class="masthead">
+      <svg class="penguin-seal" viewBox="0 0 96 112" role="img" aria-label="系着 OSA 红领结的企鹅欢迎你">
+        <path d="M48 7c-19 0-31 18-31 43 0 17-8 28-11 41 10 3 17 1 23-3 5 9 12 15 19 15s14-6 19-15c6 4 13 6 23 3-3-13-11-24-11-41C79 25 67 7 48 7Z" fill="#071638" stroke="#1d326e" stroke-width="3"/>
+        <ellipse cx="48" cy="62" rx="25" ry="33" fill="#fffbed"/>
+        <circle cx="36" cy="38" r="6" fill="#fffbed"/><circle cx="60" cy="38" r="6" fill="#fffbed"/>
+        <circle cx="37" cy="39" r="2.5" fill="#191914"/><circle cx="59" cy="39" r="2.5" fill="#191914"/>
+        <path d="m41 46 7-5 7 5-7 6Z" fill="#d1bc80" stroke="#91570a" stroke-width="1"/>
+        <path d="m48 60-12-8-5 7 12 8-7 11 12-6 12 6-7-11 12-8-5-7Z" fill="#c62c34" stroke="#8f1720" stroke-width="2"/>
+        <rect x="37" y="71" width="22" height="12" fill="#f7efcf" stroke="#1d326e"/>
+        <text x="48" y="80" text-anchor="middle" fill="#112457" font-size="9" font-weight="bold" font-family="monospace">OSA</text>
+        <path d="M32 97 18 104h21M64 97l14 7H57" fill="#d1bc80" stroke="#91570a" stroke-width="3" stroke-linejoin="round"/>
+      </svg>
+      <div class="mast-copy">
+        <small>WELCOME TO OUR HOMEPAGE</small>
+        <h1>HITSZ 开源技术协会</h1>
+        <div class="rainbow-rule" aria-hidden="true"></div>
+        <b>哈工大（深圳）的 Linux 用户秘密基地</b>
+      </div>
+      <span class="new-burst" aria-label="新内容">NEW!</span>
+    </header>
+
+    <div class="ticker" aria-label="滚动欢迎词"><span>★ 欢迎光临 HITSZ OSA！开源不打烊，企鹅在值班！★ MIRROR ONLINE ★ WIKI ONLINE ★ WEEKLY UPDATED ★</span></div>
+
+    <nav aria-label="主导航">
+      <table class="nav-table" role="presentation">
+        <tbody><tr>
+          <td><a href="#top" aria-current="page">首页</a></td>
+          <td><a href="#activity">活动</a></td>
+          <td><a href="#friends">友链</a></td>
+          <td><a href="#about">关于</a></td>
+          <td><a class="external" href="https://mirrors.hitsz.edu.cn/" target="_blank" rel="noreferrer">镜像站</a></td>
+          <td><a class="external" href="https://wiki.osa.moe/" target="_blank" rel="noreferrer">Wiki</a></td>
+        </tr></tbody>
+      </table>
+    </nav>
+
+    <main id="main">
+      <table class="layout-table" role="presentation">
+        <tbody><tr>
+          <td class="side-cell">
+            <aside aria-label="访客信息与快捷链接">
+              <section class="panel">
+                <h2 class="panel-title">站长欢迎</h2>
+                <div class="panel-body welcome-note">
+                  <svg class="mini-penguin" viewBox="0 0 72 68" role="img" aria-label="挥手的企鹅">
+                    <ellipse cx="35" cy="35" rx="23" ry="30" fill="#071638" stroke="#1d326e" stroke-width="2"/>
+                    <ellipse cx="35" cy="41" rx="16" ry="21" fill="#fffbed"/>
+                    <circle cx="27" cy="25" r="4" fill="#fffbed"/><circle cx="43" cy="25" r="4" fill="#fffbed"/>
+                    <circle cx="28" cy="25" r="2" fill="#191914"/><circle cx="42" cy="25" r="2" fill="#191914"/>
+                    <path d="m30 31 5-4 5 4-5 4Z" fill="#d1bc80"/>
+                    <path d="M53 28c9-10 12-6 9-2-2 3-5 5-8 8" fill="none" stroke="#071638" stroke-width="6" stroke-linecap="round"/>
+                    <path d="M22 62 11 66h16m21-4 11 4H43" fill="none" stroke="#91570a" stroke-width="3"/>
+                  </svg>
+                  <strong>嗨，朋友！</strong><br>无论你用什么发行版，都欢迎坐下聊聊。
+                </div>
+              </section>
+
+              <section class="panel">
+                <h2 class="panel-title">快捷传送</h2>
+                <div class="panel-body">
+                  <ul class="quick-list">
+                    <li><a href="#activity">最新动态</a></li>
+                    <li><a href="#services">在线服务</a></li>
+                    <li><a href="#friends">校园友链</a></li>
+                    <li><a href="#about">协会档案</a></li>
+                  </ul>
+                </div>
+              </section>
+
+              <section class="panel">
+                <h2 class="panel-title">访客计数器</h2>
+                <div class="panel-body">
+                  <p class="counter-label">您是第</p>
+                  <div class="counter" aria-label="访客编号 006827">
+                    <span class="digit"><span class="digit-strip" style="--delay:80ms"><b>9</b><b>0</b></span></span>
+                    <span class="digit"><span class="digit-strip" style="--delay:160ms"><b>9</b><b>0</b></span></span>
+                    <span class="digit"><span class="digit-strip" style="--delay:240ms"><b>5</b><b>6</b></span></span>
+                    <span class="digit"><span class="digit-strip" style="--delay:320ms"><b>7</b><b>8</b></span></span>
+                    <span class="digit"><span class="digit-strip" style="--delay:400ms"><b>1</b><b>2</b></span></span>
+                    <span class="digit"><span class="digit-strip" style="--delay:480ms"><b>6</b><b>7</b></span></span>
+                  </div>
+                  <p class="counter-caption">位访问本站的朋友</p>
+                </div>
+              </section>
+
+              <section class="panel">
+                <h2 class="panel-title">开源环</h2>
+                <div class="panel-body webring">
+                  <b>HITSZ OPEN WEBRING</b>
+                  <div class="webring-arrows"><a href="#friends">&lt;&lt; 上一站</a><a href="#friends">随机</a><a href="#friends">下一站 &gt;&gt;</a></div>
+                </div>
+              </section>
+            </aside>
+          </td>
+
+          <td id="top">
+            <section class="panel hero-panel" id="about">
+              <h2 class="panel-title">关于 HITSZ OSA</h2>
+              <div class="panel-body">
+                <p class="intro">我们是 HITSZ 开源技术协会（a.k.a. HITSZ OSA），由哈尔滨工业大学（深圳）学生中的 Linux 用户和开源软件爱好者自发组建的学生社团。我们致力于维护学校的开源基础建设，提升学校开源氛围，为开源技术爱好者提供交流平台。</p>
+                <hr class="duotone-hr">
+                <div class="cta-row">
+                  <a class="retro-button primary" href="https://mirrors.hitsz.edu.cn/" target="_blank" rel="noreferrer">访问镜像站</a>
+                  <a class="retro-button" href="#activity">社团活动</a>
+                  <a class="retro-button" href="#about-detail">了解协会</a>
+                </div>
+                <p class="signature">— <b>OSA 的企鹅们</b>，写于校园网的一台 Linux 主机</p>
+              </div>
+            </section>
+
+            <section class="panel" id="activity">
+              <h2 class="panel-title">最新动态 / WHAT'S NEW</h2>
+              <div class="panel-body">
+                <ul class="news-list">
+                  <li class="news-item"><time class="date" datetime="2026-07-20">07/20</time><div class="news-copy"><span class="tag pinned">置顶公告</span>协会门户网站改版测试中，欢迎通过 GitHub 反馈建议。 <span class="new-burst" aria-hidden="true">NEW!</span></div></li>
+                  <li class="news-item"><time class="date" datetime="2026-07-15">07/15</time><div class="news-copy"><span class="tag warn">公告 · warn</span>本周镜像站例行维护窗口：周日 02:00–03:00，期间部分同步任务可能延迟。</div></li>
+                  <li class="news-item"><time class="date" datetime="2026-08-08">08/08</time><div class="news-copy"><span class="tag upcoming">沙龙 · 即将举行</span>暑期开源分享夜：如何参与上游社区</div></li>
+                  <li class="news-item"><time class="date" datetime="2026-05-20">05/20</time><div class="news-copy"><span class="tag">讲座</span>HPC 入门：从登录集群到提交第一个作业</div></li>
+                  <li class="news-item"><time class="date" datetime="2026-04-12">04/12</time><div class="news-copy"><span class="tag">沙龙</span>Linux Install Party 2026 春季场</div></li>
+                </ul>
+              </div>
+            </section>
+
+            <section class="panel" id="services">
+              <h2 class="panel-title">我们的服务 / ONLINE SERVICES</h2>
+              <div class="panel-body service-grid">
+                <article class="service"><span class="status">online</span><h3>开源软件镜像站</h3><p>主流 Linux 发行版与开源软件镜像，校园网内高速下载。</p></article>
+                <article class="service"><span class="status">online</span><h3>镜像使用帮助</h3><p>一键换源。</p></article>
+                <article class="service"><span class="status">online</span><h3>OSA Wiki</h3><p>Linux 入门、HPC 文档。</p></article>
+                <article class="service"><span class="status">online</span><h3>Weekly 周报</h3><p>技术新闻与群聊精华。</p></article>
+                <article class="service"><span class="status">online · 校内</span><h3>Gitea 代码托管</h3><p>校内可用的轻量代码协作平台。</p></article>
+                <article class="service"><span class="status beta">beta · 校内</span><h3>AI Gateway</h3><p>统一接入主流大模型 API。</p></article>
+              </div>
+            </section>
+
+            <section class="panel" id="friends">
+              <h2 class="panel-title">友链交换 / COOL LINKS</h2>
+              <div class="panel-body">
+                <table class="friend-table">
+                  <tbody>
+                    <tr><td><a href="#friends">清华大学 TUNA 协会</a></td><td><a href="#friends">MirrorZ</a></td></tr>
+                    <tr><td><a href="#friends">中科大 LUG</a></td><td><a href="#friends">上交大 SJTUG</a></td></tr>
+                    <tr><td><a href="#friends">Awesome HITSZ</a></td><td><a href="#friends">哈尔滨工业大学（深圳）</a></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="panel" id="about-detail">
+              <h2 class="panel-title">站点档案 / SITE INFO</h2>
+              <div class="panel-body">
+                <p><b>本站主题：</b>Linux、开源软件、校园基础设施与技术分享。</p>
+                <p><b>最佳体验：</b>任何尊重开放标准的浏览器。分辨率 800×600 也不掉队。</p>
+                <p><b>最后更新：</b><time datetime="2026-07-26">2026-07-26</time> · HTML 手工编写 · 不含任何追踪器。</p>
+              </div>
+            </section>
+          </td>
+        </tr></tbody>
+      </table>
+    </main>
+
+    <footer class="footer">
+      <div class="badge-row" aria-label="经典浏览器兼容徽章">
+        <span class="web-badge" title="Netscape Now! compatible">
+          <svg width="88" height="31" viewBox="0 0 88 31" role="img" aria-label="Netscape Now 兼容徽章">
+            <defs><linearGradient id="net-bg" x2="0" y2="1"><stop stop-color="#1d326e"/><stop offset="1" stop-color="#071638"/></linearGradient></defs>
+            <rect width="88" height="31" fill="url(#net-bg)"/><rect x="1" y="1" width="86" height="29" fill="none" stroke="#fffbed"/>
+            <circle cx="16" cy="15.5" r="11" fill="#f7efcf" stroke="#d1bc80"/><path d="M10 23V8h4l8 10V8h4v15h-4l-8-10v10Z" fill="#112457"/>
+            <text x="31" y="12" fill="#fffbed" font-size="7" font-weight="bold" font-family="sans-serif">NETSCAPE</text><text x="31" y="24" fill="#e8d9ae" font-size="11" font-weight="bold" font-family="sans-serif">NOW!</text>
+          </svg>
+        </span>
+        <span class="web-badge" title="Best viewed with Internet Explorer">
+          <svg width="88" height="31" viewBox="0 0 88 31" role="img" aria-label="Internet Explorer 兼容徽章">
+            <defs><linearGradient id="ie-bg" x2="1" y2="1"><stop stop-color="#fffbed"/><stop offset="1" stop-color="#d1bc80"/></linearGradient></defs>
+            <rect width="88" height="31" fill="url(#ie-bg)"/><rect x="1" y="1" width="86" height="29" fill="none" stroke="#071638"/>
+            <path d="M6 17c0-7 4-12 10-12 5 0 8 3 8 7H11c0-2 2-4 5-4 3 0 4 2 4 4H9v4h15c-1 6-4 9-9 9-6 0-9-3-9-8Z" fill="#1d326e"/><path d="M4 21c7-6 15-9 25-10" fill="none" stroke="#c62c34" stroke-width="2"/>
+            <text x="31" y="11" fill="#112457" font-size="6.5" font-weight="bold" font-family="sans-serif">BEST VIEWED</text><text x="31" y="22" fill="#8f1720" font-size="8" font-weight="bold" font-family="sans-serif">WITH IE 4.0</text><text x="31" y="28" fill="#112457" font-size="4.5" font-family="monospace">800 × 600</text>
+          </svg>
+        </span>
+        <span class="web-badge" title="手工 HTML 4.0">
+          <svg width="88" height="31" viewBox="0 0 88 31" role="img" aria-label="Hand coded HTML 徽章">
+            <rect width="88" height="31" fill="#8f1720"/><rect x="2" y="2" width="84" height="27" fill="#fffbed" stroke="#071638"/>
+            <rect x="4" y="4" width="23" height="23" fill="#112457"/><text x="15.5" y="19" text-anchor="middle" fill="#fffbed" font-size="12" font-weight="bold" font-family="monospace">&lt;/&gt;</text>
+            <text x="31" y="12" fill="#8f1720" font-size="7" font-weight="bold" font-family="sans-serif">HAND CODED</text><text x="31" y="23" fill="#112457" font-size="9" font-weight="bold" font-family="monospace">HTML 4.0</text>
+          </svg>
+        </span>
+      </div>
+      <p class="footer-links"><a href="https://github.com/hitsz-osa" target="_blank" rel="noreferrer">GitHub</a> · <a href="#about-detail">QQ 群</a> · <a href="#about-detail">Bilibili</a></p>
+      <p class="footer-line">HITSZ OSA · 哈尔滨工业大学（深圳）开源技术协会 · Copyleft 2026</p>
+      <p class="mail-line">[ osa@hitsz.edu.cn ] — Open Source Forever!</p>
+      <p class="console-note">More information in browser console</p>
+    </footer>
+  </div>
+  <script>
+    console.info(
+      "%cHITSZ OSA%c 企鹅在控制台向你挥手！\n欢迎访问镜像站、Wiki 与 Weekly。Open Source Forever!",
+      "background:#112457;color:#fffbed;padding:4px 8px;font-weight:bold",
+      "color:#8f1720;font-weight:bold"
+    );
+  </script>
+</body>
+</html>

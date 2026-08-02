@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="《开源日报》头版：HITSZ OSA 校园开源服务、活动与社群动态。">
+  <meta name="theme-color" content="#eee8d9">
+  <title>开源日报｜HITSZ OSA</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme:light;
+      --paper:#eee8d9;
+      --paper-deep:#e3dccb;
+      --ink:#191713;
+      --ink-soft:#4f4a40;
+      --rule:#2e2b25;
+      --rule-light:#aaa18f;
+      --stamp:#a51d17;
+      --serif:"Noto Serif SC","Songti SC","STSong",serif;
+      --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+      --mono:"JetBrains Mono","Cascadia Code",ui-monospace,monospace;
+      --s1:.25rem;
+      --s2:.5rem;
+      --s3:.75rem;
+      --s4:1rem;
+      --s5:1.25rem;
+      --s6:1.5rem;
+      --s8:2rem;
+      --s10:2.5rem;
+      --s12:3rem;
+      --s16:4rem;
+      --page:82.5rem;
+      --ease:cubic-bezier(.16,1,.3,1);
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:#cfc7b5}
+    body{
+      min-width:20rem;
+      margin:0;
+      overflow-x:hidden;
+      background:
+        radial-gradient(circle at 20% 18%,rgba(25,23,19,.055) 0 .045rem,transparent .055rem),
+        radial-gradient(circle at 73% 61%,rgba(25,23,19,.04) 0 .04rem,transparent .05rem),
+        #cfc7b5;
+      background-size:.7rem .7rem,.9rem .9rem;
+      color:var(--ink);
+      font-family:var(--serif);
+      line-height:1.7;
+      text-rendering:optimizeLegibility;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit}
+    :focus-visible{outline:.16rem solid var(--stamp);outline-offset:.2rem}
+    ::selection{background:rgba(165,29,23,.18)}
+    .skip-link{
+      position:fixed;z-index:100;top:var(--s2);left:var(--s2);translate:0 -6rem;
+      border:.08rem solid var(--ink);background:var(--paper);padding:var(--s2) var(--s3);
+      font-family:var(--sans);font-weight:700;text-decoration:none;transition:translate .16s ease;
+    }
+    .skip-link:focus{translate:0}
+    .paper{
+      position:relative;width:min(100%,var(--page));margin-inline:auto;background:var(--paper);
+      box-shadow:0 .5rem 2.5rem rgba(33,28,20,.18);
+    }
+    .paper::before{
+      position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.23;content:"";
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
+    }
+    .paper>*{position:relative;z-index:1}
+    .page-pad{padding-inline:clamp(var(--s4),4vw,var(--s10))}
+    .utility{
+      display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:var(--s4);
+      min-height:2.35rem;border-top:.25rem solid var(--ink);border-bottom:.06rem solid var(--ink);
+      font:600 .68rem/1.3 var(--sans);letter-spacing:.09em;
+    }
+    .utility .weather{text-align:right}
+    .utility strong{font-family:var(--mono);font-size:.62rem;letter-spacing:.04em}
+    .masthead{
+      display:grid;grid-template-columns:8rem 1fr 8rem;align-items:center;gap:var(--s4);
+      padding-block:var(--s4);border-bottom:.24rem double var(--ink);text-align:center;
+    }
+    .brand-note,.edition{font-size:.69rem;line-height:1.45;letter-spacing:.12em}
+    .brand-note{text-align:left}
+    .edition{text-align:right}
+    .masthead-title{margin:0;font-size:clamp(3.4rem,8.5vw,7.2rem);font-weight:900;line-height:.9;letter-spacing:.02em}
+    .masthead-title span{display:block;margin-top:var(--s2);font:700 .7rem/1 var(--mono);letter-spacing:.52em;text-transform:uppercase}
+    .nav{
+      display:flex;align-items:center;justify-content:center;min-height:2.9rem;border-bottom:.08rem solid var(--ink);
+      font:700 .78rem/1 var(--sans);letter-spacing:.12em;
+    }
+    .nav a{position:relative;display:inline-flex;align-items:center;min-height:2.9rem;padding-inline:var(--s4);text-decoration:none}
+    .nav a+a::before{position:absolute;left:0;color:var(--rule-light);content:"◆";font-size:.38rem}
+    .nav a::after{position:absolute;right:var(--s4);bottom:.5rem;left:var(--s4);height:.08rem;background:var(--stamp);content:"";scale:0 1;transform-origin:left;transition:scale .2s var(--ease)}
+    .nav a:hover::after,.nav a[aria-current="page"]::after{scale:1 1}
+    .external-label{font-family:var(--mono);font-size:.63rem;letter-spacing:.04em}
+    main{padding-bottom:var(--s10)}
+    .hero{
+      display:grid;grid-template-columns:minmax(0,2.15fr) minmax(15rem,.85fr);gap:var(--s6);
+      padding-block:var(--s6);border-bottom:.24rem double var(--ink);
+    }
+    .lead{padding-right:var(--s6);border-right:.06rem solid var(--ink)}
+    .kicker{display:flex;align-items:center;gap:var(--s2);margin:0 0 var(--s2);font:800 .72rem/1.3 var(--sans);letter-spacing:.18em}
+    .kicker::before{width:2.4rem;height:.16rem;background:var(--ink);content:""}
+    .hero h1{margin:0 0 var(--s3);font-size:clamp(2.4rem,5vw,4.8rem);font-weight:900;line-height:1.04;letter-spacing:.025em}
+    .deck{margin:0 0 var(--s4);font-size:clamp(1.04rem,1.6vw,1.28rem);font-weight:700;line-height:1.55;text-align:justify}
+    .intro{margin:0;column-count:2;column-gap:var(--s6);column-rule:.06rem solid var(--rule-light);font-size:.92rem;text-align:justify}
+    .intro::first-letter{float:left;margin:.13em .12em 0 0;font-size:4.1em;font-weight:900;line-height:.72}
+    .byline{display:block;margin-top:var(--s3);font:600 .63rem/1.4 var(--mono);letter-spacing:.08em}
+    .hero-side{display:flex;min-width:0;flex-direction:column;justify-content:space-between}
+    .penguin-box{position:relative;min-height:15rem;border:.08rem solid var(--ink);display:grid;place-items:center;padding:var(--s4);background:rgba(255,255,255,.08)}
+    .penguin-box::before,.penguin-box::after{position:absolute;width:2.2rem;height:2.2rem;content:""}
+    .penguin-box::before{top:.28rem;left:.28rem;border-top:.08rem solid var(--ink);border-left:.08rem solid var(--ink)}
+    .penguin-box::after{right:.28rem;bottom:.28rem;border-right:.08rem solid var(--ink);border-bottom:.08rem solid var(--ink)}
+    .penguin-box svg{width:min(100%,10rem);height:auto}
+    .penguin-caption{margin:var(--s2) 0 0;font-size:.72rem;letter-spacing:.12em;text-align:center}
+    .stamp{
+      position:absolute;right:-.35rem;bottom:-.55rem;display:grid;width:5.4rem;height:5.4rem;place-items:center;
+      rotate:-11deg;border:.23rem double var(--stamp);border-radius:50%;color:var(--stamp);
+      font:900 1.04rem/1.15 var(--serif);letter-spacing:.12em;text-align:center;opacity:.92;
+    }
+    .stamp::before{position:absolute;inset:.3rem;border:.08rem solid var(--stamp);border-radius:50%;content:""}
+    .actions{display:grid;grid-template-columns:1fr 1fr;margin-top:var(--s4);border-top:.08rem solid var(--ink);border-left:.08rem solid var(--ink)}
+    .actions a{
+      min-height:3rem;display:flex;align-items:center;justify-content:space-between;gap:var(--s2);
+      border-right:.08rem solid var(--ink);border-bottom:.08rem solid var(--ink);padding:var(--s2) var(--s3);
+      font:800 .72rem/1.25 var(--sans);letter-spacing:.06em;text-decoration:none;transition:background .16s ease,color .16s ease;
+    }
+    .actions a:first-child{grid-column:1/-1;background:var(--ink);color:var(--paper)}
+    .actions a:hover{background:var(--stamp);color:var(--paper)}
+    .section{padding-block:var(--s8);border-bottom:.24rem double var(--ink)}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:var(--s4);margin-bottom:var(--s4);border-bottom:.16rem solid var(--ink);padding-bottom:var(--s2)}
+    .section-head h2{margin:0;font-size:clamp(1.8rem,3.7vw,3rem);line-height:1;letter-spacing:.08em}
+    .section-head p{margin:0;font:600 .65rem/1.4 var(--mono);letter-spacing:.08em;text-align:right}
+    .briefs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:.06rem solid var(--ink);border-left:.06rem solid var(--ink)}
+    .brief{
+      min-width:0;padding:var(--s3);border-right:.06rem solid var(--ink);border-bottom:.06rem solid var(--ink);
+      transition:background .16s ease,translate .2s var(--ease);
+    }
+    .brief:hover{background:rgba(25,23,19,.055);translate:0 -.12rem}
+    .brief time{display:block;margin-bottom:var(--s2);font:800 .7rem/1 var(--mono);letter-spacing:.06em}
+    .brief .tag{display:inline-block;margin-bottom:var(--s2);border:.06rem solid var(--ink);padding:.16rem .28rem;font:800 .58rem/1.2 var(--sans);letter-spacing:.06em}
+    .brief .warn{border-style:double;border-width:.18rem;padding:.07rem .2rem}
+    .brief a{font-size:.86rem;font-weight:700;line-height:1.55;text-decoration-thickness:.06rem;text-underline-offset:.18rem}
+    .brief a:hover{text-decoration-style:double}
+    .services{
+      column-count:3;column-gap:var(--s8);column-rule:.06rem solid var(--ink);orphans:3;widows:3;
+    }
+    .service{display:inline-block;width:100%;margin:0 0 var(--s6);break-inside:avoid}
+    .service-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s2);margin-bottom:var(--s2);border-bottom:.06rem solid var(--ink);padding-bottom:var(--s1)}
+    .service h3{margin:0;font-size:1.18rem;line-height:1.3;letter-spacing:.03em}
+    .state{font:800 .58rem/1.2 var(--mono);letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+    .state::before{display:inline-block;width:.38rem;height:.38rem;margin-right:.3rem;border-radius:50%;background:var(--ink);content:""}
+    .service p{margin:0;font-size:.9rem;line-height:1.78;text-align:justify}
+    .service a{font-weight:800;text-decoration-thickness:.06rem;text-underline-offset:.2rem}
+    .service a:hover{background:var(--ink);color:var(--paper)}
+    .service p::first-letter{font-weight:900}
+    .classifieds{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-top:.08rem solid var(--ink);border-left:.08rem solid var(--ink)}
+    .ad{
+      min-height:8.25rem;display:flex;min-width:0;flex-direction:column;justify-content:space-between;gap:var(--s3);
+      border-right:.08rem solid var(--ink);border-bottom:.08rem solid var(--ink);padding:var(--s3);text-align:center;text-decoration:none;
+      transition:background .16s ease,color .16s ease;
+    }
+    .ad:hover{background:var(--ink);color:var(--paper)}
+    .ad small{font:700 .58rem/1.2 var(--mono);letter-spacing:.12em}
+    .ad strong{font-size:.94rem;line-height:1.45}
+    .ad span{font:700 .64rem/1.2 var(--sans);letter-spacing:.08em}
+    footer{padding-block:var(--s6) var(--s8)}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:var(--s6);padding-top:var(--s3);border-top:.16rem solid var(--ink)}
+    .footer-grid p{margin:0;font-size:.75rem;line-height:1.7}
+    .social{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s4);font:700 .72rem/1.4 var(--sans)}
+    .social a{text-underline-offset:.18rem}
+    .social a:hover{text-decoration-style:double}
+    .console{font:600 .62rem/1.6 var(--mono)!important;letter-spacing:.03em}
+    .folio{display:flex;justify-content:space-between;gap:var(--s4);margin-top:var(--s4);border-top:.06rem solid var(--ink);padding-top:var(--s2);font:600 .57rem/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    @media (max-width:64rem){
+      .briefs{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .brief:last-child{grid-column:1/-1}
+      .classifieds{grid-template-columns:repeat(3,minmax(0,1fr))}
+    }
+    @media (max-width:46rem){
+      .page-pad{padding-inline:var(--s4)}
+      .utility{grid-template-columns:1fr auto}.utility .weather{display:none}
+      .masthead{grid-template-columns:1fr;padding-block:var(--s3)}
+      .brand-note,.edition{text-align:center}.brand-note{display:none}
+      .masthead-title{font-size:clamp(3.2rem,17vw,5rem)}
+      .nav{justify-content:flex-start;overflow-x:auto;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}
+      .nav a{flex:0 0 auto;padding-inline:var(--s3)}
+      .nav a::after{right:var(--s3);left:var(--s3)}
+      .hero{grid-template-columns:1fr;gap:var(--s4)}
+      .lead{padding-right:0;border-right:0}
+      .intro{column-count:1}
+      .hero-side{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);align-items:stretch}
+      .penguin-box{min-height:12rem}
+      .actions{margin-top:0}
+      .section{padding-block:var(--s6)}
+      .section-head{align-items:start}.section-head p{max-width:9rem}
+      .briefs{grid-template-columns:1fr}.brief:last-child{grid-column:auto}
+      .services{column-count:1}
+      .classifieds{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .footer-grid{grid-template-columns:1fr}.folio{flex-direction:column}
+    }
+    @media (max-width:26rem){
+      .hero-side{grid-template-columns:1fr}
+      .penguin-box{min-height:11rem}
+      .classifieds{grid-template-columns:1fr 1fr}
+      .ad{min-height:7rem;padding:var(--s2)}
+    }
+    @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳至正文</a>
+  <div class="paper">
+    <header class="page-pad">
+      <div class="utility">
+        <strong>HITSZ OSA / OPEN SOURCE DAILY</strong>
+        <span>2026年7月26日　星期日</span>
+        <span class="weather">深圳 · 多云 · 31℃</span>
+      </div>
+      <div class="masthead">
+        <p class="brand-note">哈尔滨工业大学（深圳）<br>学生开源技术社团</p>
+        <p class="masthead-title">开源日报<span>HITSZ OSA</span></p>
+        <p class="edition">2026年7月26日<br><strong>第42期</strong> · 免费赠阅</p>
+      </div>
+      <nav class="nav" aria-label="主导航">
+        <a href="#main" aria-current="page">首页</a>
+        <a href="#news">活动</a>
+        <a href="#friends">友链</a>
+        <a href="#about">关于</a>
+        <a href="#services" class="external-label">镜像站 ↗</a>
+        <a href="#services" class="external-label">Wiki ↗</a>
+      </nav>
+    </header>
+
+    <main id="main" class="page-pad">
+      <section class="hero" aria-labelledby="hero-title">
+        <article class="lead">
+          <p class="kicker">头版头条 · 校园开源</p>
+          <h1 id="hero-title">HITSZ 开源技术协会</h1>
+          <p class="deck">学生自发组建，维护开放基础设施；让每一次下载、每一份文档与每一场讨论，都成为校园开源的一部分。</p>
+          <p class="intro">我们是 HITSZ 开源技术协会（a.k.a. HITSZ OSA），由哈尔滨工业大学（深圳）学生中的 Linux 用户和开源软件爱好者自发组建的学生社团。我们致力于维护学校的开源基础建设，提升学校开源氛围，为开源技术爱好者提供交流平台。</p>
+          <span class="byline">本报记者 OSA 编辑部 / 深圳大学城讯</span>
+        </article>
+        <aside class="hero-side" aria-label="协会吉祥物与快捷入口">
+          <figure style="margin:0">
+            <div class="penguin-box">
+              <svg viewBox="0 0 180 210" role="img" aria-label="戴着报童帽、挥手欢迎的企鹅">
+                <g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                  <path fill="#191713" d="M52 83c3-35 20-52 41-52 25 0 42 21 43 58l-1 62c-1 31-17 49-43 49-28 0-45-19-46-49z"/>
+                  <ellipse cx="91" cy="125" rx="34" ry="53" fill="#eee8d9"/>
+                  <path fill="#eee8d9" d="M61 77c4-16 15-27 30-27s27 11 32 27c-10-7-20-7-31 0-11-8-21-8-31 0z"/>
+                  <circle cx="77" cy="78" r="3.2" fill="#191713" stroke="none"/>
+                  <circle cx="107" cy="78" r="3.2" fill="#191713" stroke="none"/>
+                  <path d="m85 88 8 5 8-5-8-4z" fill="#eee8d9"/>
+                  <path d="M48 111 23 93M24 93l-5-17M24 93l-13-8M132 112l24 20"/>
+                  <path d="m70 196-14 9h24M111 196l14 9h-24"/>
+                  <path d="M48 46c17-16 64-22 91 1M59 40l7-22 53 3 11 21z" fill="#eee8d9"/>
+                  <path d="M65 19c15 8 34 10 54 2"/>
+                  <path d="M67 117h50v43H67z" fill="#eee8d9"/>
+                  <path d="M73 126h37M73 135h28M73 144h33" stroke-width="2"/>
+                </g>
+              </svg>
+              <span class="stamp" aria-label="红色印章：开源有我">开源<br>有我</span>
+            </div>
+            <figcaption class="penguin-caption">企鹅阿开：欢迎来到 OSA！</figcaption>
+          </figure>
+          <div class="actions" aria-label="快捷入口">
+            <a href="#services"><span>访问镜像站</span><span>→</span></a>
+            <a href="#news"><span>社团活动</span><span>→</span></a>
+            <a href="#about"><span>了解协会</span><span>→</span></a>
+          </div>
+        </aside>
+      </section>
+
+      <section id="news" class="section" aria-labelledby="news-title">
+        <div class="section-head">
+          <h2 id="news-title">协会简讯</h2>
+          <p>五则 / 按编辑优先级刊载<br>OSA NEWSWIRE</p>
+        </div>
+        <div class="briefs">
+          <article class="brief"><time datetime="2026-07-20">07/20</time><span class="tag">置顶公告</span><br><a href="#">协会门户网站改版测试中，欢迎通过 GitHub 反馈建议。</a></article>
+          <article class="brief"><time datetime="2026-07-15">07/15</time><span class="tag warn">公告 · WARN</span><br><a href="#">本周镜像站例行维护窗口：周日 02:00–03:00，期间部分同步任务可能延迟。</a></article>
+          <article class="brief"><time datetime="2026-08-08">08/08</time><span class="tag">沙龙 · 即将举行</span><br><a href="#">暑期开源分享夜：如何参与上游社区</a></article>
+          <article class="brief"><time datetime="2026-05-20">05/20</time><span class="tag">讲座</span><br><a href="#">HPC 入门：从登录集群到提交第一个作业</a></article>
+          <article class="brief"><time datetime="2026-04-12">04/12</time><span class="tag">沙龙</span><br><a href="#">Linux Install Party 2026 春季场</a></article>
+        </div>
+      </section>
+
+      <section id="services" class="section" aria-labelledby="services-title">
+        <div class="section-head">
+          <h2 id="services-title">基础设施特刊</h2>
+          <p>六项服务 / 持续维护<br>PUBLIC INFRASTRUCTURE</p>
+        </div>
+        <div class="services">
+          <article class="service"><div class="service-head"><h3><a href="#">开源软件镜像站</a></h3><span class="state">online</span></div><p>主流 Linux 发行版与开源软件镜像，校园网内高速下载。它是协会最忙碌的“发行站”，将开放软件稳定送到每一台电脑。</p></article>
+          <article class="service"><div class="service-head"><h3><a href="#">镜像使用帮助</a></h3><span class="state">online</span></div><p>一键换源。面向新手与熟练用户整理常见发行版配置，让软件源切换不再需要反复检索。</p></article>
+          <article class="service"><div class="service-head"><h3><a href="#">OSA Wiki</a></h3><span class="state">online</span></div><p>Linux 入门、HPC 文档。经验被认真编辑为可检索、可更新、可继续书写的校园技术档案。</p></article>
+          <article class="service"><div class="service-head"><h3><a href="#">Weekly 周报</a></h3><span class="state">online</span></div><p>技术新闻与群聊精华。每周打捞值得读的项目、观点与工具，用短篇幅记录长久兴趣。</p></article>
+          <article class="service"><div class="service-head"><h3><a href="#">Gitea 代码托管</a></h3><span class="state">online · 校内</span></div><p>面向校内项目的协作仓库，为代码、议题与版本留下清晰脉络，也让共同维护更自然。</p></article>
+          <article class="service"><div class="service-head"><h3><a href="#">AI Gateway</a></h3><span class="state">beta · 校内</span></div><p>统一接入主流大模型 API。仍在测试中的共享入口，服务课程探索、原型开发与技术研究。</p></article>
+        </div>
+      </section>
+
+      <section id="friends" class="section" aria-labelledby="friends-title">
+        <div class="section-head">
+          <h2 id="friends-title">分类广告</h2>
+          <p>友好组织 / 公益刊登<br>CLASSIFIEDS</p>
+        </div>
+        <div class="classifieds">
+          <a class="ad" href="#"><small>高校社团 · 01</small><strong>清华大学<br>TUNA 协会</strong><span>镜像与开源社区 ↗</span></a>
+          <a class="ad" href="#"><small>镜像导航 · 02</small><strong>MirrorZ</strong><span>开源镜像站索引 ↗</span></a>
+          <a class="ad" href="#"><small>高校社团 · 03</small><strong>中科大<br>LUG</strong><span>Linux 用户组织 ↗</span></a>
+          <a class="ad" href="#"><small>高校社团 · 04</small><strong>上交大<br>SJTUG</strong><span>技术与镜像服务 ↗</span></a>
+          <a class="ad" href="#"><small>校园导航 · 05</small><strong>Awesome<br>HITSZ</strong><span>校园资源清单 ↗</span></a>
+          <a class="ad" href="#"><small>学校官网 · 06</small><strong>哈尔滨工业大学<br>（深圳）</strong><span>官方网站 ↗</span></a>
+        </div>
+      </section>
+    </main>
+
+    <footer id="about" class="page-pad">
+      <div class="footer-grid">
+        <p><strong>HITSZ OSA</strong><br>哈尔滨工业大学（深圳）开源技术协会<br>Copyleft 2026</p>
+        <nav class="social" aria-label="社交媒体"><a href="#">GitHub</a><a href="#">QQ 群</a><a href="#">Bilibili</a></nav>
+        <p class="console">More information in browser console</p>
+      </div>
+      <div class="folio"><span>本报由 HITSZ OSA 编辑与维护 · 开放协作 · 欢迎投稿</span><span>OPEN SOURCE DAILY / PAGE 01</span></div>
+    </footer>
+  </div>
+  <script>
+    console.info("HITSZ OSA · 开源日报 第42期");
+    console.info("More information: 欢迎访问镜像站、OSA Wiki，或在 GitHub 参与门户建设。");
+  </script>
+</body>
+</html>

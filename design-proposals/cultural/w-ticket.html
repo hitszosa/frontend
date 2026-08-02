@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="HITSZ 开源技术协会——一张通往开放世界的票。">
+  <meta name="theme-color" content="#ece8df">
+  <title>HITSZ OSA · 票据拼贴</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root{
+      color-scheme:light;
+      --desk:#ece8df;
+      --desk-line:#d8d1c5;
+      --ink:#24272b;
+      --muted:#686a6c;
+      --paper:#fffdf5;
+      --paper-deep:#f1ead9;
+      --indigo:#373da9;
+      --osa:#576edb;
+      --accent:#8762d3;
+      --sage:#cbd8c4;
+      --sage-ink:#34513d;
+      --blue:#cbd9e7;
+      --blue-ink:#294862;
+      --rose:#e8cecc;
+      --rose-ink:#6c3938;
+      --ochre:#e4d2aa;
+      --ochre-ink:#644e25;
+      --lilac:#d9d1e8;
+      --lilac-ink:#4e3d6d;
+      --mint:#c9ddd6;
+      --mint-ink:#31594d;
+      --warn:#9a4d35;
+      --success:#2f7048;
+      --shadow:0 .25rem .5rem rgb(43 38 30 / .10),0 1rem 2.5rem rgb(43 38 30 / .10);
+      --shadow-raised:0 .5rem .75rem rgb(43 38 30 / .12),0 1.5rem 3rem rgb(43 38 30 / .14);
+      --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+      --serif:"Noto Serif SC","Songti SC",serif;
+      --mono:"JetBrains Mono","Cascadia Code",ui-monospace,monospace;
+      --s1:.25rem;
+      --s2:.5rem;
+      --s3:.75rem;
+      --s4:1rem;
+      --s5:1.5rem;
+      --s6:2rem;
+      --s7:3rem;
+      --s8:4rem;
+      --radius:.25rem;
+      --content:76rem;
+      --ease:cubic-bezier(.22,1,.36,1);
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--desk)}
+    body{margin:0;min-width:20rem;overflow-x:hidden;background-color:var(--desk);background-image:linear-gradient(90deg,transparent 49.8%,rgb(255 255 255 / .18) 50%,transparent 50.2%),repeating-linear-gradient(0deg,transparent 0,transparent 3.9rem,var(--desk-line) 4rem);color:var(--ink);font-family:var(--sans);line-height:1.65;text-rendering:optimizeLegibility}
+    a{color:inherit;text-decoration:none}
+    a:focus-visible{outline:.125rem solid var(--osa);outline-offset:.25rem}
+    ::selection{background:var(--lilac);color:var(--indigo)}
+    .skip{position:fixed;z-index:99;top:var(--s3);left:var(--s3);translate:0 -6rem;background:var(--ink);color:var(--paper);padding:var(--s2) var(--s4);font-weight:800}
+    .skip:focus{translate:0}
+    .shell{width:min(calc(100% - 2rem),var(--content));margin-inline:auto}
+    .eyebrow{margin:0 0 var(--s2);color:var(--indigo);font:800 .68rem/1.4 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:var(--s4);margin-bottom:var(--s5)}
+    .section-head h2{margin:0;font:900 clamp(1.65rem,3vw,2.5rem)/1.05 var(--serif);letter-spacing:-.03em}
+    .section-head p{margin:0;color:var(--muted);font:600 .7rem/1.4 var(--mono);letter-spacing:.06em}
+
+    .site-header{position:relative;z-index:20;padding-top:var(--s4)}
+    .nav-ticket{display:flex;align-items:center;justify-content:space-between;gap:var(--s5);min-height:4rem;padding:var(--s2) var(--s4);border:.0625rem solid var(--desk-line);background:var(--paper);box-shadow:0 .25rem .75rem rgb(43 38 30 / .07);transform:rotate(-.35deg)}
+    .brand{display:inline-flex;align-items:center;gap:var(--s2);min-height:2.75rem;font:900 .86rem/1 var(--mono);letter-spacing:.03em;white-space:nowrap}
+    .brand svg{width:2rem;height:2rem;color:var(--indigo)}
+    .brand span{color:var(--indigo)}
+    .nav{display:flex;align-items:center;justify-content:flex-end;gap:var(--s1);margin:0;padding:0;list-style:none;flex-wrap:wrap}
+    .nav a{display:inline-flex;align-items:center;min-height:2.75rem;padding:0 var(--s3);border:.0625rem dashed transparent;font-size:.78rem;font-weight:750;transition:background .18s ease,color .18s ease,border-color .18s ease}
+    .nav a:hover,.nav a[aria-current="page"]{border-color:var(--indigo);background:var(--lilac);color:var(--indigo)}
+    .nav .external::after{content:" ↗";font-family:var(--mono);font-size:.65rem}
+
+    .hero{padding:clamp(3rem,7vw,6.5rem) 0 var(--s8)}
+    .boarding-pass{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 15rem;min-height:30rem;background:var(--paper);box-shadow:var(--shadow);transform:rotate(.6deg);transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+    .boarding-pass:hover{transform:rotate(0deg) translateY(-.25rem);box-shadow:var(--shadow-raised)}
+    .boarding-pass::before,.boarding-pass::after{position:absolute;z-index:2;right:14.35rem;width:1.25rem;height:1.25rem;border-radius:50%;background:var(--desk);content:"";translate:50% 0}
+    .boarding-pass::before{top:-.625rem}.boarding-pass::after{bottom:-.625rem}
+    .pass-main{position:relative;display:flex;flex-direction:column;padding:clamp(1.5rem,4vw,3.5rem);overflow:hidden}
+    .pass-main::after{position:absolute;right:0;top:0;bottom:0;border-right:.125rem dashed rgb(36 39 43 / .35);content:""}
+    .airline{display:flex;align-items:center;justify-content:space-between;gap:var(--s4);margin-bottom:auto}
+    .airline-name{display:flex;align-items:center;gap:var(--s3);font:900 1rem/1 var(--mono);letter-spacing:.16em;color:var(--indigo)}
+    .penguin{width:4rem;height:4rem;flex:none;color:var(--indigo)}
+    .class-stamp{padding:var(--s2) var(--s3);border:.125rem solid var(--accent);color:var(--accent);font:900 .7rem/1 var(--mono);letter-spacing:.1em;transform:rotate(2deg)}
+    .route{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:var(--s4);margin:var(--s6) 0}
+    .airport-code{font:900 clamp(2.5rem,7vw,6.2rem)/.88 var(--mono);letter-spacing:-.09em;color:var(--ink)}
+    .route-line{position:relative;height:.125rem;background:var(--indigo)}
+    .route-line::before{position:absolute;left:50%;top:50%;translate:-50% -50%;padding:0 var(--s2);background:var(--paper);color:var(--indigo);content:"✈";font-size:1.4rem}
+    .route-name{display:flex;justify-content:space-between;margin-top:var(--s2);color:var(--muted);font:700 .65rem/1.3 var(--mono);letter-spacing:.08em}
+    .hero h1{margin:0 0 var(--s4);font:900 clamp(2rem,5vw,4rem)/1.08 var(--serif);letter-spacing:-.045em;color:var(--indigo)}
+    .intro{max-width:54rem;margin:0;color:#414449;font-size:clamp(.88rem,1.3vw,1rem)}
+    .actions{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s5)}
+    .action{display:inline-flex;align-items:center;justify-content:center;min-height:2.75rem;padding:0 var(--s4);border:.0625rem solid var(--ink);font-size:.78rem;font-weight:800;transition:transform .18s var(--ease),background .18s ease,color .18s ease}
+    .action.primary{border-color:var(--indigo);background:var(--indigo);color:var(--paper)}
+    .action:hover{transform:translateY(-.15rem);background:var(--ink);color:var(--paper)}
+    .action.primary:hover{background:var(--osa);border-color:var(--osa)}
+    .pass-stub{display:flex;flex-direction:column;justify-content:space-between;padding:var(--s5);background:var(--lilac);background-image:repeating-linear-gradient(90deg,transparent 0,transparent .48rem,rgb(55 61 169 / .05) .5rem)}
+    .stub-label{color:var(--lilac-ink);font:900 .66rem/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+    .stub-value{display:block;margin-top:var(--s1);color:var(--indigo);font:900 2.6rem/.9 var(--mono);letter-spacing:-.06em}
+    .seat-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4);border-block:.0625rem solid rgb(78 61 109 / .35);padding:var(--s4) 0}
+    .seat-grid strong{display:block;margin-top:var(--s1);font:900 1.35rem/1 var(--mono)}
+    .barcode{height:5.5rem;background:repeating-linear-gradient(90deg,var(--ink) 0,var(--ink) .12rem,transparent .12rem,transparent .22rem,var(--ink) .22rem,var(--ink) .28rem,transparent .28rem,transparent .46rem);border-block:.35rem solid var(--paper)}
+    .barcode-number{text-align:center;font:600 .55rem/1 var(--mono);letter-spacing:.18em}
+
+    .collage{display:grid;grid-template-columns:minmax(17rem,.78fr) minmax(0,1.7fr);gap:clamp(2rem,5vw,5rem);align-items:start;padding:var(--s8) 0}
+    .receipt-wrap{position:relative;z-index:2;transform:rotate(-1.2deg)}
+    .receipt{position:relative;padding:var(--s6) var(--s5);background:var(--paper);box-shadow:var(--shadow);font-family:var(--mono)}
+    .receipt::before,.receipt::after{position:absolute;left:0;width:100%;height:.75rem;background:radial-gradient(circle at .375rem 0,var(--desk) .32rem,transparent .34rem) 0 0/.75rem .75rem repeat-x;content:""}
+    .receipt::before{top:0}.receipt::after{bottom:0;transform:rotate(180deg)}
+    .receipt-logo{text-align:center;margin:var(--s2) 0 var(--s4)}
+    .receipt-logo strong{display:block;font-size:1.05rem;letter-spacing:.12em}
+    .receipt-logo span{font-size:.62rem;color:var(--muted)}
+    .receipt-rule{border:0;border-top:.0625rem dashed var(--ink);margin:var(--s3) 0}
+    .events{margin:0;padding:0;list-style:none}
+    .event{padding:var(--s3) 0;border-bottom:.0625rem dotted rgb(36 39 43 / .35);transition:padding .18s ease,background .18s ease}
+    .event:last-child{border-bottom:0}
+    .event:hover{padding-inline:var(--s2);background:var(--paper-deep)}
+    .event-meta{display:flex;align-items:center;justify-content:space-between;gap:var(--s2);margin-bottom:var(--s1);font-size:.65rem}
+    .event time{font-weight:900}
+    .event-tag{color:var(--indigo);font-weight:900}
+    .event-tag.warn{color:var(--warn)}
+    .event-tag.soon{background:var(--indigo);color:var(--paper);padding:0 var(--s1)}
+    .event p{margin:0;font-size:.72rem;line-height:1.55}
+    .receipt-total{display:flex;justify-content:space-between;margin-top:var(--s3);font-weight:900;font-size:.72rem}
+    .receipt-foot{text-align:center;margin-top:var(--s5);color:var(--muted);font-size:.58rem;letter-spacing:.08em}
+
+    .services{min-width:0}
+    .ticket-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s5)}
+    .service-ticket{--ticket:var(--blue);--ticket-ink:var(--blue-ink);position:relative;display:grid;grid-template-columns:minmax(0,1fr) 5.5rem;min-height:11.5rem;background:var(--ticket);color:var(--ticket-ink);box-shadow:var(--shadow);transform:rotate(var(--turn));transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+    .service-ticket:nth-child(1){--turn:-.8deg;--ticket:var(--blue);--ticket-ink:var(--blue-ink)}
+    .service-ticket:nth-child(2){--turn:.7deg;--ticket:var(--sage);--ticket-ink:var(--sage-ink)}
+    .service-ticket:nth-child(3){--turn:.4deg;--ticket:var(--lilac);--ticket-ink:var(--lilac-ink)}
+    .service-ticket:nth-child(4){--turn:-.6deg;--ticket:var(--ochre);--ticket-ink:var(--ochre-ink)}
+    .service-ticket:nth-child(5){--turn:.8deg;--ticket:var(--rose);--ticket-ink:var(--rose-ink)}
+    .service-ticket:nth-child(6){--turn:-.4deg;--ticket:var(--mint);--ticket-ink:var(--mint-ink)}
+    .service-ticket:hover{z-index:3;transform:rotate(0deg) translateY(-.35rem);box-shadow:var(--shadow-raised)}
+    .service-ticket::before,.service-ticket::after{position:absolute;z-index:2;right:4.85rem;width:1rem;height:1rem;border-radius:50%;background:var(--desk);content:"";translate:50% 0}
+    .service-ticket::before{top:-.5rem}.service-ticket::after{bottom:-.5rem}
+    .ticket-body{display:flex;min-width:0;flex-direction:column;padding:var(--s4)}
+    .ticket-top{display:flex;align-items:center;justify-content:space-between;gap:var(--s2);font:800 .58rem/1 var(--mono);letter-spacing:.08em}
+    .state{display:inline-flex;align-items:center;gap:var(--s1);padding:var(--s1) var(--s2);border:.0625rem solid currentColor;font-weight:900}
+    .state::before{width:.4rem;height:.4rem;border-radius:50%;background:var(--success);content:""}
+    .state.beta::before{background:var(--accent)}
+    .service-ticket h3{margin:var(--s5) 0 var(--s2);font:900 1.25rem/1.2 var(--serif);letter-spacing:-.02em}
+    .service-ticket p{margin:0;font-size:.76rem;line-height:1.5}
+    .ticket-bottom{display:flex;justify-content:space-between;gap:var(--s3);margin-top:auto;padding-top:var(--s4);font:700 .56rem/1.3 var(--mono);letter-spacing:.05em}
+    .ticket-stub{display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:var(--s3);border-left:.125rem dashed rgb(36 39 43 / .28)}
+    .gate{font:900 .58rem/1.2 var(--mono);text-align:center;text-transform:uppercase}
+    .gate strong{display:block;margin-top:var(--s1);font-size:1.05rem}
+    .qr{display:grid;width:3.7rem;height:3.7rem;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(7,1fr);gap:.1rem;padding:.22rem;background:var(--paper);box-shadow:inset 0 0 0 .0625rem rgb(36 39 43 / .2)}
+    .qr i{background:var(--ticket-ink)}
+    .ticket-number{writing-mode:vertical-rl;font:800 .5rem/1 var(--mono);letter-spacing:.1em}
+
+    .links-section{padding:var(--s8) 0}
+    .tag-rack{position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--s4);padding:3.5rem var(--s4) var(--s4);border-top:.35rem solid var(--ink)}
+    .tag-rack::before{position:absolute;top:-1rem;left:4%;width:92%;height:.45rem;background:var(--ink);box-shadow:0 .3rem 0 var(--paper-deep);content:""}
+    .bag-tag{--turn:0deg;position:relative;display:flex;min-height:14.5rem;flex-direction:column;justify-content:flex-end;padding:3rem var(--s4) var(--s4);background:var(--paper);border:.0625rem solid var(--desk-line);box-shadow:var(--shadow);transform:rotate(var(--turn));transition:transform .25s var(--ease),background .18s ease}
+    .bag-tag:nth-child(1){--turn:-2deg;background:var(--blue)}.bag-tag:nth-child(2){--turn:1.2deg}.bag-tag:nth-child(3){--turn:-.7deg;background:var(--sage)}.bag-tag:nth-child(4){--turn:1.8deg;background:var(--ochre)}.bag-tag:nth-child(5){--turn:-1.4deg;background:var(--lilac)}.bag-tag:nth-child(6){--turn:.8deg;background:var(--rose)}
+    .bag-tag::before{position:absolute;top:1.1rem;left:50%;width:1.1rem;height:1.1rem;border:.3rem solid var(--paper-deep);border-radius:50%;background:var(--desk);box-shadow:0 0 0 .0625rem var(--muted);content:"";translate:-50% 0}
+    .bag-tag::after{position:absolute;top:-3.85rem;left:50%;width:.0625rem;height:5.15rem;background:var(--ink);content:"";transform:rotate(calc(var(--turn) * -1));transform-origin:bottom}
+    .bag-tag:hover{z-index:3;transform:rotate(0deg) translateY(-.4rem);background:var(--paper)}
+    .bag-tag small{font:800 .54rem/1.4 var(--mono);letter-spacing:.1em;color:var(--muted)}
+    .bag-tag strong{display:block;margin:var(--s3) 0;font:900 1rem/1.3 var(--serif)}
+    .bag-route{margin-top:auto;padding-top:var(--s3);border-top:.0625rem dashed currentColor;font:900 .65rem/1.4 var(--mono);color:var(--indigo)}
+
+    footer{padding:var(--s7) 0 var(--s6)}
+    .footer-stub{display:grid;grid-template-columns:1fr auto;gap:var(--s5);align-items:center;padding:var(--s4) var(--s5);border:.0625rem dashed var(--muted);background:var(--paper);box-shadow:0 .25rem .75rem rgb(43 38 30 / .06);font-size:.72rem}
+    .footer-stub p{margin:0}
+    .footer-links{display:flex;gap:var(--s3);font-weight:800}
+    .footer-links a{border-bottom:.0625rem dotted currentColor}
+    .footer-links a:hover{color:var(--indigo)}
+    .console-note{grid-column:1/-1;color:var(--muted);font:600 .58rem/1.4 var(--mono);text-align:right}
+
+    @media (max-width:64rem){
+      .boarding-pass{grid-template-columns:minmax(0,1fr) 12rem}.boarding-pass::before,.boarding-pass::after{right:11.35rem}
+      .collage{grid-template-columns:19rem minmax(0,1fr);gap:var(--s6)}
+      .ticket-grid{grid-template-columns:1fr}.tag-rack{grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s6) var(--s4)}
+    }
+    @media (max-width:46rem){
+      .site-header{padding-top:var(--s2)}.nav-ticket{display:block;transform:none;padding:var(--s2) var(--s3)}.brand{width:100%;justify-content:center}.nav{justify-content:center;border-top:.0625rem dashed var(--desk-line)}.nav a{padding-inline:var(--s2);font-size:.7rem}
+      .hero{padding:var(--s7) 0}.boarding-pass{display:block;min-height:0;transform:rotate(.25deg)}.pass-main{padding:var(--s5)}.pass-main::after{right:auto;left:0;top:auto;bottom:0;width:100%;height:0;border-right:0;border-bottom:.125rem dashed rgb(36 39 43 / .35)}.boarding-pass::before,.boarding-pass::after{top:auto;bottom:10.35rem;right:auto;width:1rem;height:1rem;translate:0 50%}.boarding-pass::before{left:-.5rem}.boarding-pass::after{right:-.5rem}.pass-stub{min-height:11rem;display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}.pass-stub .barcode{grid-column:1/-1;height:3rem}.barcode-number{grid-column:1/-1}.route{gap:var(--s2)}.airport-code{font-size:clamp(2rem,12vw,4rem)}.hero h1{font-size:clamp(1.8rem,8vw,3rem)}
+      .collage{grid-template-columns:1fr;gap:var(--s8);padding-block:var(--s7)}.receipt-wrap{width:min(100%,25rem);margin-inline:auto}.ticket-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s4)}.service-ticket{grid-template-columns:minmax(0,1fr) 4.75rem;min-height:12.5rem}.service-ticket::before,.service-ticket::after{right:4.15rem}.service-ticket h3{font-size:1.05rem}.qr{width:3.2rem;height:3.2rem}
+      .tag-rack{grid-template-columns:repeat(2,minmax(0,1fr));padding-inline:0}.footer-stub{grid-template-columns:1fr}.footer-links{flex-wrap:wrap}.console-note{text-align:left}
+    }
+    @media (max-width:31rem){
+      .shell{width:min(calc(100% - 1.25rem),var(--content))}.nav a{min-height:2.4rem;padding-inline:.4rem;font-size:.65rem}.airline{align-items:flex-start}.class-stamp{font-size:.58rem}.penguin{width:3rem;height:3rem}.route-name{font-size:.52rem}.intro{font-size:.82rem}.action{width:100%}.ticket-grid{grid-template-columns:1fr}.service-ticket{min-height:10.75rem}.tag-rack{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s5) var(--s2)}.bag-tag{min-height:12rem;padding-inline:var(--s3)}.bag-tag strong{font-size:.88rem}.section-head{align-items:start;flex-direction:column}.footer-stub{padding:var(--s4)}
+    }
+    @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">跳至主内容</a>
+  <header class="site-header shell" id="top">
+    <div class="nav-ticket">
+      <a class="brand" href="#top" aria-label="HITSZ OSA 首页">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><path fill="currentColor" d="M32 5c-9 0-15 8-15 19 0 3 .4 5.5 1.2 8C12 36 8 43 8 49c0 4 3 7 7 7 3 0 6-2 8-4 3 4 6 7 9 7s6-3 9-7c2 2 5 4 8 4 4 0 7-3 7-7 0-6-4-13-10-17 .8-2.5 1.2-5 1.2-8C47 13 41 5 32 5Z"/><path fill="var(--paper)" d="M32 20c-7 0-11 6-11 15 0 8 5 17 11 17s11-9 11-17c0-9-4-15-11-15Z"/><circle cx="27" cy="18" r="2.5" fill="var(--paper)"/><circle cx="37" cy="18" r="2.5" fill="var(--paper)"/><path fill="var(--ochre)" d="m32 22-5 5h10z"/></svg>
+        HITSZ <span>OSA</span>
+      </a>
+      <nav aria-label="主导航"><ul class="nav">
+        <li><a href="#top" aria-current="page">首页</a></li><li><a href="#events">活动</a></li><li><a href="#links">友链</a></li><li><a href="#about">关于</a></li><li><a class="external" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer">镜像站</a></li><li><a class="external" href="https://wiki.osa.moe" target="_blank" rel="noreferrer">Wiki</a></li>
+      </ul></nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero shell" id="about" aria-labelledby="hero-title">
+      <article class="boarding-pass">
+        <div class="pass-main">
+          <div class="airline">
+            <div class="airline-name">
+              <svg class="penguin" viewBox="0 0 80 80" aria-hidden="true"><path fill="currentColor" d="M40 4C27 4 20 15 20 30c0 5 1 9 3 13-9 5-15 14-15 22 0 5 4 9 9 9 5 0 10-3 13-7 3 5 7 9 10 9s7-4 10-9c3 4 8 7 13 7 5 0 9-4 9-9 0-8-6-17-15-22 2-4 3-8 3-13C60 15 53 4 40 4Z"/><ellipse cx="40" cy="43" rx="14" ry="23" fill="var(--paper)"/><circle cx="33" cy="24" r="3" fill="var(--paper)"/><circle cx="47" cy="24" r="3" fill="var(--paper)"/><path fill="var(--ochre)" d="m40 29-7 7h14z"/></svg>
+              OSA AIR
+            </div>
+            <span class="class-stamp">OPEN CLASS</span>
+          </div>
+          <div>
+            <div class="route" aria-label="航线：HITSZ 至 OPEN SOURCE">
+              <div><div class="airport-code">HIT</div><div class="route-name"><span>HITSZ</span><span>SZX</span></div></div>
+              <div class="route-line"></div>
+              <div><div class="airport-code">OSS</div><div class="route-name"><span>OPEN SOURCE</span><span>∞</span></div></div>
+            </div>
+            <p class="eyebrow">Boarding call · 一起出发</p>
+            <h1 id="hero-title">HITSZ 开源技术协会</h1>
+            <p class="intro">我们是 HITSZ 开源技术协会（a.k.a. HITSZ OSA），由哈尔滨工业大学（深圳）学生中的 Linux 用户和开源软件爱好者自发组建的学生社团。我们致力于维护学校的开源基础建设，提升学校开源氛围，为开源技术爱好者提供交流平台。</p>
+            <div class="actions"><a class="action primary" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer">访问镜像站</a><a class="action" href="#events">社团活动</a><a class="action" href="#about">了解协会</a></div>
+          </div>
+        </div>
+        <aside class="pass-stub" aria-label="登机牌信息">
+          <div><span class="stub-label">Boarding gate</span><strong class="stub-value">OSA</strong></div>
+          <div class="seat-grid"><div><span class="stub-label">Seat</span><strong>F/OSS</strong></div><div><span class="stub-label">Time</span><strong>NOW</strong></div></div>
+          <div class="barcode" aria-hidden="true"></div><div class="barcode-number">OSA 2026 0726 576EDB</div>
+        </aside>
+      </article>
+    </section>
+
+    <div class="collage shell">
+      <section class="receipt-wrap" id="events" aria-labelledby="events-title">
+        <div class="section-head"><div><p class="eyebrow">Receipt / 01</p><h2 id="events-title">近期动态</h2></div><p>共 5 项</p></div>
+        <div class="receipt">
+          <div class="receipt-logo"><strong>OSA CAMPUS STORE</strong><span>HARBIN INSTITUTE OF TECHNOLOGY, SHENZHEN</span></div><hr class="receipt-rule">
+          <ol class="events">
+            <li class="event"><div class="event-meta"><time datetime="2026-07-20">07/20</time><span class="event-tag">[置顶公告]</span></div><p>协会门户网站改版测试中，欢迎通过 GitHub 反馈建议。</p></li>
+            <li class="event"><div class="event-meta"><time datetime="2026-07-15">07/15</time><span class="event-tag warn">[公告 · WARN]</span></div><p>本周镜像站例行维护窗口：周日 02:00–03:00，期间部分同步任务可能延迟。</p></li>
+            <li class="event"><div class="event-meta"><time datetime="2026-08-08">08/08</time><span class="event-tag soon">[沙龙 · 即将举行]</span></div><p>暑期开源分享夜：如何参与上游社区</p></li>
+            <li class="event"><div class="event-meta"><time datetime="2026-05-20">05/20</time><span class="event-tag">[讲座]</span></div><p>HPC 入门：从登录集群到提交第一个作业</p></li>
+            <li class="event"><div class="event-meta"><time datetime="2026-04-12">04/12</time><span class="event-tag">[沙龙]</span></div><p>Linux Install Party 2026 春季场</p></li>
+          </ol>
+          <hr class="receipt-rule"><div class="receipt-total"><span>TOTAL</span><span>5 OPEN EVENTS</span></div><div class="receipt-foot">THANK YOU FOR SUPPORTING OPEN SOURCE<br>NO PROPRIETARY LOCK-IN · HAVE A NICE DAY</div>
+        </div>
+      </section>
+
+      <section class="services" id="services" aria-labelledby="services-title">
+        <div class="section-head"><div><p class="eyebrow">Tickets / 02</p><h2 id="services-title">开放服务</h2></div><p>6 张有效票证</p></div>
+        <div class="ticket-grid">
+          <a class="service-ticket" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer"><div class="ticket-body"><div class="ticket-top"><span>OSA EXPRESS · A01</span><span class="state">ONLINE</span></div><h3>开源软件镜像站</h3><p>主流 Linux 发行版与开源软件镜像，校园网内高速下载。</p><div class="ticket-bottom"><span>票号 5762-001</span><span>始发 HITSZ</span></div></div><div class="ticket-stub"><span class="gate">检票口<strong>M1</strong></span><span class="qr" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="ticket-number">OSA-MIRROR-2026</span></div></a>
+          <a class="service-ticket" href="https://mirrors.osa.moe/help" target="_blank" rel="noreferrer"><div class="ticket-body"><div class="ticket-top"><span>QUICK PASS · A02</span><span class="state">ONLINE</span></div><h3>镜像使用帮助</h3><p>一键换源。</p><div class="ticket-bottom"><span>票号 5762-002</span><span>换乘指南</span></div></div><div class="ticket-stub"><span class="gate">检票口<strong>H2</strong></span><span class="qr" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="ticket-number">OSA-HELP-2026</span></div></a>
+          <a class="service-ticket" href="https://wiki.osa.moe" target="_blank" rel="noreferrer"><div class="ticket-body"><div class="ticket-top"><span>KNOWLEDGE LINE · B01</span><span class="state">ONLINE</span></div><h3>OSA Wiki</h3><p>Linux 入门、HPC 文档。</p><div class="ticket-bottom"><span>票号 373D-003</span><span>知识专线</span></div></div><div class="ticket-stub"><span class="gate">检票口<strong>W3</strong></span><span class="qr" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="ticket-number">OSA-WIKI-2026</span></div></a>
+          <a class="service-ticket" href="https://weekly.osa.moe" target="_blank" rel="noreferrer"><div class="ticket-body"><div class="ticket-top"><span>WEEKLY ADMIT · B02</span><span class="state">ONLINE</span></div><h3>Weekly 周报</h3><p>技术新闻与群聊精华。</p><div class="ticket-bottom"><span>票号 373D-004</span><span>每周一班</span></div></div><div class="ticket-stub"><span class="gate">检票口<strong>R4</strong></span><span class="qr" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="ticket-number">OSA-WEEKLY-26</span></div></a>
+          <a class="service-ticket" href="#services"><div class="ticket-body"><div class="ticket-top"><span>CODE LOCAL · C01</span><span class="state">ONLINE · 校内</span></div><h3>Gitea 代码托管</h3><p>校内。</p><div class="ticket-bottom"><span>票号 8762-005</span><span>LOCAL ONLY</span></div></div><div class="ticket-stub"><span class="gate">检票口<strong>G5</strong></span><span class="qr" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="ticket-number">OSA-GITEA-2026</span></div></a>
+          <a class="service-ticket" href="#services"><div class="ticket-body"><div class="ticket-top"><span>MODEL CONNECT · C02</span><span class="state beta">BETA · 校内</span></div><h3>AI Gateway</h3><p>统一接入主流大模型 API。</p><div class="ticket-bottom"><span>票号 8762-006</span><span>试运行</span></div></div><div class="ticket-stub"><span class="gate">检票口<strong>AI</strong></span><span class="qr" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="ticket-number">OSA-AIGW-BETA</span></div></a>
+        </div>
+      </section>
+    </div>
+
+    <section class="links-section shell" id="links" aria-labelledby="links-title">
+      <div class="section-head"><div><p class="eyebrow">Baggage tags / 03</p><h2 id="links-title">同行友链</h2></div><p>目的地：开放社区</p></div>
+      <div class="tag-rack">
+        <a class="bag-tag" href="https://tuna.tsinghua.edu.cn" target="_blank" rel="noreferrer"><small>BAG 01 · PEK</small><strong>清华大学 TUNA 协会</strong><span class="bag-route">SZX → TUNA ↗</span></a>
+        <a class="bag-tag" href="https://help.mirrors.cernet.edu.cn" target="_blank" rel="noreferrer"><small>BAG 02 · CNGI</small><strong>MirrorZ</strong><span class="bag-route">SZX → MIRRORZ ↗</span></a>
+        <a class="bag-tag" href="https://lug.ustc.edu.cn" target="_blank" rel="noreferrer"><small>BAG 03 · HFE</small><strong>中科大 LUG</strong><span class="bag-route">SZX → USTC ↗</span></a>
+        <a class="bag-tag" href="https://sjtug.org" target="_blank" rel="noreferrer"><small>BAG 04 · SHA</small><strong>上交大 SJTUG</strong><span class="bag-route">SZX → SJTUG ↗</span></a>
+        <a class="bag-tag" href="https://awesome-hitsz.github.io" target="_blank" rel="noreferrer"><small>BAG 05 · SZX</small><strong>Awesome HITSZ</strong><span class="bag-route">CAMPUS → AWESOME ↗</span></a>
+        <a class="bag-tag" href="https://www.hitsz.edu.cn" target="_blank" rel="noreferrer"><small>BAG 06 · HITSZ</small><strong>哈尔滨工业大学（深圳）</strong><span class="bag-route">HOME BASE ↗</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell">
+    <div class="footer-stub"><p><strong>HITSZ OSA</strong> · 哈尔滨工业大学（深圳）开源技术协会 · Copyleft 2026</p><div class="footer-links"><a href="https://github.com/hitsz-osa" target="_blank" rel="noreferrer">GitHub</a><a href="#top">QQ 群</a><a href="https://space.bilibili.com" target="_blank" rel="noreferrer">Bilibili</a></div><span class="console-note">More information in browser console</span></div>
+  </footer>
+  <script>console.info("HITSZ OSA · Welcome aboard OSA AIR. Next stop: OPEN SOURCE.");</script>
+</body>
+</html>

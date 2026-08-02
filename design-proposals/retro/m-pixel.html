@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HITSZ OSA 8-bit 像素冒险：维护校园开源基础设施，连接开源技术爱好者。">
+  <title>HITSZ OSA · 8-BIT OPEN SOURCE QUEST</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme:light;
+      --ink:#211d38;
+      --osa:#576edb;
+      --deep:#373da9;
+      --accent:#8762d3;
+      --paper:#f7edbc;
+      --px:4px;
+      --space-1:4px;
+      --space-2:8px;
+      --space-3:12px;
+      --space-4:16px;
+      --space-6:24px;
+      --space-8:32px;
+      --space-12:48px;
+      --space-16:64px;
+      --mono:"JetBrains Mono","Cascadia Code",ui-monospace,"Noto Sans Mono CJK SC",monospace;
+      --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+    }
+    *,*::before,*::after { box-sizing:border-box; }
+    html { scroll-behavior:smooth; background:var(--deep); }
+    body {
+      min-width:320px;
+      margin:0;
+      overflow-x:clip;
+      background:var(--paper);
+      color:var(--ink);
+      font-family:var(--mono);
+      font-size:16px;
+      line-height:1.65;
+      -webkit-font-smoothing:none;
+      font-smooth:never;
+      text-rendering:geometricPrecision;
+    }
+    body::before {
+      position:fixed;
+      z-index:-1;
+      inset:0;
+      background:repeating-linear-gradient(0deg,var(--paper) 0,var(--paper) 4px,var(--accent) 4px,var(--accent) 8px);
+      content:"";
+    }
+    a { color:inherit; }
+    a,button { -webkit-tap-highlight-color:transparent; }
+    :focus-visible { outline:4px solid var(--accent); outline-offset:4px; }
+    ::selection { background:var(--accent); color:var(--paper); }
+    .skip-link {
+      position:fixed;
+      z-index:200;
+      top:8px;
+      left:8px;
+      padding:8px 12px;
+      border:4px solid var(--ink);
+      background:var(--paper);
+      color:var(--ink);
+      font-weight:900;
+      text-decoration:none;
+      transform:translateY(-80px);
+    }
+    .skip-link:focus { transform:translateY(0); }
+    .shell { width:min(calc(100% - 32px),1120px); margin-inline:auto; }
+    .pixel-panel {
+      border:4px solid var(--ink);
+      background:var(--paper);
+      box-shadow:8px 8px 0 var(--deep);
+      clip-path:polygon(0 8px,4px 8px,4px 4px,8px 4px,8px 0,calc(100% - 8px) 0,calc(100% - 8px) 4px,calc(100% - 4px) 4px,calc(100% - 4px) 8px,100% 8px,100% calc(100% - 8px),calc(100% - 4px) calc(100% - 8px),calc(100% - 4px) calc(100% - 4px),calc(100% - 8px) calc(100% - 4px),calc(100% - 8px) 100%,8px 100%,8px calc(100% - 4px),4px calc(100% - 4px),4px calc(100% - 8px),0 calc(100% - 8px));
+    }
+    .pixel-label {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:4px 8px;
+      background:var(--ink);
+      color:var(--paper);
+      font-size:.6875rem;
+      font-weight:900;
+      letter-spacing:.08em;
+      line-height:1.4;
+      text-transform:uppercase;
+    }
+    .pixel-label::before { content:"■"; color:var(--osa); }
+
+    .site-header {
+      position:sticky;
+      z-index:100;
+      top:0;
+      border-top:4px solid var(--ink);
+      border-bottom:4px solid var(--ink);
+      background:var(--paper);
+      box-shadow:0 4px 0 var(--osa);
+    }
+    .header-inner { display:flex; min-height:72px; align-items:center; justify-content:space-between; gap:24px; }
+    .brand { display:flex; flex:0 0 auto; align-items:center; gap:12px; font-weight:900; text-decoration:none; }
+    .brand-chip {
+      display:grid;
+      width:40px;
+      height:40px;
+      place-items:center;
+      border:4px solid var(--ink);
+      background:var(--osa);
+      box-shadow:4px 4px 0 var(--deep);
+      color:var(--paper);
+      font-size:.72rem;
+      line-height:1;
+    }
+    .brand-name { display:grid; line-height:1.05; }
+    .brand-name strong { font-size:1rem; letter-spacing:.04em; }
+    .brand-name small { margin-top:6px; color:var(--deep); font-size:.58rem; letter-spacing:.08em; }
+    .nav-scroll { min-width:0; overflow-x:auto; scrollbar-width:none; }
+    .nav-scroll::-webkit-scrollbar { display:none; }
+    nav { display:flex; align-items:center; gap:8px; white-space:nowrap; }
+    .nav-link {
+      display:inline-flex;
+      min-height:40px;
+      align-items:center;
+      padding:4px 8px;
+      border:4px solid transparent;
+      font-size:.72rem;
+      font-weight:900;
+      text-decoration:none;
+    }
+    .nav-link:hover,.nav-link[aria-current="page"] { border-color:var(--ink); background:var(--osa); color:var(--paper); box-shadow:4px 4px 0 var(--deep); }
+    .nav-link:active { transform:translate(2px,2px); box-shadow:2px 2px 0 var(--deep); }
+    .nav-link.external::after { margin-left:4px; content:"↗"; }
+
+    main { padding-block:48px 80px; }
+    .hero { display:grid; grid-template-columns:minmax(0,1.45fr) minmax(280px,.55fr); min-height:610px; overflow:hidden; }
+    .hero-copy { min-width:0; padding:clamp(32px,6vw,72px); border-right:4px solid var(--ink); }
+    .eyebrow { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:24px; color:var(--deep); font-size:.72rem; font-weight:900; letter-spacing:.08em; }
+    .eyebrow::before,.eyebrow::after { width:24px; height:4px; background:var(--osa); content:""; }
+    h1 {
+      margin:0;
+      color:var(--ink);
+      font-size:clamp(2.35rem,6vw,5.2rem);
+      font-weight:1000;
+      letter-spacing:-.07em;
+      line-height:.98;
+      text-shadow:4px 4px 0 var(--osa),8px 8px 0 var(--deep);
+    }
+    h1 .latin { display:block; margin-bottom:8px; color:var(--paper); font-size:.48em; letter-spacing:.08em; -webkit-text-stroke:4px var(--ink); paint-order:stroke fill; text-shadow:4px 4px 0 var(--accent),8px 8px 0 var(--deep); }
+    .hero-intro { max-width:760px; margin:40px 0 0; font-family:var(--sans); font-size:.98rem; font-weight:700; line-height:1.9; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:16px; margin-top:32px; }
+    .pixel-button {
+      display:inline-flex;
+      min-height:48px;
+      align-items:center;
+      justify-content:center;
+      padding:8px 16px;
+      border:4px solid var(--ink);
+      background:var(--paper);
+      box-shadow:6px 6px 0 var(--ink);
+      color:var(--ink);
+      font:900 .78rem/1.25 var(--mono);
+      text-decoration:none;
+      clip-path:polygon(0 4px,4px 4px,4px 0,calc(100% - 4px) 0,calc(100% - 4px) 4px,100% 4px,100% calc(100% - 4px),calc(100% - 4px) calc(100% - 4px),calc(100% - 4px) 100%,4px 100%,4px calc(100% - 4px),0 calc(100% - 4px));
+    }
+    .pixel-button.primary { background:var(--osa); color:var(--paper); }
+    .pixel-button:hover { background:var(--accent); color:var(--paper); }
+    .pixel-button:active { transform:translate(2px,2px); box-shadow:4px 4px 0 var(--ink); }
+
+    .hero-stage { display:grid; grid-template-rows:1fr auto; min-height:100%; background:var(--osa); }
+    .sprite-zone { position:relative; display:grid; min-height:420px; place-items:center; overflow:hidden; border-bottom:4px solid var(--ink); }
+    .sprite-zone::before,.sprite-zone::after { position:absolute; width:72px; height:8px; background:var(--paper); box-shadow:8px 8px 0 var(--deep),16px 16px 0 var(--accent); content:""; }
+    .sprite-zone::before { top:32px; left:24px; }
+    .sprite-zone::after { right:24px; bottom:56px; transform:scaleX(-1); }
+    .penguin-wrap { position:relative; width:160px; height:188px; }
+    .penguin {
+      position:absolute;
+      top:0;
+      left:20px;
+      width:120px;
+      height:140px;
+      image-rendering:pixelated;
+      image-rendering:crisp-edges;
+      transform:scale(1.15);
+      transform-origin:center;
+    }
+    .penguin span { position:absolute; top:0; left:0; width:10px; height:10px; background:transparent; }
+    .penguin .ink { box-shadow:40px 0 var(--ink),50px 0 var(--ink),60px 0 var(--ink),70px 0 var(--ink),20px 10px var(--ink),30px 10px var(--ink),40px 10px var(--ink),50px 10px var(--ink),60px 10px var(--ink),70px 10px var(--ink),80px 10px var(--ink),90px 10px var(--ink),10px 20px var(--ink),20px 20px var(--ink),30px 20px var(--ink),40px 20px var(--ink),50px 20px var(--ink),60px 20px var(--ink),70px 20px var(--ink),80px 20px var(--ink),90px 20px var(--ink),100px 20px var(--ink),0 30px var(--ink),10px 30px var(--ink),20px 30px var(--ink),30px 30px var(--ink),50px 30px var(--ink),60px 30px var(--ink),80px 30px var(--ink),90px 30px var(--ink),100px 30px var(--ink),110px 30px var(--ink),0 40px var(--ink),10px 40px var(--ink),20px 40px var(--ink),30px 40px var(--ink),40px 40px var(--ink),50px 40px var(--ink),60px 40px var(--ink),70px 40px var(--ink),80px 40px var(--ink),90px 40px var(--ink),100px 40px var(--ink),110px 40px var(--ink),0 50px var(--ink),10px 50px var(--ink),20px 50px var(--ink),90px 50px var(--ink),100px 50px var(--ink),110px 50px var(--ink),0 60px var(--ink),10px 60px var(--ink),40px 60px var(--ink),70px 60px var(--ink),100px 60px var(--ink),110px 60px var(--ink),0 70px var(--ink),10px 70px var(--ink),100px 70px var(--ink),110px 70px var(--ink),10px 80px var(--ink),20px 80px var(--ink),90px 80px var(--ink),100px 80px var(--ink),20px 90px var(--ink),30px 90px var(--ink),80px 90px var(--ink),90px 90px var(--ink),30px 120px var(--ink),40px 120px var(--ink),70px 120px var(--ink),80px 120px var(--ink); }
+    .penguin .osa { box-shadow:40px 30px var(--osa),70px 30px var(--osa),20px 100px var(--osa),30px 100px var(--osa),40px 100px var(--osa),50px 100px var(--osa),60px 100px var(--osa),70px 100px var(--osa),80px 100px var(--osa),90px 100px var(--osa),30px 110px var(--osa),40px 110px var(--osa),50px 110px var(--osa),60px 110px var(--osa),70px 110px var(--osa),80px 110px var(--osa); }
+    .penguin .paper { box-shadow:30px 50px var(--paper),40px 50px var(--paper),50px 50px var(--paper),60px 50px var(--paper),70px 50px var(--paper),80px 50px var(--paper),20px 60px var(--paper),30px 60px var(--paper),50px 60px var(--paper),60px 60px var(--paper),80px 60px var(--paper),90px 60px var(--paper),20px 70px var(--paper),30px 70px var(--paper),40px 70px var(--paper),50px 70px var(--paper),60px 70px var(--paper),70px 70px var(--paper),80px 70px var(--paper),90px 70px var(--paper),30px 80px var(--paper),40px 80px var(--paper),70px 80px var(--paper),80px 80px var(--paper),40px 90px var(--paper),50px 90px var(--paper),60px 90px var(--paper),70px 90px var(--paper); }
+    .penguin .accent { box-shadow:50px 80px var(--accent),60px 80px var(--accent),20px 130px var(--accent),30px 130px var(--accent),80px 130px var(--accent),90px 130px var(--accent); }
+    .sprite-shadow { position:absolute; bottom:12px; left:24px; width:112px; height:12px; background:var(--deep); box-shadow:12px 4px 0 var(--deep),-12px 4px 0 var(--deep); }
+    .note { position:absolute; width:6px; height:6px; background:var(--paper); image-rendering:pixelated; animation:note-hop 2s steps(4,end) infinite; }
+    .note::before { position:absolute; width:4px; height:20px; background:var(--paper); box-shadow:4px 0 var(--paper),8px 0 var(--paper),8px 4px var(--paper); content:""; }
+    .note.n1 { top:64px; right:36px; }
+    .note.n2 { top:116px; left:28px; animation-delay:-.7s; transform:scale(.7); }
+    .note.n3 { right:40px; bottom:104px; animation-delay:-1.4s; transform:scale(.6); }
+    @keyframes note-hop { 0%,100% { translate:0 0; } 50% { translate:0 -16px; } }
+    .player-hud { padding:20px 24px 24px; background:var(--paper); }
+    .hud-row { display:flex; justify-content:space-between; gap:12px; font-size:.7rem; font-weight:900; }
+    .hp { display:flex; gap:4px; margin-top:12px; }
+    .heart { width:16px; height:12px; background:var(--accent); clip-path:polygon(0 0,6px 0,6px 4px,10px 4px,10px 0,16px 0,16px 8px,12px 8px,12px 12px,4px 12px,4px 8px,0 8px); }
+
+    .section { padding-top:64px; scroll-margin-top:100px; }
+    .section-heading { display:flex; flex-wrap:wrap; align-items:end; justify-content:space-between; gap:16px; margin-bottom:24px; }
+    .section-heading h2 { margin:10px 0 0; color:var(--ink); font-size:clamp(1.6rem,3vw,2.6rem); font-weight:1000; letter-spacing:-.05em; line-height:1; text-shadow:3px 3px 0 var(--osa); }
+    .section-code { color:var(--deep); font-size:.7rem; font-weight:900; }
+
+    .quest-scroll { position:relative; padding:28px 32px; }
+    .quest-scroll::before,.quest-scroll::after { position:absolute; right:20px; left:20px; height:8px; border:4px solid var(--ink); background:var(--accent); content:""; }
+    .quest-scroll::before { top:-12px; }
+    .quest-scroll::after { bottom:-12px; }
+    .quest-list { display:grid; gap:0; margin:0; padding:0; list-style:none; }
+    .quest-item { display:grid; grid-template-columns:20px 64px minmax(0,1fr); gap:12px; align-items:start; padding:18px 0; border-bottom:4px dashed var(--accent); }
+    .quest-item:last-child { border-bottom:0; }
+    .quest-marker { width:16px; height:16px; margin-top:5px; border:4px solid var(--ink); background:var(--paper); }
+    .quest-item.pinned .quest-marker,.quest-item.upcoming .quest-marker { background:var(--osa); box-shadow:4px 4px 0 var(--deep); }
+    .quest-date { padding-top:2px; color:var(--deep); font-size:.78rem; font-weight:900; }
+    .quest-copy { min-width:0; }
+    .quest-tag { display:inline-block; margin-right:8px; padding:2px 6px; background:var(--ink); color:var(--paper); font-size:.62rem; font-weight:900; }
+    .quest-tag.warn { background:var(--accent); }
+    .quest-title { font-family:var(--sans); font-size:.94rem; font-weight:800; }
+
+    .inventory-wrap { padding:24px; background:var(--deep); }
+    .inventory-top { display:flex; justify-content:space-between; gap:16px; margin-bottom:20px; color:var(--paper); font-size:.7rem; font-weight:900; }
+    .inventory-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .item-slot {
+      position:relative;
+      display:grid;
+      min-width:0;
+      min-height:218px;
+      grid-template-rows:auto auto 1fr;
+      padding:16px;
+      border:4px solid var(--ink);
+      background:var(--paper);
+      box-shadow:inset 0 0 0 4px var(--accent),6px 6px 0 var(--ink);
+      color:var(--ink);
+      text-decoration:none;
+      transition:transform 80ms steps(2,end),box-shadow 80ms steps(2,end);
+    }
+    .item-slot:hover,.item-slot:focus-visible { z-index:2; transform:translateY(-8px); box-shadow:inset 0 0 0 4px var(--osa),6px 14px 0 var(--ink); }
+    .item-slot:active { transform:translate(2px,2px); box-shadow:inset 0 0 0 4px var(--osa),4px 4px 0 var(--ink); }
+    .slot-number { position:absolute; top:8px; right:10px; color:var(--deep); font-size:.62rem; font-weight:900; }
+    .item-icon {
+      display:grid;
+      width:64px;
+      height:64px;
+      place-items:center;
+      margin-bottom:16px;
+      border:4px solid var(--ink);
+      background:var(--osa);
+      box-shadow:4px 4px 0 var(--deep);
+      color:var(--paper);
+      font-size:1rem;
+      font-weight:1000;
+      line-height:1;
+    }
+    .item-name { margin:0 0 8px; font-family:var(--sans); font-size:1rem; font-weight:900; line-height:1.35; }
+    .item-desc { margin:0; font-family:var(--sans); font-size:.78rem; font-weight:700; line-height:1.65; }
+    .item-status { align-self:end; justify-self:start; margin-top:16px; padding:2px 6px; background:var(--ink); color:var(--paper); font-size:.58rem; font-weight:900; text-transform:uppercase; }
+    .item-status::before { margin-right:6px; color:var(--osa); content:"■"; }
+    .item-status.beta::before { color:var(--accent); }
+
+    .friend-map { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; padding:24px; }
+    .warp-link { display:grid; min-height:112px; grid-template-columns:44px minmax(0,1fr); align-items:center; gap:16px; padding:16px; border:4px solid var(--ink); background:var(--paper); box-shadow:4px 4px 0 var(--deep); text-decoration:none; }
+    .warp-link:hover { background:var(--osa); color:var(--paper); transform:translateY(-4px); box-shadow:4px 8px 0 var(--ink); }
+    .warp-link:active { transform:translate(2px,2px); box-shadow:2px 2px 0 var(--ink); }
+    .warp-icon { position:relative; width:36px; height:36px; border:4px solid var(--ink); background:var(--accent); transform:rotate(45deg); }
+    .warp-icon::after { position:absolute; inset:8px; background:var(--paper); content:""; }
+    .warp-copy { min-width:0; font-family:var(--sans); font-size:.84rem; font-weight:900; line-height:1.45; }
+    .warp-copy small { display:block; margin-top:4px; font-family:var(--mono); font-size:.58rem; }
+
+    .footer { border-top:4px solid var(--ink); background:var(--ink); color:var(--paper); }
+    .footer-inner { display:grid; grid-template-columns:1fr auto; gap:24px; align-items:center; padding-block:32px; }
+    .footer-copy { font-family:var(--sans); font-size:.78rem; font-weight:700; }
+    .footer-links { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:12px; }
+    .footer-links a { padding:4px 8px; border:4px solid var(--paper); font-size:.66rem; font-weight:900; text-decoration:none; }
+    .footer-links a:hover { background:var(--osa); }
+    .console-note { grid-column:1/-1; margin:0; color:var(--accent); font-size:.62rem; font-weight:900; }
+
+    @media (max-width:860px) {
+      .header-inner { flex-wrap:wrap; gap:0; padding-block:8px; }
+      .brand { width:100%; padding-bottom:8px; }
+      .nav-scroll { width:100%; border-top:4px solid var(--ink); }
+      nav { padding-top:8px; }
+      .hero { grid-template-columns:1fr; }
+      .hero-copy { border-right:0; border-bottom:4px solid var(--ink); }
+      .hero-stage { min-height:500px; }
+      .inventory-grid,.friend-map { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width:560px) {
+      .shell { width:min(calc(100% - 24px),1120px); }
+      main { padding-top:28px; }
+      .hero-copy { padding:32px 20px 40px; }
+      h1 { font-size:clamp(2.1rem,12vw,3.45rem); text-shadow:3px 3px 0 var(--osa),6px 6px 0 var(--deep); }
+      h1 .latin { -webkit-text-stroke:3px var(--ink); }
+      .hero-intro { margin-top:32px; font-size:.88rem; }
+      .pixel-button { flex:1 1 140px; }
+      .sprite-zone { min-height:380px; }
+      .section { padding-top:52px; }
+      .quest-scroll { padding:24px 16px; }
+      .quest-item { grid-template-columns:16px 52px minmax(0,1fr); gap:8px; }
+      .quest-date { font-size:.69rem; }
+      .quest-title { display:block; margin-top:6px; font-size:.84rem; }
+      .inventory-wrap,.friend-map { padding:16px; }
+      .inventory-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+      .item-slot { min-height:238px; padding:12px; }
+      .item-icon { width:52px; height:52px; }
+      .item-name { font-size:.84rem; }
+      .item-desc { font-size:.7rem; }
+      .friend-map { grid-template-columns:1fr; }
+      .footer-inner { grid-template-columns:1fr; }
+      .footer-links { justify-content:flex-start; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      html { scroll-behavior:auto; }
+      .note { animation:none; }
+      .item-slot,.warp-link { transition:none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主线任务</a>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="#home" aria-label="HITSZ OSA 首页">
+        <span class="brand-chip" aria-hidden="true">OSA</span>
+        <span class="brand-name"><strong>HITSZ OSA</strong><small>OPEN SOURCE GUILD</small></span>
+      </a>
+      <div class="nav-scroll">
+        <nav aria-label="主导航">
+          <a class="nav-link" href="#home" aria-current="page">首页</a>
+          <a class="nav-link" href="#activity">活动</a>
+          <a class="nav-link" href="#friends">友链</a>
+          <a class="nav-link" href="#about">关于</a>
+          <a class="nav-link external" href="https://mirrors.osa.moe/" target="_blank" rel="noreferrer noopener">镜像站</a>
+          <a class="nav-link external" href="https://wiki.osa.moe/" target="_blank" rel="noreferrer noopener">Wiki</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="shell">
+    <section id="home" class="hero pixel-panel" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="eyebrow">PLAYER 1 · NEW QUEST UNLOCKED</div>
+        <h1 id="hero-title"><span class="latin">HITSZ</span>开源技术协会</h1>
+        <p class="hero-intro">我们是 HITSZ 开源技术协会（a.k.a. HITSZ OSA），由哈尔滨工业大学（深圳）学生中的 Linux 用户和开源软件爱好者自发组建的学生社团。我们致力于维护学校的开源基础建设，提升学校开源氛围，为开源技术爱好者提供交流平台。</p>
+        <div class="hero-actions" aria-label="快速行动">
+          <a class="pixel-button primary" href="https://mirrors.osa.moe/" target="_blank" rel="noreferrer noopener">▶ 访问镜像站</a>
+          <a class="pixel-button" href="#activity">社团活动</a>
+          <a class="pixel-button" href="#about">了解协会</a>
+        </div>
+      </div>
+      <div class="hero-stage" aria-label="OSA 像素企鹅向你挥手">
+        <div class="sprite-zone">
+          <span class="note n1" aria-hidden="true"></span><span class="note n2" aria-hidden="true"></span><span class="note n3" aria-hidden="true"></span>
+          <div class="penguin-wrap" aria-hidden="true">
+            <div class="penguin"><span class="ink"></span><span class="osa"></span><span class="paper"></span><span class="accent"></span></div>
+            <span class="sprite-shadow"></span>
+          </div>
+        </div>
+        <div class="player-hud">
+          <div class="hud-row"><span>OSA PENGUIN</span><span>LV. 26</span></div>
+          <div class="hp" aria-label="生命值 5 格"><span class="heart"></span><span class="heart"></span><span class="heart"></span><span class="heart"></span><span class="heart"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="activity" class="section" aria-labelledby="activity-title">
+      <div class="section-heading">
+        <div><span class="pixel-label">QUEST LOG</span><h2 id="activity-title">任务日志 / 动态</h2></div>
+        <span class="section-code">5 / 5 ENTRIES</span>
+      </div>
+      <div class="quest-scroll pixel-panel">
+        <ol class="quest-list">
+          <li class="quest-item pinned"><span class="quest-marker" aria-hidden="true"></span><time class="quest-date" datetime="2026-07-20">07/20</time><div class="quest-copy"><span class="quest-tag">置顶公告</span><span class="quest-title">协会门户网站改版测试中，欢迎通过 GitHub 反馈建议。</span></div></li>
+          <li class="quest-item"><span class="quest-marker" aria-hidden="true"></span><time class="quest-date" datetime="2026-07-15">07/15</time><div class="quest-copy"><span class="quest-tag warn">公告 · WARN</span><span class="quest-title">本周镜像站例行维护窗口：周日 02:00–03:00，期间部分同步任务可能延迟。</span></div></li>
+          <li class="quest-item upcoming"><span class="quest-marker" aria-hidden="true"></span><time class="quest-date" datetime="2026-08-08">08/08</time><div class="quest-copy"><span class="quest-tag">沙龙 · 即将举行</span><span class="quest-title">暑期开源分享夜：如何参与上游社区</span></div></li>
+          <li class="quest-item"><span class="quest-marker" aria-hidden="true"></span><time class="quest-date" datetime="2026-05-20">05/20</time><div class="quest-copy"><span class="quest-tag">讲座</span><span class="quest-title">HPC 入门：从登录集群到提交第一个作业</span></div></li>
+          <li class="quest-item"><span class="quest-marker" aria-hidden="true"></span><time class="quest-date" datetime="2026-04-12">04/12</time><div class="quest-copy"><span class="quest-tag">沙龙</span><span class="quest-title">Linux Install Party 2026 春季场</span></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="services" class="section" aria-labelledby="services-title">
+      <div class="section-heading">
+        <div><span class="pixel-label">ITEM BAG</span><h2 id="services-title">基础设施道具栏</h2></div>
+        <span class="section-code">SLOTS 06 / 06</span>
+      </div>
+      <div class="inventory-wrap pixel-panel">
+        <div class="inventory-top"><span>OSA INFRASTRUCTURE INVENTORY</span><span>SELECT ITEM ↑</span></div>
+        <div class="inventory-grid">
+          <a class="item-slot" href="https://mirrors.osa.moe/" target="_blank" rel="noreferrer noopener"><span class="slot-number">01</span><span class="item-icon" aria-hidden="true">MIR</span><h3 class="item-name">开源软件镜像站</h3><p class="item-desc">主流 Linux 发行版与开源软件镜像，校园网内高速下载。</p><span class="item-status">online</span></a>
+          <a class="item-slot" href="https://mirrors.osa.moe/help/" target="_blank" rel="noreferrer noopener"><span class="slot-number">02</span><span class="item-icon" aria-hidden="true">+S</span><h3 class="item-name">镜像使用帮助</h3><p class="item-desc">一键换源。</p><span class="item-status">online</span></a>
+          <a class="item-slot" href="https://wiki.osa.moe/" target="_blank" rel="noreferrer noopener"><span class="slot-number">03</span><span class="item-icon" aria-hidden="true">WIKI</span><h3 class="item-name">OSA Wiki</h3><p class="item-desc">Linux 入门、HPC 文档。</p><span class="item-status">online</span></a>
+          <a class="item-slot" href="https://weekly.osa.moe/" target="_blank" rel="noreferrer noopener"><span class="slot-number">04</span><span class="item-icon" aria-hidden="true">WK</span><h3 class="item-name">Weekly 周报</h3><p class="item-desc">技术新闻与群聊精华。</p><span class="item-status">online</span></a>
+          <a class="item-slot" href="https://git.osa.moe/" target="_blank" rel="noreferrer noopener"><span class="slot-number">05</span><span class="item-icon" aria-hidden="true">GIT</span><h3 class="item-name">Gitea 代码托管</h3><p class="item-desc">协会自建代码仓库。</p><span class="item-status">online · 校内</span></a>
+          <a class="item-slot" href="https://ai.osa.moe/" target="_blank" rel="noreferrer noopener"><span class="slot-number">06</span><span class="item-icon" aria-hidden="true">AI</span><h3 class="item-name">AI Gateway</h3><p class="item-desc">统一接入主流大模型 API。</p><span class="item-status beta">beta · 校内</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section id="friends" class="section" aria-labelledby="friends-title">
+      <div class="section-heading">
+        <div><span class="pixel-label">WORLD MAP</span><h2 id="friends-title">友链传送点</h2></div>
+        <span class="section-code">6 LOCATIONS FOUND</span>
+      </div>
+      <div class="friend-map pixel-panel">
+        <a class="warp-link" href="https://tuna.moe/" target="_blank" rel="noreferrer noopener"><span class="warp-icon" aria-hidden="true"></span><span class="warp-copy">清华大学 TUNA 协会<small>WARP 01 ↗</small></span></a>
+        <a class="warp-link" href="https://mirrorz.org/" target="_blank" rel="noreferrer noopener"><span class="warp-icon" aria-hidden="true"></span><span class="warp-copy">MirrorZ<small>WARP 02 ↗</small></span></a>
+        <a class="warp-link" href="https://lug.ustc.edu.cn/" target="_blank" rel="noreferrer noopener"><span class="warp-icon" aria-hidden="true"></span><span class="warp-copy">中科大 LUG<small>WARP 03 ↗</small></span></a>
+        <a class="warp-link" href="https://sjtug.org/" target="_blank" rel="noreferrer noopener"><span class="warp-icon" aria-hidden="true"></span><span class="warp-copy">上交大 SJTUG<small>WARP 04 ↗</small></span></a>
+        <a class="warp-link" href="https://awesome-hitsz.github.io/" target="_blank" rel="noreferrer noopener"><span class="warp-icon" aria-hidden="true"></span><span class="warp-copy">Awesome HITSZ<small>WARP 05 ↗</small></span></a>
+        <a class="warp-link" href="https://www.hitsz.edu.cn/" target="_blank" rel="noreferrer noopener"><span class="warp-icon" aria-hidden="true"></span><span class="warp-copy">哈尔滨工业大学（深圳）<small>WARP 06 ↗</small></span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer id="about" class="footer">
+    <div class="shell footer-inner">
+      <div class="footer-copy">HITSZ OSA · 哈尔滨工业大学（深圳）开源技术协会 · Copyleft 2026</div>
+      <div class="footer-links" aria-label="社交链接">
+        <a href="https://github.com/hitszosa" target="_blank" rel="noreferrer noopener">GitHub</a>
+        <a href="#about">QQ 群</a>
+        <a href="https://space.bilibili.com/" target="_blank" rel="noreferrer noopener">Bilibili</a>
+      </div>
+      <p class="console-note">More information in browser console</p>
+    </div>
+  </footer>
+  <script>
+    console.log('%c HITSZ OSA ', 'background:#576edb;color:#f7edbc;padding:4px 8px;font-weight:bold');
+    console.log('OPEN SOURCE QUEST // More information: https://www.osa.moe');
+  </script>
+</body>
+</html>

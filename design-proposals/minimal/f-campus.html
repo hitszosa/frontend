@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HITSZ 开源技术协会校园开源服务与活动公告。">
+  <title>HITSZ OSA · 校园开源公告</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme:light;
+      --page-bg:#f8fafc;
+      --page-fg:#1e293b;
+      --muted-fg:#64748b;
+      --primary:#576edb;
+      --secondary:#6f46bf;
+      --osa-fg:#373da9;
+      --surface:#ffffff;
+      --surface-fg:#161a4d;
+      --surface-border:#e2e8f0;
+      --inset:#f1f5f9;
+      --inset-fg:#1e293b;
+      --inset-border:#cbd5e1;
+      --activity:#d97706;
+      --activity-fg:#92400e;
+      --success:#059669;
+      --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+      --mono:"JetBrains Mono","Cascadia Code",ui-monospace,monospace;
+      --space-1:.25rem;
+      --space-2:.5rem;
+      --space-3:.75rem;
+      --space-4:1rem;
+      --space-5:1.5rem;
+      --space-6:2rem;
+      --space-7:3rem;
+      --space-8:4rem;
+      --radius:4px;
+      --label-radius:2px;
+      --ease:cubic-bezier(.22,1,.36,1);
+    }
+
+    html.dark {
+      color-scheme:dark;
+      --page-bg:#0f172a;
+      --page-fg:#f8fafc;
+      --muted-fg:#94a3b8;
+      --primary:#c2dbf9;
+      --secondary:#dad6f8;
+      --osa-fg:#97b9f0;
+      --surface:#1e293b;
+      --surface-fg:#f6f9fb;
+      --surface-border:#334155;
+      --inset:#020617;
+      --inset-fg:#cbd5e1;
+      --inset-border:#1e293b;
+      --activity:#fbbf24;
+      --activity-fg:#fcd34d;
+      --success:#34d399;
+    }
+
+    *,*::before,*::after { box-sizing:border-box; }
+    html { scroll-behavior:smooth; background:var(--page-bg); }
+    body {
+      margin:0;
+      min-width:320px;
+      overflow-x:hidden;
+      background:var(--page-bg);
+      color:var(--page-fg);
+      font-family:var(--sans);
+      font-size:16px;
+      line-height:1.7;
+      -webkit-font-smoothing:antialiased;
+      transition:background-color .2s ease,color .2s ease;
+    }
+    a { color:inherit; }
+    button,a { -webkit-tap-highlight-color:transparent; }
+    :focus-visible { outline:2px solid var(--primary); outline-offset:3px; }
+    ::selection { background:color-mix(in srgb,var(--primary) 22%,transparent); }
+    .mono { font-family:var(--mono); }
+    .shell { width:min(calc(100% - var(--space-6)),74rem); margin-inline:auto; }
+    .skip-link {
+      position:fixed;
+      z-index:100;
+      top:var(--space-2);
+      left:var(--space-2);
+      padding:var(--space-2) var(--space-3);
+      border:1px solid var(--surface-border);
+      border-radius:var(--label-radius);
+      background:var(--surface);
+      color:var(--surface-fg);
+      font-weight:700;
+      text-decoration:none;
+      transform:translateY(-5rem);
+    }
+    .skip-link:focus { transform:translateY(0); }
+
+    .site-header {
+      position:sticky;
+      z-index:40;
+      top:0;
+      border-top:4px solid var(--osa-fg);
+      border-bottom:1px solid var(--surface-border);
+      background:var(--page-bg);
+    }
+    .masthead {
+      display:flex;
+      min-height:76px;
+      align-items:center;
+      justify-content:space-between;
+      gap:var(--space-5);
+    }
+    .identity {
+      display:flex;
+      min-width:max-content;
+      align-items:center;
+      gap:var(--space-3);
+      color:var(--surface-fg);
+      text-decoration:none;
+    }
+    .identity-mark { width:40px; height:40px; flex:0 0 auto; }
+    .identity-copy { display:grid; gap:var(--space-1); line-height:1.1; }
+    .identity-copy strong { font-size:.9375rem; letter-spacing:.04em; }
+    .identity-copy span { color:var(--muted-fg); font-size:.6875rem; }
+    .utility { display:flex; min-width:0; align-items:center; }
+    .utility nav { min-width:0; }
+    .utility-list {
+      display:flex;
+      align-items:center;
+      margin:0;
+      padding:0;
+      list-style:none;
+      white-space:nowrap;
+    }
+    .utility-link,.theme-toggle {
+      display:inline-flex;
+      min-height:44px;
+      align-items:center;
+      justify-content:center;
+      padding-inline:var(--space-3);
+      border:0;
+      border-bottom:2px solid transparent;
+      background:transparent;
+      color:var(--muted-fg);
+      font:650 .8125rem/1 var(--sans);
+      text-decoration:none;
+      transition:border-color .18s ease,color .18s ease,background-color .18s ease;
+    }
+    .utility-link:hover,.utility-link[aria-current="page"] { border-bottom-color:var(--primary); color:var(--osa-fg); }
+    .utility-link.external::after { margin-left:var(--space-1); font:600 .625rem/1 var(--mono); content:"↗"; }
+    .theme-toggle {
+      width:44px;
+      padding:0;
+      border-left:1px solid var(--surface-border);
+      color:var(--osa-fg);
+      cursor:pointer;
+      font:700 .6875rem/1 var(--mono);
+    }
+    .theme-toggle:hover { background:var(--inset); }
+
+    .hero {
+      display:grid;
+      grid-template-columns:minmax(0,8fr) minmax(17rem,4fr);
+      gap:var(--space-7);
+      padding-block:var(--space-8);
+      border-bottom:1px solid var(--surface-border);
+    }
+    .hero-copy { align-self:center; }
+    .eyebrow {
+      margin:0 0 var(--space-4);
+      color:var(--osa-fg);
+      font:700 .6875rem/1.4 var(--mono);
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    h1 {
+      max-width:46rem;
+      margin:0;
+      color:var(--surface-fg);
+      font-size:clamp(2.25rem,4.5vw,3.75rem);
+      font-weight:800;
+      letter-spacing:-.045em;
+      line-height:1.16;
+    }
+    .intro {
+      max-width:48rem;
+      margin:var(--space-5) 0 0;
+      color:var(--page-fg);
+      font-size:1rem;
+      line-height:1.9;
+    }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:var(--space-2); margin-top:var(--space-6); }
+    .action {
+      display:inline-flex;
+      min-height:44px;
+      align-items:center;
+      justify-content:center;
+      gap:var(--space-2);
+      padding:var(--space-2) var(--space-4);
+      border:1px solid var(--inset-border);
+      border-radius:var(--label-radius);
+      color:var(--surface-fg);
+      font-size:.875rem;
+      font-weight:700;
+      text-decoration:none;
+      transition:border-color .18s ease,background-color .18s ease,color .18s ease;
+    }
+    .action:hover { border-color:var(--primary); color:var(--osa-fg); }
+    .action.primary { border-color:var(--osa-fg); background:var(--osa-fg); color:var(--surface); }
+    .dark .action.primary { color:var(--page-bg); }
+    .action.primary:hover { background:var(--primary); color:var(--page-bg); }
+    .action.quiet { border-color:transparent; color:var(--osa-fg); }
+    .action.quiet:hover { background:var(--inset); }
+
+    .status-panel {
+      align-self:start;
+      border:1px solid var(--surface-border);
+      border-radius:var(--radius);
+      background:var(--surface);
+    }
+    .panel-heading {
+      display:flex;
+      min-height:52px;
+      align-items:center;
+      justify-content:space-between;
+      gap:var(--space-3);
+      padding:var(--space-3) var(--space-4);
+      border-bottom:1px solid var(--surface-border);
+    }
+    .panel-heading h2 { margin:0; color:var(--surface-fg); font-size:.9375rem; }
+    .panel-heading time { color:var(--muted-fg); font:600 .625rem/1 var(--mono); }
+    .status-totals { display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--surface-border); }
+    .status-total { padding:var(--space-4); }
+    .status-total + .status-total { border-left:1px solid var(--surface-border); }
+    .status-total strong { display:block; color:var(--surface-fg); font:750 1.75rem/1 var(--mono); }
+    .status-total span { color:var(--muted-fg); font-size:.75rem; }
+    .status-total.online strong { color:var(--success); }
+    .status-total.beta strong { color:var(--activity-fg); }
+    .status-note { margin:0; padding:var(--space-3) var(--space-4); color:var(--muted-fg); font-size:.75rem; }
+    .status-note::before { margin-right:var(--space-2); color:var(--success); content:"●"; }
+
+    .portal-grid {
+      display:grid;
+      grid-template-columns:minmax(0,8fr) minmax(15rem,4fr);
+      gap:var(--space-7);
+      padding-block:var(--space-8);
+      border-bottom:1px solid var(--surface-border);
+    }
+    .section-head {
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:var(--space-4);
+      margin-bottom:var(--space-4);
+      padding-bottom:var(--space-3);
+      border-bottom:2px solid var(--surface-fg);
+    }
+    .section-head h2 { margin:0; color:var(--surface-fg); font-size:1.125rem; letter-spacing:-.015em; }
+    .section-head span { color:var(--muted-fg); font:600 .625rem/1.4 var(--mono); }
+    .notice-list { display:grid; gap:var(--space-2); margin:0; padding:0; list-style:none; }
+    .notice {
+      display:grid;
+      grid-template-columns:4.5rem minmax(0,1fr);
+      gap:var(--space-4);
+      align-items:start;
+      padding:var(--space-4);
+      border-left:2px solid transparent;
+      background:var(--inset);
+      transition:border-color .18s ease,background-color .18s ease;
+    }
+    .notice:hover { border-left-color:var(--primary); background:color-mix(in srgb,var(--inset) 76%,var(--surface)); }
+    .notice time { padding-top:var(--space-1); color:var(--muted-fg); font:650 .75rem/1.3 var(--mono); }
+    .notice-body { min-width:0; }
+    .tag {
+      display:inline-block;
+      margin-bottom:var(--space-2);
+      padding:var(--space-1) var(--space-2);
+      border:1px solid var(--inset-border);
+      border-radius:var(--label-radius);
+      color:var(--osa-fg);
+      font:700 .625rem/1.2 var(--mono);
+      letter-spacing:.02em;
+    }
+    .tag.warn { border-color:color-mix(in srgb,var(--activity) 48%,var(--inset-border)); color:var(--activity-fg); }
+    .notice a,.notice-title {
+      display:block;
+      color:var(--surface-fg);
+      font-size:.9375rem;
+      font-weight:650;
+      line-height:1.65;
+      text-decoration-color:transparent;
+      text-underline-offset:.2em;
+      transition:color .18s ease,text-decoration-color .18s ease;
+    }
+    .notice a:hover { color:var(--osa-fg); text-decoration-color:currentColor; }
+
+    .quick-links { border-top:1px solid var(--surface-border); }
+    .quick-link {
+      display:grid;
+      grid-template-columns:2rem 1fr auto;
+      gap:var(--space-3);
+      align-items:center;
+      min-height:68px;
+      padding-block:var(--space-3);
+      border-bottom:1px solid var(--surface-border);
+      color:var(--surface-fg);
+      text-decoration:none;
+      transition:color .18s ease,padding .2s var(--ease);
+    }
+    .quick-link:hover { padding-left:var(--space-2); color:var(--osa-fg); }
+    .quick-index { color:var(--muted-fg); font:600 .625rem/1 var(--mono); }
+    .quick-copy strong { display:block; font-size:.875rem; }
+    .quick-copy small { display:block; margin-top:var(--space-1); color:var(--muted-fg); font-size:.6875rem; line-height:1.5; }
+    .quick-arrow { color:var(--osa-fg); font-family:var(--mono); }
+
+    .directory-section { padding-block:var(--space-8); border-bottom:1px solid var(--surface-border); }
+    .table-wrap { border-top:1px solid var(--inset-border); }
+    .service-table { width:100%; border-collapse:collapse; table-layout:fixed; }
+    .service-table th {
+      padding:var(--space-3) var(--space-4);
+      border-bottom:1px solid var(--inset-border);
+      color:var(--muted-fg);
+      font:700 .625rem/1.4 var(--mono);
+      letter-spacing:.06em;
+      text-align:left;
+      text-transform:uppercase;
+    }
+    .service-table th:first-child,.service-table td:first-child { padding-left:0; }
+    .service-table th:last-child,.service-table td:last-child { padding-right:0; text-align:right; }
+    .service-table td { padding:var(--space-4); border-bottom:1px solid var(--surface-border); vertical-align:middle; }
+    .service-table tbody tr { transition:background-color .18s ease; }
+    .service-table tbody tr:hover { background:var(--inset); }
+    .service-name { width:24%; }
+    .service-desc { width:52%; color:var(--muted-fg); font-size:.8125rem; }
+    .service-meta { width:12%; }
+    .service-status { width:12%; }
+    .service-name a { color:var(--surface-fg); font-size:.9375rem; font-weight:750; text-decoration:none; }
+    .service-name a:hover { color:var(--osa-fg); text-decoration:underline; text-underline-offset:.2em; }
+    .label {
+      display:inline-block;
+      padding:var(--space-1) var(--space-2);
+      border:1px solid var(--inset-border);
+      border-radius:var(--label-radius);
+      color:var(--muted-fg);
+      font:700 .625rem/1.2 var(--mono);
+    }
+    .state {
+      display:inline-flex;
+      align-items:center;
+      gap:var(--space-2);
+      color:var(--success);
+      font:700 .625rem/1.2 var(--mono);
+      text-transform:uppercase;
+    }
+    .state::before { width:6px; height:6px; border-radius:50%; background:currentColor; content:""; }
+    .state.beta { color:var(--activity-fg); }
+
+    .friends { display:grid; grid-template-columns:auto 1fr; align-items:stretch; border-bottom:1px solid var(--surface-border); }
+    .friends-heading {
+      display:flex;
+      align-items:center;
+      padding:var(--space-4) var(--space-5) var(--space-4) 0;
+      border-right:1px solid var(--surface-border);
+      color:var(--muted-fg);
+      font:700 .6875rem/1.4 var(--mono);
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    .friend-list { display:flex; flex-wrap:wrap; margin:0; padding:0 0 0 var(--space-5); list-style:none; }
+    .friend-list a {
+      display:inline-flex;
+      min-height:52px;
+      align-items:center;
+      padding-inline:var(--space-3);
+      color:var(--page-fg);
+      font-size:.75rem;
+      text-decoration:none;
+    }
+    .friend-list a::after { margin-left:var(--space-1); color:var(--muted-fg); font:600 .5625rem/1 var(--mono); content:"↗"; }
+    .friend-list a:hover { color:var(--osa-fg); text-decoration:underline; text-underline-offset:.2em; }
+
+    footer { padding-block:var(--space-7); }
+    .footer-grid { display:grid; grid-template-columns:1fr auto; gap:var(--space-5); align-items:end; }
+    .footer-title { margin:0; color:var(--surface-fg); font-weight:750; }
+    .footer-copy,.console-note { margin:var(--space-1) 0 0; color:var(--muted-fg); font-size:.75rem; }
+    .footer-side { text-align:right; }
+    .footer-links { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:var(--space-4); }
+    .footer-links a { color:var(--osa-fg); font-size:.75rem; font-weight:700; text-underline-offset:.2em; }
+    .console-note { font-family:var(--mono); font-size:.625rem; }
+
+    @media (max-width:900px) {
+      .masthead { align-items:stretch; flex-direction:column; gap:0; padding-top:var(--space-3); }
+      .identity { min-height:48px; }
+      .utility { width:100%; border-top:1px solid var(--surface-border); }
+      .utility nav { flex:1; overflow-x:auto; scrollbar-width:none; }
+      .utility nav::-webkit-scrollbar { display:none; }
+      .utility-list { width:max-content; }
+      .theme-toggle { flex:0 0 44px; }
+      .hero,.portal-grid { grid-template-columns:1fr; }
+      .status-panel { width:100%; }
+      .portal-grid { gap:var(--space-8); }
+      .friends { grid-template-columns:1fr; }
+      .friends-heading { padding:var(--space-4) 0 var(--space-2); border-right:0; }
+      .friend-list { padding:0; }
+    }
+
+    @media (max-width:600px) {
+      .shell { width:min(calc(100% - var(--space-5)),74rem); }
+      .site-header { position:relative; }
+      .identity-copy span { font-size:.625rem; }
+      .utility-link { padding-inline:var(--space-3); font-size:.75rem; }
+      .hero { gap:var(--space-6); padding-block:var(--space-7); }
+      h1 { font-size:2.25rem; }
+      .intro { font-size:.9375rem; line-height:1.8; }
+      .hero-actions { display:grid; grid-template-columns:1fr 1fr; }
+      .action { padding-inline:var(--space-3); }
+      .action.primary { grid-column:1/-1; }
+      .portal-grid,.directory-section { padding-block:var(--space-7); }
+      .section-head { align-items:flex-start; flex-direction:column; gap:var(--space-1); }
+      .notice { grid-template-columns:1fr; gap:var(--space-2); }
+      .notice time { padding-top:0; }
+      .service-table,.service-table tbody { display:block; }
+      .service-table thead { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
+      .service-table tr { display:grid; grid-template-columns:1fr auto; padding-block:var(--space-4); border-bottom:1px solid var(--surface-border); }
+      .service-table td { width:auto; padding:0; border:0; text-align:left; }
+      .service-table td:first-child { grid-column:1; }
+      .service-table td:nth-child(2) { grid-column:1/-1; margin-top:var(--space-2); }
+      .service-table td:nth-child(3) { grid-column:1; margin-top:var(--space-3); }
+      .service-table td:last-child { grid-column:2; grid-row:1; padding-left:var(--space-3); text-align:right; }
+      .friend-list { display:grid; grid-template-columns:1fr 1fr; }
+      .friend-list a { min-height:44px; padding:var(--space-2) var(--space-2) var(--space-2) 0; }
+      .footer-grid { grid-template-columns:1fr; align-items:start; }
+      .footer-side { text-align:left; }
+      .footer-links { justify-content:flex-start; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      html { scroll-behavior:auto; }
+      *,*::before,*::after { transition-duration:.01ms!important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <div class="masthead shell">
+      <a class="identity" href="#main" aria-label="HITSZ OSA 首页">
+        <svg class="identity-mark" viewBox="0 0 40 40" role="img" aria-label="OSA 标志占位">
+          <rect x="1" y="1" width="38" height="38" rx="2" fill="var(--surface)" stroke="var(--osa-fg)" stroke-width="2"/>
+          <path d="M7 9h26M7 31h26" stroke="var(--inset-border)"/>
+          <text x="20" y="25" fill="var(--osa-fg)" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" font-weight="800">OSA</text>
+        </svg>
+        <span class="identity-copy"><strong>HITSZ OSA</strong><span>哈尔滨工业大学（深圳）开源技术协会</span></span>
+      </a>
+      <div class="utility">
+        <nav aria-label="主要导航">
+          <ul class="utility-list">
+            <li><a class="utility-link" href="#main" aria-current="page">首页</a></li>
+            <li><a class="utility-link" href="#updates">活动</a></li>
+            <li><a class="utility-link" href="#links">友链</a></li>
+            <li><a class="utility-link" href="#about">关于</a></li>
+            <li><a class="utility-link external" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer noopener">镜像站</a></li>
+            <li><a class="utility-link external" href="https://wiki.osa.moe" target="_blank" rel="noreferrer noopener">Wiki</a></li>
+          </ul>
+        </nav>
+        <button class="theme-toggle" type="button" aria-label="切换到深色模式" aria-pressed="false" title="切换明暗主题">暗</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero shell" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Campus Open Source Notice · 校园开源服务门户</p>
+        <h1 id="hero-title">HITSZ 开源技术协会</h1>
+        <p class="intro">我们是 HITSZ 开源技术协会（a.k.a. HITSZ OSA），由哈尔滨工业大学（深圳）学生中的 Linux 用户和开源软件爱好者自发组建的学生社团。我们致力于维护学校的开源基础建设，提升学校开源氛围，为开源技术爱好者提供交流平台。</p>
+        <div class="hero-actions" aria-label="常用入口">
+          <a class="action primary" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer noopener">访问镜像站 <span aria-hidden="true">↗</span></a>
+          <a class="action" href="#updates">社团活动</a>
+          <a class="action quiet" href="#about">了解协会 <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      <aside class="status-panel" aria-labelledby="status-title">
+        <div class="panel-heading"><h2 id="status-title">服务状态摘要</h2><time datetime="2026-07-26">07/26 更新</time></div>
+        <div class="status-totals">
+          <div class="status-total online"><strong>5</strong><span>项服务在线</span></div>
+          <div class="status-total beta"><strong>1</strong><span>项服务测试中</span></div>
+        </div>
+        <p class="status-note">公共服务运行正常，校内服务需校园网络访问。</p>
+      </aside>
+    </section>
+
+    <div class="portal-grid shell">
+      <section id="updates" aria-labelledby="updates-title">
+        <header class="section-head"><h2 id="updates-title">最新公告与活动</h2><span>NOTICE BOARD · 05</span></header>
+        <ol class="notice-list">
+          <li class="notice">
+            <time datetime="2026-07-20">07/20</time>
+            <div class="notice-body"><span class="tag">置顶公告</span><a href="https://github.com/hitszosa" target="_blank" rel="noreferrer noopener">协会门户网站改版测试中，欢迎通过 GitHub 反馈建议。</a></div>
+          </li>
+          <li class="notice">
+            <time datetime="2026-07-15">07/15</time>
+            <div class="notice-body"><span class="tag warn">公告</span><span class="notice-title">本周镜像站例行维护窗口：周日 02:00–03:00，期间部分同步任务可能延迟。</span></div>
+          </li>
+          <li class="notice">
+            <time datetime="2026-08-08">08/08</time>
+            <div class="notice-body"><span class="tag">沙龙 · 即将举行</span><a href="#updates">暑期开源分享夜：如何参与上游社区</a></div>
+          </li>
+          <li class="notice">
+            <time datetime="2026-05-20">05/20</time>
+            <div class="notice-body"><span class="tag">讲座</span><span class="notice-title">HPC 入门：从登录集群到提交第一个作业</span></div>
+          </li>
+          <li class="notice">
+            <time datetime="2026-04-12">04/12</time>
+            <div class="notice-body"><span class="tag">沙龙</span><span class="notice-title">Linux Install Party 2026 春季场</span></div>
+          </li>
+        </ol>
+      </section>
+
+      <aside aria-labelledby="quick-title">
+        <header class="section-head"><h2 id="quick-title">常用服务</h2><span>QUICK LINKS</span></header>
+        <div class="quick-links">
+          <a class="quick-link" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer noopener"><span class="quick-index">01</span><span class="quick-copy"><strong>开源软件镜像站</strong><small>校园网内高速下载</small></span><span class="quick-arrow" aria-hidden="true">↗</span></a>
+          <a class="quick-link" href="https://mirrors.osa.moe/help" target="_blank" rel="noreferrer noopener"><span class="quick-index">02</span><span class="quick-copy"><strong>镜像使用帮助</strong><small>配置指南与一键换源</small></span><span class="quick-arrow" aria-hidden="true">↗</span></a>
+          <a class="quick-link" href="https://wiki.osa.moe" target="_blank" rel="noreferrer noopener"><span class="quick-index">03</span><span class="quick-copy"><strong>OSA Wiki</strong><small>Linux、HPC 与技术文档</small></span><span class="quick-arrow" aria-hidden="true">↗</span></a>
+          <a class="quick-link" href="https://weekly.osa.moe" target="_blank" rel="noreferrer noopener"><span class="quick-index">04</span><span class="quick-copy"><strong>Weekly 周报</strong><small>技术新闻与本周活动</small></span><span class="quick-arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </aside>
+    </div>
+
+    <section class="directory-section shell" id="services" aria-labelledby="services-title">
+      <header class="section-head"><h2 id="services-title">服务目录</h2><span>6 SERVICES · 实时状态</span></header>
+      <div class="table-wrap">
+        <table class="service-table">
+          <thead><tr><th scope="col">服务</th><th scope="col">说明</th><th scope="col">访问范围</th><th scope="col">状态</th></tr></thead>
+          <tbody>
+            <tr><td class="service-name"><a href="https://mirrors.osa.moe" target="_blank" rel="noreferrer noopener">开源软件镜像站 ↗</a></td><td class="service-desc">主流 Linux 发行版与开源软件镜像，校园网内高速下载</td><td class="service-meta"><span class="label">公开</span></td><td class="service-status"><span class="state">online</span></td></tr>
+            <tr><td class="service-name"><a href="https://mirrors.osa.moe/help" target="_blank" rel="noreferrer noopener">镜像使用帮助 ↗</a></td><td class="service-desc">各发行版与工具的镜像配置指南，一键换源</td><td class="service-meta"><span class="label">公开</span></td><td class="service-status"><span class="state">online</span></td></tr>
+            <tr><td class="service-name"><a href="https://wiki.osa.moe" target="_blank" rel="noreferrer noopener">OSA Wiki ↗</a></td><td class="service-desc">Linux 入门、HPC 文档、技术分享沉淀</td><td class="service-meta"><span class="label">公开</span></td><td class="service-status"><span class="state">online</span></td></tr>
+            <tr><td class="service-name"><a href="https://weekly.osa.moe" target="_blank" rel="noreferrer noopener">Weekly 周报 ↗</a></td><td class="service-desc">技术新闻、群聊精华、本周活动一览</td><td class="service-meta"><span class="label">公开</span></td><td class="service-status"><span class="state">online</span></td></tr>
+            <tr><td class="service-name"><a href="https://git.osa.moe" target="_blank" rel="noreferrer noopener">Gitea 代码托管 ↗</a></td><td class="service-desc">自托管 Git</td><td class="service-meta"><span class="label">校内</span></td><td class="service-status"><span class="state">online</span></td></tr>
+            <tr><td class="service-name"><a href="https://aigw.osa.moe" target="_blank" rel="noreferrer noopener">AI Gateway ↗</a></td><td class="service-desc">统一接入主流大模型 API</td><td class="service-meta"><span class="label">校内</span></td><td class="service-status"><span class="state beta">beta</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="friends shell" id="links" aria-labelledby="links-title">
+      <h2 class="friends-heading" id="links-title">友好组织</h2>
+      <ul class="friend-list">
+        <li><a href="https://tuna.moe" target="_blank" rel="noreferrer noopener">清华大学 TUNA 协会</a></li>
+        <li><a href="https://mirrorz.org" target="_blank" rel="noreferrer noopener">MirrorZ</a></li>
+        <li><a href="https://lug.ustc.edu.cn" target="_blank" rel="noreferrer noopener">中科大 LUG</a></li>
+        <li><a href="https://sjtug.org" target="_blank" rel="noreferrer noopener">上交大 SJTUG</a></li>
+        <li><a href="https://awesome-hitsz.github.io" target="_blank" rel="noreferrer noopener">Awesome HITSZ</a></li>
+        <li><a href="https://www.hitsz.edu.cn" target="_blank" rel="noreferrer noopener">哈尔滨工业大学（深圳）</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="shell" id="about">
+    <div class="footer-grid">
+      <div><p class="footer-title">HITSZ OSA</p><p class="footer-copy">哈尔滨工业大学（深圳）开源技术协会 · Copyleft 2026</p></div>
+      <div class="footer-side"><div class="footer-links" aria-label="社交媒体"><a href="https://github.com/hitszosa" target="_blank" rel="noreferrer noopener">GitHub</a><a href="https://qm.qq.com/cgi-bin/qm/qr?k=EmOyWeZrOaOeSoVrVLoozyKYdvjOia_t" target="_blank" rel="noreferrer noopener">QQ 群</a><a href="https://space.bilibili.com/1124374292" target="_blank" rel="noreferrer noopener">Bilibili</a></div><p class="console-note">More information in browser console</p></div>
+    </div>
+  </footer>
+
+  <script>
+    const root = document.documentElement;
+    const toggle = document.querySelector('.theme-toggle');
+    toggle.addEventListener('click', () => {
+      const dark = root.classList.toggle('dark');
+      toggle.textContent = dark ? '明' : '暗';
+      toggle.setAttribute('aria-pressed', String(dark));
+      toggle.setAttribute('aria-label', dark ? '切换到浅色模式' : '切换到深色模式');
+    });
+    console.info('HITSZ OSA · Campus Open Source Notice');
+    console.info('More information: https://www.osa.moe');
+  </script>
+</body>
+</html>

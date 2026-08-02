@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HITSZ OSA — 明亮、开放、来自千禧年的校园开源社群。">
+  <meta name="theme-color" content="#86d4ff">
+  <title>HITSZ OSA · Open Source 2000</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme:light;
+      --sky-top:#6cc8ff;
+      --sky-mid:#bce9ff;
+      --sky-low:#ecfbff;
+      --ink:#193a68;
+      --ink-soft:#4f6f94;
+      --osa-500:#576edb;
+      --osa-700:#373da9;
+      --accent-500:#8762d3;
+      --aqua:#25c9ef;
+      --aqua-light:#dffcff;
+      --mint:#65e5ca;
+      --lime:#bcf36a;
+      --pink:#ff8fca;
+      --yellow:#ffe778;
+      --white-tint:#f7fdff;
+      --surface:rgba(249,253,255,.78);
+      --surface-solid:#effaff;
+      --line:rgba(64,121,184,.24);
+      --line-strong:rgba(255,255,255,.88);
+      --shadow:rgba(37,74,126,.18);
+      --shadow-deep:rgba(20,62,123,.25);
+      --silver-dark:#7188a7;
+      --silver-mid:#d7e7f4;
+      --silver-light:#ffffff;
+      --warn:#b65225;
+      --success:#14745d;
+      --sans:"Trebuchet MS","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+      --mono:"JetBrains Mono","Cascadia Code",ui-monospace,monospace;
+      --s1:.25rem;
+      --s2:.5rem;
+      --s3:.75rem;
+      --s4:1rem;
+      --s5:1.25rem;
+      --s6:1.5rem;
+      --s8:2rem;
+      --s10:2.5rem;
+      --s12:3rem;
+      --s16:4rem;
+      --r-sm:.75rem;
+      --r-md:1.25rem;
+      --r-lg:2rem;
+      --pill:999rem;
+      --max:76rem;
+      --ease:cubic-bezier(.16,1,.3,1);
+    }
+
+    *,*::before,*::after{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:7rem;background:var(--sky-low)}
+    body{
+      min-width:20rem;
+      margin:0;
+      overflow-x:hidden;
+      color:var(--ink);
+      font-family:var(--sans);
+      line-height:1.65;
+      background:
+        radial-gradient(circle at 12% 18%,rgba(255,255,255,.88) 0 2.5rem,transparent 2.65rem),
+        radial-gradient(circle at 18% 20%,rgba(255,255,255,.7) 0 4rem,transparent 4.15rem),
+        radial-gradient(circle at 85% 26%,rgba(255,255,255,.65) 0 4.5rem,transparent 4.7rem),
+        linear-gradient(180deg,var(--sky-top) 0,var(--sky-mid) 26rem,var(--sky-low) 52rem,var(--white-tint) 100%);
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+    body::before{
+      position:fixed;
+      z-index:-1;
+      inset:0;
+      background:
+        radial-gradient(ellipse at 50% 7%,rgba(255,255,255,.55),transparent 36%),
+        linear-gradient(115deg,transparent 35%,rgba(255,255,255,.26) 48%,transparent 61%);
+      content:"";
+      pointer-events:none;
+    }
+    a{color:inherit}
+    button,a{-webkit-tap-highlight-color:transparent}
+    :focus-visible{outline:.2rem solid var(--osa-700);outline-offset:.2rem}
+    ::selection{background:var(--yellow);color:var(--osa-700)}
+    .shell{width:min(calc(100% - 2rem),var(--max));margin-inline:auto}
+    .skip-link{position:fixed;z-index:100;top:var(--s2);left:var(--s2);translate:0 -5rem;border:.1rem solid var(--line-strong);border-radius:var(--pill);background:var(--surface-solid);padding:var(--s2) var(--s4);font-weight:800;transition:translate .2s var(--ease)}
+    .skip-link:focus{translate:0}
+
+    .site-header{position:sticky;z-index:50;top:0;padding:var(--s3) 0;background:linear-gradient(180deg,rgba(240,252,255,.92),rgba(222,247,255,.7));border-bottom:.1rem solid var(--line-strong);box-shadow:0 .4rem 1.5rem rgba(38,103,154,.12);backdrop-filter:blur(.7rem) saturate(140%)}
+    .nav-shell{display:flex;align-items:center;justify-content:space-between;gap:var(--s6)}
+    .brand{display:inline-flex;flex:none;align-items:center;gap:var(--s3);text-decoration:none;font-weight:900;letter-spacing:.04em}
+    .brand-bubble{display:grid;width:2.8rem;height:2.8rem;place-items:center;border:.1rem solid rgba(255,255,255,.95);border-radius:50%;background:radial-gradient(circle at 35% 25%,var(--silver-light) 0 8%,var(--aqua-light) 14%,rgba(80,208,238,.74) 48%,var(--osa-500) 100%);box-shadow:inset -.3rem -.4rem .6rem rgba(44,73,164,.25),inset .2rem .2rem .35rem var(--silver-light),0 .3rem .7rem var(--shadow)}
+    .brand-bubble svg{width:1.85rem;height:1.85rem;filter:drop-shadow(0 .1rem .08rem rgba(25,58,104,.25))}
+    .brand strong{display:block;color:var(--osa-700);font-size:.95rem;line-height:1.05}
+    .brand small{display:block;color:var(--ink-soft);font:700 .62rem/1.3 var(--mono);letter-spacing:.08em}
+    .nav-list{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:var(--s2);margin:0;padding:0;list-style:none}
+    .nav-link{display:inline-flex;min-height:2.35rem;align-items:center;padding:.35rem .82rem;border:.08rem solid rgba(255,255,255,.8);border-radius:var(--pill);background:linear-gradient(180deg,rgba(255,255,255,.74),rgba(188,233,255,.43));box-shadow:inset 0 .08rem .15rem var(--silver-light),0 .14rem .3rem var(--shadow);color:var(--ink);font-size:.78rem;font-weight:800;text-decoration:none;transition:translate .2s var(--ease),box-shadow .2s,color .2s}
+    .nav-link:hover,.nav-link[aria-current="page"]{translate:0 -.12rem;box-shadow:inset 0 .08rem .15rem var(--silver-light),0 .35rem .7rem var(--shadow);color:var(--osa-700)}
+    .nav-link.external::after{margin-left:.3rem;color:var(--osa-500);content:"↗"}
+
+    .hero{position:relative;min-height:46rem;padding:clamp(4rem,8vw,7.5rem) 0 var(--s16);isolation:isolate}
+    .hero::before,.hero::after{position:absolute;z-index:-1;border-radius:50%;content:"";filter:blur(.05rem)}
+    .hero::before{top:8%;left:-7rem;width:22rem;height:22rem;background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.9) 0 4%,rgba(111,228,255,.32) 28%,rgba(135,98,211,.12) 55%,transparent 68%)}
+    .hero::after{right:-9rem;bottom:0;width:27rem;height:15rem;background:radial-gradient(ellipse,rgba(188,243,106,.48),rgba(101,229,202,.16) 42%,transparent 70%)}
+    .hero-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(19rem,.65fr);align-items:center;gap:clamp(2rem,6vw,6rem)}
+    .eyebrow{display:inline-flex;align-items:center;gap:var(--s2);margin:0 0 var(--s5);padding:.42rem .85rem;border:.1rem solid var(--line-strong);border-radius:var(--pill);background:linear-gradient(90deg,rgba(255,255,255,.72),rgba(175,246,249,.64));box-shadow:inset 0 .1rem .2rem rgba(255,255,255,.9),0 .25rem .7rem var(--shadow);color:var(--osa-700);font:800 .72rem/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+    .eyebrow::before{width:.55rem;height:.55rem;border-radius:50%;background:var(--mint);box-shadow:0 0 0 .18rem rgba(101,229,202,.25);content:""}
+    h1{max-width:50rem;margin:0;font-size:clamp(3rem,7vw,6.5rem);font-weight:900;line-height:.9;letter-spacing:-.065em}
+    .metal{display:block;color:transparent;background:linear-gradient(180deg,var(--silver-light) 0,var(--silver-mid) 23%,var(--silver-dark) 48%,var(--silver-light) 61%,#9bb4ce 80%,var(--silver-light) 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-stroke:.06rem rgba(39,86,143,.34);filter:drop-shadow(0 .18rem 0 rgba(255,255,255,.65)) drop-shadow(0 .35rem .25rem rgba(39,86,143,.18))}
+    .hero-intro{max-width:47rem;margin:var(--s8) 0 0;padding:var(--s5) var(--s6);border:.1rem solid rgba(255,255,255,.84);border-radius:var(--r-md);background:linear-gradient(135deg,rgba(255,255,255,.72),rgba(227,250,255,.55));box-shadow:inset .08rem .08rem .2rem rgba(255,255,255,.94),0 .65rem 1.8rem var(--shadow);color:var(--ink);font-size:clamp(.92rem,1.3vw,1.03rem)}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:var(--s3);margin-top:var(--s6)}
+    .bubble-btn{position:relative;display:inline-flex;min-height:3.2rem;align-items:center;justify-content:center;overflow:hidden;padding:.7rem 1.25rem;border:.1rem solid rgba(255,255,255,.9);border-radius:var(--pill);background:linear-gradient(180deg,rgba(255,255,255,.94) 0,rgba(169,241,255,.76) 35%,rgba(42,182,229,.76) 58%,rgba(87,110,219,.88) 100%);box-shadow:inset 0 .22rem .3rem rgba(255,255,255,.95),inset 0 -.25rem .45rem rgba(55,61,169,.3),0 .4rem .8rem var(--shadow-deep);color:var(--white-tint);font-weight:900;text-decoration:none;text-shadow:0 .1rem .12rem rgba(28,71,128,.48);transition:translate .2s var(--ease),filter .2s,box-shadow .2s}
+    .bubble-btn::before{position:absolute;top:.18rem;left:14%;width:70%;height:38%;border-radius:var(--pill);background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.08));content:"";pointer-events:none}
+    .bubble-btn span{position:relative}
+    .bubble-btn.secondary{background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(247,253,255,.72) 40%,rgba(205,228,241,.8) 60%,rgba(149,169,196,.85));color:var(--osa-700);text-shadow:0 .08rem rgba(255,255,255,.9)}
+    .bubble-btn.tertiary{background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(232,214,255,.75) 42%,rgba(135,98,211,.78));color:var(--white-tint)}
+    .bubble-btn:hover{translate:0 -.2rem;filter:saturate(112%) brightness(1.04);box-shadow:inset 0 .22rem .3rem rgba(255,255,255,.95),inset 0 -.25rem .45rem rgba(55,61,169,.28),0 .7rem 1.2rem var(--shadow-deep)}
+
+    .orbit-stage{position:relative;width:min(100%,25rem);aspect-ratio:1;margin-inline:auto}
+    .planet{position:absolute;z-index:2;top:50%;left:50%;display:grid;width:12rem;height:12rem;place-items:center;translate:-50% -50%;border:.15rem solid rgba(255,255,255,.92);border-radius:50%;background:radial-gradient(circle at 33% 24%,var(--silver-light) 0 5%,var(--aqua-light) 12%,#65d8f3 33%,#5083de 70%,var(--osa-700) 100%);box-shadow:inset -.8rem -1rem 1.8rem rgba(23,61,128,.35),inset .5rem .45rem .8rem rgba(255,255,255,.74),0 1rem 2.2rem rgba(44,96,154,.28)}
+    .planet::before,.planet::after{position:absolute;border-radius:48% 52% 42% 58%;background:linear-gradient(135deg,var(--lime),var(--mint));box-shadow:inset .1rem .15rem .2rem rgba(255,255,255,.65);content:""}
+    .planet::before{top:23%;left:18%;width:3.4rem;height:2.5rem;rotate:-18deg}
+    .planet::after{right:14%;bottom:21%;width:4rem;height:2.8rem;rotate:24deg}
+    .penguin{position:relative;z-index:3;width:6.3rem;height:auto;filter:drop-shadow(0 .4rem .25rem rgba(25,58,104,.25))}
+    .orbit{position:absolute;z-index:1;inset:9%;border:.12rem solid rgba(255,255,255,.72);border-radius:50%;box-shadow:0 0 0 .08rem rgba(87,110,219,.14);animation:spin 18s linear infinite}
+    .orbit.second{inset:1%;border-color:rgba(55,61,169,.24);animation-duration:27s;animation-direction:reverse;rotate:28deg}
+    .orbit .star{position:absolute;display:grid;width:2.75rem;height:2.75rem;place-items:center;border:.1rem solid rgba(255,255,255,.9);border-radius:50%;background:radial-gradient(circle at 30% 22%,var(--silver-light),var(--yellow) 30%,var(--pink) 100%);box-shadow:inset .15rem .15rem .25rem rgba(255,255,255,.85),0 .35rem .65rem var(--shadow);color:var(--osa-700);font-size:1.3rem}
+    .orbit .star.one{top:-1rem;left:50%;translate:-50% 0}
+    .orbit .star.two{right:-.8rem;bottom:18%}
+    .orbit.second .star{top:65%;left:-.4rem;background:radial-gradient(circle at 30% 22%,var(--silver-light),var(--mint) 38%,var(--aqua) 100%)}
+    .rainbow-ring{position:absolute;z-index:0;inset:21%;border:.65rem solid transparent;border-radius:50%;background:linear-gradient(var(--sky-mid),var(--sky-mid)) padding-box,conic-gradient(var(--pink),var(--yellow),var(--mint),var(--aqua),var(--accent-500),var(--pink)) border-box;opacity:.65;rotate:-18deg;scale:1.55 .46}
+    @keyframes spin{to{rotate:1turn}}
+
+    .content-field{position:relative;padding:var(--s16) 0;background:linear-gradient(180deg,rgba(245,253,255,.35),rgba(246,253,255,.9) 12rem,var(--white-tint) 100%)}
+    .content-field::before{position:absolute;top:-3rem;left:0;width:100%;height:6rem;background:radial-gradient(ellipse at 8% 100%,var(--white-tint) 0 26%,transparent 27%),radial-gradient(ellipse at 28% 100%,var(--white-tint) 0 33%,transparent 34%),radial-gradient(ellipse at 53% 100%,var(--white-tint) 0 30%,transparent 31%),radial-gradient(ellipse at 77% 100%,var(--white-tint) 0 35%,transparent 36%),radial-gradient(ellipse at 96% 100%,var(--white-tint) 0 28%,transparent 29%);content:""}
+    .section{padding-block:var(--s16)}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:var(--s6);margin-bottom:var(--s8)}
+    .section-head h2{margin:0;color:var(--osa-700);font-size:clamp(2rem,4vw,3.25rem);line-height:1;letter-spacing:-.04em}
+    .section-kicker{margin:0 0 var(--s2);color:var(--aqua);font:900 .72rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+    .section-count{flex:none;padding:.45rem .85rem;border:.1rem solid var(--line-strong);border-radius:var(--pill);background:linear-gradient(180deg,var(--silver-light),var(--silver-mid) 48%,var(--silver-light));box-shadow:0 .25rem .65rem var(--shadow);color:var(--osa-700);font:900 .72rem/1 var(--mono)}
+
+    .news-panel{overflow:hidden;border:.1rem solid var(--line-strong);border-radius:var(--r-lg);background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(222,248,255,.76));box-shadow:inset .1rem .1rem .2rem var(--silver-light),0 1.2rem 3rem var(--shadow)}
+    .news-item{display:grid;grid-template-columns:4.5rem minmax(8rem,9rem) 1fr auto;align-items:center;gap:var(--s4);padding:1.15rem 1.35rem;border-bottom:.08rem solid var(--line);text-decoration:none;transition:background .2s,translate .2s var(--ease)}
+    .news-item:last-child{border-bottom:0}
+    .news-item:hover{background:rgba(255,255,255,.6);translate:.25rem 0}
+    .date{color:var(--osa-700);font:900 .84rem/1 var(--mono)}
+    .tag{justify-self:start;padding:.33rem .65rem;border:.08rem solid rgba(255,255,255,.9);border-radius:var(--pill);background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(135,98,211,.25));box-shadow:inset 0 .08rem .15rem var(--silver-light),0 .12rem .3rem var(--shadow);color:var(--osa-700);font-size:.72rem;font-weight:900;white-space:nowrap}
+    .tag.warn{background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,231,120,.62));color:var(--warn)}
+    .tag.soon{background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(101,229,202,.53));color:var(--success)}
+    .news-title{font-weight:800}
+    .news-arrow{display:grid;width:2rem;height:2rem;place-items:center;border-radius:50%;background:rgba(255,255,255,.66);color:var(--osa-500);font-weight:900}
+
+    .service-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s5)}
+    .service-card{position:relative;min-height:18rem;overflow:hidden;padding:var(--s6);border:.1rem solid var(--line-strong);border-radius:var(--r-lg);background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(211,246,255,.68) 58%,rgba(215,211,255,.5));box-shadow:inset .12rem .12rem .25rem rgba(255,255,255,.95),0 .8rem 1.8rem var(--shadow);text-decoration:none;transition:translate .25s var(--ease),box-shadow .25s}
+    .service-card::after{position:absolute;right:-2.5rem;bottom:-3.5rem;width:10rem;height:10rem;border-radius:50%;background:radial-gradient(circle,rgba(101,229,202,.38),transparent 67%);content:""}
+    .service-card:hover{translate:0 -.45rem;box-shadow:inset .12rem .12rem .25rem rgba(255,255,255,.95),0 1.25rem 2.5rem var(--shadow-deep)}
+    .crystal{display:grid;width:5rem;height:5rem;place-items:center;border:.13rem solid rgba(255,255,255,.92);border-radius:50%;background:radial-gradient(circle at 32% 23%,var(--silver-light) 0 8%,var(--aqua-light) 17%,rgba(82,210,238,.72) 46%,rgba(87,110,219,.82) 100%);box-shadow:inset -.4rem -.5rem .8rem rgba(55,61,169,.27),inset .22rem .2rem .35rem var(--silver-light),0 0 1.5rem rgba(37,201,239,.42),0 .4rem .8rem var(--shadow);color:var(--white-tint);font:900 1.65rem/1 var(--mono);text-shadow:0 .12rem .2rem var(--osa-700)}
+    .service-card:nth-child(2n) .crystal{background:radial-gradient(circle at 32% 23%,var(--silver-light) 0 8%,#f7e9ff 17%,rgba(196,156,238,.72) 46%,rgba(135,98,211,.88) 100%);box-shadow:inset -.4rem -.5rem .8rem rgba(55,61,169,.24),inset .22rem .2rem .35rem var(--silver-light),0 0 1.5rem rgba(135,98,211,.34),0 .4rem .8rem var(--shadow)}
+    .service-card h3{margin:var(--s5) 0 var(--s2);color:var(--osa-700);font-size:1.15rem}
+    .service-card p{margin:0;color:var(--ink-soft);font-size:.88rem}
+    .status{position:absolute;top:var(--s6);right:var(--s6);display:inline-flex;align-items:center;gap:.35rem;padding:.3rem .55rem;border-radius:var(--pill);background:rgba(255,255,255,.68);color:var(--success);font:800 .62rem/1 var(--mono)}
+    .status::before{width:.45rem;height:.45rem;border-radius:50%;background:var(--mint);box-shadow:0 0 .55rem var(--mint);content:""}
+    .status.beta{color:var(--accent-500)}
+    .status.beta::before{background:var(--pink);box-shadow:0 0 .55rem var(--pink)}
+
+    .friend-wrap{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4)}
+    .friend{display:flex;align-items:center;justify-content:space-between;gap:var(--s4);padding:1rem 1.25rem;border:.1rem solid var(--line-strong);border-radius:var(--pill);background:linear-gradient(180deg,rgba(255,255,255,.86),rgba(213,241,251,.72) 46%,rgba(176,210,228,.72));box-shadow:inset 0 .18rem .25rem var(--silver-light),0 .35rem .75rem var(--shadow);font-weight:900;text-decoration:none;transition:translate .2s var(--ease),filter .2s}
+    .friend:hover{translate:.2rem -.12rem;filter:saturate(120%)}
+    .friend::after{display:grid;width:2rem;height:2rem;flex:none;place-items:center;border-radius:50%;background:conic-gradient(var(--pink),var(--yellow),var(--mint),var(--aqua),var(--accent-500),var(--pink));color:var(--white-tint);content:"↗";text-shadow:0 .08rem .1rem var(--osa-700)}
+
+    footer{padding:var(--s10) 0;background:linear-gradient(180deg,var(--white-tint),rgba(164,226,251,.72));border-top:.1rem solid var(--line-strong)}
+    .footer-row{display:flex;align-items:center;justify-content:space-between;gap:var(--s6)}
+    .footer-copy{margin:0;color:var(--ink-soft);font-size:.78rem;font-weight:700}
+    .footer-links{display:flex;flex-wrap:wrap;gap:var(--s2)}
+    .footer-links a{padding:.35rem .65rem;border-radius:var(--pill);background:rgba(255,255,255,.55);font-size:.72rem;font-weight:900;text-decoration:none}
+    .console-note{margin:.45rem 0 0;color:var(--osa-700);font:700 .65rem/1.4 var(--mono)}
+
+    @media (max-width:56rem){
+      .nav-shell{align-items:flex-start;flex-direction:column;gap:var(--s3)}
+      .nav-list{justify-content:flex-start}
+      .hero{padding-top:var(--s12)}
+      .hero-grid{grid-template-columns:1fr}
+      .orbit-stage{width:min(86vw,24rem)}
+      .service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media (max-width:38rem){
+      html{scroll-padding-top:10rem}
+      .site-header{position:relative}
+      .shell{width:min(calc(100% - 1.25rem),var(--max))}
+      .brand-bubble{width:2.45rem;height:2.45rem}
+      .nav-list{gap:.35rem}
+      .nav-link{min-height:2rem;padding:.25rem .58rem;font-size:.7rem}
+      .hero{min-height:auto;padding:var(--s10) 0 var(--s16)}
+      h1{font-size:clamp(2.8rem,14vw,4.2rem)}
+      .hero-intro{padding:var(--s4);font-size:.88rem}
+      .hero-actions{display:grid;grid-template-columns:1fr}
+      .bubble-btn{width:100%}
+      .planet{width:9.8rem;height:9.8rem}
+      .penguin{width:5.2rem}
+      .section{padding-block:var(--s12)}
+      .section-head{align-items:flex-start;flex-direction:column;gap:var(--s3)}
+      .news-item{grid-template-columns:3.9rem 1fr auto;gap:var(--s2);padding:1rem}
+      .news-item .tag{grid-column:2}
+      .news-title{grid-column:2/4;font-size:.88rem}
+      .news-arrow{grid-column:3;grid-row:1;width:1.7rem;height:1.7rem}
+      .service-grid{grid-template-columns:1fr}
+      .service-card{min-height:15rem}
+      .friend-wrap{grid-template-columns:1fr}
+      .friend{border-radius:var(--r-md)}
+      .footer-row{align-items:flex-start;flex-direction:column}
+    }
+    @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.orbit{animation:none}.service-card,.bubble-btn,.friend,.news-item,.nav-link{transition:none}}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header">
+    <div class="shell nav-shell">
+      <a class="brand" href="#main" aria-label="HITSZ OSA 首页">
+        <span class="brand-bubble" aria-hidden="true">
+          <svg viewBox="0 0 64 64" role="img"><ellipse cx="32" cy="36" rx="19" ry="23" fill="#182747"/><ellipse cx="32" cy="39" rx="13" ry="17" fill="#f7fdff"/><circle cx="25" cy="24" r="3" fill="#f7fdff"/><circle cx="39" cy="24" r="3" fill="#f7fdff"/><circle cx="25" cy="24" r="1.2" fill="#193a68"/><circle cx="39" cy="24" r="1.2" fill="#193a68"/><path d="M27 29h10l-5 5z" fill="#ffe778"/><ellipse cx="18" cy="56" rx="9" ry="3" fill="#ffb95f"/><ellipse cx="46" cy="56" rx="9" ry="3" fill="#ffb95f"/></svg>
+        </span>
+        <span><strong>HITSZ OSA</strong><small>OPEN SOURCE 2000</small></span>
+      </a>
+      <nav aria-label="主导航">
+        <ul class="nav-list">
+          <li><a class="nav-link" href="#main" aria-current="page">首页</a></li>
+          <li><a class="nav-link" href="#news">活动</a></li>
+          <li><a class="nav-link" href="#friends">友链</a></li>
+          <li><a class="nav-link" href="#about">关于</a></li>
+          <li><a class="nav-link external" href="https://mirrors.osa.moe/">镜像站</a></li>
+          <li><a class="nav-link external" href="https://wiki.osa.moe/">Wiki</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="about" aria-labelledby="hero-title">
+      <div class="shell hero-grid">
+        <div>
+          <p class="eyebrow">Online since 2026 · Shenzhen</p>
+          <h1 id="hero-title"><span class="metal">HITSZ</span> 开源技术协会</h1>
+          <p class="hero-intro">我们是 HITSZ 开源技术协会（a.k.a. HITSZ OSA），由哈尔滨工业大学（深圳）学生中的 Linux 用户和开源软件爱好者自发组建的学生社团。我们致力于维护学校的开源基础建设，提升学校开源氛围，为开源技术爱好者提供交流平台。</p>
+          <div class="hero-actions" aria-label="快捷入口">
+            <a class="bubble-btn" href="https://mirrors.osa.moe/"><span>访问镜像站 ↗</span></a>
+            <a class="bubble-btn secondary" href="#news"><span>社团活动</span></a>
+            <a class="bubble-btn tertiary" href="#services"><span>了解协会</span></a>
+          </div>
+        </div>
+        <div class="orbit-stage" aria-label="企鹅环绕地球插画">
+          <div class="rainbow-ring" aria-hidden="true"></div>
+          <div class="orbit" aria-hidden="true"><span class="star one">★</span><span class="star two">✦</span></div>
+          <div class="orbit second" aria-hidden="true"><span class="star">✧</span></div>
+          <div class="planet">
+            <svg class="penguin" viewBox="0 0 120 150" role="img" aria-label="OSA 企鹅向你挥手">
+              <ellipse cx="59" cy="84" rx="43" ry="55" fill="#172643"/>
+              <ellipse cx="60" cy="93" rx="30" ry="40" fill="#f7fdff"/>
+              <path d="M21 65C4 69 1 84 7 99c8-7 14-12 22-13z" fill="#172643"/>
+              <path d="M99 62c19-13 24-26 20-38-15 7-23 18-29 31z" fill="#172643"/>
+              <circle cx="45" cy="51" r="7" fill="#f7fdff"/><circle cx="75" cy="51" r="7" fill="#f7fdff"/>
+              <circle cx="46" cy="52" r="2.7" fill="#193a68"/><circle cx="74" cy="52" r="2.7" fill="#193a68"/>
+              <path d="M49 61h22L60 72z" fill="#ffe778"/>
+              <ellipse cx="38" cy="137" rx="22" ry="7" fill="#ffb75e"/><ellipse cx="82" cy="137" rx="22" ry="7" fill="#ffb75e"/>
+              <path d="M19 36c11-21 72-24 84 0-15-9-69-9-84 0z" fill="#576edb"/>
+              <circle cx="95" cy="25" r="9" fill="#ff8fca"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="content-field">
+      <section class="section shell" id="news" aria-labelledby="news-title">
+        <div class="section-head">
+          <div><p class="section-kicker">What's happening</p><h2 id="news-title">OSA 动态</h2></div>
+          <span class="section-count">05 UPDATES</span>
+        </div>
+        <div class="news-panel">
+          <a class="news-item" href="#news"><time class="date" datetime="2026-07-20">07/20</time><span class="tag">置顶公告</span><span class="news-title">协会门户网站改版测试中，欢迎通过 GitHub 反馈建议。</span><span class="news-arrow" aria-hidden="true">›</span></a>
+          <a class="news-item" href="#news"><time class="date" datetime="2026-07-15">07/15</time><span class="tag warn">公告 · warn</span><span class="news-title">本周镜像站例行维护窗口：周日 02:00–03:00，期间部分同步任务可能延迟。</span><span class="news-arrow" aria-hidden="true">›</span></a>
+          <a class="news-item" href="#news"><time class="date" datetime="2026-08-08">08/08</time><span class="tag soon">沙龙 · 即将举行</span><span class="news-title">暑期开源分享夜：如何参与上游社区</span><span class="news-arrow" aria-hidden="true">›</span></a>
+          <a class="news-item" href="#news"><time class="date" datetime="2026-05-20">05/20</time><span class="tag">讲座</span><span class="news-title">HPC 入门：从登录集群到提交第一个作业</span><span class="news-arrow" aria-hidden="true">›</span></a>
+          <a class="news-item" href="#news"><time class="date" datetime="2026-04-12">04/12</time><span class="tag">沙龙</span><span class="news-title">Linux Install Party 2026 春季场</span><span class="news-arrow" aria-hidden="true">›</span></a>
+        </div>
+      </section>
+
+      <section class="section shell" id="services" aria-labelledby="services-title">
+        <div class="section-head">
+          <div><p class="section-kicker">Crystal powered</p><h2 id="services-title">开放服务</h2></div>
+          <span class="section-count">06 SERVICES</span>
+        </div>
+        <div class="service-grid">
+          <a class="service-card" href="https://mirrors.osa.moe/"><span class="status">online</span><span class="crystal" aria-hidden="true">↓</span><h3>开源软件镜像站</h3><p>主流 Linux 发行版与开源软件镜像，校园网内高速下载。</p></a>
+          <a class="service-card" href="https://mirrors.osa.moe/help/"><span class="status">online</span><span class="crystal" aria-hidden="true">↻</span><h3>镜像使用帮助</h3><p>一键换源。</p></a>
+          <a class="service-card" href="https://wiki.osa.moe/"><span class="status">online</span><span class="crystal" aria-hidden="true">W</span><h3>OSA Wiki</h3><p>Linux 入门、HPC 文档。</p></a>
+          <a class="service-card" href="#services"><span class="status">online</span><span class="crystal" aria-hidden="true">◫</span><h3>Weekly 周报</h3><p>技术新闻与群聊精华。</p></a>
+          <a class="service-card" href="#services"><span class="status">online · 校内</span><span class="crystal" aria-hidden="true">⌘</span><h3>Gitea 代码托管</h3><p>校内代码协作与项目托管。</p></a>
+          <a class="service-card" href="#services"><span class="status beta">beta · 校内</span><span class="crystal" aria-hidden="true">AI</span><h3>AI Gateway</h3><p>统一接入主流大模型 API。</p></a>
+        </div>
+      </section>
+
+      <section class="section shell" id="friends" aria-labelledby="friends-title">
+        <div class="section-head">
+          <div><p class="section-kicker">Hyperlink friends</p><h2 id="friends-title">友链星球</h2></div>
+          <span class="section-count">06 LINKS</span>
+        </div>
+        <div class="friend-wrap">
+          <a class="friend" href="https://tuna.moe/">清华大学 TUNA 协会</a>
+          <a class="friend" href="https://mirrorz.org/">MirrorZ</a>
+          <a class="friend" href="https://lug.ustc.edu.cn/">中科大 LUG</a>
+          <a class="friend" href="https://sjtug.org/">上交大 SJTUG</a>
+          <a class="friend" href="https://awesome-hitsz.github.io/">Awesome HITSZ</a>
+          <a class="friend" href="https://www.hitsz.edu.cn/">哈尔滨工业大学（深圳）</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="shell footer-row">
+      <div><p class="footer-copy">HITSZ OSA · 哈尔滨工业大学（深圳）开源技术协会 · Copyleft 2026</p><p class="console-note">More information in browser console</p></div>
+      <nav class="footer-links" aria-label="社交媒体"><a href="https://github.com/hitsz-osa">GitHub</a><a href="#about">QQ 群</a><a href="https://space.bilibili.com/">Bilibili</a></nav>
+    </div>
+  </footer>
+  <script>
+    console.log('%c HITSZ OSA / OPEN SOURCE 2000 ', 'background:#576edb;color:#f7fdff;border-radius:12px;padding:6px 12px;font-weight:bold');
+    console.log('Welcome, Linux users and open-source lovers. https://github.com/hitsz-osa');
+  </script>
+</body>
+</html>

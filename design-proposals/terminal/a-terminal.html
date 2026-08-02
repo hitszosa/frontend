@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HITSZ OSA — 哈尔滨工业大学（深圳）开源技术协会">
+  <title>HITSZ OSA // terminal</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page-bg:#f8fafc;
+      --page-fg:#1e293b;
+      --muted-fg:#94a3b8;
+      --primary:#576edb;
+      --secondary:#6f46bf;
+      --osa-fg:#373da9;
+      --surface:#ffffff;
+      --surface-fg:#161a4d;
+      --surface-border:#e2e8f0;
+      --inset:#f1f5f9;
+      --inset-fg:#1e293b;
+      --inset-border:#cbd5e1;
+      --activity:#d97706;
+      --activity-fg:#92400e;
+      --success:#059669;
+      --osa-500:#576edb;
+      --osa-600:#4751cb;
+      --osa-700:#373da9;
+      --osa-900:#161a4d;
+      --accent-500:#8762d3;
+      --accent-600:#6f46bf;
+      --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+      --mono:"JetBrains Mono","Cascadia Code",ui-monospace,"Noto Sans Mono CJK SC",monospace;
+      --space-1:.25rem;
+      --space-2:.5rem;
+      --space-3:.75rem;
+      --space-4:1rem;
+      --space-5:1.5rem;
+      --space-6:2rem;
+      --space-7:3rem;
+      --space-8:4rem;
+      --radius:4px;
+      --ease:cubic-bezier(.22,1,.36,1);
+    }
+
+    html.dark {
+      color-scheme: dark;
+      --page-bg:#0f172a;
+      --page-fg:#f8fafc;
+      --muted-fg:#94a3b8;
+      --primary:#c2dbf9;
+      --secondary:#dad6f8;
+      --osa-fg:#97b9f0;
+      --surface:#1e293b;
+      --surface-fg:#f6f9fb;
+      --surface-border:#334155;
+      --inset:#020617;
+      --inset-fg:#cbd5e1;
+      --inset-border:#1e293b;
+      --activity:#fbbf24;
+      --activity-fg:#fcd34d;
+      --success:#34d399;
+    }
+
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      min-width:320px;
+      background:
+        linear-gradient(90deg, color-mix(in srgb, var(--primary) 4%, transparent) 1px, transparent 1px),
+        linear-gradient(color-mix(in srgb, var(--primary) 4%, transparent) 1px, transparent 1px),
+        var(--page-bg);
+      background-size:32px 32px;
+      color:var(--page-fg);
+      font-family:var(--mono);
+      line-height:1.65;
+      transition:background-color .25s ease,color .25s ease;
+    }
+
+    a { color:inherit; }
+    a:focus-visible, button:focus-visible {
+      outline:2px solid var(--primary);
+      outline-offset:3px;
+    }
+    ::selection { background:color-mix(in srgb, var(--primary) 26%, transparent); }
+
+    .theme-toggle {
+      position:fixed;
+      z-index:100;
+      top:var(--space-3);
+      right:var(--space-3);
+      display:grid;
+      width:36px;
+      height:36px;
+      place-items:center;
+      border:1px solid var(--inset-border);
+      border-radius:var(--radius);
+      background:var(--inset);
+      color:var(--inset-fg);
+      font:700 1rem/1 var(--mono);
+      cursor:pointer;
+      transition:transform .2s var(--ease),border-color .2s,color .2s;
+    }
+    .theme-toggle:hover { transform:translateY(-2px); border-color:var(--primary); color:var(--primary); }
+
+    .shellbar {
+      position:sticky;
+      z-index:50;
+      top:0;
+      border-bottom:1px solid var(--inset-border);
+      background:color-mix(in srgb, var(--inset) 94%, transparent);
+      backdrop-filter:blur(12px);
+    }
+    .shellbar-inner {
+      display:flex;
+      align-items:stretch;
+      width:min(1184px,100%);
+      min-height:60px;
+      margin-inline:auto;
+      padding-right:60px;
+    }
+    .brand {
+      display:flex;
+      flex:0 0 auto;
+      align-items:center;
+      gap:var(--space-3);
+      padding:var(--space-2) var(--space-4);
+      border-right:1px solid var(--inset-border);
+      text-decoration:none;
+    }
+    .brand-mark { width:36px; height:36px; flex:none; }
+    .brand-copy { display:grid; line-height:1.25; }
+    .brand-copy strong { color:var(--surface-fg); font-size:.84rem; letter-spacing:.04em; }
+    .brand-copy small { color:var(--muted-fg); font-size:.64rem; }
+    .tabs { min-width:0; overflow-x:auto; scrollbar-width:none; }
+    .tabs::-webkit-scrollbar { display:none; }
+    .tabs ul { display:flex; height:100%; margin:0; padding:0; list-style:none; white-space:nowrap; }
+    .tabs a {
+      position:relative;
+      display:flex;
+      height:100%;
+      min-height:60px;
+      align-items:center;
+      gap:.4rem;
+      padding-inline:var(--space-4);
+      color:var(--muted-fg);
+      font-size:.77rem;
+      text-decoration:none;
+      transition:background .2s,color .2s;
+    }
+    .tabs a::before { content:'['; color:var(--inset-border); }
+    .tabs a::after { content:']'; color:var(--inset-border); }
+    .tabs a:hover { background:color-mix(in srgb, var(--primary) 7%, transparent); color:var(--primary); }
+    .tabs a[aria-current="page"] { background:var(--surface); color:var(--osa-fg); }
+    .tabs a[aria-current="page"]::after { color:var(--primary); }
+    .tabs .external::after { content:' ↗'; color:var(--primary); }
+
+    main { width:min(1120px,calc(100% - 40px)); margin-inline:auto; padding-block:var(--space-7) var(--space-8); }
+    .terminal-window {
+      overflow:hidden;
+      border:1px solid var(--inset-border);
+      border-radius:var(--radius);
+      background:var(--inset);
+      color:var(--inset-fg);
+    }
+    .window-bar {
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      align-items:center;
+      min-height:40px;
+      border-bottom:1px solid var(--inset-border);
+      background:color-mix(in srgb, var(--surface) 70%, var(--inset));
+      color:var(--muted-fg);
+      font-size:.7rem;
+    }
+    .window-dots { display:flex; gap:6px; padding-left:var(--space-4); }
+    .window-dot { width:8px; height:8px; border:1px solid var(--inset-border); border-radius:50%; }
+    .window-dot:nth-child(1) { background:var(--activity); }
+    .window-dot:nth-child(2) { background:var(--secondary); }
+    .window-dot:nth-child(3) { background:var(--success); }
+    .window-title { letter-spacing:.08em; }
+    .window-state { justify-self:end; padding-right:var(--space-4); color:var(--success); }
+
+    .hero-body {
+      position:relative;
+      display:grid;
+      grid-template-columns:minmax(0,1.55fr) minmax(250px,.65fr);
+      min-height:520px;
+    }
+    .hero-main { padding:clamp(2rem,5vw,4.5rem); border-right:1px solid var(--inset-border); }
+    .prompt { margin:0 0 var(--space-5); color:var(--muted-fg); font-size:clamp(.72rem,1.4vw,.9rem); }
+    .prompt-user { color:var(--success); }
+    .prompt-path { color:var(--osa-fg); }
+    .prompt-command { color:var(--primary); }
+    .hero-kicker {
+      display:flex;
+      align-items:center;
+      gap:var(--space-3);
+      margin-bottom:var(--space-3);
+      color:var(--muted-fg);
+      font-size:.7rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+    .hero-kicker::before { content:''; width:36px; height:1px; background:var(--primary); }
+    h1 {
+      max-width:700px;
+      margin:0;
+      color:var(--surface-fg);
+      font-family:var(--mono);
+      font-size:clamp(2.3rem,6.8vw,5.4rem);
+      font-weight:750;
+      letter-spacing:-.08em;
+      line-height:.95;
+    }
+    h1 .accent { color:var(--osa-fg); }
+    .intro {
+      max-width:730px;
+      margin:var(--space-6) 0 0;
+      color:var(--page-fg);
+      font-family:var(--sans);
+      font-size:clamp(.94rem,1.5vw,1.06rem);
+      line-height:1.95;
+    }
+    .command-row { display:flex; flex-wrap:wrap; gap:var(--space-3); margin-top:var(--space-6); }
+    .command-link {
+      display:inline-flex;
+      align-items:center;
+      gap:var(--space-2);
+      min-height:42px;
+      padding:var(--space-2) var(--space-4);
+      border:1px solid var(--inset-border);
+      border-radius:var(--radius);
+      background:var(--surface);
+      color:var(--surface-fg);
+      font-size:.76rem;
+      font-weight:700;
+      text-decoration:none;
+      transition:transform .2s var(--ease),border-color .2s,color .2s,background .2s;
+    }
+    .command-link::before { content:'$'; color:var(--success); }
+    .command-link:hover { transform:translateY(-2px); border-color:var(--primary); color:var(--primary); }
+    .command-link.primary { border-color:var(--primary); background:var(--primary); color:var(--inset); }
+    html.dark .command-link.primary { color:var(--inset); }
+    .command-link.primary::before { color:currentColor; }
+    .command-link.text { border-color:transparent; background:transparent; color:var(--osa-fg); }
+    .command-link.text::before { content:'>'; }
+
+    .host-panel { display:flex; flex-direction:column; justify-content:space-between; padding:var(--space-6); }
+    .logo-wrap { display:grid; place-items:center; padding-block:var(--space-5); }
+    .logo-wrap svg { width:min(180px,72%); filter:drop-shadow(10px 12px 0 color-mix(in srgb,var(--primary) 10%,transparent)); }
+    .host-info { margin:0; font-size:.72rem; }
+    .host-info div { display:grid; grid-template-columns:84px 1fr; gap:var(--space-2); padding-block:.35rem; border-bottom:1px dotted var(--inset-border); }
+    .host-info dt { color:var(--muted-fg); }
+    .host-info dd { margin:0; color:var(--inset-fg); }
+    .host-info .ok { color:var(--success); }
+    .palette { display:flex; gap:5px; margin-top:var(--space-5); }
+    .palette i { display:block; width:100%; height:6px; background:var(--primary); }
+    .palette i:nth-child(2) { background:var(--secondary); }
+    .palette i:nth-child(3) { background:var(--success); }
+    .palette i:nth-child(4) { background:var(--activity); }
+    .palette i:nth-child(5) { background:var(--surface-fg); }
+    .cursor { display:inline-block; width:.68em; height:1.05em; vertical-align:-.12em; background:var(--primary); animation:blink 1.05s steps(1,end) infinite; }
+    @keyframes blink { 50% { opacity:0; } }
+
+    .dashboard { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr); gap:var(--space-6); margin-top:var(--space-6); }
+    .side-stack { display:grid; align-content:start; gap:var(--space-6); }
+    .tui-section { min-width:0; }
+    .frame-label {
+      display:flex;
+      align-items:center;
+      gap:var(--space-3);
+      margin:0 0 -1px;
+      color:var(--primary);
+      font-size:.72rem;
+      font-weight:700;
+      letter-spacing:.1em;
+      white-space:nowrap;
+    }
+    .frame-label::before { content:'┌─'; color:var(--inset-border); }
+    .frame-label::after { content:''; width:100%; height:1px; background:var(--inset-border); }
+    .frame-label span { color:var(--muted-fg); font-weight:400; }
+    .frame {
+      border:1px solid var(--inset-border);
+      border-radius:0 0 var(--radius) var(--radius);
+      background:var(--inset);
+    }
+    .section-command { padding:var(--space-3) var(--space-4); border-bottom:1px solid var(--inset-border); color:var(--muted-fg); font-size:.7rem; }
+    .section-command strong { color:var(--success); font-weight:500; }
+    .section-command code { color:var(--primary); font-family:inherit; }
+
+    .journal { margin:0; padding:0; list-style:none; }
+    .journal li {
+      display:grid;
+      grid-template-columns:52px 92px minmax(0,1fr);
+      gap:var(--space-3);
+      padding:var(--space-3) var(--space-4);
+      border-bottom:1px dotted var(--inset-border);
+      font-size:.77rem;
+      transition:background .2s;
+    }
+    .journal li:last-child { border-bottom:0; }
+    .journal li:hover { background:color-mix(in srgb,var(--primary) 6%,transparent); }
+    .journal time { color:var(--muted-fg); font-variant-numeric:tabular-nums; }
+    .severity { width:max-content; color:var(--osa-fg); }
+    .severity::before { content:'['; color:var(--inset-border); }
+    .severity::after { content:']'; color:var(--inset-border); }
+    .severity.warn { color:var(--activity-fg); }
+    .severity.upcoming { color:var(--activity-fg); }
+    .journal a { color:var(--inset-fg); text-decoration:none; }
+    .journal a:hover { color:var(--primary); text-decoration:underline; text-underline-offset:3px; }
+    .journal .pin { color:var(--primary); }
+
+    .service-summary { display:flex; gap:var(--space-5); padding:var(--space-3) var(--space-4); border-bottom:1px solid var(--inset-border); font-size:.7rem; color:var(--muted-fg); }
+    .service-summary b { color:var(--success); }
+    .service-summary .beta-count { color:var(--activity-fg); }
+    .services { margin:0; padding:0; list-style:none; }
+    .service {
+      display:grid;
+      grid-template-columns:22px minmax(150px,.75fr) minmax(220px,1.25fr) auto;
+      align-items:start;
+      gap:var(--space-3);
+      padding:var(--space-4);
+      border-bottom:1px dotted var(--inset-border);
+      transition:background .2s;
+    }
+    .service:last-child { border-bottom:0; }
+    .service:hover { background:color-mix(in srgb,var(--primary) 6%,transparent); }
+    .status { color:var(--success); line-height:1.5; }
+    .status.beta { color:var(--activity); }
+    .service-title { color:var(--surface-fg); font-size:.8rem; font-weight:700; }
+    .service-title small { display:block; color:var(--success); font-size:.62rem; font-weight:400; letter-spacing:.06em; }
+    .service-title small.beta { color:var(--activity-fg); }
+    .service-desc { color:var(--muted-fg); font-family:var(--sans); font-size:.76rem; line-height:1.7; }
+    .service a { color:var(--primary); font-size:.72rem; text-decoration:none; }
+    .service a:hover { text-decoration:underline; text-underline-offset:3px; }
+    .scope { color:var(--activity-fg); font-family:var(--mono); }
+
+    .friends-grid { display:grid; grid-template-columns:1fr; margin:0; padding:var(--space-3); list-style:none; }
+    .friends-grid li { min-width:0; }
+    .friends-grid a {
+      display:flex;
+      min-height:42px;
+      align-items:center;
+      gap:var(--space-2);
+      padding:var(--space-2);
+      color:var(--inset-fg);
+      font-size:.72rem;
+      text-decoration:none;
+      transition:background .2s,color .2s;
+    }
+    .friends-grid a::before { content:'drwxr-xr-x'; flex:none; color:var(--muted-fg); font-size:.58rem; }
+    .friends-grid a::after { content:'↗'; margin-left:auto; color:var(--primary); }
+    .friends-grid a:hover { background:color-mix(in srgb,var(--primary) 8%,transparent); color:var(--primary); }
+
+    .motd { padding:var(--space-5); }
+    .motd p { margin:0; color:var(--muted-fg); font-size:.72rem; }
+    .motd .ascii { color:var(--osa-fg); line-height:1.35; white-space:pre; }
+    .motd strong { color:var(--surface-fg); }
+
+    footer { border-top:1px solid var(--inset-border); background:var(--inset); color:var(--muted-fg); }
+    .footer-inner { width:min(1120px,calc(100% - 40px)); margin-inline:auto; padding:var(--space-6) 0; font-size:.7rem; }
+    .footer-row { display:flex; flex-wrap:wrap; justify-content:space-between; gap:var(--space-3) var(--space-5); }
+    .footer-links { display:flex; flex-wrap:wrap; gap:var(--space-4); }
+    .footer-links a { color:var(--primary); text-decoration:none; }
+    .footer-links a:hover { text-decoration:underline; text-underline-offset:3px; }
+    .exit-line { margin:var(--space-4) 0 0; color:var(--success); }
+    .exit-line::before { content:'# '; color:var(--muted-fg); }
+
+    @media (max-width:860px) {
+      .brand-copy { display:none; }
+      .brand { padding-inline:var(--space-3); }
+      .tabs a { padding-inline:var(--space-3); }
+      .hero-body { grid-template-columns:1fr; }
+      .hero-main { border-right:0; border-bottom:1px solid var(--inset-border); }
+      .host-panel { display:grid; grid-template-columns:180px 1fr; align-items:center; gap:var(--space-5); }
+      .logo-wrap { padding:0; }
+      .dashboard { grid-template-columns:1fr; }
+      .side-stack { grid-template-columns:1fr 1fr; }
+    }
+
+    @media (max-width:620px) {
+      :root { --space-7:2rem; --space-8:3rem; }
+      main,.footer-inner { width:min(100% - 24px,1120px); }
+      .shellbar-inner { min-height:54px; }
+      .brand { min-height:54px; }
+      .tabs a { min-height:54px; padding-inline:.65rem; font-size:.69rem; }
+      .theme-toggle { top:9px; right:9px; }
+      .window-bar { grid-template-columns:1fr auto; }
+      .window-title { display:none; }
+      .hero-main { padding:var(--space-6) var(--space-4); }
+      h1 { font-size:clamp(2.25rem,14vw,3.5rem); letter-spacing:-.07em; }
+      .command-link { flex:1 1 calc(50% - var(--space-3)); justify-content:center; padding-inline:var(--space-2); }
+      .command-link.text { flex-basis:100%; }
+      .host-panel { grid-template-columns:100px 1fr; padding:var(--space-4); }
+      .logo-wrap svg { width:90px; }
+      .host-info div { grid-template-columns:62px 1fr; }
+      .journal li { grid-template-columns:46px minmax(0,1fr); gap:var(--space-2); }
+      .journal .severity { grid-column:2; grid-row:1; }
+      .journal a { grid-column:1 / -1; }
+      .service { grid-template-columns:18px minmax(0,1fr) auto; gap:var(--space-2); }
+      .service-desc { grid-column:2 / -1; }
+      .side-stack { grid-template-columns:1fr; }
+      .friends-grid { grid-template-columns:1fr; }
+      .friends-grid a { padding-block:.55rem; }
+      .footer-row { display:grid; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      html { scroll-behavior:auto; }
+      *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" type="button" aria-label="切换深色模式" aria-pressed="false" title="切换明暗主题">◐</button>
+
+  <header class="shellbar">
+    <div class="shellbar-inner">
+      <a class="brand" href="#top" aria-label="HITSZ OSA 首页">
+        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+          <defs><linearGradient id="brandGradient" x1="5" y1="4" x2="43" y2="44" gradientUnits="userSpaceOnUse"><stop stop-color="#576edb"/><stop offset="1" stop-color="#8762d3"/></linearGradient></defs>
+          <rect x="2" y="2" width="44" height="44" rx="9" fill="url(#brandGradient)"/>
+          <path d="M15 17.5c0-4.2 3.5-7.5 9-7.5s9 3.3 9 7.5v9.8c0 6.1-3.7 10.7-9 10.7s-9-4.6-9-10.7z" fill="none" stroke="#f8fafc" stroke-width="2.4"/>
+          <circle cx="20.5" cy="19" r="1.5" fill="#f8fafc"/><circle cx="27.5" cy="19" r="1.5" fill="#f8fafc"/>
+          <path d="m21 23 3-2 3 2-3 2z" fill="#fbbf24"/>
+        </svg>
+        <span class="brand-copy"><strong>HITSZ OSA</strong><small>tty0 · online</small></span>
+      </a>
+      <nav class="tabs" aria-label="主导航">
+        <ul>
+          <li><a href="#top" aria-current="page">首页</a></li>
+          <li><a href="#updates">活动</a></li>
+          <li><a href="#friends">友链</a></li>
+          <li><a href="#about">关于</a></li>
+          <li><a class="external" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer">镜像站</a></li>
+          <li><a class="external" href="https://wiki.osa.moe" target="_blank" rel="noreferrer">Wiki</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="terminal-window" aria-labelledby="hero-title">
+      <div class="window-bar" aria-hidden="true">
+        <div class="window-dots"><i class="window-dot"></i><i class="window-dot"></i><i class="window-dot"></i></div>
+        <span class="window-title">welcome.txt — xic@osa:~</span>
+        <span class="window-state">● CONNECTED</span>
+      </div>
+      <div class="hero-body">
+        <div class="hero-main">
+          <p class="prompt"><span class="prompt-user">xic@osa</span>:<span class="prompt-path">~</span>$ <span class="prompt-command">cat welcome.txt</span></p>
+          <div class="hero-kicker">Open source, on campus</div>
+          <h1 id="hero-title">HITSZ<br><span class="accent">开源技术协会</span></h1>
+          <p class="intro">我们是 HITSZ 开源技术协会（a.k.a. HITSZ OSA），由哈尔滨工业大学（深圳）学生中的 Linux 用户和开源软件爱好者自发组建的学生社团。我们致力于维护学校的开源基础建设，提升学校开源氛围，为开源技术爱好者提供交流平台。</p>
+          <div class="command-row" aria-label="快捷入口">
+            <a class="command-link primary" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer">访问镜像站</a>
+            <a class="command-link" href="#updates">社团活动</a>
+            <a class="command-link text" href="#about">了解协会 →</a>
+          </div>
+          <p class="prompt" style="margin-top:2rem;margin-bottom:0"><span class="prompt-user">xic@osa</span>:<span class="prompt-path">~</span>$ <span class="cursor" aria-hidden="true"></span><span class="sr-only"></span></p>
+        </div>
+        <aside class="host-panel" aria-label="OSA 主机信息">
+          <div class="logo-wrap">
+            <svg viewBox="0 0 200 200" role="img" aria-label="OSA 标志占位图">
+              <defs><linearGradient id="heroGradient" x1="28" y1="20" x2="174" y2="180" gradientUnits="userSpaceOnUse"><stop stop-color="#576edb"/><stop offset="1" stop-color="#8762d3"/></linearGradient></defs>
+              <rect x="12" y="12" width="176" height="176" rx="30" fill="url(#heroGradient)"/>
+              <path d="M65 77c0-24 14-41 35-41s35 17 35 41v39c0 29-16 48-35 48s-35-19-35-48z" fill="none" stroke="#f8fafc" stroke-width="9"/>
+              <circle cx="86" cy="84" r="6" fill="#f8fafc"/><circle cx="114" cy="84" r="6" fill="#f8fafc"/>
+              <path d="m88 99 12-8 12 8-12 9z" fill="#fbbf24"/>
+              <text x="100" y="143" fill="#f8fafc" font-family="ui-monospace,monospace" font-size="22" font-weight="700" text-anchor="middle">OSA</text>
+            </svg>
+          </div>
+          <div>
+            <dl class="host-info">
+              <div><dt>Host</dt><dd>osa.moe</dd></div>
+              <div><dt>OS</dt><dd>GNU/Linux</dd></div>
+              <div><dt>Uptime</dt><dd>since 2020</dd></div>
+              <div><dt>Services</dt><dd class="ok">5 online / 1 beta</dd></div>
+              <div><dt>Community</dt><dd>HITSZ</dd></div>
+            </dl>
+            <div class="palette" aria-label="OSA 品牌色带"><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="dashboard">
+      <div class="main-stack">
+        <section class="tui-section" id="updates" aria-labelledby="updates-title">
+          <h2 class="frame-label" id="updates-title">UPDATES <span>/ 社团动态</span></h2>
+          <div class="frame">
+            <div class="section-command"><strong>xic@osa</strong>:~$ <code>journalctl -u osa-community --since "2026-04-01"</code></div>
+            <ol class="journal">
+              <li><time datetime="2026-07-20">07/20</time><span class="severity pin">置顶公告</span><a href="https://github.com/hitszosa">协会门户网站改版测试中，欢迎通过 GitHub 反馈建议。</a></li>
+              <li><time datetime="2026-07-15">07/15</time><span class="severity warn">公告/warn</span><a href="#updates">本周镜像站例行维护窗口：周日 02:00–03:00，期间部分同步任务可能延迟。</a></li>
+              <li><time datetime="2026-08-08">08/08</time><span class="severity upcoming">沙龙·即将举行</span><a href="#updates">暑期开源分享夜：如何参与上游社区</a></li>
+              <li><time datetime="2026-05-20">05/20</time><span class="severity">讲座</span><a href="#updates">HPC 入门：从登录集群到提交第一个作业</a></li>
+              <li><time datetime="2026-04-12">04/12</time><span class="severity">沙龙</span><a href="#updates">Linux Install Party 2026 春季场</a></li>
+            </ol>
+          </div>
+        </section>
+
+        <section class="tui-section" id="services" aria-labelledby="services-title" style="margin-top:1.5rem">
+          <h2 class="frame-label" id="services-title">SERVICES <span>/ systemctl status</span></h2>
+          <div class="frame">
+            <div class="section-command"><strong>root@osa</strong>:~# <code>systemctl --type=service --state=running</code></div>
+            <div class="service-summary"><span><b>● 5 active</b></span><span class="beta-count">● 1 beta</span><span>load: operational</span></div>
+            <ul class="services">
+              <li class="service">
+                <span class="status" aria-label="online">●</span>
+                <span class="service-title">开源软件镜像站<small>ONLINE</small></span>
+                <span class="service-desc">主流 Linux 发行版与开源软件镜像，校园网内高速下载。</span>
+                <a href="https://mirrors.osa.moe" target="_blank" rel="noreferrer">open ↗</a>
+              </li>
+              <li class="service">
+                <span class="status" aria-label="online">●</span>
+                <span class="service-title">镜像使用帮助<small>ONLINE</small></span>
+                <span class="service-desc">一键换源。</span>
+                <a href="https://mirrors.osa.moe/help" target="_blank" rel="noreferrer">open ↗</a>
+              </li>
+              <li class="service">
+                <span class="status" aria-label="online">●</span>
+                <span class="service-title">OSA Wiki<small>ONLINE</small></span>
+                <span class="service-desc">Linux 入门、HPC 文档。</span>
+                <a href="https://wiki.osa.moe" target="_blank" rel="noreferrer">open ↗</a>
+              </li>
+              <li class="service">
+                <span class="status" aria-label="online">●</span>
+                <span class="service-title">Weekly 周报<small>ONLINE</small></span>
+                <span class="service-desc">每周开源资讯与社区近况。</span>
+                <a href="https://weekly.osa.moe" target="_blank" rel="noreferrer">open ↗</a>
+              </li>
+              <li class="service">
+                <span class="status" aria-label="online">●</span>
+                <span class="service-title">Gitea 代码托管<small>ONLINE <span class="scope"># 校内</span></small></span>
+                <span class="service-desc">面向校内成员的轻量代码协作。</span>
+                <a href="#services">open ↗</a>
+              </li>
+              <li class="service">
+                <span class="status beta" aria-label="beta">●</span>
+                <span class="service-title">AI Gateway<small class="beta">BETA <span class="scope"># 校内</span></small></span>
+                <span class="service-desc">统一接入主流大模型 API。</span>
+                <a href="#services">open ↗</a>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+
+      <div class="side-stack">
+        <section class="tui-section" id="friends" aria-labelledby="friends-title">
+          <h2 class="frame-label" id="friends-title">LINKS <span>/ 友链</span></h2>
+          <div class="frame">
+            <div class="section-command"><strong>xic@osa</strong>:~$ <code>ls -la ~/friends/</code></div>
+            <ul class="friends-grid">
+              <li><a href="https://tuna.moe" target="_blank" rel="noreferrer">清华大学 TUNA 协会</a></li>
+              <li><a href="https://mirrorz.org" target="_blank" rel="noreferrer">MirrorZ</a></li>
+              <li><a href="https://lug.ustc.edu.cn" target="_blank" rel="noreferrer">中科大 LUG</a></li>
+              <li><a href="https://sjtug.org" target="_blank" rel="noreferrer">上交大 SJTUG</a></li>
+              <li><a href="https://awesome-hitsz.github.io" target="_blank" rel="noreferrer">Awesome HITSZ</a></li>
+              <li><a href="https://www.hitsz.edu.cn" target="_blank" rel="noreferrer">哈尔滨工业大学（深圳）</a></li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="tui-section" id="about" aria-labelledby="about-title">
+          <h2 class="frame-label" id="about-title">MOTD <span>/ message of the day</span></h2>
+          <div class="frame motd">
+            <p class="ascii" aria-hidden="true">   __  ____  ___
+  / / / / / / _ \
+ / /_/ / /_/ ___/
+/_____/\____/_/</p>
+            <p style="margin-top:1rem"><strong>Open source is a social protocol.</strong><br>欢迎 Linux 用户、开源软件爱好者，以及所有对技术保持好奇的人。</p>
+            <p style="margin-top:1rem;color:var(--success)">guest access: enabled</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-row">
+        <span>HITSZ OSA · 哈尔滨工业大学（深圳）开源技术协会 · Copyleft 2026</span>
+        <nav class="footer-links" aria-label="社交媒体">
+          <a href="https://github.com/hitszosa" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://qm.qq.com" target="_blank" rel="noreferrer">QQ 群</a>
+          <a href="https://space.bilibili.com/1124374292" target="_blank" rel="noreferrer">Bilibili</a>
+        </nav>
+      </div>
+      <p class="exit-line">More information in browser console</p>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.querySelector('.theme-toggle');
+    toggle.addEventListener('click', () => {
+      const dark = document.documentElement.classList.toggle('dark');
+      toggle.setAttribute('aria-pressed', String(dark));
+      toggle.setAttribute('aria-label', dark ? '切换浅色模式' : '切换深色模式');
+      console.info(`[osa@browser] theme=${dark ? 'dark' : 'light'}`);
+    });
+    console.info('HITSZ OSA // welcome, curious hacker.');
+    console.info('More information: https://www.osa.moe');
+  </script>
+</body>
+</html>

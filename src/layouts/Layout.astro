@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import { getCollection } from 'astro:content';
+import { osaLogoPub, ThemeToggle } from '@hitszosa/ui';
 
 interface Props {
   title?: string;
@@ -7,119 +9,242 @@ interface Props {
 }
 
 const {
-  title = 'HITSZ OSA - Landing Page',
-  description = 'Welcome to OSA.moe, the landing page for HITSZ OSA and more.',
+  title = 'HITSZ OSA — 哈尔滨工业大学（深圳）开源技术协会',
+  description = '哈尔滨工业大学（深圳）开源技术协会：运营开源软件镜像站、技术 Wiki 与 Weekly，举办讲座、沙龙与开源活动。',
 } = Astro.props;
+const currentPath = Astro.url.pathname;
+const canonicalUrl = new URL(currentPath, Astro.site ?? 'https://www.osa.moe');
+
+const navItems = [
+  { label: '首页', link: '/' },
+  { label: '动态', link: '/updates' },
+  { label: '友链', link: '/links' },
+  { label: '关于', link: '/about' },
+  { label: '镜像站', link: 'https://mirrors.osa.moe', external: true },
+  { label: 'Wiki', link: 'https://wiki.osa.moe', external: true },
+];
+const quickServices = (await getCollection('services')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const normalize = (p: string | null) => {
+  if (!p || p === '/') return '/';
+  return p.endsWith('/') ? p.slice(0, -1) : p;
+};
+const cur = normalize(currentPath);
+const isActive = (link: string) => {
+  const l = normalize(link);
+  if (l === '/') return cur === '/';
+  return cur === l || cur.startsWith(`${l}/`);
+};
+
+const socialLinks = [
+  { name: 'GitHub', href: 'https://github.com/hitszosa' },
+  {
+    name: 'QQ 群',
+    href: 'https://qm.qq.com/cgi-bin/qm/qr?k=EmOyWeZrOaOeSoVrVLoozyKYdvjOia_t',
+  },
+  { name: 'Bilibili', href: 'https://space.bilibili.com/1124374292' },
+];
 ---
 
 <!doctype html>
 <html
-  lang="zh"
+  lang="zh-CN"
   data-default-theme-mode="system"
   data-theme-storage-key="theme-preference"
 >
   <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width,initial-scale=1,shrink-to-fit=no"
-    />
-    <meta http-equiv="x-ua-compatible" content="IE=edge" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
     <title>{title}</title>
-    <link
-      rel="apple-touch-icon"
-      sizes="57x57"
-      href="/icons/apple-icon-57x57.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="60x60"
-      href="/icons/apple-icon-60x60.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="72x72"
-      href="/icons/apple-icon-72x72.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="76x76"
-      href="/icons/apple-icon-76x76.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="114x114"
-      href="/icons/apple-icon-114x114.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="120x120"
-      href="/icons/apple-icon-120x120.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="144x144"
-      href="/icons/apple-icon-144x144.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="152x152"
-      href="/icons/apple-icon-152x152.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/icons/apple-icon-180x180.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="192x192"
-      href="/icons/android-icon-192x192.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/icons/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="96x96"
-      href="/icons/favicon-96x96.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/icons/favicon-16x16.png"
-    />
-    <link
-      rel="manifest"
-      type="application/manifest+json"
-      href="/manifest.json"
-    />
-    <meta name="msapplication-TileColor" content="#ffffff" />
-    <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png" />
-    <meta name="theme-color" content="#ffffff" />
-    <meta name="description" content={description} />
+    <meta name="description" content={description}>
+    <link rel="canonical" href={canonicalUrl}>
+    <link rel="icon" href="/favicon.ico">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+    <meta property="og:url" content={canonicalUrl}>
+    <meta property="og:site_name" content="HITSZ OSA">
+    <meta name="theme-color" content="#ffffff">
     <script>
-      import '@hitszosa/ui/client/theme-init';
+    import '@hitszosa/ui/client/theme-init';
+
+    console.info('Welcome to the pub!');
+    console.info('Check out TXT record of tg.osa.moe');
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Ubuntu:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
   </head>
   <body
-    class="bg-page-bg text-page-fg m-0 transition-colors duration-300 ease-in-out"
-    style="font-family: Ubuntu, 'Noto Sans SC', Arial, Helvetica, sans-serif;"
+    class="ui-sans bg-page-bg text-page-fg m-0 flex min-h-screen flex-col transition-colors duration-300 ease-in-out"
   >
-    <main class="max-w-[700px] mx-auto py-12 z-0">
+    <header
+      class="fixed top-0 left-0 z-50 w-full border-b border-surface-border/70 bg-surface/90 shadow-sm backdrop-blur-md backdrop-saturate-200"
+    >
+      <div
+        class="mx-auto flex h-16 max-w-6xl items-center justify-between px-3 sm:px-6"
+      >
+        <a href="/" class="flex items-center gap-2.5 no-underline">
+          <img src={osaLogoPub.src} alt={osaLogoPub.alt} class="h-9 w-9">
+          <span
+            class="hidden text-lg font-medium whitespace-nowrap text-surface-fg sm:inline"
+            >HITSZ <span class="text-primary">OSA</span></span
+          >
+        </a>
+        <nav class="flex items-center gap-2 sm:gap-5" aria-label="主导航">
+          <ul class="flex list-none items-center gap-3 p-0 sm:gap-5">
+            {navItems.map((item) => (
+                <li class:list={[item.external && 'hidden md:block']}>
+                  <a
+                    href={item.link}
+                    target={item.external ? '_blank' : undefined}
+                    rel={item.external ? 'noreferrer noopener' : undefined}
+                    aria-current={isActive(item.link) ? 'page' : undefined}
+                    class:list={[
+                      'relative inline-block text-xs font-medium no-underline transition-colors after:absolute after:-bottom-1.5 after:left-1/2 after:block after:h-0.5 after:-translate-x-1/2 after:rounded-full after:transition-all sm:text-sm',
+                      isActive(item.link)
+                        ? 'text-primary after:w-full after:bg-primary'
+                        : 'text-osa-fg after:w-0 hover:text-primary hover:after:w-full hover:after:bg-osa-fg/40',
+                    ]}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            <li class="service-menu-group relative hidden sm:block">
+              <button
+                type="button"
+                aria-haspopup="menu"
+                class="service-menu-trigger relative inline-flex cursor-default items-center text-sm font-medium text-osa-fg transition-colors hover:text-primary focus-visible:text-primary"
+              >
+                服务与产品<span class="ml-1 text-[10px]">⌄</span>
+              </button>
+              <div
+                role="menu"
+                class="service-menu absolute right-0 top-full w-72 rounded-lg border border-surface-border bg-surface p-2 shadow-lg"
+              >
+                {quickServices.map((item) => (
+                    <a
+                      role="menuitem"
+                      href={item.data.href}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      class="group/item flex items-center gap-2 rounded-md px-3 py-2 text-sm text-surface-fg no-underline hover:bg-page-bg hover:text-primary focus:bg-page-bg"
+                    >
+                      <span
+                        class="ui-mono shrink-0 rounded px-1 py-0.5 text-[9px]"
+                        style={
+                          item.data.category === 'service'
+                            ? 'background: color-mix(in srgb, var(--ui-success, var(--ui-secondary)) 14%, transparent); color: var(--ui-success, var(--ui-secondary));'
+                            : 'background: color-mix(in srgb, var(--ui-primary) 14%, transparent); color: var(--ui-primary);'
+                        }
+                      >
+                        {item.data.category === 'service' ? '服务' : '项目'}
+                      </span>
+                      <>
+                        <span class="min-w-0 flex-1 truncate">
+                          {item.data.name}
+                        </span>
+                        <span class="text-xs text-muted-fg group-hover/item:text-primary">
+                          ↗
+                        </span>
+                      </>
+                    </a>
+                  ))}
+              </div>
+            </li>
+            <li class="relative sm:hidden">
+              <details class="group">
+                <summary
+                  class="flex cursor-pointer list-none items-center text-xs font-medium text-osa-fg marker:hidden"
+                >
+                  服务与产品<span class="ml-1 text-[10px]">⌄</span>
+                </summary>
+                <div
+                  class="absolute right-0 top-full z-10 mt-3 w-64 rounded-lg border border-surface-border bg-surface p-2 shadow-lg"
+                >
+                  {quickServices.map((item) => (
+                      <a
+                        href={item.data.href}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        class="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-surface-fg no-underline hover:bg-page-bg hover:text-primary"
+                      >
+                        <>
+                          <span
+                            class="ui-mono rounded px-1 py-0.5 text-[9px]"
+                            style={
+                              item.data.category === 'service'
+                                ? 'background: color-mix(in srgb, var(--ui-success, var(--ui-secondary)) 14%, transparent); color: var(--ui-success, var(--ui-secondary));'
+                                : 'background: color-mix(in srgb, var(--ui-primary) 14%, transparent); color: var(--ui-primary);'
+                            }
+                          >
+                            {item.data.category === 'service' ? '服务' : '项目'}
+                          </span>
+                          <span class="min-w-0 flex-1 truncate">
+                            {item.data.name}
+                          </span>
+                          <span class="text-xs text-muted-fg">↗</span>
+                        </>
+                      </a>
+                    ))}
+                </div>
+              </details>
+            </li>
+          </ul>
+          <ThemeToggle size="sm" />
+        </nav>
+      </div>
+    </header>
+
+    <main class="mx-auto w-full max-w-6xl flex-1 px-6 pt-16">
       <slot />
     </main>
+
+    <!-- ============ Footer ============ -->
+    <footer
+      class="mt-16 border-t border-surface-border px-6 pt-8 pb-10 text-center text-xs text-muted-fg"
+    >
+      <p class="my-2">
+        HITSZ OSA · 哈尔滨工业大学（深圳）开源技术协会 · Copyleft
+        {new Date().getFullYear()}
+      </p>
+      <p class="my-2">
+        {socialLinks.map(({ name, href }, i) => (
+            <>
+              <a
+                href={href}
+                target="_blank"
+                rel="noreferrer noopener"
+                class="text-inherit no-underline transition-colors hover:text-primary"
+              >
+                {name}
+              </a>
+              {i < socialLinks.length - 1 && <span class="mx-3">·</span>}
+            </>
+          ))}
+      </p>
+      <p class="console-easter-egg my-2">More information in browser console</p>
+    </footer>
+    <style>
+    .service-menu {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(4px);
+      transition:
+        opacity 150ms ease-out,
+        transform 150ms ease-out,
+        visibility 150ms ease-out;
+    }
+
+    .service-menu-group:hover .service-menu,
+    .service-menu-group:focus-within .service-menu {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    </style>
   </body>
 </html>

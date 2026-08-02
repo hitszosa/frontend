@@ -29,7 +29,7 @@
 ## Conventions
 
 - Use `pnpm`, not npm or yarn
-- Prefer single quotes and semicolons, matching Prettier config
+- Prefer single quotes and semicolons, matching Biome config
 - Keep data in frontmatter and rendering in the template
 - Prefer consuming shared logo metadata from `@hitszosa/ui`
 - Keep site-specific visuals here; move reusable assets and tokens to `@hitszosa/ui`
@@ -37,5 +37,5 @@
 ## Git Hooks
 
 - `pre-commit` runs `lint-staged`
-- Staged files are formatted with Prettier
+- Staged Astro/CSS/JS/JSON/TS files are formatted with Biome
 - Staged Astro/JS/TS files are auto-fixed with ESLint

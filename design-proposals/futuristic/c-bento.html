@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HITSZ 开源技术协会：维护开源基础设施，连接校园开源技术爱好者。">
+  <title>HITSZ OSA · Bento 信息板</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page-bg:#f8fafc;
+      --page-fg:#1e293b;
+      --muted-fg:#94a3b8;
+      --primary:#576edb;
+      --secondary:#6f46bf;
+      --osa-fg:#373da9;
+      --surface:#ffffff;
+      --surface-fg:#161a4d;
+      --surface-border:#e2e8f0;
+      --inset:#f1f5f9;
+      --inset-fg:#1e293b;
+      --inset-border:#cbd5e1;
+      --activity:#d97706;
+      --activity-fg:#92400e;
+      --success:#059669;
+      --osa-500:#576edb;
+      --osa-600:#4751cb;
+      --osa-700:#373da9;
+      --osa-900:#161a4d;
+      --accent-500:#8762d3;
+      --accent-600:#6f46bf;
+      --font-sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+      --font-mono:"JetBrains Mono","Cascadia Code",ui-monospace,"Noto Sans Mono CJK SC",monospace;
+      --space-1:.25rem;
+      --space-2:.5rem;
+      --space-3:.75rem;
+      --space-4:1rem;
+      --space-5:1.25rem;
+      --space-6:1.5rem;
+      --space-8:2rem;
+      --space-10:2.5rem;
+      --space-12:3rem;
+      --radius-sm:.5rem;
+      --radius-md:.75rem;
+      --radius-pill:999rem;
+      --radius-card:1.5rem;
+      --ease-out:cubic-bezier(.22,1,.36,1);
+      --duration-fast:160ms;
+      --duration-base:280ms;
+      --card-shadow:0 1.25rem 3.5rem color-mix(in srgb,var(--osa-900) 9%,transparent),0 .25rem 1rem color-mix(in srgb,var(--osa-900) 5%,transparent);
+      --nav-bg:color-mix(in srgb,var(--surface) 84%,transparent);
+    }
+
+    html.dark {
+      color-scheme: dark;
+      --page-bg:#0f172a;
+      --page-fg:#f8fafc;
+      --muted-fg:#94a3b8;
+      --primary:#c2dbf9;
+      --secondary:#dad6f8;
+      --osa-fg:#97b9f0;
+      --surface:#1e293b;
+      --surface-fg:#f6f9fb;
+      --surface-border:#334155;
+      --inset:#020617;
+      --inset-fg:#cbd5e1;
+      --inset-border:#1e293b;
+      --activity:#fbbf24;
+      --activity-fg:#fcd34d;
+      --success:#34d399;
+      --card-shadow:none;
+      --nav-bg:color-mix(in srgb,var(--page-bg) 82%,transparent);
+    }
+
+    *,*::before,*::after{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-width:20rem;
+      background:var(--page-bg);
+      color:var(--page-fg);
+      font-family:var(--font-sans);
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      transition:background-color var(--duration-base) ease,color var(--duration-base) ease;
+    }
+    a{color:inherit}
+    button,a{-webkit-tap-highlight-color:transparent}
+    :focus-visible{outline:.1875rem solid color-mix(in srgb,var(--primary) 72%,transparent);outline-offset:.1875rem}
+    ::selection{background:color-mix(in srgb,var(--primary) 24%,transparent);color:var(--page-fg)}
+
+    .skip-link{
+      position:fixed;
+      z-index:100;
+      top:var(--space-2);
+      left:var(--space-2);
+      translate:0 -5rem;
+      border-radius:var(--radius-sm);
+      background:var(--surface);
+      padding:var(--space-3) var(--space-4);
+      color:var(--surface-fg);
+      font-weight:700;
+      transition:translate var(--duration-fast) ease;
+    }
+    .skip-link:focus{translate:0}
+
+    .site-header{
+      position:sticky;
+      z-index:50;
+      top:0;
+      border-bottom:1px solid color-mix(in srgb,var(--surface-border) 76%,transparent);
+      background:var(--nav-bg);
+      backdrop-filter:blur(1rem) saturate(140%);
+    }
+    .nav-shell{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      width:min(100% - 2rem,85rem);
+      min-height:4.5rem;
+      margin-inline:auto;
+      padding-right:3.25rem;
+    }
+    .brand{
+      display:inline-flex;
+      align-items:center;
+      gap:var(--space-3);
+      color:var(--surface-fg);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    .brand-mark{width:2.25rem;height:2.25rem;flex:0 0 auto}
+    .brand-copy{font-size:.9375rem;font-weight:800;letter-spacing:-.01em}
+    .brand-copy span{color:var(--osa-fg)}
+    .primary-nav{display:flex;align-items:center;gap:var(--space-6)}
+    .nav-list{display:flex;align-items:center;gap:var(--space-5);margin:0;padding:0;list-style:none}
+    .nav-link{
+      display:inline-flex;
+      align-items:center;
+      min-height:2.75rem;
+      color:var(--muted-fg);
+      font-size:.875rem;
+      font-weight:650;
+      text-decoration:none;
+      transition:color var(--duration-fast) ease;
+    }
+    .nav-link:hover,.nav-link[aria-current="page"]{color:var(--osa-fg)}
+    .nav-link[aria-current="page"]::before{
+      width:.375rem;
+      height:.375rem;
+      margin-right:var(--space-2);
+      border-radius:50%;
+      background:var(--primary);
+      content:"";
+    }
+    .external::after{margin-left:var(--space-1);font-family:var(--font-mono);font-size:.625rem;content:"↗"}
+    .theme-toggle{
+      position:fixed;
+      z-index:60;
+      top:var(--space-4);
+      right:var(--space-4);
+      display:grid;
+      width:2.5rem;
+      height:2.5rem;
+      place-items:center;
+      border:1px solid var(--surface-border);
+      border-radius:var(--radius-pill);
+      background:var(--surface);
+      color:var(--osa-fg);
+      box-shadow:0 .25rem 1rem color-mix(in srgb,var(--osa-900) 8%,transparent);
+      cursor:pointer;
+      font:700 1rem/1 var(--font-mono);
+      transition:translate var(--duration-fast) var(--ease-out),border-color var(--duration-fast) ease,background-color var(--duration-base) ease;
+    }
+    .dark .theme-toggle{box-shadow:none}
+    .theme-toggle:hover{translate:0 -.125rem;border-color:color-mix(in srgb,var(--primary) 52%,var(--surface-border))}
+
+    main{width:min(100% - 2rem,85rem);margin-inline:auto;padding-block:var(--space-8) var(--space-12)}
+    .dashboard{
+      display:grid;
+      grid-template-columns:repeat(12,minmax(0,1fr));
+      grid-template-areas:
+        "hero hero hero hero hero hero hero mirror mirror mirror mirror mirror"
+        "hero hero hero hero hero hero hero event event event event event"
+        "updates updates updates updates updates updates updates services services services services services"
+        "links links links links links links links join join join join join";
+      gap:var(--space-4);
+      align-items:stretch;
+    }
+    .card{
+      position:relative;
+      overflow:hidden;
+      border:1px solid var(--surface-border);
+      border-radius:var(--radius-card);
+      background-color:var(--surface);
+      box-shadow:var(--card-shadow);
+      color:var(--surface-fg);
+      transition:translate var(--duration-base) var(--ease-out),border-color var(--duration-base) ease,box-shadow var(--duration-base) ease,background-color var(--duration-base) ease;
+    }
+    .hero::before,.dark .card:not(.hero){
+      background-image:radial-gradient(circle at 100% 0%,color-mix(in srgb,var(--primary) 17%,transparent) 0,color-mix(in srgb,var(--secondary) 8%,transparent) 34%,transparent 68%);
+    }
+    .dark .card{box-shadow:inset 0 1px color-mix(in srgb,var(--primary) 7%,transparent)}
+    @media (hover:hover){
+      .card:hover{translate:0 -.125rem;border-color:color-mix(in srgb,var(--primary) 40%,var(--surface-border));box-shadow:0 1.5rem 4rem color-mix(in srgb,var(--osa-900) 12%,transparent),0 .375rem 1.25rem color-mix(in srgb,var(--osa-900) 6%,transparent)}
+      .dark .card:hover{box-shadow:inset 0 1px color-mix(in srgb,var(--primary) 12%,transparent)}
+    }
+    .card-inner{position:relative;z-index:1;height:100%;padding:var(--space-6)}
+    .section-head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-4)}
+    .eyebrow,.mono{font-family:var(--font-mono)}
+    .eyebrow{margin:0;color:var(--muted-fg);font-size:.6875rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase}
+    .text-link{color:var(--osa-fg);font-family:var(--font-mono);font-size:.6875rem;font-weight:700;text-decoration:none}
+    .text-link:hover{text-decoration:underline;text-underline-offset:.25rem}
+    .status{display:inline-flex;align-items:center;gap:var(--space-2);color:var(--muted-fg);font-family:var(--font-mono);font-size:.6875rem;font-weight:700;white-space:nowrap}
+    .status-dot{position:relative;width:.5rem;height:.5rem;flex:0 0 auto;border-radius:50%;background:var(--success)}
+    .status-dot::after{position:absolute;inset:-.25rem;border:1px solid color-mix(in srgb,var(--success) 50%,transparent);border-radius:inherit;content:"";animation:pulse 2.8s ease-out infinite}
+    .status.beta .status-dot{background:var(--activity)}
+    .status.beta .status-dot::after{border-color:color-mix(in srgb,var(--activity) 45%,transparent)}
+    @keyframes pulse{0%,38%{scale:.7;opacity:0}48%{opacity:.8}85%,100%{scale:1.45;opacity:0}}
+
+    .hero{grid-area:hero;min-height:21rem;isolation:isolate}
+    .hero::before{position:absolute;top:-8rem;right:-5rem;width:27rem;height:27rem;border-radius:50%;content:"";pointer-events:none}
+    .hero .card-inner{display:flex;flex-direction:column;justify-content:space-between;padding:var(--space-8)}
+    .hero-meta{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4)}
+    .hero-index{color:var(--muted-fg);font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.1em}
+    .hero-state{display:inline-flex;align-items:center;gap:var(--space-2);color:var(--osa-fg);font-family:var(--font-mono);font-size:.6875rem;font-weight:700}
+    .hero-state::before{width:.375rem;height:.375rem;border-radius:50%;background:var(--primary);content:""}
+    h1{max-width:49rem;margin:var(--space-8) 0 var(--space-4);font-size:clamp(2.375rem,4.8vw,4.75rem);line-height:1.02;letter-spacing:-.055em}
+    .hero-intro{max-width:47rem;margin:0;color:color-mix(in srgb,var(--page-fg) 73%,var(--muted-fg));font-size:clamp(.9375rem,1.3vw,1.0625rem);line-height:1.8}
+    .hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3);margin-top:var(--space-8)}
+    .button{
+      display:inline-flex;
+      min-height:2.75rem;
+      align-items:center;
+      justify-content:center;
+      gap:var(--space-2);
+      border:1px solid transparent;
+      border-radius:var(--radius-md);
+      padding:var(--space-3) var(--space-5);
+      font-size:.875rem;
+      font-weight:750;
+      line-height:1;
+      text-decoration:none;
+      transition:translate var(--duration-fast) var(--ease-out),border-color var(--duration-fast) ease,background-color var(--duration-fast) ease,color var(--duration-fast) ease;
+    }
+    .button:hover{translate:0 -.125rem}
+    .button-primary{background:var(--primary);color:var(--surface)}
+    .button-primary:hover{background:color-mix(in srgb,var(--primary) 88%,var(--osa-600))}
+    .button-secondary{border-color:var(--surface-border);background:color-mix(in srgb,var(--surface) 66%,transparent);color:var(--surface-fg)}
+    .button-secondary:hover{border-color:color-mix(in srgb,var(--primary) 45%,var(--surface-border));color:var(--osa-fg)}
+    .button-quiet{padding-inline:var(--space-3);color:var(--osa-fg)}
+    .button-quiet:hover{background:color-mix(in srgb,var(--primary) 8%,transparent)}
+
+    .mirror{grid-area:mirror;min-height:9.75rem}
+    .mirror .card-inner{display:flex;flex-direction:column;justify-content:space-between}
+    .mirror-link{position:absolute;inset:0;z-index:2;border-radius:inherit}
+    .mirror-link:focus-visible{outline-offset:-.25rem}
+    .mirror-top{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3)}
+    .mirror h2{max-width:24rem;margin:var(--space-5) 0 var(--space-2);font-size:clamp(1.5rem,2.8vw,2.25rem);line-height:1.08;letter-spacing:-.035em}
+    .mirror p{margin:0;color:var(--muted-fg);font-size:.875rem}
+    .mirror-arrow{position:absolute;right:var(--space-6);bottom:var(--space-6);color:var(--osa-fg);font-family:var(--font-mono);transition:translate var(--duration-fast) var(--ease-out)}
+    .mirror:hover .mirror-arrow{translate:.25rem 0}
+
+    .event{grid-area:event;min-height:9.75rem}
+    .event .card-inner{display:grid;grid-template-columns:auto 1fr;gap:var(--space-5);align-items:center}
+    .date-block{display:grid;width:4.75rem;height:5.25rem;place-content:center;border:1px solid color-mix(in srgb,var(--activity) 28%,var(--surface-border));border-radius:var(--radius-md);background:color-mix(in srgb,var(--activity) 8%,var(--surface));color:var(--activity-fg);text-align:center}
+    .date-block strong{font:800 1.75rem/1 var(--font-mono)}
+    .date-block span{margin-top:var(--space-1);font:700 .625rem/1 var(--font-mono);letter-spacing:.1em}
+    .event-copy{min-width:0}
+    .badge{display:inline-flex;align-items:center;border-radius:var(--radius-pill);padding:.375rem .625rem;background:color-mix(in srgb,var(--activity) 13%,transparent);color:var(--activity-fg);font-family:var(--font-mono);font-size:.625rem;font-weight:800;letter-spacing:.06em}
+    .event h2{margin:var(--space-3) 0 var(--space-2);font-size:1.125rem;line-height:1.3;letter-spacing:-.015em}
+    .event p{margin:0;color:var(--muted-fg);font-size:.8125rem;line-height:1.55}
+
+    .updates{grid-area:updates}
+    .feed{margin:0;padding:0;list-style:none}
+    .feed-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:var(--space-3);min-height:2.75rem;margin-inline:calc(var(--space-2) * -1);padding:var(--space-2);border-bottom:1px solid color-mix(in srgb,var(--surface-border) 70%,transparent);border-radius:var(--radius-sm)}
+    .feed-row:last-child{border-bottom-color:transparent}
+    .feed-row.pinned{background:color-mix(in srgb,var(--primary) 8%,transparent)}
+    .feed-row.warn{background:color-mix(in srgb,var(--activity) 8%,transparent)}
+    .feed-kind{border-radius:.375rem;padding:.3125rem .4375rem;background:var(--inset);color:var(--inset-fg);font-family:var(--font-mono);font-size:.625rem;font-weight:800;white-space:nowrap}
+    .pinned .feed-kind{background:color-mix(in srgb,var(--primary) 14%,transparent);color:var(--osa-fg)}
+    .warn .feed-kind{background:color-mix(in srgb,var(--activity) 16%,transparent);color:var(--activity-fg)}
+    .feed-title{overflow:hidden;color:var(--surface-fg);font-size:.8125rem;font-weight:600;text-decoration:none;text-overflow:ellipsis;white-space:nowrap}
+    .feed-title:hover{color:var(--osa-fg)}
+    .feed time{color:var(--muted-fg);font-family:var(--font-mono);font-size:.6875rem}
+
+    .services{grid-area:services}
+    .service-list{margin:0;padding:0;list-style:none}
+    .service-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:var(--space-3);min-height:3rem;padding-inline:var(--space-2);border-bottom:1px solid color-mix(in srgb,var(--surface-border) 70%,transparent);border-radius:var(--radius-sm);text-decoration:none;transition:background-color var(--duration-fast) ease}
+    .service-list li:last-child .service-row{border-bottom-color:transparent}
+    .service-row:hover{background:var(--inset)}
+    .service-name{display:flex;min-width:0;align-items:center;gap:var(--space-3);font-size:.875rem;font-weight:700;white-space:nowrap}
+    .service-meta{display:flex;align-items:center;gap:var(--space-2)}
+    .campus{border-radius:.375rem;padding:.25rem .4375rem;background:color-mix(in srgb,var(--activity) 13%,transparent);color:var(--activity-fg);font-family:var(--font-mono);font-size:.5625rem;font-weight:800}
+    .row-status{color:var(--muted-fg);font-family:var(--font-mono);font-size:.625rem}
+    .service-row .status-dot{width:.4375rem;height:.4375rem}
+
+    .links{grid-area:links}
+    .chips{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-5)}
+    .chip{display:inline-flex;min-height:2.25rem;align-items:center;border:1px solid var(--surface-border);border-radius:var(--radius-pill);padding:var(--space-2) var(--space-4);background:var(--inset);color:var(--inset-fg);font-size:.8125rem;font-weight:650;text-decoration:none;transition:translate var(--duration-fast) var(--ease-out),border-color var(--duration-fast) ease,color var(--duration-fast) ease}
+    .chip:hover{translate:0 -.125rem;border-color:color-mix(in srgb,var(--primary) 45%,var(--surface-border));color:var(--osa-fg)}
+
+    .join{grid-area:join}
+    .join-copy{max-width:30rem;margin:var(--space-3) 0 0;color:var(--muted-fg);font-size:.8125rem;line-height:1.65}
+    .join-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2);margin-top:var(--space-5)}
+    .join-button{display:flex;min-height:2.5rem;align-items:center;justify-content:center;border:1px solid var(--surface-border);border-radius:var(--radius-md);color:var(--surface-fg);font-family:var(--font-mono);font-size:.6875rem;font-weight:750;text-decoration:none;transition:translate var(--duration-fast) var(--ease-out),border-color var(--duration-fast) ease,color var(--duration-fast) ease,background-color var(--duration-fast) ease}
+    .join-button:hover{translate:0 -.125rem;border-color:color-mix(in srgb,var(--primary) 45%,var(--surface-border));background:color-mix(in srgb,var(--primary) 7%,transparent);color:var(--osa-fg)}
+
+    footer{border-top:1px solid var(--surface-border);padding:var(--space-8) var(--space-4) var(--space-10);color:var(--muted-fg);font-size:.75rem;text-align:center}
+    footer p{margin:var(--space-2) 0}
+    .footer-links{display:flex;justify-content:center;gap:var(--space-5)}
+    .footer-links a{text-decoration:none}
+    .footer-links a:hover{color:var(--osa-fg)}
+    .console-note{font-family:var(--font-mono);font-size:.625rem}
+
+    @media (max-width:68.749rem){
+      .external-nav{display:none}
+      .dashboard{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        grid-template-areas:
+          "hero hero"
+          "mirror event"
+          "updates updates"
+          "services services"
+          "links join";
+      }
+      .hero{min-height:auto}
+      h1{max-width:42rem}
+    }
+
+    @media (max-width:47.999rem){
+      .nav-shell{width:min(100% - 1.5rem,85rem);min-height:4rem;padding-right:2.75rem}
+      .brand-copy{display:none}
+      .brand-mark{width:2rem;height:2rem}
+      .nav-list{gap:var(--space-3)}
+      .nav-link{font-size:.75rem}
+      .theme-toggle{top:.75rem;right:.75rem}
+      main{width:min(100% - 1.5rem,85rem);padding-block:var(--space-6) var(--space-8)}
+      .dashboard{grid-template-columns:minmax(0,1fr);grid-template-areas:"hero" "mirror" "event" "updates" "services" "links" "join"}
+      .card-inner,.hero .card-inner{padding:var(--space-5)}
+      .hero::before{top:-9rem;right:-10rem}
+      h1{margin-top:var(--space-10);font-size:clamp(2.25rem,12vw,3.5rem)}
+      .hero-intro{font-size:.9375rem;line-height:1.75}
+      .hero-actions{margin-top:var(--space-6)}
+      .button{flex:1 1 calc(50% - var(--space-2));padding-inline:var(--space-3)}
+      .button-quiet{flex-basis:100%}
+      .mirror-arrow{right:var(--space-5);bottom:var(--space-5)}
+      .feed-row{grid-template-columns:auto minmax(0,1fr)}
+      .feed time{display:none}
+      .service-meta .row-status{display:none}
+      .links,.join{min-height:auto}
+    }
+
+    @media (max-width:23.5rem){
+      .nav-list{gap:var(--space-2)}
+      .nav-link{font-size:.6875rem}
+      .event .card-inner{gap:var(--space-3)}
+      .date-block{width:4rem}
+      .join-actions{grid-template-columns:1fr}
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <div class="nav-shell">
+      <a class="brand" href="#main" aria-label="HITSZ OSA 首页">
+        <svg class="brand-mark" viewBox="0 0 40 40" role="img" aria-label="OSA 标志">
+          <defs>
+            <linearGradient id="osa-logo-gradient" x1="4" y1="4" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+              <stop stop-color="var(--osa-500)"/>
+              <stop offset="1" stop-color="var(--accent-500)"/>
+            </linearGradient>
+          </defs>
+          <rect x="1" y="1" width="38" height="38" rx="12" fill="url(#osa-logo-gradient)"/>
+          <circle cx="20" cy="18" r="10" fill="var(--surface)" opacity=".94"/>
+          <circle cx="16.5" cy="16.5" r="1.5" fill="var(--osa-900)"/>
+          <circle cx="23.5" cy="16.5" r="1.5" fill="var(--osa-900)"/>
+          <path d="M17 21.5c1.7 1.4 4.3 1.4 6 0" fill="none" stroke="var(--osa-900)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M20 27l-3 4h6l-3-4z" fill="var(--activity)"/>
+        </svg>
+        <span class="brand-copy">HITSZ <span>OSA</span></span>
+      </a>
+
+      <nav class="primary-nav" aria-label="主要导航">
+        <ul class="nav-list">
+          <li><a class="nav-link" href="#main" aria-current="page">首页</a></li>
+          <li><a class="nav-link" href="#updates">活动</a></li>
+          <li><a class="nav-link" href="#links">友链</a></li>
+          <li><a class="nav-link" href="#join">关于</a></li>
+          <li class="external-nav"><a class="nav-link external" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer noopener">镜像站</a></li>
+          <li class="external-nav"><a class="nav-link external" href="https://wiki.osa.moe" target="_blank" rel="noreferrer noopener">Wiki</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <button class="theme-toggle" type="button" aria-label="切换到深色模式" aria-pressed="false" title="切换明暗主题"><span aria-hidden="true">☾</span></button>
+
+  <main id="main">
+    <div class="dashboard">
+      <section class="card hero" aria-labelledby="hero-title">
+        <div class="card-inner">
+          <div>
+            <div class="hero-meta">
+              <span class="hero-index">01 / ASSOCIATION</span>
+              <span class="hero-state">学生开源社区</span>
+            </div>
+            <h1 id="hero-title">HITSZ 开源技术协会</h1>
+            <p class="hero-intro">我们是 HITSZ 开源技术协会（a.k.a. HITSZ OSA），由哈尔滨工业大学（深圳）学生中的 Linux 用户和开源软件爱好者自发组建的学生社团。我们致力于维护学校的开源基础建设，提升学校开源氛围，为开源技术爱好者提供交流平台。</p>
+          </div>
+          <div class="hero-actions" aria-label="快捷入口">
+            <a class="button button-primary" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer noopener">访问镜像站 <span aria-hidden="true">↗</span></a>
+            <a class="button button-secondary" href="#updates">社团活动</a>
+            <a class="button button-quiet" href="#join">了解协会 <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </section>
+
+      <article class="card mirror" aria-labelledby="mirror-title">
+        <a class="mirror-link" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer noopener" aria-label="访问开源软件镜像站"></a>
+        <div class="card-inner">
+          <div class="mirror-top">
+            <p class="eyebrow">MIRROR / 镜像服务</p>
+            <span class="status"><span class="status-dot" aria-hidden="true"></span>ONLINE</span>
+          </div>
+          <div>
+            <h2 id="mirror-title">开源软件镜像站</h2>
+            <p>主流 Linux 发行版与开源软件镜像 · 校园网内高速下载</p>
+          </div>
+          <span class="mirror-arrow" aria-hidden="true">↗</span>
+        </div>
+      </article>
+
+      <article class="card event" aria-labelledby="event-title">
+        <div class="card-inner">
+          <time class="date-block" datetime="2026-08-08"><strong>08</strong><span>AUG / 08</span></time>
+          <div class="event-copy">
+            <span class="badge">即将举行</span>
+            <h2 id="event-title">暑期开源分享夜</h2>
+            <p>如何参与上游社区 · 沙龙</p>
+          </div>
+        </div>
+      </article>
+
+      <section class="card updates" id="updates" aria-labelledby="updates-title">
+        <div class="card-inner">
+          <div class="section-head">
+            <h2 class="eyebrow" id="updates-title">UPDATES / 社团动态</h2>
+            <a class="text-link" href="#updates">LIVE FEED</a>
+          </div>
+          <ul class="feed">
+            <li class="feed-row pinned">
+              <span class="feed-kind">置顶公告</span>
+              <a class="feed-title" href="https://github.com/hitszosa" target="_blank" rel="noreferrer noopener">协会门户网站改版测试中，欢迎通过 GitHub 反馈建议。</a>
+              <time datetime="2026-07-20">07/20</time>
+            </li>
+            <li class="feed-row warn">
+              <span class="feed-kind">公告</span>
+              <span class="feed-title">本周镜像站例行维护窗口：周日 02:00–03:00，期间部分同步任务可能延迟。</span>
+              <time datetime="2026-07-15">07/15</time>
+            </li>
+            <li class="feed-row">
+              <span class="feed-kind">沙龙·即将举行</span>
+              <a class="feed-title" href="#event-title">暑期开源分享夜：如何参与上游社区</a>
+              <time datetime="2026-08-08">08/08</time>
+            </li>
+            <li class="feed-row">
+              <span class="feed-kind">讲座</span>
+              <span class="feed-title">HPC 入门：从登录集群到提交第一个作业</span>
+              <time datetime="2026-05-20">05/20</time>
+            </li>
+            <li class="feed-row">
+              <span class="feed-kind">沙龙</span>
+              <span class="feed-title">Linux Install Party 2026 春季场</span>
+              <time datetime="2026-04-12">04/12</time>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card services" aria-labelledby="services-title">
+        <div class="card-inner">
+          <div class="section-head">
+            <h2 class="eyebrow" id="services-title">SERVICES / 服务</h2>
+            <span class="status"><span class="status-dot" aria-hidden="true"></span>5 ACTIVE</span>
+          </div>
+          <ul class="service-list">
+            <li><a class="service-row" href="https://mirrors.osa.moe/help" target="_blank" rel="noreferrer noopener" aria-label="镜像使用帮助，一键换源，online"><span class="service-name"><span class="status-dot" aria-hidden="true"></span>镜像使用帮助</span><span class="service-meta"><span class="row-status">一键换源 · online</span><span aria-hidden="true">→</span></span></a></li>
+            <li><a class="service-row" href="https://wiki.osa.moe" target="_blank" rel="noreferrer noopener" aria-label="OSA Wiki，Linux 入门、HPC 文档，online"><span class="service-name"><span class="status-dot" aria-hidden="true"></span>OSA Wiki</span><span class="service-meta"><span class="row-status">Linux 入门、HPC 文档 · online</span><span aria-hidden="true">→</span></span></a></li>
+            <li><a class="service-row" href="https://weekly.osa.moe" target="_blank" rel="noreferrer noopener" aria-label="Weekly 周报，online"><span class="service-name"><span class="status-dot" aria-hidden="true"></span>Weekly 周报</span><span class="service-meta"><span class="row-status">online</span><span aria-hidden="true">→</span></span></a></li>
+            <li><a class="service-row" href="https://git.osa.moe" target="_blank" rel="noreferrer noopener" aria-label="Gitea 代码托管，online，校内"><span class="service-name"><span class="status-dot" aria-hidden="true"></span>Gitea 代码托管</span><span class="service-meta"><span class="campus">校内</span><span class="row-status">online</span><span aria-hidden="true">→</span></span></a></li>
+            <li><a class="service-row" href="https://aigw.osa.moe" target="_blank" rel="noreferrer noopener" aria-label="AI Gateway，统一接入主流大模型 API，beta，校内"><span class="service-name"><span class="status beta"><span class="status-dot" aria-hidden="true"></span></span>AI Gateway</span><span class="service-meta"><span class="campus">校内</span><span class="row-status">统一接入主流大模型 API · beta</span><span aria-hidden="true">→</span></span></a></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card links" id="links" aria-labelledby="links-title">
+        <div class="card-inner">
+          <div class="section-head">
+            <h2 class="eyebrow" id="links-title">LINKS / 友链</h2>
+            <span class="mono" style="color:var(--muted-fg);font-size:.6875rem">6 PEERS</span>
+          </div>
+          <div class="chips">
+            <a class="chip" href="https://tuna.moe" target="_blank" rel="noreferrer noopener">清华大学 TUNA 协会</a>
+            <a class="chip" href="https://mirrorz.org" target="_blank" rel="noreferrer noopener">MirrorZ</a>
+            <a class="chip" href="https://lug.ustc.edu.cn" target="_blank" rel="noreferrer noopener">中科大 LUG</a>
+            <a class="chip" href="https://sjtug.org" target="_blank" rel="noreferrer noopener">上交大 SJTUG</a>
+            <a class="chip" href="https://awesome-hitsz.github.io" target="_blank" rel="noreferrer noopener">Awesome HITSZ</a>
+            <a class="chip" href="https://www.hitsz.edu.cn" target="_blank" rel="noreferrer noopener">哈尔滨工业大学（深圳）</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="card join" id="join" aria-labelledby="join-title">
+        <div class="card-inner">
+          <h2 class="eyebrow" id="join-title">JOIN US / 加入我们</h2>
+          <p class="join-copy">无论你刚开始接触 Linux，还是已经在向上游贡献代码，都欢迎来一起折腾。</p>
+          <div class="join-actions">
+            <a class="join-button" href="https://qm.qq.com/cgi-bin/qm/qr?k=EmOyWeZrOaOeSoVrVLoozyKYdvjOia_t" target="_blank" rel="noreferrer noopener">QQ 群</a>
+            <a class="join-button" href="https://github.com/hitszosa" target="_blank" rel="noreferrer noopener">GitHub</a>
+            <a class="join-button" href="https://space.bilibili.com/1124374292" target="_blank" rel="noreferrer noopener">Bilibili</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <p>HITSZ OSA · 哈尔滨工业大学（深圳）开源技术协会 · Copyleft 2026</p>
+    <p class="footer-links"><a href="https://github.com/hitszosa" target="_blank" rel="noreferrer noopener">GitHub</a><a href="https://qm.qq.com/cgi-bin/qm/qr?k=EmOyWeZrOaOeSoVrVLoozyKYdvjOia_t" target="_blank" rel="noreferrer noopener">QQ 群</a><a href="https://space.bilibili.com/1124374292" target="_blank" rel="noreferrer noopener">Bilibili</a></p>
+    <p class="console-note">More information in browser console</p>
+  </footer>
+
+  <script>
+    const root = document.documentElement;
+    const toggle = document.querySelector('.theme-toggle');
+    const icon = toggle.querySelector('span');
+
+    toggle.addEventListener('click', () => {
+      const isDark = root.classList.toggle('dark');
+      toggle.setAttribute('aria-pressed', String(isDark));
+      toggle.setAttribute('aria-label', isDark ? '切换到浅色模式' : '切换到深色模式');
+      icon.textContent = isDark ? '☀' : '☾';
+    });
+
+    console.info('HITSZ OSA · More information in browser console');
+    console.info('欢迎访问开源技术协会信息板。');
+  </script>
+</body>
+</html>

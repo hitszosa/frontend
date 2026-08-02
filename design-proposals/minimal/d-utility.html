@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HITSZ 开源技术协会：维护校园开源基础设施，为开源技术爱好者提供交流平台。">
+  <title>HITSZ OSA · 静默工具页</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: light;
+      --page-bg:#f8fafc;
+      --page-fg:#1e293b;
+      --muted-fg:#64748b;
+      --primary:#576edb;
+      --secondary:#6f46bf;
+      --osa-fg:#373da9;
+      --surface:#ffffff;
+      --surface-fg:#161a4d;
+      --surface-border:#e2e8f0;
+      --inset:#f1f5f9;
+      --inset-fg:#1e293b;
+      --inset-border:#cbd5e1;
+      --activity:#d97706;
+      --activity-fg:#92400e;
+      --success:#059669;
+      --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+      --mono:"JetBrains Mono","Cascadia Code",ui-monospace,monospace;
+      --space-1:.25rem;
+      --space-2:.5rem;
+      --space-3:.75rem;
+      --space-4:1rem;
+      --space-5:1.25rem;
+      --space-6:1.5rem;
+      --space-8:2rem;
+      --space-10:2.5rem;
+      --space-12:3rem;
+      --radius:8px;
+      --content:74rem;
+      --duration:160ms;
+    }
+
+    html.dark {
+      color-scheme: dark;
+      --page-bg:#0f172a;
+      --page-fg:#f8fafc;
+      --muted-fg:#94a3b8;
+      --primary:#c2dbf9;
+      --secondary:#dad6f8;
+      --osa-fg:#97b9f0;
+      --surface:#1e293b;
+      --surface-fg:#f6f9fb;
+      --surface-border:#334155;
+      --inset:#020617;
+      --inset-fg:#cbd5e1;
+      --inset-border:#1e293b;
+      --activity:#fbbf24;
+      --activity-fg:#fcd34d;
+      --success:#34d399;
+    }
+
+    *,*::before,*::after { box-sizing:border-box; }
+    html { background:var(--page-bg); scroll-behavior:smooth; }
+    body {
+      min-width:320px;
+      margin:0;
+      background:var(--page-bg);
+      color:var(--page-fg);
+      font-family:var(--sans);
+      font-size:16px;
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      transition:background-color var(--duration) ease,color var(--duration) ease;
+    }
+    a { color:inherit; }
+    button,a { -webkit-tap-highlight-color:transparent; }
+    :focus-visible { outline:2px solid var(--primary); outline-offset:3px; }
+    ::selection { background:color-mix(in srgb,var(--primary) 20%,transparent); }
+    .mono { font-family:var(--mono); }
+    .shell { width:min(calc(100% - 2rem),var(--content)); margin-inline:auto; }
+    .skip-link {
+      position:fixed;
+      z-index:100;
+      top:var(--space-2);
+      left:var(--space-2);
+      transform:translateY(-5rem);
+      border:1px solid var(--surface-border);
+      border-radius:var(--radius);
+      background:var(--surface);
+      padding:var(--space-2) var(--space-3);
+      color:var(--surface-fg);
+      font-size:.8125rem;
+      font-weight:700;
+    }
+    .skip-link:focus { transform:translateY(0); }
+
+    .site-header {
+      position:sticky;
+      z-index:40;
+      top:0;
+      border-bottom:1px solid var(--surface-border);
+      background:var(--surface);
+    }
+    .nav-shell {
+      display:flex;
+      min-height:3.75rem;
+      align-items:center;
+      justify-content:space-between;
+      gap:var(--space-5);
+    }
+    .brand {
+      display:inline-flex;
+      min-height:2.75rem;
+      flex:0 0 auto;
+      align-items:center;
+      gap:var(--space-2);
+      color:var(--surface-fg);
+      font-size:.875rem;
+      font-weight:800;
+      letter-spacing:.01em;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    .brand-mark { width:1.75rem; height:1.75rem; }
+    .brand strong { color:var(--primary); }
+    .nav-group { display:flex; min-width:0; align-items:center; gap:var(--space-4); }
+    .nav-list { display:flex; align-items:center; gap:var(--space-5); margin:0; padding:0; list-style:none; }
+    .nav-link {
+      position:relative;
+      display:inline-flex;
+      min-height:2.75rem;
+      align-items:center;
+      color:var(--page-fg);
+      font-size:.8125rem;
+      font-weight:600;
+      text-decoration:none;
+      white-space:nowrap;
+      transition:color var(--duration) ease;
+    }
+    .nav-link::after {
+      position:absolute;
+      right:0;
+      bottom:0;
+      left:0;
+      height:1px;
+      background:var(--primary);
+      content:"";
+      transform:scaleX(0);
+      transform-origin:left;
+      transition:transform var(--duration) ease;
+    }
+    .nav-link:hover,.nav-link[aria-current="page"] { color:var(--primary); }
+    .nav-link:hover::after,.nav-link[aria-current="page"]::after { transform:scaleX(1); }
+    .external::after { position:static; width:auto; height:auto; margin-left:var(--space-1); background:none; content:"↗"; transform:none; }
+    .external { padding-right:0; }
+    .theme-toggle {
+      display:grid;
+      width:2.75rem;
+      height:2.75rem;
+      flex:0 0 auto;
+      place-items:center;
+      border:1px solid var(--surface-border);
+      border-radius:var(--radius);
+      background:var(--surface);
+      color:var(--surface-fg);
+      cursor:pointer;
+      font:700 .6875rem/1 var(--mono);
+      transition:border-color var(--duration) ease,color var(--duration) ease,background-color var(--duration) ease;
+    }
+    .theme-toggle:hover { border-color:var(--primary); color:var(--primary); }
+    .dark .theme-toggle .mode-dark,.theme-toggle .mode-light { display:none; }
+    .dark .theme-toggle .mode-light { display:inline; }
+
+    .hero {
+      display:grid;
+      max-height:17.5rem;
+      grid-template-columns:minmax(0,1fr) 6rem;
+      gap:var(--space-8);
+      align-items:center;
+      padding-block:var(--space-8);
+      border-bottom:1px solid var(--surface-border);
+    }
+    .hero-copy { min-width:0; }
+    .hero h1 {
+      margin:0 0 var(--space-3);
+      color:var(--surface-fg);
+      font-size:clamp(1.875rem,3.4vw,2.625rem);
+      line-height:1.15;
+      letter-spacing:-.035em;
+    }
+    .hero-intro { max-width:51rem; color:var(--muted-fg); font-size:.875rem; line-height:1.65; }
+    .hero-intro p { margin:0; }
+    .hero-intro p + p { margin-top:var(--space-1); }
+    .hero-actions { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2) var(--space-5); margin-top:var(--space-4); }
+    .action {
+      display:inline-flex;
+      min-height:2.75rem;
+      align-items:center;
+      justify-content:center;
+      color:var(--primary);
+      font-size:.8125rem;
+      font-weight:700;
+      text-decoration:none;
+      text-underline-offset:.25rem;
+    }
+    .action:hover { text-decoration:underline; }
+    .action-primary {
+      border:1px solid var(--primary);
+      border-radius:var(--radius);
+      padding-inline:var(--space-4);
+      background:var(--primary);
+      color:var(--surface);
+      text-decoration:none;
+      transition:background-color var(--duration) ease,color var(--duration) ease;
+    }
+    .dark .action-primary { color:var(--inset); }
+    .action-primary:hover { background:transparent; color:var(--primary); text-decoration:none; }
+    .hero-logo { display:block; width:6rem; height:6rem; }
+
+    .section { padding-block:var(--space-10); border-bottom:1px solid var(--surface-border); }
+    .section-head { display:flex; align-items:baseline; justify-content:space-between; gap:var(--space-4); margin-bottom:var(--space-5); }
+    .section-title {
+      margin:0;
+      color:var(--surface-fg);
+      font-size:.8125rem;
+      font-weight:800;
+      letter-spacing:.04em;
+    }
+    .section-note { margin:0; color:var(--muted-fg); font:500 .6875rem/1.5 var(--mono); }
+    .text-link { color:var(--primary); font-size:.75rem; font-weight:700; text-decoration:none; }
+    .text-link:hover { text-decoration:underline; text-underline-offset:.25rem; }
+
+    .service-grid {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      margin:0;
+      padding:0;
+      border-top:1px solid var(--surface-border);
+      border-left:1px solid var(--surface-border);
+      list-style:none;
+    }
+    .service-item { min-width:0; border-right:1px solid var(--surface-border); border-bottom:1px solid var(--surface-border); }
+    .service-link {
+      display:grid;
+      min-height:8.5rem;
+      grid-template-columns:2rem minmax(0,1fr);
+      gap:var(--space-3);
+      padding:var(--space-5);
+      color:var(--surface-fg);
+      text-decoration:none;
+      transition:background-color var(--duration) ease;
+    }
+    .service-link:hover { background:var(--inset); }
+    .service-link:focus-visible { outline-offset:-3px; }
+    .service-initial {
+      display:grid;
+      width:2rem;
+      height:2rem;
+      place-items:center;
+      border:1px solid var(--inset-border);
+      border-radius:4px;
+      color:var(--primary);
+      font:800 .625rem/1 var(--mono);
+    }
+    .service-copy { min-width:0; }
+    .service-name { margin:0; font-size:.9375rem; line-height:1.4; }
+    .service-description { margin:var(--space-1) 0 0; color:var(--muted-fg); font-size:.75rem; line-height:1.55; }
+    .service-meta { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2); margin-top:var(--space-3); }
+    .status { display:inline-flex; align-items:center; gap:.375rem; color:var(--success); font:700 .625rem/1 var(--mono); text-transform:uppercase; }
+    .status::before { width:.375rem; height:.375rem; border-radius:50%; background:currentColor; content:""; }
+    .status.beta { color:var(--activity-fg); }
+    .scope { color:var(--muted-fg); font:600 .625rem/1 var(--mono); }
+
+    .content-columns { display:grid; grid-template-columns:minmax(0,3fr) minmax(18rem,2fr); gap:var(--space-12); padding-block:var(--space-12); }
+    .content-columns .section { padding:0; border:0; }
+    .updates { margin:0; padding:0; border-top:1px solid var(--surface-border); list-style:none; }
+    .update-row {
+      display:grid;
+      grid-template-columns:3.5rem 6.25rem minmax(0,1fr);
+      align-items:start;
+      gap:var(--space-3);
+      min-height:3.75rem;
+      padding:var(--space-3) 0;
+      border-bottom:1px solid var(--surface-border);
+    }
+    .update-row time { padding-top:.125rem; color:var(--muted-fg); font:500 .6875rem/1.5 var(--mono); }
+    .update-kind { color:var(--primary); font:700 .6875rem/1.5 var(--mono); }
+    .update-kind.notice,.update-kind.upcoming { color:var(--activity-fg); }
+    .update-link { color:var(--surface-fg); font-size:.8125rem; font-weight:600; line-height:1.55; text-decoration:none; }
+    .update-link:hover { color:var(--primary); text-decoration:underline; text-underline-offset:.2rem; }
+
+    .side-column { display:flex; min-width:0; flex-direction:column; gap:var(--space-10); }
+    .join-box { border-top:1px solid var(--surface-border); border-bottom:1px solid var(--surface-border); padding-block:var(--space-5); }
+    .join-box p { margin:0; color:var(--muted-fg); font-size:.8125rem; line-height:1.7; }
+    .join-actions { display:flex; flex-wrap:wrap; gap:var(--space-2) var(--space-5); margin-top:var(--space-4); }
+    .join-actions a { display:inline-flex; min-height:2.75rem; align-items:center; color:var(--primary); font-size:.8125rem; font-weight:700; text-decoration:none; }
+    .join-actions a:hover { text-decoration:underline; text-underline-offset:.25rem; }
+    .friend-links {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      margin:0;
+      padding:0;
+      border-top:1px solid var(--surface-border);
+      border-left:1px solid var(--surface-border);
+      list-style:none;
+    }
+    .friend-links li { min-width:0; border-right:1px solid var(--surface-border); border-bottom:1px solid var(--surface-border); }
+    .friend-links a {
+      display:flex;
+      min-height:3.25rem;
+      align-items:center;
+      justify-content:space-between;
+      gap:var(--space-2);
+      padding:var(--space-3);
+      color:var(--surface-fg);
+      font-size:.75rem;
+      font-weight:650;
+      line-height:1.4;
+      text-decoration:none;
+      transition:background-color var(--duration) ease,color var(--duration) ease;
+    }
+    .friend-links a::after { flex:0 0 auto; color:var(--muted-fg); font:500 .6875rem/1 var(--mono); content:"↗"; }
+    .friend-links a:hover { background:var(--inset); color:var(--primary); }
+    .friend-links a:focus-visible { outline-offset:-3px; }
+
+    footer { border-top:1px solid var(--surface-border); background:var(--surface); }
+    .footer-shell { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:var(--space-6); align-items:start; padding-block:var(--space-8); color:var(--muted-fg); font-size:.6875rem; }
+    .footer-shell p { margin:0; }
+    .footer-meta { display:flex; flex-direction:column; gap:var(--space-2); }
+    .footer-links { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:var(--space-5); }
+    .footer-links a { min-height:2.75rem; color:var(--page-fg); font-weight:650; line-height:2.75rem; text-decoration:none; }
+    .footer-links a:hover { color:var(--primary); text-decoration:underline; text-underline-offset:.25rem; }
+    .console-note { font-family:var(--mono); font-size:.625rem; }
+
+    @media (max-width:54rem) {
+      .external-nav { display:none; }
+      .service-link { min-height:9.5rem; padding:var(--space-4); }
+      .content-columns { grid-template-columns:minmax(0,3fr) minmax(15rem,2fr); gap:var(--space-8); }
+      .update-row { grid-template-columns:3.25rem minmax(0,1fr); gap:var(--space-2) var(--space-3); }
+      .update-kind { grid-column:2; grid-row:1; }
+      .update-link { grid-column:2; }
+    }
+
+    @media (max-width:44rem) {
+      .shell { width:min(calc(100% - 1.5rem),var(--content)); }
+      .nav-shell { min-height:3.5rem; gap:var(--space-2); }
+      .brand { gap:.375rem; font-size:.75rem; }
+      .brand-mark { width:1.5rem; height:1.5rem; }
+      .nav-group { gap:var(--space-2); }
+      .nav-list { gap:var(--space-1); }
+      .nav-link { min-width:2.75rem; justify-content:center; font-size:.75rem; }
+      .theme-toggle { width:2.75rem; height:2.75rem; }
+      .hero { max-height:none; grid-template-columns:minmax(0,1fr) 4.5rem; gap:var(--space-3); padding-block:var(--space-5); }
+      .hero h1 { margin-bottom:var(--space-2); font-size:1.75rem; }
+      .hero-intro { grid-column:1 / -1; font-size:.8125rem; }
+      .hero-logo { width:4.5rem; height:4.5rem; }
+      .hero-actions { grid-column:1 / -1; gap:var(--space-2) var(--space-4); margin-top:var(--space-3); }
+      .section { padding-block:var(--space-8); }
+      .section-head { align-items:flex-start; flex-direction:column; gap:var(--space-1); }
+      .service-grid { grid-template-columns:1fr; }
+      .service-link { min-height:auto; padding:var(--space-4); }
+      .content-columns { grid-template-columns:1fr; gap:var(--space-10); padding-block:var(--space-10); }
+      .side-column { gap:var(--space-8); }
+      .footer-shell { grid-template-columns:1fr; gap:var(--space-4); }
+      .footer-links { justify-content:flex-start; }
+    }
+
+    @media (max-width:23.5rem) {
+      .shell { width:min(calc(100% - 1rem),var(--content)); }
+      .brand span { display:none; }
+      .nav-link { min-width:2.5rem; font-size:.6875rem; }
+      .hero { grid-template-columns:minmax(0,1fr) 3.5rem; }
+      .hero-logo { width:3.5rem; height:3.5rem; }
+      .friend-links { grid-template-columns:1fr; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      html { scroll-behavior:auto; }
+      *,*::before,*::after { transition-duration:.01ms!important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <div class="shell nav-shell">
+      <a class="brand" href="#top" aria-label="HITSZ OSA 首页">
+        <svg class="brand-mark" viewBox="0 0 32 32" role="img" aria-label="OSA 标志">
+          <rect x="1" y="1" width="30" height="30" rx="4" fill="var(--primary)"/>
+          <path d="M7 11h5v10H7zm6.5 0H19v3h-2.5v1h2.1v6h-5.1v-3h2.3v-1h-2.3zm7 0H25v10h-2.8v-3.5h-1.7z" fill="var(--surface)"/>
+        </svg>
+        <span>HITSZ <strong>OSA</strong></span>
+      </a>
+      <div class="nav-group">
+        <nav aria-label="主导航">
+          <ul class="nav-list">
+            <li><a class="nav-link" href="#top" aria-current="page">首页</a></li>
+            <li><a class="nav-link" href="#updates">活动</a></li>
+            <li><a class="nav-link" href="#links">友链</a></li>
+            <li><a class="nav-link" href="#about">关于</a></li>
+            <li class="external-nav"><a class="nav-link external" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer noopener">镜像站</a></li>
+            <li class="external-nav"><a class="nav-link external" href="https://wiki.osa.moe" target="_blank" rel="noreferrer noopener">Wiki</a></li>
+          </ul>
+        </nav>
+        <button class="theme-toggle" type="button" aria-label="切换深色模式" aria-pressed="false"><span class="mode-dark">暗</span><span class="mode-light">亮</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="shell">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <h1 id="hero-title">HITSZ 开源技术协会</h1>
+          <div class="hero-intro">
+            <p>我们是 HITSZ 开源技术协会（a.k.a. HITSZ OSA），由哈尔滨工业大学（深圳）学生中的 Linux 用户和开源软件爱好者自发组建的学生社团。</p>
+            <p>我们致力于维护学校的开源基础建设，提升学校开源氛围，为开源技术爱好者提供交流平台。</p>
+          </div>
+          <div class="hero-actions" aria-label="快捷入口">
+            <a class="action action-primary" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer noopener">访问镜像站</a>
+            <a class="action" href="#updates">社团活动</a>
+            <a class="action" href="#about">了解协会 →</a>
+          </div>
+        </div>
+        <svg class="hero-logo" viewBox="0 0 96 96" role="img" aria-label="HITSZ OSA 标志占位图">
+          <rect x="1" y="1" width="94" height="94" rx="8" fill="var(--surface)" stroke="var(--surface-border)" stroke-width="2"/>
+          <path d="M19 31h15v34H19zm20 0h18v10h-8v4h7v20H39V55h8v-4h-8zm23 0h15v34h-9V53h-6z" fill="var(--primary)"/>
+        </svg>
+      </section>
+
+      <section class="section" id="services" aria-labelledby="services-title">
+        <div class="section-head">
+          <h2 class="section-title" id="services-title">服务入口</h2>
+          <p class="section-note">SERVICES · 校园开源基础设施</p>
+        </div>
+        <ul class="service-grid">
+          <li class="service-item">
+            <a class="service-link" href="https://mirrors.osa.moe" target="_blank" rel="noreferrer noopener">
+              <span class="service-initial" aria-hidden="true">MI</span>
+              <span class="service-copy">
+                <strong class="service-name">开源软件镜像站</strong>
+                <span class="service-description">主流 Linux 发行版与开源软件镜像，校园网内高速下载</span>
+                <span class="service-meta"><span class="status">online</span><span class="scope">public</span></span>
+              </span>
+            </a>
+          </li>
+          <li class="service-item">
+            <a class="service-link" href="https://mirrors.osa.moe/help" target="_blank" rel="noreferrer noopener">
+              <span class="service-initial" aria-hidden="true">HP</span>
+              <span class="service-copy">
+                <strong class="service-name">镜像使用帮助</strong>
+                <span class="service-description">各发行版与工具的镜像配置指南，一键换源</span>
+                <span class="service-meta"><span class="status">online</span><span class="scope">public</span></span>
+              </span>
+            </a>
+          </li>
+          <li class="service-item">
+            <a class="service-link" href="https://wiki.osa.moe" target="_blank" rel="noreferrer noopener">
+              <span class="service-initial" aria-hidden="true">WK</span>
+              <span class="service-copy">
+                <strong class="service-name">OSA Wiki</strong>
+                <span class="service-description">Linux 入门、HPC 文档、技术分享沉淀</span>
+                <span class="service-meta"><span class="status">online</span><span class="scope">public</span></span>
+              </span>
+            </a>
+          </li>
+          <li class="service-item">
+            <a class="service-link" href="https://weekly.osa.moe" target="_blank" rel="noreferrer noopener">
+              <span class="service-initial" aria-hidden="true">W</span>
+              <span class="service-copy">
+                <strong class="service-name">Weekly 周报</strong>
+                <span class="service-description">技术新闻、群聊精华、本周活动一览</span>
+                <span class="service-meta"><span class="status">online</span><span class="scope">public</span></span>
+              </span>
+            </a>
+          </li>
+          <li class="service-item">
+            <a class="service-link" href="https://git.osa.moe" target="_blank" rel="noreferrer noopener">
+              <span class="service-initial" aria-hidden="true">GT</span>
+              <span class="service-copy">
+                <strong class="service-name">Gitea 代码托管</strong>
+                <span class="service-description">自托管 Git</span>
+                <span class="service-meta"><span class="status">online</span><span class="scope">校内</span></span>
+              </span>
+            </a>
+          </li>
+          <li class="service-item">
+            <a class="service-link" href="https://aigw.osa.moe" target="_blank" rel="noreferrer noopener">
+              <span class="service-initial" aria-hidden="true">AI</span>
+              <span class="service-copy">
+                <strong class="service-name">AI Gateway</strong>
+                <span class="service-description">统一接入主流大模型 API</span>
+                <span class="service-meta"><span class="status beta">beta</span><span class="scope">校内</span></span>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <div class="content-columns">
+        <section class="section" id="updates" aria-labelledby="updates-title">
+          <div class="section-head">
+            <h2 class="section-title" id="updates-title">社团动态</h2>
+            <a class="text-link" href="#updates">全部活动 →</a>
+          </div>
+          <ol class="updates">
+            <li class="update-row">
+              <time datetime="2026-07-20">07/20</time>
+              <span class="update-kind">置顶公告</span>
+              <a class="update-link" href="https://github.com/hitszosa" target="_blank" rel="noreferrer noopener">协会门户网站改版测试中，欢迎通过 GitHub 反馈建议。</a>
+            </li>
+            <li class="update-row">
+              <time datetime="2026-07-15">07/15</time>
+              <span class="update-kind notice">公告</span>
+              <a class="update-link" href="#updates">本周镜像站例行维护窗口：周日 02:00–03:00，期间部分同步任务可能延迟。</a>
+            </li>
+            <li class="update-row">
+              <time datetime="2026-08-08">08/08</time>
+              <span class="update-kind upcoming">沙龙·即将举行</span>
+              <a class="update-link" href="#updates">暑期开源分享夜：如何参与上游社区</a>
+            </li>
+            <li class="update-row">
+              <time datetime="2026-05-20">05/20</time>
+              <span class="update-kind">讲座</span>
+              <a class="update-link" href="#updates">HPC 入门：从登录集群到提交第一个作业</a>
+            </li>
+            <li class="update-row">
+              <time datetime="2026-04-12">04/12</time>
+              <span class="update-kind">沙龙</span>
+              <a class="update-link" href="#updates">Linux Install Party 2026 春季场</a>
+            </li>
+          </ol>
+        </section>
+
+        <aside class="side-column" aria-label="参与协会与友链">
+          <section class="section" id="about" aria-labelledby="join-title">
+            <div class="section-head">
+              <h2 class="section-title" id="join-title">参与协会</h2>
+              <p class="section-note">JOIN / CONTACT</p>
+            </div>
+            <div class="join-box">
+              <p>欢迎 Linux 用户、开源软件爱好者与希望了解开放技术的同学参与活动、交流经验，或共同维护校园开源服务。</p>
+              <div class="join-actions">
+                <a href="https://github.com/hitszosa" target="_blank" rel="noreferrer noopener">GitHub ↗</a>
+                <a href="https://qm.qq.com/cgi-bin/qm/qr?k=EmOyWeZrOaOeSoVrVLoozyKYdvjOia_t" target="_blank" rel="noreferrer noopener">加入 QQ 群 ↗</a>
+                <a href="https://space.bilibili.com/1124374292" target="_blank" rel="noreferrer noopener">Bilibili ↗</a>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="links" aria-labelledby="links-title">
+            <div class="section-head">
+              <h2 class="section-title" id="links-title">友链</h2>
+              <a class="text-link" href="#links">查看全部 →</a>
+            </div>
+            <ul class="friend-links">
+              <li><a href="https://tuna.moe" target="_blank" rel="noreferrer noopener">清华大学 TUNA 协会</a></li>
+              <li><a href="https://mirrorz.org" target="_blank" rel="noreferrer noopener">MirrorZ</a></li>
+              <li><a href="https://lug.ustc.edu.cn" target="_blank" rel="noreferrer noopener">中科大 LUG</a></li>
+              <li><a href="https://sjtug.org" target="_blank" rel="noreferrer noopener">上交大 SJTUG</a></li>
+              <li><a href="https://awesome.hitsz.edu.cn" target="_blank" rel="noreferrer noopener">Awesome HITSZ</a></li>
+              <li><a href="https://www.hitsz.edu.cn" target="_blank" rel="noreferrer noopener">哈尔滨工业大学（深圳）</a></li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="shell footer-shell">
+      <div class="footer-meta">
+        <p>HITSZ OSA · 哈尔滨工业大学（深圳）开源技术协会 · Copyleft 2026</p>
+        <p class="console-note">More information in browser console.</p>
+      </div>
+      <nav class="footer-links" aria-label="社交媒体">
+        <a href="https://github.com/hitszosa" target="_blank" rel="noreferrer noopener">GitHub</a>
+        <a href="https://qm.qq.com/cgi-bin/qm/qr?k=EmOyWeZrOaOeSoVrVLoozyKYdvjOia_t" target="_blank" rel="noreferrer noopener">QQ 群</a>
+        <a href="https://space.bilibili.com/1124374292" target="_blank" rel="noreferrer noopener">Bilibili</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const toggle = document.querySelector('.theme-toggle');
+      const saved = localStorage.getItem('osa-quiet-theme');
+
+      if (saved === 'dark') root.classList.add('dark');
+
+      const syncToggle = () => {
+        const dark = root.classList.contains('dark');
+        toggle.setAttribute('aria-pressed', String(dark));
+        toggle.setAttribute('aria-label', dark ? '切换浅色模式' : '切换深色模式');
+      };
+
+      toggle.addEventListener('click', () => {
+        root.classList.toggle('dark');
+        localStorage.setItem('osa-quiet-theme', root.classList.contains('dark') ? 'dark' : 'light');
+        syncToggle();
+      });
+
+      syncToggle();
+      console.info('HITSZ OSA · Quiet Utility proposal');
+      console.info('Check out TXT record of tg.osa.moe');
+    })();
+  </script>
+</body>
+</html>

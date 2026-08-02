@@ -1,0 +1,131 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Badge from '../../components/Badge.astro';
+import RelatedLink from '../../components/content/RelatedLink.astro';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  return articles.map((article) => ({
+    params: { id: article.id },
+    props: { article },
+  }));
+}
+
+interface Props {
+  article: CollectionEntry<'articles'>;
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+const { title, summary, date, author, cover, coverAlt } = article.data;
+const dateLabel = new Intl.DateTimeFormat('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+}).format(date);
+---
+
+<Layout title={`${title} | HITSZ OSA`} description={summary}>
+  <article class="mx-auto max-w-3xl py-12 md:py-16">
+    <a
+      href="/updates"
+      class="ui-mono text-sm text-primary no-underline hover:underline"
+      >← 返回动态</a
+    >
+
+    <header class="mt-8 border-b border-surface-border pb-10">
+      <div
+        class="flex flex-wrap items-center gap-2 ui-mono text-xs text-muted-fg"
+      >
+        <Badge tone="success" size="md">文章</Badge>
+        <time datetime={date.toISOString()}>{dateLabel}</time>
+        {author && <span>作者：{author}</span>}
+      </div>
+      <h1
+        class="mt-5 text-3xl font-bold leading-tight tracking-tight text-page-fg md:text-5xl"
+      >
+        {title}
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg leading-8 text-muted-fg">{summary}</p>
+    </header>
+
+    {cover && (
+        <img
+          src={cover}
+          alt={coverAlt ?? title}
+          class="mt-10 aspect-video w-full rounded-xl border border-surface-border object-cover"
+        />
+      )}
+
+    <div class="article-content mt-10">
+      <Content components={{ RelatedLink }} />
+    </div>
+
+    <footer class="mt-12 border-t border-surface-border pt-8">
+      <a
+        href="/updates"
+        class="text-sm text-primary no-underline hover:underline"
+        >查看全部动态 →</a
+      >
+    </footer>
+  </article>
+
+  <style>
+  .article-content :global(h2) {
+    margin-top: 2.75rem;
+    color: var(--ui-surface-fg);
+    font-size: 1.375rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+  }
+
+  .article-content :global(h3) {
+    margin-top: 2rem;
+    color: var(--ui-surface-fg);
+    font-size: 1.05rem;
+    font-weight: 650;
+  }
+
+  .article-content :global(p),
+  .article-content :global(li) {
+    color: var(--ui-page-fg);
+    font-size: 1rem;
+    line-height: 1.9;
+  }
+
+  .article-content :global(p) {
+    margin-top: 1.1rem;
+  }
+  .article-content :global(ul),
+  .article-content :global(ol) {
+    margin-top: 1rem;
+    padding-left: 1.4rem;
+  }
+  .article-content :global(li + li) {
+    margin-top: 0.45rem;
+  }
+  .article-content :global(strong) {
+    color: var(--ui-surface-fg);
+    font-weight: 650;
+  }
+  .article-content :global(a) {
+    color: var(--ui-primary);
+    text-underline-offset: 0.2em;
+  }
+  .article-content :global(code) {
+    border-radius: 0.25rem;
+    background: var(--ui-inset);
+    padding: 0.15em 0.4em;
+    font-family: var(--ui-font-mono, ui-monospace, monospace);
+    font-size: 0.9em;
+    color: var(--ui-inset-fg);
+  }
+  .article-content :global(blockquote) {
+    margin: 1.75rem 0;
+    border-left: 2px solid var(--ui-primary);
+    padding-left: 1rem;
+  }
+  </style>
+</Layout>
