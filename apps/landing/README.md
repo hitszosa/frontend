@@ -15,21 +15,21 @@ HITSZ OSA 官方门户：[osa.moe](https://www.osa.moe)。项目使用 Astro、M
 
 | 命令                 | 内容源              | 用途                       |
 | -------------------- | ------------------- | -------------------------- |
-| `bun run dev`        | `src/content/`      | 使用正式内容启动开发服务器 |
-| `bun run dev:mock`   | `examples/content/` | 使用示例动态开发页面       |
-| `bun run build`      | `src/content/`      | 使用正式内容构建到 `dist/` |
-| `bun run build:mock` | `examples/content/` | 构建包含示例动态的静态站点 |
-| `bun run preview`    | `dist/`             | 预览最近一次构建结果       |
+| `bun run dev`        | 根目录 `content/`                       | 使用正式内容启动开发服务器 |
+| `bun run dev:mock`   | 根目录 `content/` 和 `examples/content/` | 使用示例动态开发页面       |
+| `bun run build`      | 根目录 `content/`                       | 使用正式内容构建到 `dist/` |
+| `bun run build:mock` | 根目录 `content/` 和 `examples/content/` | 构建包含示例动态的静态站点 |
+| `bun run preview`    | `dist/`                                 | 预览最近一次构建结果       |
 
 从 Monorepo 根目录可运行 `bun run dev:landing:mock` 或 `bun run build:landing:mock`。直接运行 `astro dev`、`astro build` 或未设置 `MOCK` 时使用正式内容；`MOCK` 只接受 `true` 或 `false`。
 
 ## 内容目录
 
 ```text
-src/content/
-  events/                 # 正式活动详情，使用 MDX
-  announcements/          # 正式公告详情，使用 MDX
-  articles/               # 正式文章详情，使用 MDX
+../../content/
+  announcements/          # 两个站点共享的正式公告，使用 Markdown 或 MDX
+  events/                 # 正式活动详情，使用 Markdown 或 MDX
+  articles/               # 正式文章详情，使用 Markdown 或 MDX
   services/               # 正式服务与项目，使用 category 区分
   friend-links/           # 正式友链
 
@@ -39,13 +39,15 @@ examples/content/
   articles/               # 页面开发使用的示例文章
 ```
 
-公告、活动和文章分别存放在 `announcements/`、`events/` 和 `articles/`，但都以同等地位显示在首页和 `/updates` 动态页。目录和内容类型只用于组织文件、校验字段和选择详情页版式。
+所有正式内容均存放在 Monorepo 根目录 `content/`。公告、活动和文章以同等地位显示在首页和 `/updates` 动态页。
 
-新增正式内容时，在 `src/content/` 对应目录创建 `.mdx` 文件：
+新增正式内容时，在对应目录创建文件：
 
-- 公告：`title`、`summary`、`date`，可选 `level`、`pinned`、`importance`、`expires` 和封面；
-- 活动：`title`、`summary`、`date`，可选 `type`、`location`、`upcoming`、`pinned`、`importance` 和封面；
-- 文章：`title`、`summary`、`date`，可选 `author`、`pinned`、`importance` 和封面。
+- 公告（`.md` 或 `.mdx`）：`title`、`summary`、`date`，可选 `tags`、`level`、`pinned`、`importance`、`expires` 和封面；带有 `镜像站` 标签的公告也会显示在 Mirrors；
+- 活动（`.md` 或 `.mdx`）：`title`、`summary`、`date`，可选 `type`、`location`、`upcoming`、`pinned`、`importance` 和封面；
+- 文章（`.md` 或 `.mdx`）：`title`、`summary`、`date`，可选 `author`、`pinned`、`importance` 和封面；
+- 服务与项目（`.md`）：`name`、`description`、`href`，可选 `order`、`category`、`scope`、`status` 和 `since`；
+- 友链（`.yaml`）：`name`、`href`，可选 `description`、`logo` 和 `order`。
 
 `importance` 默认为 `normal`，普通内容不需要填写。只有需要进入首页展示板的内容才写 `importance: important`；展示板按日期倒序取最新三条，最新一条使用大卡片，其余两条使用小卡片。重要内容仍同时出现在普通动态列表中。
 

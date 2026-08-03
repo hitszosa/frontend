@@ -1,12 +1,13 @@
 ---
-import { getCollection } from 'astro:content'
 import Layout from '../../layouts/Layout.astro'
 import NewsList from '@components/news/NewsList.astro'
-import { sortNewsByDateDesc, toArticleDigest } from '../../lib/news'
-
-const news = sortNewsByDateDesc(await getCollection('news')).map(
+import {
+  getMirrorNews,
+  sortNewsByDateDesc,
   toArticleDigest,
-)
+} from '../../lib/news'
+
+const news = sortNewsByDateDesc(await getMirrorNews()).map(toArticleDigest)
 ---
 
 <Layout title="News | HITSZ OSA Mirrors">

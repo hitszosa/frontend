@@ -1,3 +1,4 @@
+import mdx from '@astrojs/mdx'
 import vue from '@astrojs/vue'
 import { defineConfig } from 'astro/config'
 import icon from 'astro-icon'
@@ -11,6 +12,7 @@ const useMockData = mockValue === 'true'
 
 export default defineConfig({
   integrations: [
+    mdx(),
     vue({
       appEntrypoint: '/src/vue/setup',
     }),
