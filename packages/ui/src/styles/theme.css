@@ -28,6 +28,10 @@
   --ui-graph-primary: #576edb;
   --ui-graph-secondary: #8762d3;
   --ui-graph-highlight: #d97706;
+  --ui-info: #0284c7;
+  --ui-info-fg: #075985;
+  --ui-danger: #dc2626;
+  --ui-danger-fg: #991b1b;
 }
 
 .dark {
@@ -58,6 +62,10 @@
   --ui-graph-primary: #97b9f0;
   --ui-graph-secondary: #bab1ec;
   --ui-graph-highlight: #fbbf24;
+  --ui-info: #38bdf8;
+  --ui-info-fg: #7dd3fc;
+  --ui-danger: #f87171;
+  --ui-danger-fg: #fca5a5;
 }
 
 .ui-sans {
