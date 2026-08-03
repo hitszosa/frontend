@@ -36,6 +36,7 @@
     "vue-tsc": "^3.2.7"
   },
   "dependencies": {
+    "@astrojs/mdx": "catalog:",
     "@hitszosa/ui": "workspace:*",
     "@iconify-json/icon-park-outline": "^1.2.4",
     "@iconify/json": "^2.2.469",

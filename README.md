@@ -13,6 +13,8 @@
 
 两个应用都是 Astro 静态站点。`@hitszosa/ui` 是 Just-in-Time internal package，没有独立构建产物；应用构建时由 Astro/Vite 直接编译其源码。
 
+正式内容统一存放在根目录 `content/`，按 `announcements`、`events`、`articles`、`services` 和 `friend-links` 分类。Landing 读取全部集合，Mirrors 只读取带有 `镜像站` 标签的公告；该目录已加入 Turbo 的全局构建依赖。
+
 ## 技术栈
 
 - Bun 1.3+

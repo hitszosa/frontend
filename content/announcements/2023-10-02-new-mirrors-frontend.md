@@ -1,12 +1,10 @@
 ---
 title: 镜像站新前端上线了
 date: 2023-10-02
-description: 了解新镜像站前端的开发历程和亮点。
+summary: 了解新镜像站前端的开发历程和亮点。
 tags:
-    - 公告
+  - 镜像站
 ---
-
-# 镜像站新前端上线了
 
 > Rewrite it in Vue!
 

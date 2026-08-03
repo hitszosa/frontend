@@ -9,13 +9,13 @@ if (mockValue !== undefined && mockValue !== 'true' && mockValue !== 'false') {
 const useMockContent = mockValue === 'true';
 const eventsBase = useMockContent
   ? './examples/content/events'
-  : './src/content/events';
+  : '../../content/events';
 const announcementsBase = useMockContent
   ? './examples/content/announcements'
-  : './src/content/announcements';
+  : '../../content/announcements';
 const articlesBase = useMockContent
   ? './examples/content/articles'
-  : './src/content/articles';
+  : '../../content/articles';
 
 const selectedContent = (base: string, pattern: string) => {
   const loader = glob({ base, pattern });
@@ -31,7 +31,7 @@ const selectedContent = (base: string, pattern: string) => {
 };
 
 const services = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/services' }),
+  loader: glob({ pattern: '**/[^_]*.md', base: '../../content/services' }),
   schema: z.object({
     name: z.string(),
     description: z.string(),
@@ -82,7 +82,7 @@ const articles = defineCollection({
 const friendLinks = defineCollection({
   loader: glob({
     pattern: '**/[^_]*.yaml',
-    base: './src/content/friend-links',
+    base: '../../content/friend-links',
   }),
   schema: z.object({
     name: z.string(),
@@ -98,6 +98,7 @@ const announcements = defineCollection({
   schema: z.object({
     title: z.string(),
     summary: z.string(),
+    tags: z.array(z.string()).default([]),
     level: z.enum(['info', 'warn']).default('info'),
     pinned: z.boolean().default(false),
     importance: z.enum(['normal', 'important']).default('normal'),

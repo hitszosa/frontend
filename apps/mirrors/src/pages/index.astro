@@ -1,14 +1,13 @@
 ---
-import { getCollection } from 'astro:content'
 import Layout from '../layouts/Layout.astro'
 import MirrorList from '@components/index/MirrorList/MirrorList.vue'
 import DownloadWidget from '@components/index/DownloadWidget/DownloadWidget.astro'
 import NewsWidget from '@components/index/NewsWidget/NewsWidget.astro'
-import { sortNewsByDateDesc, toArticleDigest } from '../lib/news'
+import { getMirrorNews, sortNewsByDateDesc, toArticleDigest } from '../lib/news'
 import SectionHeading from '@components/base/SectionHeading.astro'
 import { Icon } from 'astro-icon/components'
 
-const news = sortNewsByDateDesc(await getCollection('news'))
+const news = sortNewsByDateDesc(await getMirrorNews())
   .map(toArticleDigest)
   .slice(0, 3)
 ---
