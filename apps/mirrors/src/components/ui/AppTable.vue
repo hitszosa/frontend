@@ -1,6 +1,6 @@
 <template>
   <div
-    class="overflow-hidden rounded-2xl border border-surface-border bg-surface shadow-sm"
+    class="overflow-hidden rounded-2xl border border-surface-border bg-surface"
   >
     <table class="min-w-full divide-y divide-surface-border">
       <thead class="bg-page-bg/80">
