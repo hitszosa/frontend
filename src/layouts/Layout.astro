@@ -61,6 +61,7 @@ const socialLinks = [
     <title>{title}</title>
     <meta name="description" content={description}>
     <link rel="canonical" href={canonicalUrl}>
+    <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/favicon.ico">
     <meta property="og:type" content="website">
     <meta property="og:title" content={title}>
@@ -68,7 +69,7 @@ const socialLinks = [
     <meta property="og:url" content={canonicalUrl}>
     <meta property="og:site_name" content="HITSZ OSA">
     <meta name="theme-color" content="#ffffff">
-    <script>
+    <script type="module">
     import '@hitszosa/ui/client/theme-init';
 
     console.info('Welcome to the pub!');

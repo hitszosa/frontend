@@ -4,19 +4,19 @@
 
 - Project: `osa-moe-landing-page`
 - Site: `https://www.osa.moe`
-- Stack: Astro 6, Tailwind CSS v4, pnpm
+- Stack: Astro 6, Tailwind CSS v4, bun
 - Shared UI package: `@hitszosa/ui` via GitHub dependency in `package.json`
 
 ## Commands
 
-- Install dependencies: `pnpm install`
-- Start dev server: `pnpm dev`
-- Build: `pnpm build`
-- Preview build: `pnpm preview`
-- Lint: `pnpm lint`
-- Fix lint issues: `pnpm lint:fix`
-- Format: `pnpm format`
-- Check formatting: `pnpm format:check`
+- Install dependencies: `bun install`
+- Start dev server: `bun dev`
+- Build: `bun build`
+- Preview build: `bun preview`
+- Lint: `bun lint`
+- Fix lint issues: `bun lint:fix`
+- Format: `bun format`
+- Check formatting: `bun format:check`
 
 ## Code Structure
 
@@ -28,7 +28,7 @@
 
 ## Conventions
 
-- Use `pnpm`, not npm or yarn
+- Use `bun`, not npm or yarn
 - Prefer single quotes and semicolons, matching Biome config
 - Keep data in frontmatter and rendering in the template
 - Prefer consuming shared logo metadata from `@hitszosa/ui`
