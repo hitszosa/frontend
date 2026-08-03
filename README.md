@@ -16,12 +16,12 @@
 ## 技术栈
 
 - Bun 1.3+
-- Turborepo 2
-- Astro 6
+- [Turborepo 2](https://turborepo.com/docs)
+- [Astro 6](https://docs.astro.build)
 - TypeScript
 - Tailwind CSS 4
 - Vue 3、Pinia（仅 Mirrors 的交互组件）
-- ESLint、Biome、Sherif
+- ESLint、[Biome](https://biomejs.dev/guides/getting-started/)、[Sherif](https://github.com/QuiiBz/sherif)
 
 ## 快速开始
 
