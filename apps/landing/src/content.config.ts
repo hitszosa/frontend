@@ -2,14 +2,18 @@ import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
-const useExampleContent = process.env.CONTENT_SOURCE === 'example';
-const eventsBase = useExampleContent
+const mockValue = process.env.MOCK;
+if (mockValue !== undefined && mockValue !== 'true' && mockValue !== 'false') {
+  throw new Error('MOCK must be either true or false');
+}
+const useMockContent = mockValue === 'true';
+const eventsBase = useMockContent
   ? './examples/content/events'
   : './src/content/events';
-const announcementsBase = useExampleContent
+const announcementsBase = useMockContent
   ? './examples/content/announcements'
   : './src/content/announcements';
-const articlesBase = useExampleContent
+const articlesBase = useMockContent
   ? './examples/content/articles'
   : './src/content/articles';
 

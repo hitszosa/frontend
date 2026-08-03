@@ -11,10 +11,10 @@
 在全局样式中引入共享 CSS：
 
 ```css
+@import '@hitszosa/ui/styles/theme.css';
 @import 'tailwindcss';
 @config '@hitszosa/ui/tailwind/preset';
-@source '../../node_modules/@hitszosa/ui/src/components';
-@import '@hitszosa/ui/styles/theme.css';
+@source '../../node_modules/@hitszosa/ui/src';
 ```
 
 `@source` 是 Tailwind CSS v4 必需的配置，因为 `node_modules` 默认不会被扫描。
@@ -54,10 +54,12 @@
 
 ```astro
 ---
-import { ThemeToggle } from '@hitszosa/ui'
+import { SiteFooter, SiteHeader, ThemeToggle } from '@hitszosa/ui'
 ---
 
+<SiteHeader activeSite="landing" currentPath={Astro.url.pathname} />
 <ThemeToggle size="md" />
+<SiteFooter />
 ```
 
 `ThemeToggle` 支持以下参数：

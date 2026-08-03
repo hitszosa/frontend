@@ -23,29 +23,24 @@ Now you are ready to go!
 
 ### Develop
 
-From the repository root, use `bun run dev:mirrors` to start the Astro dev server with hot module replacement.
+默认命令不注入本地数据。需要完整的本地运行数据时，使用统一的 `MOCK=true` 模式：
 
-Use `bun run check` in this package for Astro type/content validation.
+- Monorepo 根目录：`bun run dev:mirrors:mock`
+- 当前包目录：`bun run dev:mock`
 
-Use `bun run format` to apply the shared Biome rules and `bun run lint:fix` to apply ESLint fixes.
-
-If you need local mock runtime JSON for frontend work, use:
-
-- `bun run mock:sync` to copy local mock data into `public/`
-- `bun run mock:clean` to remove those local mock copies again
+Mock 模式由 Astro 集成直接响应 `mock/` 中的三个 JSON fixture，不会复制或写入 `public/`。生产模式继续从部署环境提供 `/tunasync_status.json`、`/static/res_link.json`，并从镜像帮助站读取帮助列表。
 
 ### Build and Deploy
 
-Production builds are static Astro output under `dist/`.
+生产构建执行 `bun run build:mirrors`，输出位于 `apps/mirrors/dist/`。需要可独立预览的 fixture 构建时，执行 `bun run build:mirrors:mock`；Mock JSON 只会写入 `dist/`。
 
-Typical local verification flow:
+典型验证流程：
 
-1. Run `bun install --filter @hitszosa/mirrors` from the repository root
-2. Run `bun run check` in this package
-3. Run `bun run build:mirrors` from the repository root
-4. Deploy the contents of `apps/mirrors/dist/`
+1. 在仓库根目录运行 `bun install --filter @hitszosa/mirrors`
+2. 运行 `bun run build:mirrors`
+3. 部署 `apps/mirrors/dist/`
 
-If you want to preview the built site locally, run `bun run preview` after `bun run build`.
+若要预览最近一次构建，在当前包目录运行 `bun run preview`。`MOCK` 只接受 `true` 或 `false`，生产部署不得设置 `MOCK=true`。
 
 ## Where to start
 

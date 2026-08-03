@@ -3,10 +3,12 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build", "lint", "check"],
+      "env": ["MOCK"],
       "outputs": ["dist/**"]
     },
     "dev": {
       "dependsOn": ["^build"],
+      "env": ["MOCK"],
       "cache": false,
       "persistent": true
     },
@@ -16,6 +18,7 @@
     },
     "check": {
       "dependsOn": ["^check"],
+      "env": ["MOCK"],
       "outputs": []
     },
     "format": {

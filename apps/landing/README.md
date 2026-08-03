@@ -11,17 +11,17 @@ HITSZ OSA 官方门户：[osa.moe](https://www.osa.moe)。项目使用 Astro、M
 
 ## 开发与构建
 
-正式内容是所有默认命令的内容源；只有命令名带 `:example` 时才会设置 `CONTENT_SOURCE=example`。
+默认命令使用正式内容。设置统一开关 `MOCK=true` 后，Landing 使用 `examples/content/` 中的示例内容；Mirrors 同时使用仓库内的 JSON fixtures。
 
-| 命令                    | 内容源              | 用途                       |
-| ----------------------- | ------------------- | -------------------------- |
-| `bun run dev`           | `src/content/`      | 使用正式内容启动开发服务器 |
-| `bun run dev:example`   | `examples/content/` | 使用示例动态开发页面       |
-| `bun run build`         | `src/content/`      | 使用正式内容构建到 `dist/` |
-| `bun run build:example` | `examples/content/` | 构建包含示例动态的静态站点 |
-| `bun run preview`       | `dist/`             | 预览最近一次构建结果       |
+| 命令                 | 内容源              | 用途                       |
+| -------------------- | ------------------- | -------------------------- |
+| `bun run dev`        | `src/content/`      | 使用正式内容启动开发服务器 |
+| `bun run dev:mock`   | `examples/content/` | 使用示例动态开发页面       |
+| `bun run build`      | `src/content/`      | 使用正式内容构建到 `dist/` |
+| `bun run build:mock` | `examples/content/` | 构建包含示例动态的静态站点 |
+| `bun run preview`    | `dist/`             | 预览最近一次构建结果       |
 
-直接运行 `astro dev` 或 `astro build` 时同样使用正式内容。未设置或错误设置 `CONTENT_SOURCE` 不会启用示例数据。
+从 Monorepo 根目录可运行 `bun run dev:landing:mock` 或 `bun run build:landing:mock`。直接运行 `astro dev`、`astro build` 或未设置 `MOCK` 时使用正式内容；`MOCK` 只接受 `true` 或 `false`。
 
 ## 内容目录
 
@@ -49,7 +49,7 @@ examples/content/
 
 `importance` 默认为 `normal`，普通内容不需要填写。只有需要进入首页展示板的内容才写 `importance: important`；展示板按日期倒序取最新三条，最新一条使用大卡片，其余两条使用小卡片。重要内容仍同时出现在普通动态列表中。
 
-不要把待发布的正式内容写进 `examples/`。示例内容只用于组件开发、响应式检查和演示构建。生产部署应执行 `bun run build`，不应设置 `CONTENT_SOURCE=example`。
+不要把待发布的正式内容写进 `examples/`。示例内容只用于组件开发、响应式检查和演示构建。生产部署应执行 `bun run build`，不得设置 `MOCK=true`。
 
 ## MDX 内容组件
 

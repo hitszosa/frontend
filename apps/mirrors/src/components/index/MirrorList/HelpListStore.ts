@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue'
 
 const fetchHelpList = async () => {
   const res = await fetch(
-    import.meta.env.DEV
+    import.meta.env.PUBLIC_MOCK
       ? '/help_list.json'
       : 'https://mirrors-help.osa.moe/help_list.json',
   )

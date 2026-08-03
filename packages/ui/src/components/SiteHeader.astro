@@ -103,6 +103,15 @@ const navItems = [
   },
 ] as const
 
+const currentOrigin =
+  activeSite === 'landing' ? landingUrl : 'https://mirrors.osa.moe'
+const isCurrentSiteHref = (href: string) =>
+  href === currentOrigin || href.startsWith(`${currentOrigin}/`)
+const contextualHref = (href: string) => {
+  if (href === currentOrigin || href === `${currentOrigin}/`) return '/'
+  return isCurrentSiteHref(href) ? href.slice(currentOrigin.length) : href
+}
+
 const normalizePath = (path: string | null) => {
   if (!path || path === '/') return '/'
   return path.endsWith('/') ? path.slice(0, -1) : path
@@ -136,7 +145,7 @@ const navLinkClass = (active: boolean) => [
     class="mx-auto flex h-16 max-w-6xl items-center justify-between px-3 sm:px-6"
   >
     <a
-      href={`${landingUrl}/`}
+      href={contextualHref(`${landingUrl}/`)}
       class="flex items-center gap-2.5 no-underline"
       aria-label="HITSZ OSA 首页"
     >
@@ -154,7 +163,7 @@ const navLinkClass = (active: boolean) => [
           {navItems.map((item) => (
               <li>
                 <a
-                  href={item.href}
+                  href={contextualHref(item.href)}
                   aria-current={isActive(item) ? 'page' : undefined}
                   class:list={navLinkClass(isActive(item))}
                 >
@@ -179,9 +188,9 @@ const navLinkClass = (active: boolean) => [
               {services.map((item) => (
                   <a
                     role="menuitem"
-                    href={item.href}
-                    target="_blank"
-                    rel="noreferrer noopener"
+                    href={contextualHref(item.href)}
+                    target={isCurrentSiteHref(item.href) ? undefined : '_blank'}
+                    rel={isCurrentSiteHref(item.href) ? undefined : 'noreferrer noopener'}
                     class="group/item flex items-center gap-2 rounded-md px-3 py-2 text-sm text-surface-fg no-underline hover:bg-page-bg hover:text-primary focus:bg-page-bg"
                   >
                     <span
@@ -222,7 +231,7 @@ const navLinkClass = (active: boolean) => [
               {navItems.map((item) => (
                   <li>
                     <a
-                      href={item.href}
+                      href={contextualHref(item.href)}
                       aria-current={isActive(item) ? 'page' : undefined}
                       class:list={[
                         'flex rounded-lg px-3 py-2.5 text-sm font-medium no-underline transition-colors',
@@ -246,7 +255,7 @@ const navLinkClass = (active: boolean) => [
             <div class="grid gap-1 sm:grid-cols-2">
               {services.map((item) => (
                   <a
-                    href={item.href}
+                    href={contextualHref(item.href)}
                     class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-surface-fg no-underline hover:bg-page-bg hover:text-primary"
                   >
                     <span
