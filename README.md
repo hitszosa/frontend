@@ -110,7 +110,10 @@ Turbo 的 `build` 任务依赖当前包的 `lint`、`check` 和上游包的 `bui
 │       └── src/
 ├── packages/
 │   ├── eslint-config/        # 共享 ESLint 配置
+│   ├── mirrorz-parser/       # mirrorz-docs 加载、模板转换与 MDX 编译
 │   └── ui/                   # 共享 UI、主题和品牌资产
+├── vendor/
+│   └── mirrorz-help/         # 锁定的上游实现与 zdoc/global 递归子模块
 ├── biome.json                # 根级 Biome 配置
 ├── bun.lock
 ├── package.json              # Workspaces、Catalogs 和根任务
@@ -137,6 +140,32 @@ Turbo 的 `build` 任务依赖当前包的 `lint`、`check` 和上游包的 `bui
 ```
 
 只有确实属于单个业务域的组件才保留在应用内。更多导出和主题用法见 [`packages/ui/README.md`](packages/ui/README.md)。
+
+## Mirrorz Parser
+
+`@hitszosa/mirrorz-parser` 是独立于 Astro、Vue 和 React 的帮助文档编译层。它负责：
+
+- 按 `content/mirrors/help-overrides → vendor/mirrorz-help/zdoc/global` 顺序读取配置和 Markdown block；
+- 合并 YAML 输入定义并保留 `option`、`boolean`、`text` 语义；
+- 将 `{ztmpl}` block/inline role 转换为框架无关的 MDX 组件契约；
+- 输出 MDX、模板表、全局变量初始值、TOC 和内部链接。
+
+上游语义以 `vendor/mirrorz-help` 固定提交为准；`zdoc/global` 是其递归子模块。兼容性测试会加载 `src/routes.json` 中全部 157 个页面，并再次通过 MDX 编译器验证生成结果：
+
+```bash
+cd packages/mirrorz-parser
+bun test
+```
+
+`apps/mirrors` 在构建期消费 Parser，并将帮助页发布到 `/help/<mirror>/`。`help:generate` 将上游文档与 `content/mirrors/help-overrides/<page-id>/` 中的本地增量合并，再把 MDX 和 manifest 写入 `apps/mirrors/generated/help/`；生成目录不纳入版本控制。覆盖目录可以只替换现有页面的个别配置或 block，也可以通过完整的本地 `zh.yaml` 和 block 新增页面。`dev`、`check`、`build` 及对应 Mock 命令都会先执行生成步骤，因此 Turbo 构建不会依赖手工准备产物：
+
+```bash
+cd apps/mirrors
+bun run help:generate
+bun run build:mock
+```
+
+桌面端帮助页使用固定镜像侧栏和独立滚动的文章区域；侧栏搜索框固定在顶部，镜像列表在侧栏内部滚动。主页镜像名称旁的帮助入口和共享顶栏均使用 `/help/` 站内路由。
 
 ## 依赖与配置管理
 

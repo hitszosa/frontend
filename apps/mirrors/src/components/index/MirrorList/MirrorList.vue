@@ -19,8 +19,6 @@
           v-if="isShowHelp(row.name)"
           class="group flex gap-1 items-center cursor-pointer rounded-sm text-surface-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary"
           :href="getHelpUrl(row.name)"
-          target="_blank"
-          rel="noreferrer noopener"
         >
           <span>
             {{ row.name }}
@@ -125,7 +123,7 @@ const isNameMatched = (mirror: string, filter: string) => {
 }
 
 const getHelpUrl = (mirror: string) => {
-  return `https://mirrors-help.osa.moe/${mirror}`
+  return `/help/${encodeURIComponent(mirror)}/`
 }
 
 const onSearchInput = (event: Event) => {

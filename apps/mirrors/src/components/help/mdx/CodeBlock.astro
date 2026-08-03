@@ -1,0 +1,42 @@
+---
+import type { InputType } from '@hitszosa/mirrorz-parser'
+import HelpCodeBlock from '../HelpCodeBlock.vue'
+import { getHelpPageData } from '@/utils/help'
+
+interface Props {
+  pageId: string
+  templateId: string
+  menus?: InputType[]
+  codeLanguage?: string
+  filepath?: string
+  append?: boolean
+  enableQuickSetup?: boolean
+}
+
+const {
+  pageId,
+  templateId,
+  menus = [],
+  codeLanguage,
+  filepath,
+  append,
+  enableQuickSetup,
+} = Astro.props
+const page = getHelpPageData(pageId)
+const template = page.templates[templateId]
+if (template === undefined) {
+  throw new Error(`Template ${templateId} not found for ${pageId}`)
+}
+---
+
+<HelpCodeBlock
+  client:load
+  {pageId}
+  {template}
+  {menus}
+  globalVariables={page.globalVariables}
+  {codeLanguage}
+  {filepath}
+  {append}
+  {enableQuickSetup}
+/>

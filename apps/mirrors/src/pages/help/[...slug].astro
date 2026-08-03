@@ -1,0 +1,102 @@
+---
+import SiteFooter from '@hitszosa/ui/components/SiteFooter.astro'
+import HelpSidebar from '@components/help/HelpSidebar.vue'
+import HelpPageHeader from '@components/help/HelpPageHeader.vue'
+import { helpManifest } from '@/utils/help'
+import Layout from '@hitszosa/ui/components/SiteLayout.astro'
+
+interface GeneratedMdxModule {
+  default: any
+}
+
+const pageModules = import.meta.glob<GeneratedMdxModule>(
+  '../../../generated/help/pages/*.mdx',
+  { eager: true },
+)
+
+export function getStaticPaths() {
+  return helpManifest.routes.map((route) => ({
+    params: { slug: route.slug },
+    props: { route },
+  }))
+}
+
+const { route } = Astro.props
+const page = helpManifest.pages[route.cname]
+const moduleEntry = Object.entries(pageModules).find(([filename]) =>
+  filename.endsWith(`/${route.cname}.mdx`),
+)?.[1]
+
+if (!page || !moduleEntry) {
+  throw new Error(`Generated help page not found for ${route.cname}`)
+}
+
+const Content = moduleEntry.default
+const pageTitle = `${route.fullTitle} | HITSZ OSA Mirrors`
+---
+
+<Layout activeSite="mirrors" title={pageTitle} immersive>
+  <div
+    class="grid h-full min-h-0 w-full grid-cols-1 md:grid-cols-[18rem_minmax(0,1fr)]"
+  >
+    <aside
+      class="hidden min-h-0 overflow-hidden border-r border-surface-border bg-surface md:block"
+    >
+      <HelpSidebar client:load activePageId={route.cname} />
+    </aside>
+
+    <section
+      id="help-article-scroll"
+      class="min-h-0 overflow-y-auto overscroll-contain scroll-smooth bg-page-bg"
+    >
+      <div
+        class="mx-auto w-full max-w-5xl px-6 pt-7 pb-4 md:px-10 md:pt-10 lg:px-14"
+      >
+        <div class="mb-8 md:hidden">
+          <label
+            for="mobile-help-page"
+            class="mb-2 block text-sm font-medium text-surface-fg"
+          >
+            镜像使用帮助
+          </label>
+          <select
+            id="mobile-help-page"
+            class="h-11 w-full rounded-xl border border-surface-border bg-surface px-3 text-surface-fg outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+          >
+            {helpManifest.routes.map((item) => (
+                <option value={`/help/${item.slug}/`} selected={item.cname === route.cname}>
+                  {item.title}
+                </option>
+              ))}
+          </select>
+        </div>
+
+        <article
+          class="prose prose-slate max-w-none dark:prose-invert prose-headings:scroll-mt-24 prose-a:text-primary prose-a:no-underline hover:prose-a:underline"
+        >
+          <header class="not-prose mb-10 border-b border-surface-border pb-7">
+            <HelpPageHeader
+              client:load
+              pageId={route.cname}
+              title={page.meta.title}
+            />
+          </header>
+          <Content />
+        </article>
+      </div>
+
+      <SiteFooter class="mx-auto max-w-5xl" />
+    </section>
+  </div>
+</Layout>
+
+<script>
+const bindMobileHelpSelect = () => {
+  const select = document.querySelector<HTMLSelectElement>('#mobile-help-page')
+  select?.addEventListener('change', () => {
+    window.location.href = select.value
+  })
+}
+
+document.addEventListener('astro:page-load', bindMobileHelpSelect)
+</script>

@@ -1,0 +1,109 @@
+---
+import SiteLayout from './SiteLayout.astro'
+import type { SiteId } from './SiteHeader.astro'
+
+interface Props {
+  activeSite?: SiteId
+}
+
+const { activeSite = 'landing' } = Astro.props
+const siteName = activeSite === 'landing' ? 'HITSZ OSA' : 'HITSZ OSA Mirrors'
+
+const verses = [
+  ['Roses are red,', '玫瑰是红的，'],
+  ['Violets are blue;', '紫罗兰是蓝色的；'],
+  ['The page you seek,', '你所寻找的页面，'],
+  ['Has bid us adieu.', '已向我们道别。'],
+  ["It's not in the cards,", '命中注定无缘。'],
+  ['Not even a trace;', '杳无踪迹可寻；'],
+  ['Gone like a ghost,', '如鬼魂般消散，'],
+  ['Without a digital grace.', '亦无数字化芳痕。'],
+  ['But worry not, friend,', '但请勿忧心，友人，'],
+  ['Keep searching with glee;', '怀揣欢欣，继续探寻；'],
+  ["For the web's full of wonders,", '网络之中奇景无数，'],
+  ["There's still so much to see!", '尚有万千精彩待赏！'],
+] as const
+---
+
+<SiteLayout activeSite={activeSite} title={`404 Not Found | ${siteName}`}>
+  <section
+    class="mx-auto w-full max-w-2xl rounded-2xl border border-surface-border bg-surface px-7 py-10 text-left text-page-fg shadow-sm md:px-10"
+  >
+    <h1 class="title-line">404 Not Found</h1>
+
+    <blockquote class="mt-5 text-muted-fg">
+      {verses.map(([english, chinese]) => (
+          <p class="reveal-line verse-line">
+            <span class="translation" lang="zh-CN">{chinese}</span>
+            <span lang="en">{english}</span>
+          </p>
+        ))}
+    </blockquote>
+
+    <p
+      class="reveal-line attribution-line border-t border-surface-border text-sm text-muted-fg"
+    >
+      <span class="translation" lang="zh-CN"
+        >这首小诗由 ChatGPT 倾情呈现。</span
+      >
+      <span lang="en"
+        >This petite verse is graciously presented by ChatGPT.</span
+      >
+    </p>
+  </section>
+</SiteLayout>
+
+<style>
+.reveal-line {
+  position: relative;
+  padding-top: 1.15rem;
+}
+
+.title-line {
+  font-size: 1.875rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--color-surface-fg);
+}
+
+.verse-line {
+  min-height: 2.85rem;
+  line-height: 1.55;
+}
+
+.attribution-line {
+  min-height: 4.1rem;
+  margin-top: 1.25rem;
+  padding-top: 2.35rem;
+}
+
+.translation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--color-primary);
+  font-size: 0.82em;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  opacity: 0;
+  filter: blur(3px);
+  transform: translateY(0.45rem);
+  transition:
+    opacity 280ms ease,
+    filter 360ms ease,
+    transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-line:hover > .translation {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .translation {
+    transition: opacity 1000ms linear;
+    transform: none;
+  }
+}
+</style>

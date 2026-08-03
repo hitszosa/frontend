@@ -1,0 +1,12 @@
+@import "./theme.css";
+@import "tailwindcss";
+@config "../tailwind/preset.ts";
+@source "../";
+
+:root {
+  font-smooth: subpixel-antialiased;
+}
+
+body {
+  @apply bg-page-bg text-page-fg dark:bg-page-bg;
+}

@@ -1,0 +1,90 @@
+---
+import { ClientRouter } from 'astro:transitions'
+import '../styles/global.css'
+import SiteFooter from './SiteFooter.astro'
+import SiteHeader, { type SiteId } from './SiteHeader.astro'
+
+interface Props {
+  activeSite?: SiteId
+  title?: string
+  description?: string
+  immersive?: boolean
+}
+
+const {
+  activeSite = 'landing',
+  title: providedTitle,
+  description: providedDescription,
+  immersive = false,
+} = Astro.props
+
+const site =
+  activeSite === 'landing'
+    ? {
+        origin: 'https://www.osa.moe',
+        title: 'HITSZ OSA — 哈尔滨工业大学（深圳）开源技术协会',
+        description:
+          '哈尔滨工业大学（深圳）开源技术协会：运营开源软件镜像站、技术 Wiki 与 Weekly，举办讲座、沙龙与开源活动。',
+      }
+    : {
+        origin: 'https://mirrors.osa.moe',
+        title: 'HITSZ OSA Mirrors',
+        description: '哈尔滨工业大学（深圳）开源技术协会开源软件镜像站',
+      }
+
+const title = providedTitle ?? site.title
+const description = providedDescription ?? site.description
+const currentPath = Astro.url.pathname
+const canonicalUrl = new URL(currentPath, Astro.site ?? site.origin)
+---
+
+<!doctype html>
+<html
+  lang="zh-CN"
+  data-default-theme-mode="system"
+  data-theme-storage-key="theme-preference"
+>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <title>{title}</title>
+    <meta name="description" content={description}>
+    <link rel="canonical" href={canonicalUrl}>
+    <link rel="icon" href="/favicon.ico">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+    <meta property="og:url" content={canonicalUrl}>
+    <meta property="og:site_name" content="HITSZ OSA">
+    <meta name="theme-color" content="#ffffff">
+    <script>
+    import '../client/theme-init'
+    </script>
+    <slot name="head" />
+  </head>
+  <body
+    class:list={[
+      'ui-sans m-0 flex min-h-screen flex-col bg-page-bg text-page-fg transition-colors duration-300 ease-in-out',
+      immersive && 'h-dvh overflow-hidden',
+    ]}
+  >
+    <ClientRouter />
+    <SiteHeader activeSite={activeSite} currentPath={currentPath} />
+
+    <main
+      class:list={[
+        'mx-auto w-full flex-1',
+        activeSite === 'landing'
+          ? 'max-w-6xl px-6 pt-16'
+          : immersive
+            ? 'flex h-dvh max-w-none overflow-hidden pt-16'
+            : 'flex max-w-screen-xl justify-around px-6 pt-28 pb-12 md:px-12',
+      ]}
+    >
+      <slot />
+    </main>
+
+    {!immersive && <SiteFooter />}
+  </body>
+</html>

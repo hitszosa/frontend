@@ -1,0 +1,23 @@
+---
+import HelpCodeInline from '../HelpCodeInline.vue'
+import { getHelpPageData } from '@/utils/help'
+
+interface Props {
+  pageId: string
+  templateId: string
+}
+
+const { pageId, templateId } = Astro.props
+const page = getHelpPageData(pageId)
+const template = page.templates[templateId]
+if (template === undefined) {
+  throw new Error(`Template ${templateId} not found for ${pageId}`)
+}
+---
+
+<HelpCodeInline
+  client:load
+  {pageId}
+  {template}
+  globalVariables={page.globalVariables}
+/>

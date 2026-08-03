@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import Layout from '../layouts/Layout.astro';
+import Layout from '@hitszosa/ui/components/SiteLayout.astro';
 import FriendLinkCard from '../components/FriendLinkCard.astro';
 
 const friendLinks = (await getCollection('friendLinks')).sort(

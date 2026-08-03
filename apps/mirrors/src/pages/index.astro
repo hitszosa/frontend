@@ -1,5 +1,5 @@
 ---
-import Layout from '../layouts/Layout.astro'
+import Layout from '@hitszosa/ui/components/SiteLayout.astro'
 import MirrorList from '@components/index/MirrorList/MirrorList.vue'
 import DownloadWidget from '@components/index/DownloadWidget/DownloadWidget.astro'
 import NewsWidget from '@components/index/NewsWidget/NewsWidget.astro'
@@ -12,7 +12,7 @@ const news = sortNewsByDateDesc(await getMirrorNews())
   .slice(0, 3)
 ---
 
-<Layout>
+<Layout activeSite="mirrors">
   <div
     class="flex w-full max-w-screen-xl flex-col space-y-12 md:items-start md:flex-row md:space-x-12 md:space-y-0"
   >

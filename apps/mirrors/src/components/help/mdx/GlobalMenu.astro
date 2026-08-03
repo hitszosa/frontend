@@ -1,0 +1,13 @@
+---
+import type { InputType } from '@hitszosa/mirrorz-parser'
+import HelpGlobalMenu from '../HelpGlobalMenu.vue'
+
+interface Props {
+  id: string
+  menus: InputType[]
+}
+
+const { id, menus } = Astro.props
+---
+
+<HelpGlobalMenu client:load {id} {menus} />

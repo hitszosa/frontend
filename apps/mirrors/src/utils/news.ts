@@ -13,7 +13,7 @@ export const getMirrorNews = async (now = new Date()) =>
 export const toArticleDigest = (
   entry: CollectionEntry<'news'>,
 ): ArticleDigest => ({
-  _path: `/news/${entry.id}`,
+  _path: `https://www.osa.moe/announcements/${entry.id}/`,
   title: entry.data.title,
   description: entry.data.summary,
   date: entry.data.date.toISOString(),

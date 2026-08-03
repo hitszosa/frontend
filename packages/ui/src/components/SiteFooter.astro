@@ -44,6 +44,41 @@ const socialLinks = [
       ))}
   </p>
   {showConsoleHint && (
-    <p class="console-easter-egg my-2">More information in browser console</p>
+    <p class="my-2">
+      <span class="console-easter-egg inline-block cursor-help">
+        More information in browser console
+      </span>
+    </p>
   )}
 </footer>
+
+<style>
+.console-easter-egg:hover {
+  animation: console-hint-shake 420ms ease-in-out;
+}
+
+@keyframes console-hint-shake {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0);
+  }
+  20% {
+    transform: translateX(-2px) rotate(-1deg);
+  }
+  40% {
+    transform: translateX(2px) rotate(1deg);
+  }
+  60% {
+    transform: translateX(-1px) rotate(-0.5deg);
+  }
+  80% {
+    transform: translateX(1px) rotate(0.5deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .console-easter-egg:hover {
+    animation: none;
+  }
+}
+</style>

@@ -1,5 +1,5 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from '@hitszosa/ui/components/SiteLayout.astro';
 import { getCollection } from 'astro:content';
 
 const services = (await getCollection('services')).sort(

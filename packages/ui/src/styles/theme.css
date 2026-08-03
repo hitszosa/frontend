@@ -25,6 +25,8 @@
   --ui-activity: #d97706;
   --ui-activity-fg: #92400e;
   --ui-success: #059669;
+  --ui-warn: #d97706;
+  --ui-danger: #dc2626;
   --ui-graph-primary: #576edb;
   --ui-graph-secondary: #8762d3;
   --ui-graph-highlight: #d97706;
@@ -55,6 +57,8 @@
   --ui-activity: #fbbf24;
   --ui-activity-fg: #fcd34d;
   --ui-success: #34d399;
+  --ui-warn: #fbbf24;
+  --ui-danger: #f87171;
   --ui-graph-primary: #97b9f0;
   --ui-graph-secondary: #bab1ec;
   --ui-graph-highlight: #fbbf24;
