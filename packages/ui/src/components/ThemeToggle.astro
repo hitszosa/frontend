@@ -1,0 +1,116 @@
+---
+interface Props {
+  size?: 'sm' | 'md' | 'lg'
+  defaultMode?: 'light' | 'dark' | 'system'
+  storageKey?: string
+  class?: string
+}
+
+const {
+  size = 'md',
+  defaultMode = 'system',
+  storageKey = 'theme-preference',
+  class: className = '',
+} = Astro.props
+
+const sizeClasses = {
+  sm: {
+    button: 'h-8 w-8',
+    icon: 'text-base',
+  },
+  md: {
+    button: 'h-9 w-9',
+    icon: 'text-lg',
+  },
+  lg: {
+    button: 'h-10 w-10',
+    icon: 'text-xl',
+  },
+} as const
+
+const currentSize = sizeClasses[size]
+---
+
+<theme-toggle
+  class={className}
+  data-default-mode={defaultMode}
+  data-storage-key={storageKey}
+>
+  <button
+    class:list={[
+      'theme-toggle inline-flex items-center justify-center leading-none p-[1em] rounded-full border border-transparent bg-surface/55 text-muted-fg opacity-60 shadow-[rgba(0,0,0,0.06)_0px_2px_8px_-4px] backdrop-blur-sm transition-all duration-300 ease-in-out hover:-translate-y-[1px] hover:border-surface-border hover:bg-surface/85 hover:text-primary hover:opacity-100 focus-visible:opacity-100 focus-visible:border-surface-border focus-visible:outline-none hover:cursor-pointer',
+      currentSize.button,
+    ]}
+    type="button"
+    aria-label="Switch theme mode"
+    title="Switch theme mode"
+  >
+    <iconify-icon
+      class:list={['block leading-none', currentSize.icon]}
+      style="display:block"
+      icon="material-symbols:light-mode"
+      aria-hidden="true"
+    ></iconify-icon>
+  </button>
+</theme-toggle>
+
+<script>
+import 'iconify-icon'
+import {
+  applyTheme,
+  cycleThemeMode,
+  getStoredThemeMode,
+  saveThemeMode,
+  isThemeMode,
+  themeIcons,
+} from '../client/theme'
+import type { ThemeMode } from '../client/theme'
+
+class OsaThemeToggleElement extends HTMLElement {
+  connectedCallback() {
+    const button = this.querySelector('.theme-toggle')
+    const icon = this.querySelector('iconify-icon')
+    const storageKey = this.dataset.storageKey ?? 'theme-preference'
+    const defaultMode = isThemeMode(this.dataset.defaultMode)
+      ? this.dataset.defaultMode
+      : 'system'
+
+    const syncActiveState = (mode: ThemeMode) => {
+      icon?.setAttribute('icon', themeIcons[mode] ?? themeIcons.system)
+      button?.setAttribute('data-mode', mode)
+      button?.setAttribute(
+        'aria-label',
+        `Theme mode: ${mode}. Click to cycle modes`,
+      )
+      button?.setAttribute('title', `Theme mode: ${mode}`)
+    }
+
+    const savedMode = getStoredThemeMode(storageKey, defaultMode)
+
+    applyTheme(savedMode)
+    syncActiveState(savedMode)
+
+    button?.addEventListener('click', () => {
+      const currentMode = getStoredThemeMode(storageKey, defaultMode)
+      const nextMode = cycleThemeMode(currentMode)
+
+      saveThemeMode(nextMode, storageKey)
+      applyTheme(nextMode)
+      syncActiveState(nextMode)
+    })
+
+    const media = window.matchMedia('(prefers-color-scheme: dark)')
+    media.addEventListener('change', () => {
+      const mode = getStoredThemeMode(storageKey, defaultMode)
+      if (mode === 'system') {
+        applyTheme(mode)
+        syncActiveState(mode)
+      }
+    })
+  }
+}
+
+if (!customElements.get('theme-toggle')) {
+  customElements.define('theme-toggle', OsaThemeToggleElement)
+}
+</script>

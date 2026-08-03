@@ -1,0 +1,49 @@
+{
+  "name": "@hitszosa/ui",
+  "private": true,
+  "description": "Astro-first shared UI assets, theme tokens, and components for HITSZ OSA sites.",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "astro",
+    "tailwindcss",
+    "hitszosa",
+    "osa"
+  ],
+  "scripts": {
+    "check": "astro check",
+    "lint": "eslint src eslint.config.mjs",
+    "lint:fix": "eslint src eslint.config.mjs --fix",
+    "format": "biome format --write .",
+    "format:check": "biome format ."
+  },
+  "exports": {
+    "./tailwind/preset": "./src/tailwind/preset.ts",
+    "./tailwind/preset.ts": "./src/tailwind/preset.ts",
+    "./styles/theme.css": "./src/styles/theme.css",
+    "./client": "./src/client/index.ts",
+    "./client/shiki": "./src/client/shiki.ts",
+    "./client/theme": "./src/client/theme.ts",
+    "./client/theme-init": "./src/client/theme-init.ts",
+    "./components/*": "./src/components/*",
+    "./assets/*": "./src/assets/*",
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@tailwindcss/typography": "^0.5.19",
+    "iconify-icon": "^3.0.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "catalog:",
+    "@biomejs/biome": "catalog:",
+    "@eslint/js": "catalog:",
+    "@hitszosa/eslint-config": "workspace:*",
+    "@typescript-eslint/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "astro": "catalog:",
+    "eslint": "catalog:",
+    "eslint-plugin-astro": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:"
+  }
+}

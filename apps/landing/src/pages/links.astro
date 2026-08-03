@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import FriendLinkCard from '../components/FriendLinkCard.astro';
+
+const friendLinks = (await getCollection('friendLinks')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Layout title="友情链接 | HITSZ OSA" description="HITSZ OSA 友情链接">
+  <div class="py-14">
+    <div class="flex items-baseline justify-between">
+      <h1 class="ui-mono text-xs tracking-widest text-muted-fg">
+        LINKS / 友情链接
+      </h1>
+      <span class="ui-mono text-xs text-muted-fg">{friendLinks.length} 个</span>
+    </div>
+    <p class="mt-6 max-w-xl text-sm leading-relaxed text-muted-fg">
+      开源让彼此连接——欢迎
+      <a
+        href="https://github.com/hitszosa/osa-moe-landing-page/issues/new"
+        target="_blank"
+        rel="noreferrer noopener"
+        class="text-primary underline decoration-dotted underline-offset-4"
+        >提个 issue</a
+      >
+      互换友链。
+    </p>
+    <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {friendLinks.map((link) => <FriendLinkCard link={link} />)}
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,38 @@
+{
+  "name": "@hitszosa/landing",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "dev:example": "CONTENT_SOURCE=example astro dev",
+    "build": "astro build",
+    "build:example": "CONTENT_SOURCE=example astro build",
+    "check": "astro check",
+    "preview": "astro preview",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "biome format --write .",
+    "format:check": "biome format ."
+  },
+  "dependencies": {
+    "@astrojs/mdx": "5.0.6",
+    "@hitszosa/ui": "workspace:*",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "catalog:",
+    "tailwindcss": "catalog:"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@astrojs/check": "catalog:",
+    "@biomejs/biome": "catalog:",
+    "@eslint/js": "catalog:",
+    "@hitszosa/eslint-config": "workspace:*",
+    "@typescript-eslint/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "eslint": "catalog:",
+    "eslint-plugin-astro": "catalog:",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "typescript": "catalog:"
+  }
+}

@@ -1,0 +1,8 @@
+@import "@hitszosa/ui/styles/theme.css";
+@import "tailwindcss";
+@config "@hitszosa/ui/tailwind/preset";
+@source "../../node_modules/@hitszosa/ui/src";
+
+body {
+  @apply bg-page-bg text-page-fg dark:bg-page-bg;
+}

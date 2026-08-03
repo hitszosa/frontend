@@ -1,0 +1,49 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+interface Props extends HTMLAttributes<'footer'> {
+  showConsoleHint?: boolean
+}
+
+const { class: className, showConsoleHint = true, ...props } = Astro.props
+
+const socialLinks = [
+  { name: 'GitHub', href: 'https://github.com/hitszosa' },
+  {
+    name: 'QQ 群',
+    href: 'https://qm.qq.com/cgi-bin/qm/qr?k=EmOyWeZrOaOeSoVrVLoozyKYdvjOia_t',
+  },
+  { name: 'Bilibili', href: 'https://space.bilibili.com/1124374292' },
+]
+---
+
+<footer
+  {...props}
+  class:list={[
+    'mt-16 border-t border-surface-border px-6 pt-8 pb-10 text-center text-xs text-muted-fg',
+    className,
+  ]}
+>
+  <p class="my-2">
+    HITSZ OSA · 哈尔滨工业大学（深圳）开源技术协会 · Copyleft
+    {new Date().getFullYear()}
+  </p>
+  <p class="my-2">
+    {socialLinks.map(({ name, href }, index) => (
+        <>
+          <a
+            href={href}
+            target="_blank"
+            rel="noreferrer noopener"
+            class="text-inherit no-underline transition-colors hover:text-primary"
+          >
+            {name}
+          </a>
+          {index < socialLinks.length - 1 && <span class="mx-3">·</span>}
+        </>
+      ))}
+  </p>
+  {showConsoleHint && (
+    <p class="console-easter-egg my-2">More information in browser console</p>
+  )}
+</footer>

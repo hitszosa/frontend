@@ -1,0 +1,163 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Badge from '../../components/Badge.astro';
+import RelatedLink from '../../components/content/RelatedLink.astro';
+
+export async function getStaticPaths() {
+  const events = await getCollection('events');
+  return events.map((event) => ({
+    params: { id: event.id },
+    props: { event },
+  }));
+}
+
+interface Props {
+  event: CollectionEntry<'events'>;
+}
+
+const { event } = Astro.props;
+const { Content } = await render(event);
+const {
+  title,
+  date,
+  endDate,
+  location,
+  type,
+  summary,
+  upcoming,
+  cover,
+  coverAlt,
+} = event.data;
+const formatLongDate = (value: Date) =>
+  new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(value);
+const dateLabel = endDate
+  ? `${formatLongDate(date)} — ${formatLongDate(endDate)}`
+  : formatLongDate(date);
+---
+
+<Layout title={`${title} | HITSZ OSA`} description={summary}>
+  <article class="mx-auto max-w-3xl py-12 md:py-16">
+    <a
+      href="/updates"
+      class="ui-mono text-sm text-primary no-underline hover:underline"
+      >← 返回动态</a
+    >
+
+    <header class="mt-8 border-b border-surface-border pb-10">
+      <div
+        class="flex flex-wrap items-center gap-2 ui-mono text-xs text-muted-fg"
+      >
+        <Badge tone="secondary" size="md">活动</Badge>
+        <Badge tone="muted" size="md">{type}</Badge>
+        {upcoming && (
+            <Badge tone="warning" size="md" mono>
+              即将举行
+            </Badge>
+          )}
+      </div>
+      <h1
+        class="mt-5 text-3xl font-bold leading-tight tracking-tight text-page-fg md:text-5xl"
+      >
+        {title}
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg leading-8 text-muted-fg">{summary}</p>
+      <dl class="mt-7 grid gap-4 text-sm sm:grid-cols-2">
+        <div class="border-l-2 border-primary pl-4">
+          <dt class="ui-mono text-xs text-muted-fg">日期</dt>
+          <dd class="mt-1 text-surface-fg">
+            <time datetime={date.toISOString()}>{dateLabel}</time>
+          </dd>
+        </div>
+        <div class="border-l-2 border-surface-border pl-4">
+          <dt class="ui-mono text-xs text-muted-fg">地点</dt>
+          <dd class="mt-1 text-surface-fg">
+            {location || '待定'}
+          </dd>
+        </div>
+      </dl>
+    </header>
+
+    {cover && (
+        <img
+          src={cover}
+          alt={coverAlt ?? title}
+          class="mt-10 aspect-video w-full rounded-xl border border-surface-border object-cover"
+        />
+      )}
+
+    <div class="event-content mt-10">
+      <Content components={{ RelatedLink }} />
+    </div>
+
+    <footer class="mt-12 border-t border-surface-border pt-8">
+      <a
+        href="/updates"
+        class="text-sm text-primary no-underline hover:underline"
+        >查看全部动态 →</a
+      >
+    </footer>
+  </article>
+
+  <style>
+  .event-content :global(h2) {
+    margin-top: 2.75rem;
+    color: var(--ui-surface-fg);
+    font-size: 1.375rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+  }
+
+  .event-content :global(h3) {
+    margin-top: 2rem;
+    color: var(--ui-surface-fg);
+    font-size: 1.05rem;
+    font-weight: 650;
+  }
+
+  .event-content :global(p),
+  .event-content :global(li) {
+    color: var(--ui-page-fg);
+    font-size: 1rem;
+    line-height: 1.9;
+  }
+
+  .event-content :global(p) {
+    margin-top: 1.1rem;
+  }
+  .event-content :global(ul),
+  .event-content :global(ol) {
+    margin-top: 1rem;
+    padding-left: 1.4rem;
+  }
+  .event-content :global(li + li) {
+    margin-top: 0.45rem;
+  }
+  .event-content :global(strong) {
+    color: var(--ui-surface-fg);
+    font-weight: 650;
+  }
+  .event-content :global(a) {
+    color: var(--ui-primary);
+    text-underline-offset: 0.2em;
+  }
+  .event-content :global(code) {
+    border-radius: 0.25rem;
+    background: var(--ui-inset);
+    padding: 0.15em 0.4em;
+    font-family: var(--ui-font-mono, ui-monospace, monospace);
+    font-size: 0.9em;
+    color: var(--ui-inset-fg);
+  }
+  .event-content :global(blockquote) {
+    margin: 1.75rem 0;
+    border-left: 2px solid var(--ui-primary);
+    padding-left: 1rem;
+  }
+  </style>
+</Layout>

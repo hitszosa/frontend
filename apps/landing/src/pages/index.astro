@@ -1,0 +1,369 @@
+---
+import { getCollection } from 'astro:content';
+import { osaLogoPub } from '@hitszosa/ui';
+import Layout from '../layouts/Layout.astro';
+import Badge from '../components/Badge.astro';
+import UpdateBoard from '../components/UpdateBoard.astro';
+import { getUpdates } from '../lib/updates';
+
+const services = (await getCollection('services')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const friendLinks = (await getCollection('friendLinks')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const now = new Date();
+const updates = await getUpdates(now);
+const feed = updates.slice(0, 6);
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat('zh-CN', {
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
+const updateRecords = updates;
+const earliestRecord = updateRecords.length
+  ? new Date(Math.min(...updateRecords.map((entry) => entry.date.getTime())))
+  : new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 125),
+    );
+const heatmapStart = new Date(
+  Date.UTC(
+    earliestRecord.getUTCFullYear(),
+    earliestRecord.getUTCMonth(),
+    earliestRecord.getUTCDate() - earliestRecord.getUTCDay(),
+  ),
+);
+const recordsByDay = new Map<string, number>();
+for (const entry of updateRecords) {
+  const day = entry.date.toISOString().slice(0, 10);
+  recordsByDay.set(day, (recordsByDay.get(day) ?? 0) + 1);
+}
+const heatmapDays = Array.from({ length: 126 }, (_, index) => {
+  const date = new Date(heatmapStart);
+  date.setUTCDate(date.getUTCDate() + index);
+  const key = date.toISOString().slice(0, 10);
+  return { date, count: recordsByDay.get(key) ?? 0 };
+});
+---
+
+<Layout title="HITSZ 开源技术协会">
+  <section
+    id="top"
+    class="relative isolate overflow-hidden border-b border-surface-border py-16 md:py-24"
+  >
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 1000 310"
+      preserveAspectRatio="none"
+      class="pointer-events-none absolute inset-x-0 top-10 z-[-1] h-[22rem] w-full opacity-65 dark:opacity-35"
+    >
+      <path
+        id="branch-yellow"
+        d="M-40 82 C165 42 300 64 465 82 S716 190 1040 146"
+        fill="none"
+        stroke="#e8c95c"
+        stroke-width="2"
+      ></path>
+      <path
+        id="branch-blue"
+        d="M-50 270 C114 222 273 236 422 172 S700 135 1040 75"
+        fill="none"
+        stroke="#94a4e7"
+        stroke-width="2"
+      ></path>
+      <path
+        id="branch-violet"
+        d="M-40 252 C182 180 332 231 526 224 S766 235 1038 226"
+        fill="none"
+        stroke="#c2b7e2"
+        stroke-width="2"
+      ></path>
+      <circle class="moving-node" r="5" fill="#e6c24f">
+        <animateMotion
+          dur="188s"
+          begin={`-${Math.floor(Math.random() * 188)}s`}
+          repeatCount="indefinite"
+          path="M-40 82 C165 42 300 64 465 82 S716 190 1040 146"
+        ></animateMotion>
+      </circle>
+      <g class="moving-node">
+        <circle r="12" fill="none" stroke="#94a4e7" stroke-width="2"></circle>
+        <circle r="5" fill="#91a0e4"></circle>
+        <animateMotion
+          dur="143s"
+          begin={`-${Math.floor(Math.random() * 143)}s`}
+          repeatCount="indefinite"
+          path="M-50 270 C114 222 273 236 422 172 S700 135 1040 75"
+        ></animateMotion>
+      </g>
+      <circle class="moving-node" r="5" fill="#bcaee0">
+        <animateMotion
+          dur="58s"
+          begin={`-${Math.floor(Math.random() * 58)}s`}
+          repeatCount="indefinite"
+          path="M-40 252 C182 180 332 231 526 224 S766 235 1038 226"
+        ></animateMotion>
+      </circle>
+    </svg>
+    <div
+      class="relative mx-auto grid max-w-4xl gap-10 md:grid-cols-[minmax(0,1fr)_20rem] md:items-end"
+    >
+      <div>
+        <div class="flex items-center gap-3">
+          <img src={osaLogoPub.src} alt="" class="h-12 w-12">
+          <span class="ui-mono text-xs tracking-widest text-muted-fg"
+            >HITSZ · OPEN SOURCE ASSOCIATION</span
+          >
+        </div>
+        <h1
+          aria-label="HITSZ 开源技术协会"
+          class="mt-7 text-4xl font-bold tracking-tight text-page-fg md:text-6xl"
+        >
+          HITSZ
+          <ruby class="title-ruby outline-none" tabindex="0"
+            >开源技术协会<rt
+              ><span
+                class="title-expansion whitespace-nowrap ui-mono text-xs font-medium tracking-[0.16em] text-muted-fg"
+                ><span class="font-bold text-primary">O</span>pen
+                <span class="font-bold text-primary">S</span>ource
+                <span class="font-bold text-primary">A</span>ssociation</span
+              ></rt
+            ></ruby
+          >
+        </h1>
+        <p class="mt-5 max-w-2xl text-base leading-7 text-muted-fg md:text-lg">
+          我们是 HITSZ 开源技术协会（a.k.a. HITSZ
+          OSA），是由哈尔滨工业大学（深圳）学生中的 Linux
+          用户和开源软件爱好者自发组建的学生社团。
+          我们致力于维护学校的开源基础建设，提升学校开源氛围，为开源技术爱好者提供交流平台。
+        </p>
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a
+            href="https://github.com/hitszosa/"
+            class="rounded-md bg-primary px-5 py-2.5 ui-mono text-sm font-medium text-white no-underline hover:bg-osa-600 dark:text-slate-900"
+            >git clone hitszosa</a
+          ><a
+            href="/updates"
+            class="rounded-md border border-surface-border bg-surface px-5 py-2.5 text-sm text-surface-fg no-underline hover:border-primary/50 hover:text-primary"
+            >动态</a
+          ><a
+            href="/about"
+            class="px-4 py-2.5 text-sm text-muted-fg no-underline hover:text-primary"
+            >关于 →</a
+          >
+        </div>
+      </div>
+      <figure
+        class="m-0 rounded-lg border border-surface-border bg-surface/90 p-4"
+        aria-labelledby="update-map-caption"
+      >
+        <figcaption
+          id="update-map-caption"
+          class="flex items-baseline justify-between"
+        >
+          <span
+            class="ui-mono text-[10px] font-semibold tracking-widest text-muted-fg"
+            >UPDATE MAP</span
+          ><span class="ui-mono text-[10px] text-muted-fg"
+            >{updateRecords.length}
+            records</span
+          >
+        </figcaption>
+        <div
+          class="mt-4 grid grid-flow-col grid-rows-7 gap-1"
+          aria-label="2026 年动态记录热力图"
+        >
+          {heatmapDays.map((day) => (
+              <span
+                title={`${day.date.toLocaleDateString('zh-CN')}：${day.count} 条记录`}
+                class:list={[
+                  'aspect-square rounded-[2px]',
+                  day.count === 0
+                    ? 'bg-inset'
+                    : day.count === 1
+                      ? 'bg-primary/45'
+                      : day.count === 2
+                        ? 'bg-primary/70'
+                        : 'bg-primary',
+                ]}
+              />
+            ))}
+        </div>
+        <div
+          class="mt-3 flex items-center justify-between text-[10px] text-muted-fg"
+        >
+          <span class="ui-mono"
+            >{heatmapStart.toLocaleDateString('zh-CN', {
+                month: 'short',
+              })}</span
+          ><span>动态归档</span>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <UpdateBoard updates={updates} />
+
+  <section id="updates" class="border-b border-surface-border py-14">
+    <div class="flex items-baseline justify-between">
+      <h2 class="ui-mono text-xs tracking-widest text-muted-fg">
+        UPDATES / 动态
+      </h2>
+      <a
+        href="/updates"
+        class="ui-mono text-xs text-primary no-underline hover:underline"
+        >全部 →</a
+      >
+    </div>
+    <ul
+      class="mt-7 overflow-hidden rounded-lg border border-surface-border bg-surface"
+    >
+      {feed.map((entry, index) => (
+          <li class="flex items-center gap-3 border-b border-surface-border px-4 py-4 text-base last:border-0 hover:bg-page-bg sm:px-5">
+            <>
+              <span class="ui-mono hidden text-xs text-muted-fg sm:inline">
+                {['97eda1b', '34b7bd9', '15bf5b6'][index] ?? '0a3f712'}
+              </span>
+              <Badge
+                tone={
+                  entry.warning
+                    ? 'warning'
+                    : entry.kind === 'event'
+                      ? 'secondary'
+                      : entry.kind === 'article'
+                        ? 'success'
+                        : 'primary'
+                }
+                mono
+              >
+                {entry.pinned ? `置顶 · ${entry.label}` : entry.label}
+              </Badge>
+              <a
+                href={entry.href}
+                class="min-w-0 flex-1 truncate text-surface-fg no-underline hover:text-primary"
+              >
+                {entry.title}
+              </a>
+              <time
+                class="ui-mono shrink-0 text-xs text-muted-fg"
+                datetime={entry.date.toISOString()}
+              >
+                {formatDate(entry.date)}
+              </time>
+            </>
+          </li>
+        ))}
+    </ul>
+  </section>
+
+  <section id="services" class="grid gap-12 py-14 md:grid-cols-2">
+    <div>
+      <div class="flex items-baseline justify-between">
+        <h2 class="ui-mono text-xs tracking-widest text-muted-fg">
+          SERVICES &amp; PRODUCTS / 服务与产品
+        </h2>
+        <a
+          href="/about"
+          class="ui-mono text-xs text-primary no-underline hover:underline"
+          >全部 →</a
+        >
+      </div>
+      <ul
+        class="mt-6 divide-y divide-surface-border border-y border-surface-border"
+      >
+        {services.map((item) => (
+            <li>
+              <a
+                href={item.data.href}
+                target="_blank"
+                rel="noreferrer noopener"
+                class="group flex items-center justify-between gap-4 py-3 no-underline"
+              >
+                <span class="flex min-w-0 items-center gap-3">
+                  <span
+                    class="ui-mono shrink-0 rounded px-1.5 py-0.5 text-[10px]"
+                    style={
+                      item.data.category === 'service'
+                        ? 'background: color-mix(in srgb, var(--ui-success, var(--ui-secondary)) 14%, transparent); color: var(--ui-success, var(--ui-secondary));'
+                        : 'background: color-mix(in srgb, var(--ui-primary) 14%, transparent); color: var(--ui-primary);'
+                    }
+                  >
+                    {item.data.category === 'service' ? '服务' : '项目'}
+                  </span>
+                  <span class="font-medium text-surface-fg group-hover:text-primary">
+                    {item.data.name}
+                  </span>
+                </span>
+                <span class="ui-mono shrink-0 text-xs text-muted-fg">
+                  {item.data.scope === 'campus'
+                    ? '校内 '
+                    : item.data.status === 'developing'
+                      ? '开发中 '
+                      : item.data.status === 'beta'
+                        ? 'Beta '
+                        : ''}
+                  ↗
+                </span>
+              </a>
+            </li>
+          ))}
+      </ul>
+    </div>
+    <div>
+      <div class="flex items-baseline justify-between">
+        <h2 class="ui-mono text-xs tracking-widest text-muted-fg">
+          LINKS / 友链
+        </h2>
+        <a
+          href="/links"
+          class="ui-mono text-xs text-primary no-underline hover:underline"
+          >全部 →</a
+        >
+      </div>
+      <div class="mt-6 flex flex-wrap gap-2">
+        {friendLinks.map((link) => (
+            <a
+              href={link.data.href}
+              target="_blank"
+              rel="noreferrer noopener"
+              class="rounded-full border border-surface-border px-3 py-2 text-sm text-surface-fg no-underline hover:border-primary/50 hover:text-primary"
+            >
+              {link.data.name}
+            </a>
+          ))}
+      </div>
+    </div>
+  </section>
+
+  <style>
+  .title-ruby {
+    ruby-position: over;
+  }
+
+  .title-expansion {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.4rem);
+    transition:
+      opacity 280ms ease-out,
+      transform 280ms ease-out;
+  }
+
+  .title-ruby:hover .title-expansion,
+  .title-ruby:focus-visible .title-expansion {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .title-expansion {
+      transform: none;
+      transition: none;
+    }
+
+    .moving-node {
+      display: none;
+    }
+  }
+  </style>
+</Layout>

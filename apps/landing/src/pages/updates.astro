@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+import UpdateItem from '../components/UpdateItem.astro';
+import { getUpdates } from '../lib/updates';
+
+const updates = await getUpdates();
+---
+
+<Layout
+  title="动态 | HITSZ OSA"
+  description="HITSZ OSA 动态：协会公告、活动信息与技术文章。"
+>
+  <div class="py-14">
+    <div class="flex items-baseline justify-between">
+      <h1 class="ui-mono text-xs tracking-widest text-muted-fg">
+        UPDATES / 动态
+      </h1>
+      <span class="ui-mono text-xs text-muted-fg">{updates.length} 条</span>
+    </div>
+
+    {updates.length > 0 ? (
+        <ul class="mt-10">
+          {updates.map((entry) => (
+            <UpdateItem entry={entry} />
+          ))}
+        </ul>
+      ) : (
+        <p class="ui-mono mt-10 text-sm text-muted-fg"># 暂无动态</p>
+      )}
+  </div>
+</Layout>

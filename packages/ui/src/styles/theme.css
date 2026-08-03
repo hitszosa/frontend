@@ -1,0 +1,88 @@
+:root {
+  --ui-page-bg: #f8fafc;
+  --ui-page-fg: #1e293b;
+  --ui-muted-fg: #94a3b8;
+  --ui-primary: #576edb;
+  --ui-secondary: #6f46bf;
+  --ui-osa-fg: #373da9;
+  --ui-osa-hover: #576edb;
+  --ui-surface: #ffffff;
+  --ui-surface-fg: #161a4d;
+  --ui-surface-border: #e2e8f0;
+  --ui-inset: #f1f5f9;
+  --ui-inset-fg: #1e293b;
+  --ui-inset-border: #cbd5e1;
+
+  /* Typography: CJK body, Latin UI, and code/data labels. */
+  --ui-font-sans:
+    "Noto Sans SC", "Noto Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --ui-font-latin: "Ubuntu", "Noto Sans", sans-serif;
+  --ui-font-mono:
+    "JetBrains Mono", "Cascadia Code", "SFMono-Regular",
+    "Noto Sans Mono CJK SC", "Sarasa Mono SC", monospace;
+
+  /* Semantic accents for community content and data visualisation. */
+  --ui-activity: #d97706;
+  --ui-activity-fg: #92400e;
+  --ui-success: #059669;
+  --ui-graph-primary: #576edb;
+  --ui-graph-secondary: #8762d3;
+  --ui-graph-highlight: #d97706;
+}
+
+.dark {
+  --ui-page-bg: #0f172a;
+  --ui-page-fg: #f8fafc;
+  --ui-muted-fg: #94a3b8;
+  --ui-primary: #c2dbf9;
+  --ui-secondary: #dad6f8;
+  --ui-osa-fg: #97b9f0;
+  --ui-osa-hover: #c2dbf9;
+  --ui-surface: #1e293b;
+  --ui-surface-fg: #f6f9fb;
+  --ui-surface-border: #334155;
+  --ui-inset: #020617;
+  --ui-inset-fg: #cbd5e1;
+  --ui-inset-border: #1e293b;
+
+  --ui-font-sans:
+    "Noto Sans SC", "Noto Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --ui-font-latin: "Ubuntu", "Noto Sans", sans-serif;
+  --ui-font-mono:
+    "JetBrains Mono", "Cascadia Code", "SFMono-Regular",
+    "Noto Sans Mono CJK SC", "Sarasa Mono SC", monospace;
+
+  --ui-activity: #fbbf24;
+  --ui-activity-fg: #fcd34d;
+  --ui-success: #34d399;
+  --ui-graph-primary: #97b9f0;
+  --ui-graph-secondary: #bab1ec;
+  --ui-graph-highlight: #fbbf24;
+}
+
+.ui-sans {
+  font-family: var(
+    --ui-font-sans,
+    "Noto Sans SC",
+    "Noto Sans",
+    "PingFang SC",
+    "Microsoft YaHei",
+    sans-serif
+  );
+}
+
+.ui-latin {
+  font-family: var(--ui-font-latin, "Ubuntu", "Noto Sans", sans-serif);
+}
+
+.ui-mono {
+  font-family: var(
+    --ui-font-mono,
+    "JetBrains Mono",
+    "Cascadia Code",
+    "SFMono-Regular",
+    "Noto Sans Mono CJK SC",
+    "Sarasa Mono SC",
+    monospace
+  );
+}

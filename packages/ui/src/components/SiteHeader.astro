@@ -1,0 +1,336 @@
+---
+import osaLogoPubAsset from '../assets/logos/osa-logo-pub.svg'
+import ThemeToggle from './ThemeToggle.astro'
+
+export type SiteId = 'landing' | 'mirrors'
+
+export interface SiteServiceLink {
+  name: string
+  href: string
+  category: 'service' | 'project'
+}
+
+interface Props {
+  activeSite: SiteId
+  currentPath?: string | null
+  services?: SiteServiceLink[]
+}
+
+const osaLogoPub = {
+  src: osaLogoPubAsset.src,
+  alt: 'OSA penguin holding a beer',
+} as const
+
+const {
+  activeSite,
+  currentPath = null,
+  services = [
+    {
+      name: '开源软件镜像站',
+      href: 'https://mirrors.osa.moe',
+      category: 'service',
+    },
+    {
+      name: '镜像使用帮助',
+      href: 'https://mirrors-help.osa.moe',
+      category: 'service',
+    },
+    {
+      name: 'OSA Wiki',
+      href: 'https://wiki.osa.moe',
+      category: 'service',
+    },
+    {
+      name: 'Weekly 周报',
+      href: 'https://weekly.hitsz.org',
+      category: 'service',
+    },
+    {
+      name: 'AI Gateway',
+      href: 'https://aigw.osa.moe',
+      category: 'service',
+    },
+    {
+      name: 'HITSZ Grader',
+      href: 'https://grader.hitsz.edu.cn',
+      category: 'service',
+    },
+    {
+      name: 'Awesome HITSZ',
+      href: 'https://github.com/hitszosa/awesome-hitsz',
+      category: 'project',
+    },
+    {
+      name: '哈工大论文 Typst 模板',
+      href: 'https://github.com/hitszosa/universal-hit-thesis',
+      category: 'project',
+    },
+  ],
+} = Astro.props
+
+const landingUrl = 'https://www.osa.moe'
+const navItems = [
+  { label: '首页', href: `${landingUrl}/`, site: 'landing', path: '/' },
+  {
+    label: '动态',
+    href: `${landingUrl}/updates`,
+    site: 'landing',
+    path: '/updates',
+  },
+  {
+    label: '友链',
+    href: `${landingUrl}/links`,
+    site: 'landing',
+    path: '/links',
+  },
+  {
+    label: '关于',
+    href: `${landingUrl}/about`,
+    site: 'landing',
+    path: '/about',
+  },
+  {
+    label: '镜像站',
+    href: 'https://mirrors.osa.moe',
+    site: 'mirrors',
+    path: '/',
+  },
+  {
+    label: 'Wiki',
+    href: 'https://wiki.osa.moe',
+    site: null,
+    path: null,
+  },
+] as const
+
+const normalizePath = (path: string | null) => {
+  if (!path || path === '/') return '/'
+  return path.endsWith('/') ? path.slice(0, -1) : path
+}
+
+const normalizedCurrentPath = normalizePath(currentPath)
+const isActive = (item: (typeof navItems)[number]) => {
+  if (item.site !== activeSite || item.path === null) return false
+  if (item.site === 'mirrors') return true
+
+  const itemPath = normalizePath(item.path)
+  if (itemPath === '/') return normalizedCurrentPath === '/'
+  return (
+    normalizedCurrentPath === itemPath ||
+    normalizedCurrentPath.startsWith(`${itemPath}/`)
+  )
+}
+
+const navLinkClass = (active: boolean) => [
+  'relative inline-flex py-2 text-sm font-medium no-underline transition-colors after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:-translate-x-1/2 after:rounded-full after:transition-all',
+  active
+    ? 'text-primary after:w-full after:bg-primary'
+    : 'text-osa-fg after:w-0 hover:text-primary hover:after:w-full hover:after:bg-osa-fg/40',
+]
+---
+
+<header
+  class="fixed top-0 left-0 z-50 w-full border-b border-surface-border/70 bg-surface/90 shadow-sm backdrop-blur-md backdrop-saturate-200"
+>
+  <div
+    class="mx-auto flex h-16 max-w-6xl items-center justify-between px-3 sm:px-6"
+  >
+    <a
+      href={`${landingUrl}/`}
+      class="flex items-center gap-2.5 no-underline"
+      aria-label="HITSZ OSA 首页"
+    >
+      <img src={osaLogoPub.src} alt={osaLogoPub.alt} class="h-9 w-9">
+      <span
+        class="hidden text-lg font-medium whitespace-nowrap text-surface-fg sm:inline"
+      >
+        HITSZ <span class="text-primary">OSA</span>
+      </span>
+    </a>
+
+    <div class="flex items-center gap-2 sm:gap-4">
+      <nav class="hidden items-center gap-5 md:flex" aria-label="主导航">
+        <ul class="flex list-none items-center gap-5 p-0">
+          {navItems.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={isActive(item) ? 'page' : undefined}
+                  class:list={navLinkClass(isActive(item))}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          <li class="service-menu-group relative">
+            <button
+              type="button"
+              aria-haspopup="menu"
+              class="relative inline-flex cursor-default items-center py-2 text-sm font-medium text-osa-fg transition-colors hover:text-primary focus-visible:text-primary"
+            >
+              服务与产品<span class="ml-1 text-[10px]" aria-hidden="true"
+                >⌄</span
+              >
+            </button>
+            <div
+              role="menu"
+              class="service-menu absolute top-full right-0 w-72 rounded-lg border border-surface-border bg-surface p-2 shadow-lg"
+            >
+              {services.map((item) => (
+                  <a
+                    role="menuitem"
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    class="group/item flex items-center gap-2 rounded-md px-3 py-2 text-sm text-surface-fg no-underline hover:bg-page-bg hover:text-primary focus:bg-page-bg"
+                  >
+                    <span
+                      class:list={[
+                        'ui-mono shrink-0 rounded px-1 py-0.5 text-[9px]',
+                        item.category === 'service'
+                          ? 'bg-success/10 text-success'
+                          : 'bg-primary/10 text-primary',
+                      ]}
+                    >
+                      {item.category === 'service' ? '服务' : '项目'}
+                    </span>
+                    <span class="min-w-0 flex-1 truncate">{item.name}</span>
+                    <span class="text-xs text-muted-fg group-hover/item:text-primary">
+                      ↗
+                    </span>
+                  </a>
+                ))}
+            </div>
+          </li>
+        </ul>
+      </nav>
+
+      <ThemeToggle size="sm" />
+
+      <details class="mobile-menu relative md:hidden">
+        <summary
+          class="flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-full border border-transparent text-osa-fg transition-colors hover:border-surface-border hover:bg-page-bg hover:text-primary focus-visible:outline-2 focus-visible:outline-primary [&::-webkit-details-marker]:hidden"
+          aria-label="打开主导航"
+        >
+          <span class="mobile-menu-icon" aria-hidden="true"></span>
+        </summary>
+        <div
+          class="fixed top-[4.5rem] right-3 left-3 max-h-[calc(100vh-5.5rem)] overflow-y-auto rounded-xl border border-surface-border bg-surface p-3 shadow-xl"
+        >
+          <nav aria-label="移动端主导航">
+            <ul class="grid list-none grid-cols-2 gap-1 p-0">
+              {navItems.map((item) => (
+                  <li>
+                    <a
+                      href={item.href}
+                      aria-current={isActive(item) ? 'page' : undefined}
+                      class:list={[
+                        'flex rounded-lg px-3 py-2.5 text-sm font-medium no-underline transition-colors',
+                        isActive(item)
+                          ? 'bg-primary/10 text-primary'
+                          : 'text-osa-fg hover:bg-page-bg hover:text-primary',
+                      ]}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+            </ul>
+          </nav>
+          <div class="mt-3 border-t border-surface-border pt-3">
+            <p
+              class="ui-mono m-0 px-3 pb-1 text-[10px] tracking-wider text-muted-fg"
+            >
+              服务与产品
+            </p>
+            <div class="grid gap-1 sm:grid-cols-2">
+              {services.map((item) => (
+                  <a
+                    href={item.href}
+                    class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-surface-fg no-underline hover:bg-page-bg hover:text-primary"
+                  >
+                    <span
+                      class:list={[
+                        'ui-mono rounded px-1 py-0.5 text-[9px]',
+                        item.category === 'service'
+                          ? 'bg-success/10 text-success'
+                          : 'bg-primary/10 text-primary',
+                      ]}
+                    >
+                      {item.category === 'service' ? '服务' : '项目'}
+                    </span>
+                    <span class="truncate">{item.name}</span>
+                  </a>
+                ))}
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<style>
+.service-menu {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition:
+    opacity 150ms ease-out,
+    transform 150ms ease-out,
+    visibility 150ms ease-out;
+}
+
+.service-menu-group:hover .service-menu,
+.service-menu-group:focus-within .service-menu {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.mobile-menu-icon,
+.mobile-menu-icon::before,
+.mobile-menu-icon::after {
+  display: block;
+  width: 1rem;
+  height: 1.5px;
+  border-radius: 999px;
+  background: currentColor;
+  transition:
+    transform 160ms ease,
+    opacity 160ms ease;
+}
+
+.mobile-menu-icon {
+  position: relative;
+}
+
+.mobile-menu-icon::before,
+.mobile-menu-icon::after {
+  position: absolute;
+  left: 0;
+  content: "";
+}
+
+.mobile-menu-icon::before {
+  transform: translateY(-5px);
+}
+
+.mobile-menu-icon::after {
+  transform: translateY(5px);
+}
+
+.mobile-menu[open] .mobile-menu-icon {
+  background: transparent;
+}
+
+.mobile-menu[open] .mobile-menu-icon::before {
+  transform: rotate(45deg);
+}
+
+.mobile-menu[open] .mobile-menu-icon::after {
+  transform: rotate(-45deg);
+}
+</style>

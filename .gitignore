@@ -1,0 +1,22 @@
+node_modules/
+.turbo/
+
+# Build outputs
+**/.astro/
+**/.nuxt/
+**/.output/
+**/dist/
+**/coverage/
+
+# Local design explorations
+**/design-proposals/
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Logs and editor files
+*.log
+.DS_Store
+.idea/

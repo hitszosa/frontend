@@ -1,0 +1,17 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "biomejs.biome",
+  "files.autoSave": "onFocusChange",
+  "[vue]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "eslint.codeActionsOnSave.mode": "problems",
+  "eslint.validate": ["javascript", "typescript", "vue", "html", "markdown"],
+  "eslint.experimental.useFlatConfig": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  }
+}

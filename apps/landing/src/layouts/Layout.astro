@@ -1,0 +1,57 @@
+---
+import '../styles/global.css';
+import SiteFooter from '@hitszosa/ui/components/SiteFooter.astro';
+import SiteHeader from '@hitszosa/ui/components/SiteHeader.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'HITSZ OSA — 哈尔滨工业大学（深圳）开源技术协会',
+  description = '哈尔滨工业大学（深圳）开源技术协会：运营开源软件镜像站、技术 Wiki 与 Weekly，举办讲座、沙龙与开源活动。',
+} = Astro.props;
+const currentPath = Astro.url.pathname;
+const canonicalUrl = new URL(currentPath, Astro.site ?? 'https://www.osa.moe');
+---
+
+<!doctype html>
+<html
+  lang="zh-CN"
+  data-default-theme-mode="system"
+  data-theme-storage-key="theme-preference"
+>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <title>{title}</title>
+    <meta name="description" content={description}>
+    <link rel="canonical" href={canonicalUrl}>
+    <link rel="icon" href="/favicon.ico">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+    <meta property="og:url" content={canonicalUrl}>
+    <meta property="og:site_name" content="HITSZ OSA">
+    <meta name="theme-color" content="#ffffff">
+    <script>
+    import '@hitszosa/ui/client/theme-init';
+
+    console.info('Welcome to the pub!');
+    console.info('Check out TXT record of tg.osa.moe');
+    </script>
+  </head>
+  <body
+    class="ui-sans m-0 flex min-h-screen flex-col bg-page-bg text-page-fg transition-colors duration-300 ease-in-out"
+  >
+    <SiteHeader activeSite="landing" currentPath={currentPath} />
+
+    <main class="mx-auto w-full max-w-6xl flex-1 px-6 pt-16">
+      <slot />
+    </main>
+
+    <SiteFooter />
+  </body>
+</html>
