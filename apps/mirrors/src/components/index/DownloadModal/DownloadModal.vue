@@ -37,6 +37,7 @@
         />
         <ul
           class="grow h-full min-h-0 overflow-y-auto list-disc p-1 pl-6 text-lg space-y-1"
+          style="scrollbar-width: none; -ms-overflow-style: none;"
         >
           <li v-for="resource in currentCollection" :key="resource.name">
             <a
@@ -86,3 +87,9 @@ const onCollectionUpdate = (_collection: string, index: number) => {
   collectionIndex.value = index
 }
 </script>
+
+<style scoped>
+ul::-webkit-scrollbar {
+  display: none;
+}
+</style>
