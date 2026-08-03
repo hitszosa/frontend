@@ -70,7 +70,7 @@ const canonicalUrl = new URL(currentPath, Astro.site ?? site.origin)
     ]}
   >
     <ClientRouter />
-    <SiteHeader activeSite={activeSite} currentPath={currentPath} />
+    <SiteHeader activeSite={activeSite} currentPath={currentPath} transition:persist/>
 
     <main
       class:list={[
@@ -85,6 +85,6 @@ const canonicalUrl = new URL(currentPath, Astro.site ?? site.origin)
       <slot />
     </main>
 
-    {!immersive && <SiteFooter />}
+    {!immersive && <SiteFooter transition:persist/>}
   </body>
 </html>

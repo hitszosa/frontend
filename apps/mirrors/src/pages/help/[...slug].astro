@@ -42,7 +42,7 @@ const pageTitle = `${route.fullTitle} | HITSZ OSA Mirrors`
     <aside
       class="hidden min-h-0 overflow-hidden border-r border-surface-border bg-surface md:block"
     >
-      <HelpSidebar client:load activePageId={route.cname} />
+      <HelpSidebar client:load transition:persist activePageId={route.cname} />
     </aside>
 
     <section
