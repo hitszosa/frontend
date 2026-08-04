@@ -52,6 +52,7 @@ const canonicalUrl = new URL(currentPath, Astro.site ?? site.origin)
     <meta name="description" content={description}>
     <link rel="canonical" href={canonicalUrl}>
     <link rel="icon" href="/favicon.ico">
+    {activeSite === 'landing' && <link rel="manifest" href="/manifest.json" />}
     <meta property="og:type" content="website">
     <meta property="og:title" content={title}>
     <meta property="og:description" content={description}>

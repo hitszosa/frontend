@@ -160,17 +160,23 @@ const navLinkClass = (active: boolean) => [
     <div class="flex items-center gap-2 sm:gap-4">
       <nav class="hidden items-center gap-5 md:flex" aria-label="主导航">
         <ul class="flex list-none items-center gap-5 p-0">
-          {navItems.map((item) => (
-              <li>
-                <a
-                  href={contextualHref(item.href)}
-                  aria-current={isActive(item) ? 'page' : undefined}
-                  class:list={navLinkClass(isActive(item))}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
+          {navItems.map((item) => {
+              const external = !isCurrentSiteHref(item.href)
+              return (
+                <li>
+                  <a
+                    href={contextualHref(item.href)}
+                    target={external ? '_blank' : undefined}
+                    rel={external ? 'noreferrer noopener' : undefined}
+                    aria-current={isActive(item) ? 'page' : undefined}
+                    class:list={navLinkClass(isActive(item))}
+                  >
+                    {item.label}
+                    {external && <span class="text-xs ml-0.5" aria-hidden="true">↗</span>}
+                  </a>
+                </li>
+              )
+            })}
           <li class="service-menu-group relative">
             <button
               type="button"
@@ -228,22 +234,28 @@ const navLinkClass = (active: boolean) => [
         >
           <nav aria-label="移动端主导航">
             <ul class="grid list-none grid-cols-2 gap-1 p-0">
-              {navItems.map((item) => (
-                  <li>
-                    <a
-                      href={contextualHref(item.href)}
-                      aria-current={isActive(item) ? 'page' : undefined}
-                      class:list={[
-                        'flex rounded-lg px-3 py-2.5 text-sm font-medium no-underline transition-colors',
-                        isActive(item)
-                          ? 'bg-primary/10 text-primary'
-                          : 'text-osa-fg hover:bg-page-bg hover:text-primary',
-                      ]}
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
+              {navItems.map((item) => {
+                  const external = !isCurrentSiteHref(item.href)
+                  return (
+                    <li>
+                      <a
+                        href={contextualHref(item.href)}
+                        target={external ? '_blank' : undefined}
+                        rel={external ? 'noreferrer noopener' : undefined}
+                        aria-current={isActive(item) ? 'page' : undefined}
+                        class:list={[
+                          'flex rounded-lg px-3 py-2.5 text-sm font-medium no-underline transition-colors',
+                          isActive(item)
+                            ? 'bg-primary/10 text-primary'
+                            : 'text-osa-fg hover:bg-page-bg hover:text-primary',
+                        ]}
+                      >
+                        {item.label}
+                        {external && <span class="text-xs ml-0.5" aria-hidden="true">↗</span>}
+                      </a>
+                    </li>
+                  )
+                })}
             </ul>
           </nav>
           <div class="mt-3 border-t border-surface-border pt-3">
