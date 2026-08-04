@@ -124,7 +124,7 @@ onUnmounted(() => {
 
 <template>
   <section
-    class="not-prose my-6 overflow-hidden rounded-xl border border-surface-border bg-surface"
+    class="not-prose my-6 overflow-hidden rounded-lg border border-surface-border bg-surface"
   >
     <div
       v-if="menus.length > 0"
@@ -159,7 +159,7 @@ onUnmounted(() => {
           >
         </template>
         <template v-else>
-          <span class="font-medium text-surface-fg">{{ menu.title }}</span>
+          <span class="font-medium text-surface-fg ml-2">{{ menu.title }}</span>
           <span v-if="menu.note" class="text-xs leading-5 text-muted-fg"
             >{{ menu.note }}</span
           >

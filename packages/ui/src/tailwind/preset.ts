@@ -72,6 +72,8 @@ export default {
         'inset-border': 'var(--ui-inset-border)',
         activity: 'var(--ui-activity)',
         'activity-fg': 'var(--ui-activity-fg)',
+        info: 'var(--ui-info)',
+        'info-fg': 'var(--ui-info-fg)',
         success: 'var(--ui-success)',
         danger: 'var(--ui-danger)',
         'graph-primary': 'var(--ui-graph-primary)',

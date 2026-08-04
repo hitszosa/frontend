@@ -88,7 +88,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
           :value="filter"
           type="search"
           placeholder="搜索镜像…"
-          class="h-10 w-full rounded-xl border border-surface-border bg-page-bg pr-3 pl-9 text-surface-fg outline-none placeholder:text-muted-fg focus:border-primary focus:ring-2 focus:ring-primary"
+          class="h-10 w-full rounded-lg border border-surface-border bg-page-bg pr-3 pl-9 text-surface-fg outline-none placeholder:text-muted-fg focus:border-primary focus:ring-2 focus:ring-primary"
           @input="onSearchInput"
         >
       </div>
@@ -123,7 +123,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
             v-if="helpSet.has(row.name)"
             :href="helpHref(row.name)"
             :aria-current="row.name === props.activePageId ? 'page' : undefined"
-            class="group flex min-h-10 items-center gap-2 rounded-xl px-3 py-2 no-underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            class="group flex min-h-10 items-center gap-2 rounded-lg px-3 py-2 no-underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             :class="
               row.name === props.activePageId
                 ? 'bg-primary/10 text-primary'
@@ -138,7 +138,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
           </a>
           <div
             v-else
-            class="flex min-h-10 items-center gap-2 rounded-xl px-3 py-2 text-sm text-muted-fg/65"
+            class="flex min-h-10 items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-fg/65"
             :title="`${row.name} 暂无使用帮助`"
           >
             <span class="min-w-0 flex-1 truncate">{{ row.name }}</span>

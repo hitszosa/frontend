@@ -62,7 +62,7 @@ onMounted(publish)
 
 <template>
   <section
-    class="not-prose my-6 rounded-xl border border-surface-border bg-page-bg/55 p-4"
+    class="not-prose my-6 rounded-lg border border-surface-border bg-page-bg/55 p-4"
   >
     <div class="grid gap-4 sm:grid-cols-2">
       <label

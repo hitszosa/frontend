@@ -70,7 +70,11 @@ const canonicalUrl = new URL(currentPath, Astro.site ?? site.origin)
     ]}
   >
     <ClientRouter />
-    <SiteHeader activeSite={activeSite} currentPath={currentPath} transition:persist/>
+    <SiteHeader
+      activeSite={activeSite}
+      currentPath={currentPath}
+      transition:persist
+    />
 
     <main
       class:list={[

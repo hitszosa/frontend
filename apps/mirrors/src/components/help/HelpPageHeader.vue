@@ -113,7 +113,7 @@ onMounted(async () => {
       <div>
         <span class="mb-2 block text-xs text-muted-fg">访问协议</span>
         <div
-          class="inline-flex rounded-xl border border-surface-border bg-surface p-1"
+          class="inline-flex rounded-lg border border-surface-border bg-surface p-1"
           role="group"
           aria-label="镜像访问协议"
         >
@@ -136,7 +136,7 @@ onMounted(async () => {
       </div>
 
       <label
-        class="inline-flex h-10 cursor-pointer items-center gap-2 rounded-xl border border-surface-border bg-surface px-3 text-sm text-surface-fg"
+        class="inline-flex h-10 cursor-pointer items-center gap-2 rounded-lg border border-surface-border bg-surface px-3 text-sm text-surface-fg"
       >
         <input
           v-model="sudoEnabled"

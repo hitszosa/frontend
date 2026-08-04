@@ -61,7 +61,7 @@ const pageTitle = `${route.fullTitle} | HITSZ OSA Mirrors`
           </label>
           <select
             id="mobile-help-page"
-            class="h-11 w-full rounded-xl border border-surface-border bg-surface px-3 text-surface-fg outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+            class="h-11 w-full rounded-lg border border-surface-border bg-surface px-3 text-surface-fg outline-none focus:border-primary focus:ring-2 focus:ring-primary"
           >
             {helpManifest.routes.map((item) => (
                 <option value={`/help/${item.slug}/`} selected={item.cname === route.cname}>
