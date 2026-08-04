@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 
 import generatedHelpPages from '@generated/help/help-list.json'
+import Tooltip from '@components/ui/Tooltip.vue'
 
 type MirrorStatusItem = {
   name: string
@@ -32,28 +33,15 @@ onMounted(async () => {
 </script>
 
 <template>
-  <span
-    class="help-coverage-stat relative inline-flex cursor-help items-center rounded-full border border-surface-border bg-surface px-3 py-1.5 text-sm text-muted-fg"
+  <Tooltip
+    class="help-coverage-stat items-center rounded-full border border-surface-border bg-surface px-3 py-1.5 text-sm text-muted-fg"
+    content="可用文档数 / 镜像总数"
     aria-live="polite"
-    aria-label="文档可用数 / 镜像总数"
-    tabindex="0"
+    aria-label="可用文档数 / 镜像总数"
   >
     <span class="ui-mono font-medium text-surface-fg">
       {{ availableHelpCount ?? '—' }}
       / {{ totalMirrorCount ?? '—' }} 篇帮助文档
     </span>
-    <span
-      role="tooltip"
-      class="help-coverage-tooltip pointer-events-none absolute top-full left-1/2 z-30 mt-2 -translate-x-1/2 rounded-lg border border-surface-border bg-surface px-2.5 py-1.5 text-xs whitespace-nowrap text-surface-fg opacity-0 shadow-sm transition-opacity"
-    >
-      文档可用数 / 镜像总数
-    </span>
-  </span>
+  </Tooltip>
 </template>
-
-<style scoped>
-.help-coverage-stat:hover .help-coverage-tooltip,
-.help-coverage-stat:focus-visible .help-coverage-tooltip {
-  opacity: 1;
-}
-</style>

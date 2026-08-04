@@ -36,6 +36,11 @@ const props = withDefaults(
     enableQuickSetup: false,
   },
 )
+const menuColumns = computed(() => {
+  const indexedMenus = props.menus.map((menu, index) => ({ menu, index }))
+  const midpoint = Math.ceil(indexedMenus.length / 2)
+  return [indexedMenus.slice(0, midpoint), indexedMenus.slice(midpoint)]
+})
 
 const menuValues = reactive<MenuValue[]>(
   props.menus.map((menu) => createInitialState([menu])),
@@ -128,48 +133,41 @@ onUnmounted(() => {
   >
     <div
       v-if="menus.length > 0"
-      class="grid gap-4 border-b border-surface-border bg-page-bg/55 p-4 sm:grid-cols-2"
+      class="grid gap-x-6 border-b border-surface-border bg-page-bg/55 p-4 lg:grid-cols-2"
     >
-      <label
-        v-for="(menu, index) in menus"
-        :key="`${menu.title}-${index}`"
-        class="text-sm"
-        :class="
-          'trueValue' in menu
-            ? 'flex items-start justify-between gap-3 rounded-lg border border-surface-border bg-surface px-3 py-2.5'
-            : 'grid gap-1.5'
-        "
+      <div
+        v-for="(column, columnIndex) in menuColumns"
+        :key="columnIndex"
+        class="min-w-0"
       >
-        <template v-if="'trueValue' in menu">
-          <span class="min-w-0">
-            <span class="block font-medium text-surface-fg"
-              >{{ menu.title }}</span
-            >
-            <span
-              v-if="menu.note"
-              class="mt-0.5 block text-xs leading-5 text-muted-fg"
-              >{{ menu.note }}</span
-            >
-          </span>
-          <input
-            type="checkbox"
-            :checked="menu.defaultValue"
-            class="mt-0.5 h-4 w-4 shrink-0 accent-primary"
-            @change="updateBoolean(index, $event)"
+        <label
+          v-for="(item, itemIndex) in column"
+          :key="`${item.menu.title}-${item.index}`"
+          :class="[
+            'grid min-h-16 grid-cols-[minmax(0,1fr)_minmax(8rem,14rem)] items-center gap-x-4 gap-y-1 border-b border-surface-border/80 text-sm',
+            item.index === props.menus.length - 1 ? 'mb-0 border-b-0' : 'lg:mb-4',
+            itemIndex === column.length - 1
+              ? 'lg:mb-0 lg:border-b-0'
+              : 'lg:pb-4',
+          ]"
+        >
+          <span class="min-w-0 font-medium text-surface-fg"
+            >{{ item.menu.title }}</span
           >
-        </template>
-        <template v-else>
-          <span class="font-medium text-surface-fg ml-2">{{ menu.title }}</span>
-          <span v-if="menu.note" class="text-xs leading-5 text-muted-fg"
-            >{{ menu.note }}</span
+          <input
+            v-if="'trueValue' in item.menu"
+            type="checkbox"
+            :checked="item.menu.defaultValue"
+            class="h-4 w-4 shrink-0 justify-self-end accent-primary"
+            @change="updateBoolean(item.index, $event)"
           >
           <select
-            v-if="'items' in menu"
-            class="h-10 rounded-lg border border-surface-border bg-surface px-3 text-surface-fg outline-none focus:border-primary focus:ring-2 focus:ring-primary"
-            @change="updateSelect(index, $event)"
+            v-else-if="'items' in item.menu"
+            class="h-10 w-full min-w-0 rounded-lg border border-surface-border bg-surface px-3 text-surface-fg outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+            @change="updateSelect(item.index, $event)"
           >
             <option
-              v-for="([ label ], optionIndex) in menu.items"
+              v-for="([ label ], optionIndex) in item.menu.items"
               :key="label"
               :value="optionIndex"
             >
@@ -179,12 +177,17 @@ onUnmounted(() => {
           <input
             v-else
             type="text"
-            :value="menu.defaultValue"
-            class="h-10 rounded-lg border border-surface-border bg-surface px-3 text-surface-fg outline-none focus:border-primary focus:ring-2 focus:ring-primary"
-            @input="updateText(index, $event)"
+            :value="item.menu.defaultValue"
+            class="h-10 w-full min-w-0 rounded-lg border border-surface-border bg-surface px-3 text-surface-fg outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+            @input="updateText(item.index, $event)"
           >
-        </template>
-      </label>
+          <span
+            v-if="item.menu.note"
+            class="col-span-2 text-xs leading-5 text-muted-fg"
+            >{{ item.menu.note }}</span
+          >
+        </label>
+      </div>
     </div>
 
     <header

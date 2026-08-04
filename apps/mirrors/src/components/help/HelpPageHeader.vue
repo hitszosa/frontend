@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import Tooltip from '@components/ui/Tooltip.vue'
 
 import {
   helpProtocolEvent,
@@ -85,24 +86,18 @@ onMounted(async () => {
         >
           {{ title }}
         </h1>
-        <span
-          class="group/status relative inline-flex shrink-0 cursor-help items-center"
+        <Tooltip
+          class="shrink-0 items-center"
           role="status"
           :aria-label="`镜像状态：${status}`"
-          tabindex="0"
+          :content="status"
         >
           <span
             class="h-2.5 w-2.5 rounded-full"
             :class="statusColor"
             aria-hidden="true"
           />
-          <span
-            role="tooltip"
-            class="ui-mono pointer-events-none absolute top-full left-1/2 z-20 mt-2 -translate-x-1/2 rounded-lg border border-surface-border bg-surface px-2.5 py-1.5 text-xs whitespace-nowrap text-surface-fg opacity-0 transition-opacity group-hover/status:opacity-100 group-focus/status:opacity-100"
-          >
-            {{ status }}
-          </span>
-        </span>
+        </Tooltip>
       </div>
       <p class="mt-3 mb-0 text-sm text-muted-fg">
         HITSZ OSA 开源软件镜像站使用帮助

@@ -20,39 +20,33 @@ const news = sortNewsByDateDesc(await getMirrorNews())
   <div
     class="flex w-full max-w-screen-xl flex-col space-y-12 md:items-start md:flex-row md:space-x-12 md:space-y-0"
   >
-    <div class="grow space-y-4">
+    <div class="grow space-y-4 md:order-first">
       <SectionHeading>
         <Icon slot="icon" name="icon-park-outline:dropbox" />
-        Index of mirrors
+        Index of Mirrors
       </SectionHeading>
       <MirrorList client:load />
     </div>
     <div
-      class="flex sticky top-24 h-min min-w-[20em] flex-col space-y-10 rounded-lg border border-surface-border bg-surface px-7 py-7 mt-10 shadow-sm md:w-[32vw] md:max-w-[30em]"
+      class="order-first flex h-min min-w-[20em] flex-col space-y-10 mb-4 md:order-last md:sticky md:mt-20 md:top-24 md:w-[32vw] md:max-w-[30em]"
     >
-      <section>
-        <a
-          href="/help/"
-          class="group flex items-center justify-between rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm no-underline transition-colors hover:border-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      <a
+        href="/help/"
+        class="group flex items-center justify-between rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm no-underline transition-colors hover:border-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      >
+        <span class="flex items-center gap-2 font-medium text-primary">
+          <Icon name="icon-park-outline:help" />
+          <span>Help · 镜像使用帮助</span>
+        </span>
+        <span
+          aria-hidden="true"
+          class="text-primary transition-transform group-hover:translate-x-1"
         >
-          <span class="flex items-center gap-2 font-medium text-primary">
-            <Icon name="icon-park-outline:help" />
-            <span>Help · 镜像使用帮助</span>
-          </span>
-          <span
-            aria-hidden="true"
-            class="text-primary transition-transform group-hover:translate-x-1"
-          >
-            →
-          </span>
-        </a>
-      </section>
-      <section>
-        <DownloadWidget />
-      </section>
-      <section>
-        <NewsWidget digests={news} />
-      </section>
+          →
+        </span>
+      </a>
+      <DownloadWidget />
+      <NewsWidget digests={news} />
     </div>
   </div>
 </Layout>

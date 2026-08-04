@@ -5,6 +5,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 
 import { useHelpListStore } from '@components/index/MirrorList/HelpListStore'
 import { useMirrorListStore } from '@components/index/MirrorList/MirrorListStore'
+import Tooltip from '@components/ui/Tooltip.vue'
 
 const props = defineProps<{
   activePageId: string
@@ -136,13 +137,13 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
               class="text-xs text-muted-fg opacity-0 transition-opacity group-hover:opacity-100 group-focus:opacity-100"
             />
           </a>
-          <div
+          <Tooltip
             v-else
-            class="flex min-h-10 items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-fg/65"
-            :title="`${row.name} 暂无使用帮助`"
+            :content="`${row.name} 暂无使用帮助`"
+            class="flex min-h-10 w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-fg/65"
           >
             <span class="min-w-0 flex-1 truncate">{{ row.name }}</span>
-          </div>
+          </Tooltip>
         </li>
       </ul>
     </nav>
