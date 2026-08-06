@@ -133,7 +133,7 @@ onUnmounted(() => {
   >
     <div
       v-if="menus.length > 0"
-      class="grid gap-x-6 border-b border-surface-border bg-page-bg/55 p-4 lg:grid-cols-2"
+      class="grid gap-x-6 border-b border-surface-border bg-page-bg/55 px-4 py-2 lg:grid-cols-2"
     >
       <div
         v-for="(column, columnIndex) in menuColumns"
@@ -145,10 +145,10 @@ onUnmounted(() => {
           :key="`${item.menu.title}-${item.index}`"
           :class="[
             'grid min-h-16 grid-cols-[minmax(0,1fr)_minmax(8rem,14rem)] items-center gap-x-4 gap-y-1 border-b border-surface-border/80 text-sm',
-            item.index === props.menus.length - 1 ? 'mb-0 border-b-0' : 'lg:mb-4',
-            itemIndex === column.length - 1
-              ? 'lg:mb-0 lg:border-b-0'
-              : 'lg:pb-4',
+            item.index === props.menus.length - 1 ? 'mb-0 border-b-0' :
+              itemIndex === column.length - 1
+                ? 'lg:mb-0 lg:border-b-0'
+                : 'lg:mb-4 lg:pb-4',
           ]"
         >
           <span class="min-w-0 font-medium text-surface-fg"
