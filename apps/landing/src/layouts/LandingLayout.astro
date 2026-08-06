@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import SiteLayout from '@hitszosa/ui/components/SiteLayout.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  immersive?: boolean;
+}
+
+const { title, description, immersive = false } = Astro.props;
+const services = (await getCollection('services'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((entry) => ({
+    name: entry.data.name,
+    href: entry.data.href,
+    category: entry.data.category,
+    featured: entry.data.featured,
+  }));
+---
+
+<SiteLayout
+  activeSite="landing"
+  title={title}
+  description={description}
+  immersive={immersive}
+  services={services}
+>
+  <slot />
+</SiteLayout>

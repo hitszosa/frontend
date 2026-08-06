@@ -38,6 +38,7 @@ const services = defineCollection({
     href: z.string(),
     order: z.number().default(99),
     category: z.enum(['service', 'project']).default('service'),
+    featured: z.boolean().default(false),
     scope: z.enum(['public', 'campus']).default('public'),
     status: z
       .enum(['online', 'beta', 'maintaining', 'active', 'developing'])
@@ -88,7 +89,7 @@ const friendLinks = defineCollection({
     name: z.string(),
     href: z.string(),
     description: z.string().default(''),
-    logo: z.string().optional(),
+    logo: z.string().min(1),
     order: z.number().default(99),
   }),
 });

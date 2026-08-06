@@ -1,5 +1,5 @@
 ---
-import Layout from '@hitszosa/ui/components/SiteLayout.astro';
+import Layout from '../layouts/LandingLayout.astro';
 import UpdateItem from '../components/UpdateItem.astro';
 import { getUpdates } from '../lib/updates';
 
@@ -15,7 +15,15 @@ const updates = await getUpdates();
       <h1 class="ui-mono text-xs tracking-widest text-muted-fg">
         UPDATES / 动态
       </h1>
-      <span class="ui-mono text-xs text-muted-fg">{updates.length} 条</span>
+      <div class="flex items-center gap-4">
+        <a
+          href="/rss.xml"
+          aria-label="订阅 HITSZ OSA RSS"
+          class="ui-mono text-xs text-primary no-underline hover:underline"
+          >RSS</a
+        >
+        <span class="ui-mono text-xs text-muted-fg">{updates.length} 条</span>
+      </div>
     </div>
 
     {updates.length > 0 ? (

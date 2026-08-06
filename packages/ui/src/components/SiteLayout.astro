@@ -2,13 +2,17 @@
 import { ClientRouter } from 'astro:transitions'
 import '../styles/global.css'
 import SiteFooter from './SiteFooter.astro'
-import SiteHeader, { type SiteId } from './SiteHeader.astro'
+import SiteHeader, {
+  type SiteId,
+  type SiteServiceLink,
+} from './SiteHeader.astro'
 
 interface Props {
   activeSite?: SiteId
   title?: string
   description?: string
   immersive?: boolean
+  services?: SiteServiceLink[]
 }
 
 const {
@@ -16,6 +20,7 @@ const {
   title: providedTitle,
   description: providedDescription,
   immersive = false,
+  services: serviceLinks,
 } = Astro.props
 
 const site =
@@ -36,6 +41,7 @@ const title = providedTitle ?? site.title
 const description = providedDescription ?? site.description
 const currentPath = Astro.url.pathname
 const canonicalUrl = new URL(currentPath, Astro.site ?? site.origin)
+const feedUrl = new URL('/rss.xml', Astro.site ?? site.origin)
 ---
 
 <!doctype html>
@@ -51,6 +57,14 @@ const canonicalUrl = new URL(currentPath, Astro.site ?? site.origin)
     <title>{title}</title>
     <meta name="description" content={description}>
     <link rel="canonical" href={canonicalUrl}>
+    {activeSite === 'landing' && (
+      <link
+        rel="alternate"
+        type="application/rss+xml"
+        title="HITSZ OSA 动态"
+        href={feedUrl}
+      />
+    )}
     <link rel="icon" href="/favicon.ico">
     <meta property="og:type" content="website">
     <meta property="og:title" content={title}>
@@ -73,6 +87,7 @@ const canonicalUrl = new URL(currentPath, Astro.site ?? site.origin)
     <SiteHeader
       activeSite={activeSite}
       currentPath={currentPath}
+      services={serviceLinks}
       transition:persist
     />
 

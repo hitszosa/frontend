@@ -13,16 +13,25 @@ const { name, href, description, logo } = link.data;
   href={href}
   target="_blank"
   rel="noreferrer noopener"
-  class="friend-link-card group flex items-center gap-4 rounded-xl border border-surface-border bg-surface p-4 no-underline shadow-sm transition-all duration-300 will-change-transform hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2"
+  aria-label={`${name}（外部链接）`}
+  class="friend-link-card group flex items-center gap-3 rounded-xl border border-surface-border bg-surface p-4 no-underline shadow-sm transition-all duration-300 will-change-transform hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2"
 >
   {logo ? (
-      <img src={logo} alt="" class="h-10 w-10 shrink-0 rounded-lg object-contain" loading="lazy" />
-    ) : (
-      <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-osa-fg/10 text-lg font-bold text-primary">
-        {name.charAt(0)}
-      </div>
-    )}
-  <div class="min-w-0">
+    <img
+      src={logo}
+      alt={`${name} 图标`}
+      class="h-10 w-10 shrink-0 rounded-lg bg-inset object-contain p-1"
+      loading="lazy"
+      decoding="async"
+    />
+  ) : (
+    <div
+      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-osa-fg/10 text-lg font-bold text-primary"
+    >
+      {name.charAt(0)}
+    </div>
+  )}
+  <div class="min-w-0 flex-1">
     <h3
       class="friend-link-name truncate text-sm font-semibold text-surface-fg transition-colors"
     >
@@ -30,6 +39,11 @@ const { name, href, description, logo } = link.data;
     </h3>
     {description && <p class="mt-0.5 truncate text-xs text-muted-fg">{description}</p>}
   </div>
+  <span
+    aria-hidden="true"
+    class="shrink-0 text-primary transition-transform group-hover:translate-x-0.5"
+    >↗</span
+  >
 </a>
 
 <style>

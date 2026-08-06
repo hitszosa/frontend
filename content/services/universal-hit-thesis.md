@@ -4,6 +4,7 @@ description: 适用于哈尔滨工业大学一校三区的学位论文 Typst 模
 href: https://github.com/hitszosa/universal-hit-thesis
 order: 25
 category: project
+featured: true
 scope: public
 status: active
 ---
