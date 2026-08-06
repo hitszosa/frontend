@@ -66,6 +66,7 @@ const feedUrl = new URL('/rss.xml', Astro.site ?? site.origin)
       />
     )}
     <link rel="icon" href="/favicon.ico">
+    {activeSite === 'landing' && <link rel="manifest" href="/manifest.json" />}
     <meta property="og:type" content="website">
     <meta property="og:title" content={title}>
     <meta property="og:description" content={description}>
