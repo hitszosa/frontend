@@ -20,9 +20,11 @@
   nixConfig = {
     extra-substituters = [
       "https://nix-community.cachix.org"
+      "https://hitszosa.cachix.org"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "hitszosa.cachix.org-1:jszO2bo2i2x0/eRn5ZbvU72eFjyFM4kmSEdkVMqOpac="
     ];
   };
 
