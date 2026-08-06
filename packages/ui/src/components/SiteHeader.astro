@@ -114,6 +114,9 @@ const contextualHref = (href: string) => {
   if (href === currentOrigin || href === `${currentOrigin}/`) return '/'
   return isCurrentSiteHref(href) ? href.slice(currentOrigin.length) : href
 }
+const showMirrorsArrow = activeSite === 'landing'
+const showServiceArrow = (href: string) =>
+  showMirrorsArrow && href === 'https://mirrors.osa.moe'
 
 const normalizePath = (path: string | null) => {
   if (!path || path === '/') return '/'
@@ -167,6 +170,7 @@ const navLinkClass = (active: boolean) => [
         <ul class="flex list-none items-center gap-5 p-0">
           {navItems.map((item) => {
               const external = !isCurrentSiteHref(item.href)
+              const showArrow = showMirrorsArrow && item.site === 'mirrors'
               return (
                 <li>
                   <a
@@ -177,7 +181,7 @@ const navLinkClass = (active: boolean) => [
                     class:list={navLinkClass(isActive(item))}
                   >
                     {item.label}
-                    {external && <span class="text-xs ml-0.5" aria-hidden="true">↗</span>}
+                    {showArrow && <span class="text-xs ml-0.5" aria-hidden="true">↗</span>}
                   </a>
                 </li>
               )
@@ -216,9 +220,11 @@ const navLinkClass = (active: boolean) => [
                       {item.category === 'service' ? '服务' : '项目'}
                     </span>
                     <span class="min-w-0 flex-1 truncate">{item.name}</span>
-                    <span class="text-xs text-muted-fg group-hover/item:text-primary">
-                      ↗
-                    </span>
+                    {showServiceArrow(item.href) && (
+                      <span class="text-xs text-muted-fg group-hover/item:text-primary">
+                        ↗
+                      </span>
+                    )}
                   </a>
                 ))}
             </div>
@@ -242,6 +248,7 @@ const navLinkClass = (active: boolean) => [
             <ul class="grid list-none grid-cols-2 gap-1 p-0">
               {navItems.map((item) => {
                   const external = !isCurrentSiteHref(item.href)
+                  const showArrow = showMirrorsArrow && item.site === 'mirrors'
                   return (
                     <li>
                       <a
@@ -257,7 +264,7 @@ const navLinkClass = (active: boolean) => [
                         ]}
                       >
                         {item.label}
-                        {external && <span class="text-xs ml-0.5" aria-hidden="true">↗</span>}
+                        {showArrow && <span class="text-xs ml-0.5" aria-hidden="true">↗</span>}
                       </a>
                     </li>
                   )
@@ -292,7 +299,7 @@ const navLinkClass = (active: boolean) => [
                         {item.category === 'service' ? '服务' : '项目'}
                       </span>
                       <span class="min-w-0 flex-1 truncate">{item.name}</span>
-                      {external && (
+                      {showServiceArrow(item.href) && (
                         <span
                           aria-hidden="true"
                           class="shrink-0 text-xs text-muted-fg group-hover/item:text-primary"
