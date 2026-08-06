@@ -79,6 +79,16 @@ Mirrors 的生产环境需要在站点同源提供：
 
 帮助列表在生产模式下从 `https://mirrors-help.osa.moe/help_list.json` 获取。
 
+## Nix 构建
+
+Flake 为 `aarch64-linux` 和 `x86_64-linux` 提供 `mirrors` 静态产物：
+
+```bash
+nix build .#mirrors
+```
+
+`result/` 的根目录就是镜像站部署目录。CI 使用相同产物并将文件描述符上限提高到 8192，以容纳 bun2nix 首次构建时的依赖缓存。
+
 ## 常用命令
 
 | 命令 | 作用 |

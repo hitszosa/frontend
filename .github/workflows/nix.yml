@@ -1,0 +1,45 @@
+name: nix
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frontend-mirrors:
+    runs-on: ubuntu-26.04-arm
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+            max-jobs = 4
+
+      # read-only
+      - if: github.event_name != 'push' || github.ref != 'refs/heads/main'
+        uses: cachix/cachix-action@v17
+        with:
+          name: hitszosa
+
+      # writeable
+      - if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: cachix/cachix-action@v17
+        with:
+          name: hitszosa
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - run: |
+          ulimit -n 8192
+          nix flake check
+          nix build --no-link --print-out-paths .#mirrors

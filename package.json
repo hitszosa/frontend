@@ -34,10 +34,13 @@
     "lint": "turbo run lint",
     "check": "turbo run check && bun run check:packages",
     "check:packages": "sherif",
+    "postinstall": "bun run nix:generate-deps",
+    "nix:generate-deps": "bunx bun2nix --output-file bun.nix",
     "format": "turbo run format",
     "format:check": "turbo run format:check"
   },
   "devDependencies": {
+    "bun2nix": "2.1.2",
     "sherif": "1.13.0",
     "turbo": "^2.5.0"
   }
