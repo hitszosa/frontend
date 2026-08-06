@@ -20,3 +20,7 @@ node_modules/
 *.log
 .DS_Store
 .idea/
+
+# Nix
+result
+result-*
