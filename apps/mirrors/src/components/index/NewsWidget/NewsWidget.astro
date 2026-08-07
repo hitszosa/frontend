@@ -1,4 +1,5 @@
 ---
+import ArrowAction from "../../ui/ArrowAction.vue";
 import SectionHeading from "../../base/SectionHeading.astro";
 import { Icon } from "astro-icon/components";
 import type { ArticleDigest } from "../../news/ArticleDigest";
@@ -20,16 +21,8 @@ const { digests } = Astro.props;
     <ul class="divide-y divide-surface-border">
       {digests.map((digest) => <NewsWidgetItem digest={digest} />)}
     </ul>
-    <a
-      href="https://www.osa.moe/updates/"
-      class="group ml-auto flex w-fit items-center gap-2 rounded-sm text-sm font-medium text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-osa-hover"
-    >
+    <ArrowAction href="https://www.osa.moe/updates/" class="ml-auto">
       Read More
-      <span
-        class="transition-transform group-hover:translate-x-0.5 group-focus-visible:translate-x-0.5"
-      >
-        →
-      </span>
-    </a>
+    </ArrowAction>
   </div>
 </section>

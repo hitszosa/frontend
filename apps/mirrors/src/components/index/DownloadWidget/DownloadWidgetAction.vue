@@ -1,14 +1,11 @@
 <template>
-  <button
+  <ArrowAction
     type="button"
-    class="group ml-auto flex w-fit items-center gap-2 rounded-sm text-sm font-medium text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-osa-hover hover:cursor-pointer"
+    class="ml-auto"
     @click="onToggleModal"
   >
     Download
-    <span class="transition-transform group-hover:translate-x-0.5 group-focus-visible:translate-x-0.5">
-      →
-    </span>
-  </button>
+  </ArrowAction>
   <AppModal v-model="isOpen" aria-labelledby="download-modal-title">
     <IndexDownloadModal @close="onCloseModal" />
   </AppModal>
@@ -17,6 +14,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import AppModal from '@components/ui/AppModal.vue'
+import ArrowAction from '@components/ui/ArrowAction.vue'
 import IndexDownloadModal from '../DownloadModal/DownloadModal.vue'
 
 const isOpen = ref(false)
