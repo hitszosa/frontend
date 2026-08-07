@@ -1,8 +1,10 @@
 <template>
   <section class="space-y-4 my-4">
+    <label for="mirror-search-input" class="sr-only">搜索镜像</label>
     <input
       :value="mirrorFilter"
       id="mirror-search-input"
+      type="search"
       placeholder="Press '/' key to search for mirrors..."
       class="form-input w-full rounded-lg border border-surface-border bg-surface px-4 py-2 text-surface-fg outline-none transition placeholder:text-muted-fg focus:border-primary focus:ring-2 focus:ring-primary"
       @input="onSearchInput"
