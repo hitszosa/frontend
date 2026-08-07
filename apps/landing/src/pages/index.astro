@@ -381,7 +381,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
     const namespace = 'http://www.w3.org/2000/svg';
 
     for (const node of nodes) {
-      if (Math.random() >= 0.9) continue;
+      if (Math.random() >= 0.1) continue;
 
       const logo = logos[Math.floor(Math.random() * logos.length)];
       const visual = node.querySelector('[data-node-visual]');
