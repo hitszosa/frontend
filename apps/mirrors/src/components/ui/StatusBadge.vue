@@ -3,7 +3,7 @@
     class="inline-flex shrink-0 items-center rounded px-1.5 py-0.5 text-[11px] font-medium capitalize"
     :style="badgeStyle"
   >
-    {{ status }}
+    {{ statusLabel }}
   </span>
 </template>
 
@@ -25,6 +25,15 @@ const statusMap: Record<string, Status> = {
 const resolvedStatus = computed<Status>(
   () => statusMap[props.status] ?? 'unknown',
 )
+
+const statusLabels: Record<Status, string> = {
+  success: '正常',
+  syncing: '同步中',
+  failed: '失败',
+  unknown: '未知',
+}
+
+const statusLabel = computed(() => statusLabels[resolvedStatus.value])
 
 const toneMap = {
   success: { bg: 'var(--ui-success)', fg: 'var(--ui-success)' },

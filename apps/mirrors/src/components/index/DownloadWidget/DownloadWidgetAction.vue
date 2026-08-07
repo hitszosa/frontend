@@ -4,7 +4,7 @@
     class="inline-flex h-9 w-full items-center justify-center gap-2 rounded-lg bg-surface px-4 text-base font-medium text-surface-fg shadow-sm ring-1 ring-surface-border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:border-primary/50 hocus:bg-page-bg hocus:text-primary hover:cursor-pointer"
     @click="onToggleModal"
   >
-    Get LiveCD & Software
+    下载 LiveCD 与软件
   </button>
   <AppModal v-model="isOpen" aria-labelledby="download-modal-title">
     <IndexDownloadModal @close="onCloseModal" />

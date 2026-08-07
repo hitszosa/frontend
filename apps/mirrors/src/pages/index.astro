@@ -23,7 +23,7 @@ const news = sortNewsByDateDesc(await getMirrorNews())
     <div class="grow space-y-4 md:order-first">
       <SectionHeading as="h1">
         <Icon slot="icon" name="icon-park-outline:dropbox" />
-        Index of Mirrors
+        镜像列表
       </SectionHeading>
       <MirrorList client:load />
     </div>
@@ -36,7 +36,7 @@ const news = sortNewsByDateDesc(await getMirrorNews())
       >
         <span class="flex items-center gap-2 font-medium text-primary">
           <Icon name="icon-park-outline:help" />
-          <span>Help · 镜像使用帮助</span>
+          <span>镜像使用帮助</span>
         </span>
         <span
           aria-hidden="true"

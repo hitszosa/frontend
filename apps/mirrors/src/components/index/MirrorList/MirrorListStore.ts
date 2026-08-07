@@ -56,7 +56,7 @@ export const useMirrorListStore = defineStore('mirror-list', () => {
     } catch {
       rawData.value = null
       rows.value = []
-      errorMessage.value = 'Mirror list is temporarily unavailable.'
+      errorMessage.value = '镜像列表暂时不可用，请稍后重试。'
     } finally {
       loading.value = false
     }

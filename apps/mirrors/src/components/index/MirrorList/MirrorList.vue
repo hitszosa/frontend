@@ -5,7 +5,7 @@
       :value="mirrorFilter"
       id="mirror-search-input"
       type="search"
-      placeholder="Press '/' key to search for mirrors..."
+      placeholder="搜索镜像（按 / 快速聚焦）"
       class="form-input w-full rounded-lg border border-surface-border bg-surface px-4 py-2 text-surface-fg outline-none transition placeholder:text-muted-fg focus:border-primary focus:ring-2 focus:ring-primary"
       @input="onSearchInput"
     >
@@ -68,17 +68,17 @@ const createColumns = () => {
   return [
     {
       key: 'name',
-      label: 'Name',
+      label: '镜像',
       sortable: true,
     },
     {
       key: 'lastUpdate',
-      label: 'Last Update',
+      label: '最后同步',
       sortable: true,
     },
     {
       key: 'status',
-      label: 'Status',
+      label: '状态',
       sortable: true,
     },
   ]
