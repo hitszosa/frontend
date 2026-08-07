@@ -6,7 +6,8 @@ interface Props {
 }
 
 const { digest } = Astro.props
-const dateString = new Date(digest.date).toISOString().slice(0, 10)
+const dateTime = new Date(digest.date).toISOString()
+const dateString = dateTime.slice(0, 10)
 ---
 
 <li
@@ -21,8 +22,17 @@ const dateString = new Date(digest.date).toISOString().slice(0, 10)
     </a>
   </div>
   <div class="flex shrink-0 self-stretch items-center text-sm">
-    <span class="inline-block">
+    <relative-time
+      datetime={dateTime}
+      format="relative"
+      lang="en"
+      class="inline-block whitespace-nowrap"
+    >
       {dateString}
-    </span>
+    </relative-time>
   </div>
 </li>
+
+<script>
+import '@github/relative-time-element'
+</script>

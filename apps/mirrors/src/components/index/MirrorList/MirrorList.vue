@@ -42,7 +42,14 @@
         </div>
       </template>
       <template #lastUpdate-data="{ row }">
-        <span class="whitespace-nowrap">{{ row.lastUpdate }}</span>
+        <relative-time
+          :datetime="formatDateTime(row.lastUpdate)"
+          format="relative"
+          lang="en"
+          class="whitespace-nowrap"
+        >
+          {{ formatFallbackDate(row.lastUpdate) }}
+        </relative-time>
       </template>
       <template #status-data="{ row }">
         <StatusBadge :status="row.status" />
@@ -53,6 +60,7 @@
 
 <script setup lang="ts">
 import { Icon as IconifyIcon } from '@iconify/vue'
+import '@github/relative-time-element'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import AppTable from '@components/ui/AppTable.vue'
@@ -104,6 +112,14 @@ const isNameMatched = (mirror: string, filter: string) => {
 
 const getHelpUrl = (mirror: string) => {
   return `/help/${encodeURIComponent(mirror)}/`
+}
+
+const formatDateTime = (timestamp: number) => {
+  return new Date(timestamp * 1000).toISOString()
+}
+
+const formatFallbackDate = (timestamp: number) => {
+  return formatDateTime(timestamp).slice(0, 10)
 }
 
 const onSearchInput = (event: Event) => {
