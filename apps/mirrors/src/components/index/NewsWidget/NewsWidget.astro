@@ -16,13 +16,15 @@ const { digests } = Astro.props
     <Icon slot="icon" name="icon-park-outline:newspaper-folding" />
     Recent News
   </SectionHeading>
-  <div class="rounded-lg border border-surface-border bg-surface p-5 shadow-sm">
+  <div
+    class="space-y-4 rounded-lg border border-surface-border bg-surface p-5 shadow-sm"
+  >
     <ul class="list-inside list-none space-y-2">
       {digests.map((digest) => <NewsWidgetItem digest={digest} />)}
     </ul>
     <a
       href="https://www.osa.moe/updates/"
-      class="mt-4 inline-flex h-9 w-full items-center justify-center gap-2 rounded-lg bg-surface px-4 text-base font-medium text-surface-fg shadow-sm ring-1 ring-surface-border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:bg-page-bg hocus:text-primary"
+      class="inline-flex h-9 w-full items-center justify-center gap-2 rounded-lg bg-surface px-4 text-base font-medium text-surface-fg shadow-sm ring-1 ring-surface-border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:bg-page-bg hocus:text-primary"
     >
       Read More
     </a>

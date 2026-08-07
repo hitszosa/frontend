@@ -6,15 +6,12 @@ interface Props {
 }
 
 const { digest } = Astro.props
-const dateString = new Intl.DateTimeFormat('zh-CN', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-  timeZone: 'UTC',
-}).format(new Date(digest.date))
+const dateString = new Date(digest.date)
+  .toISOString()
+  .slice(0, 10)
 ---
 
-<li class="flex items-center justify-between gap-4 text-sm text-muted-fg">
+<li class="flex items-center justify-between gap-4 text-muted-fg">
   <div class="flex min-w-0 items-center text-page-fg">
     <a
       href={digest._path}
@@ -23,7 +20,7 @@ const dateString = new Intl.DateTimeFormat('zh-CN', {
       {digest.title}
     </a>
   </div>
-  <div class="shrink-0">
+  <div class="flex shrink-0 self-stretch items-center text-sm">
     <span class="inline-block">
       {dateString}
     </span>
