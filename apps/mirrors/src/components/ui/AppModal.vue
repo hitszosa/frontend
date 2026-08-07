@@ -1,5 +1,5 @@
 <template>
-  <Teleport to="body">
+  <Teleport to="body" :disabled="!isMounted">
     <div
       v-show="modelValue"
       class="fixed inset-0 z-100 flex overscroll-contain items-center justify-center bg-slate-950/60 px-4 pt-20 pb-8 backdrop-blur-sm"
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 defineOptions({
   inheritAttrs: false,
@@ -39,8 +39,13 @@ const emit = defineEmits<{
 
 const dialogRef = ref<HTMLDivElement | null>(null)
 const previousActiveElement = ref<HTMLElement | null>(null)
+const isMounted = ref(false)
 let previousRootOverflow = ''
 let pageScrollLocked = false
+
+onMounted(() => {
+  isMounted.value = true
+})
 
 const lockPageScroll = () => {
   if (pageScrollLocked) {
