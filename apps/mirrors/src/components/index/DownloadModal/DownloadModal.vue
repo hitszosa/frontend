@@ -43,7 +43,11 @@
           class="h-11 w-full shrink-0 rounded-lg border border-surface-border bg-page-bg px-3 text-surface-fg outline-none focus:border-primary focus:ring-2 focus:ring-primary sm:hidden"
           @change="onMobileCollectionUpdate"
         >
-          <option v-for="(collection, index) in collections" :key="collection" :value="index">
+          <option
+            v-for="(collection, index) in collections"
+            :key="collection"
+            :value="index"
+          >
             {{ collection }}
           </option>
         </select>
@@ -64,7 +68,9 @@
         </ul>
       </div>
       <div v-else class="flex flex-col gap-3 sm:flex-row sm:gap-6">
-        <div class="h-11 w-full animate-pulse rounded-lg bg-page-bg sm:h-[32em] sm:w-40" />
+        <div
+          class="h-11 w-full animate-pulse rounded-lg bg-page-bg sm:h-[32em] sm:w-40"
+        />
         <div class="h-[32em] grow animate-pulse rounded-lg bg-page-bg" />
       </div>
     </div>
