@@ -39,6 +39,7 @@ const services = defineCollection({
     order: z.number().default(99),
     category: z.enum(['service', 'project']).default('service'),
     featured: z.boolean().default(false),
+    hide: z.boolean().default(false),
     scope: z.enum(['public', 'campus']).default('public'),
     status: z
       .enum(['online', 'beta', 'maintaining', 'active', 'developing'])
@@ -49,35 +50,39 @@ const services = defineCollection({
 
 const events = defineCollection({
   loader: selectedContent(eventsBase, '**/[^_]*.{md,mdx}'),
-  schema: z.object({
-    title: z.string(),
-    date: z.coerce.date(),
-    endDate: z.coerce.date().optional(),
-    location: z.string().default(''),
-    type: z
-      .enum(['讲座', '沙龙', '比赛', '团建', '例会', '其他'])
-      .default('其他'),
-    summary: z.string(),
-    pinned: z.boolean().default(false),
-    importance: z.enum(['normal', 'important']).default('normal'),
-    upcoming: z.boolean().default(false),
-    cover: z.string().optional(),
-    coverAlt: z.string().optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      date: z.coerce.date(),
+      endDate: z.coerce.date().optional(),
+      location: z.string().default(''),
+      type: z
+        .enum(['讲座', '沙龙', '比赛', '团建', '例会', '其他'])
+        .default('其他'),
+      summary: z.string(),
+      hide: z.boolean().default(false),
+      pinned: z.boolean().default(false),
+      importance: z.enum(['normal', 'important']).default('normal'),
+      upcoming: z.boolean().default(false),
+      cover: z.union([z.url(), z.string().startsWith('/'), image()]).optional(),
+      coverAlt: z.string().optional(),
+    }),
 });
 
 const articles = defineCollection({
   loader: selectedContent(articlesBase, '**/[^_]*.{md,mdx}'),
-  schema: z.object({
-    title: z.string(),
-    summary: z.string(),
-    date: z.coerce.date(),
-    pinned: z.boolean().default(false),
-    importance: z.enum(['normal', 'important']).default('normal'),
-    author: z.string().optional(),
-    cover: z.string().optional(),
-    coverAlt: z.string().optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      summary: z.string(),
+      date: z.coerce.date(),
+      hide: z.boolean().default(false),
+      pinned: z.boolean().default(false),
+      importance: z.enum(['normal', 'important']).default('normal'),
+      author: z.string().optional(),
+      cover: z.union([z.url(), z.string().startsWith('/'), image()]).optional(),
+      coverAlt: z.string().optional(),
+    }),
 });
 
 const friendLinks = defineCollection({
@@ -94,20 +99,44 @@ const friendLinks = defineCollection({
   }),
 });
 
+const memberProject = z.object({
+  name: z.string(),
+  description: z.string().default(''),
+  href: z.url(),
+  logo: z.string().min(1).optional(),
+  type: z.enum(['project', 'website', 'other']).default('project'),
+});
+
+const members = defineCollection({
+  loader: glob({
+    pattern: '**/[^_]*.yaml',
+    base: '../../content/members',
+  }),
+  schema: z.object({
+    name: z.string(),
+    github: z.string().optional(),
+    image: z.string().min(1).optional(),
+    order: z.number().default(100),
+    projects: z.array(memberProject).default([]),
+  }),
+});
+
 const announcements = defineCollection({
   loader: selectedContent(announcementsBase, '**/[^_]*.{md,mdx}'),
-  schema: z.object({
-    title: z.string(),
-    summary: z.string(),
-    tags: z.array(z.string()).default([]),
-    level: z.enum(['info', 'warn']).default('info'),
-    pinned: z.boolean().default(false),
-    importance: z.enum(['normal', 'important']).default('normal'),
-    date: z.coerce.date(),
-    expires: z.coerce.date().optional(),
-    cover: z.string().optional(),
-    coverAlt: z.string().optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      summary: z.string(),
+      tags: z.array(z.string()).default([]),
+      level: z.enum(['info', 'warn']).default('info'),
+      hide: z.boolean().default(false),
+      pinned: z.boolean().default(false),
+      importance: z.enum(['normal', 'important']).default('normal'),
+      date: z.coerce.date(),
+      expires: z.coerce.date().optional(),
+      cover: z.union([z.url(), z.string().startsWith('/'), image()]).optional(),
+      coverAlt: z.string().optional(),
+    }),
 });
 
 export const collections = {
@@ -115,5 +144,6 @@ export const collections = {
   events,
   articles,
   friendLinks,
+  members,
   announcements,
 };

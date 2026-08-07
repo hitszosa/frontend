@@ -1,0 +1,7 @@
+name: 离谱
+order: 100
+projects:
+  - name: HITA
+    description: HITA 课表
+    href: https://github.com/HIT-A/HITA_Android
+    logo: https://raw.githubusercontent.com/HIT-A/HITA_Android/main/app/src/main/ic_launcher-playstore.png

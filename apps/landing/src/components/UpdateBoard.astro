@@ -1,6 +1,7 @@
 ---
 import type { UpdateEntry } from '../lib/updates';
 import Badge from './Badge.astro';
+import ContentImage from './content/ContentImage.astro';
 
 interface Props {
   updates: UpdateEntry[];
@@ -32,27 +33,18 @@ const getTone = (entry: UpdateEntry): BadgeTone =>
 
 {primaryUpdate && (
     <section id="featured" class="border-b border-surface-border py-14">
-      <article class="mt-7 grid overflow-hidden rounded-xl border border-surface-border bg-surface md:grid-cols-[minmax(0,1.45fr)_minmax(15rem,1fr)]">
-        <div class="relative min-h-56 bg-inset">
-          {primaryUpdate.cover ? (
-            <img
+      <article class="mt-7 flex flex-col overflow-hidden rounded-xl border border-surface-border bg-surface md:flex-row">
+        {primaryUpdate.cover && (
+          <div class="flex shrink-0 items-center justify-center border-b border-surface-border bg-inset md:max-w-[60%] md:border-r md:border-b-0">
+            <ContentImage
               src={primaryUpdate.cover}
               alt={primaryUpdate.coverAlt ?? primaryUpdate.title}
-              class="absolute inset-0 h-full w-full object-cover"
+              class="mx-auto block h-auto max-h-[70vh] w-auto max-w-full md:max-h-[32rem]"
               loading="eager"
             />
-          ) : (
-            <div class="absolute inset-0 flex flex-col items-center justify-center border-b border-surface-border text-center md:border-b-0 md:border-r">
-              <span class="ui-mono text-xs tracking-widest text-muted-fg">
-                UPDATE IMAGE
-              </span>
-              <span class="mt-2 text-sm text-muted-fg">
-                动态配图上传后在此展示
-              </span>
-            </div>
-          )}
-        </div>
-        <div class="flex flex-col p-6 sm:p-8">
+          </div>
+        )}
+        <div class="flex min-w-0 flex-1 flex-col p-6 sm:p-8">
           <div class="flex flex-wrap items-center gap-2 text-xs text-muted-fg">
             <Badge tone={getTone(primaryUpdate)}>{primaryUpdate.label}</Badge>
             {primaryUpdate.meta && (
@@ -87,23 +79,18 @@ const getTone = (entry: UpdateEntry): BadgeTone =>
           {secondaryUpdates.map((entry) => (
             <a
               href={entry.href}
-              class="group grid min-h-28 grid-cols-[6rem_minmax(0,1fr)] overflow-hidden rounded-lg border border-surface-border bg-surface no-underline hover:border-primary/50"
+              class="group flex min-h-28 overflow-hidden rounded-lg border border-surface-border bg-surface no-underline hover:border-primary/50"
             >
-              <div class="relative bg-inset">
-                {entry.cover ? (
-                  <img
+              {entry.cover && (
+                <div class="flex shrink-0 max-w-2/5 items-center justify-center border-r border-surface-border bg-inset">
+                  <ContentImage
                     src={entry.cover}
                     alt={entry.coverAlt ?? entry.title}
-                    class="absolute inset-0 h-full w-full object-cover"
-                    loading="lazy"
+                    class="block h-full w-full object-cover"
                   />
-                ) : (
-                  <span class="ui-mono absolute inset-0 flex items-center justify-center text-[10px] text-muted-fg">
-                    UPDATE
-                  </span>
-                )}
-              </div>
-              <div class="p-4">
+                </div>
+              )}
+              <div class="min-w-0 flex-1 p-4">
                 <div class="flex flex-wrap items-center gap-1.5">
                   <Badge tone={getTone(entry)}>{entry.label}</Badge>
                   {entry.meta && <Badge tone="muted">{entry.meta}</Badge>}

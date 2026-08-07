@@ -1,0 +1,8 @@
+name: XiC
+github: ZreXoc
+order: 100
+projects:
+  - name: XiC 的个人主页
+    description: '你好！你好！'
+    href: https://www.zrex.top/
+    type: website

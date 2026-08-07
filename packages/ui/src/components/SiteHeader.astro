@@ -114,9 +114,8 @@ const contextualHref = (href: string) => {
   if (href === currentOrigin || href === `${currentOrigin}/`) return '/'
   return isCurrentSiteHref(href) ? href.slice(currentOrigin.length) : href
 }
-const showMirrorsArrow = activeSite === 'landing'
-const showServiceArrow = (href: string) =>
-  showMirrorsArrow && href === 'https://mirrors.osa.moe'
+
+const showServiceArrow = (href: string) => !isCurrentSiteHref(href)
 
 const normalizePath = (path: string | null) => {
   if (!path || path === '/') return '/'
@@ -170,7 +169,7 @@ const navLinkClass = (active: boolean) => [
         <ul class="flex list-none items-center gap-5 p-0">
           {navItems.map((item) => {
               const external = !isCurrentSiteHref(item.href)
-              const showArrow = showMirrorsArrow && item.site === 'mirrors'
+              const showArrow = item.site !== 'landing' && external
               return (
                 <li>
                   <a
@@ -248,7 +247,7 @@ const navLinkClass = (active: boolean) => [
             <ul class="grid list-none grid-cols-2 gap-1 p-0">
               {navItems.map((item) => {
                   const external = !isCurrentSiteHref(item.href)
-                  const showArrow = showMirrorsArrow && item.site === 'mirrors'
+                  const showArrow = external && item.site === 'mirrors'
                   return (
                     <li>
                       <a

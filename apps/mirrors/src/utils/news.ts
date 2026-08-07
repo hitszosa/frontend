@@ -7,7 +7,9 @@ export const getMirrorNews = async (now = new Date()) =>
   getCollection(
     'news',
     ({ data }) =>
-      data.tags.includes(MIRRORS_TAG) && (!data.expires || data.expires > now),
+      !data.hide &&
+      data.tags.includes(MIRRORS_TAG) &&
+      (!data.expires || data.expires > now),
   )
 
 export const toArticleDigest = (

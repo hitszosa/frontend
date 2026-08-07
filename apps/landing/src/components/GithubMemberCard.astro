@@ -1,0 +1,36 @@
+---
+import type { GithubOrgMember } from '../lib/github';
+
+interface Props {
+  member: GithubOrgMember;
+}
+
+const { member } = Astro.props;
+---
+
+<a
+  href={member.profileUrl}
+  target="_blank"
+  rel="noreferrer noopener"
+  title={member.login}
+  aria-label={`${member.login} 的 GitHub 主页`}
+  class="group relative inline-flex h-12 w-12 overflow-hidden rounded-full bg-primary/10 ring-1 ring-surface-border transition-transform hover:scale-110 hover:ring-primary"
+>
+  <span
+    aria-hidden="true"
+    class="absolute inset-0 flex items-center justify-center text-sm font-semibold text-primary"
+  >
+    {Array.from(member.login)[0]?.toUpperCase()}
+  </span>
+  <img
+    src={member.avatarUrl}
+    alt={member.login}
+    width="48"
+    height="48"
+    class="relative h-full w-full object-cover opacity-0 transition-opacity"
+    loading="eager"
+    decoding="async"
+    onload="this.style.opacity='1'"
+    onerror="this.remove()"
+  >
+</a>

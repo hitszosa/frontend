@@ -1,18 +1,31 @@
 ---
 import { getCollection } from 'astro:content';
-import { osaLogoPub } from '@hitszosa/ui';
+import {
+  osaLogoAlt,
+  osaLogoMono,
+  osaLogoPub,
+  osaLogoVtuber,
+  osaLogoDefault,
+} from '@hitszosa/ui';
 import Layout from '../layouts/LandingLayout.astro';
 import Badge from '../components/Badge.astro';
 import UpdateBoard from '../components/UpdateBoard.astro';
 import FriendLinkCard from '../components/FriendLinkCard.astro';
 import { getUpdates } from '../lib/updates';
 
-const services = (await getCollection('services'))
+const services = (await getCollection('services', ({ data }) => !data.hide))
   .filter((item) => item.data.featured)
   .sort((a, b) => a.data.order - b.data.order);
 const friendLinks = (await getCollection('friendLinks')).sort(
   (a, b) => a.data.order - b.data.order,
 );
+const easterEggLogos = [
+  osaLogoPub.src,
+  osaLogoMono.src,
+  osaLogoAlt.src,
+  osaLogoVtuber.src,
+  osaLogoDefault.src,
+];
 const now = new Date();
 const updates = await getUpdates(now);
 const feed = updates.slice(0, 6);
@@ -50,72 +63,84 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
 <Layout title="HITSZ 开源技术协会">
   <section
     id="top"
-    class="relative isolate overflow-hidden border-b border-surface-border py-16 md:py-24"
+    class="relative left-1/2 w-screen -translate-x-1/2 isolate overflow-x-clip border-b border-surface-border py-16 md:py-24"
   >
     <svg
+      data-easter-egg-logos={JSON.stringify(easterEggLogos)}
       aria-hidden="true"
       viewBox="0 0 1000 310"
-      preserveAspectRatio="none"
-      class="pointer-events-none absolute inset-x-0 top-10 z-[-1] h-[22rem] w-full opacity-65 dark:opacity-35"
+      preserveAspectRatio="xMidYMid meet"
+      class="pointer-events-none absolute left-1/2 top-6 z-[-1] w-[max(100vw,72rem)] max-w-none -translate-x-1/2 opacity-65 dark:opacity-35"
     >
       <path
         id="branch-yellow"
-        d="M-40 82 C165 42 300 64 465 82 S716 190 1040 146"
+        class="hero-branch"
+        d="M-120 84 C220 15 650 245 1120 150"
         fill="none"
         stroke="#e8c95c"
         stroke-width="2"
       ></path>
       <path
         id="branch-blue"
-        d="M-50 270 C114 222 273 236 422 172 S700 135 1040 75"
+        class="hero-branch"
+        d="M-120 300 C260 195 690 170 1120 55"
         fill="none"
         stroke="#94a4e7"
         stroke-width="2"
       ></path>
       <path
         id="branch-violet"
-        d="M-40 252 C182 180 332 231 526 224 S766 235 1038 226"
+        class="hero-branch"
+        d="M-120 270 C260 165 700 280 1120 220"
         fill="none"
         stroke="#c2b7e2"
         stroke-width="2"
       ></path>
-      <circle class="moving-node" r="5" fill="#e6c24f">
+      <g class="moving-node" data-moving-node>
+        <g data-node-visual>
+          <circle r="5" fill="#e6c24f"></circle>
+        </g>
         <animateMotion
           dur="188s"
           begin={`-${Math.floor(Math.random() * 188)}s`}
           repeatCount="indefinite"
-          path="M-40 82 C165 42 300 64 465 82 S716 190 1040 146"
-        ></animateMotion>
-      </circle>
-      <g class="moving-node">
-        <circle r="12" fill="none" stroke="#94a4e7" stroke-width="2"></circle>
-        <circle r="5" fill="#91a0e4"></circle>
+        >
+          <mpath href="#branch-yellow"></mpath>
+        </animateMotion>
+      </g>
+      <g class="moving-node" data-moving-node>
+        <g data-node-visual>
+          <circle r="12" fill="none" stroke="#94a4e7" stroke-width="2"></circle>
+          <circle r="5" fill="#91a0e4"></circle>
+        </g>
         <animateMotion
           dur="143s"
           begin={`-${Math.floor(Math.random() * 143)}s`}
           repeatCount="indefinite"
-          path="M-50 270 C114 222 273 236 422 172 S700 135 1040 75"
-        ></animateMotion>
+        >
+          <mpath href="#branch-blue"></mpath>
+        </animateMotion>
       </g>
-      <circle class="moving-node" r="5" fill="#bcaee0">
+      <g class="moving-node" data-moving-node>
+        <g data-node-visual>
+          <circle r="5" fill="#bcaee0"></circle>
+        </g>
         <animateMotion
           dur="58s"
           begin={`-${Math.floor(Math.random() * 58)}s`}
           repeatCount="indefinite"
-          path="M-40 252 C182 180 332 231 526 224 S766 235 1038 226"
-        ></animateMotion>
-      </circle>
+        >
+          <mpath href="#branch-violet"></mpath>
+        </animateMotion>
+      </g>
     </svg>
     <div
-      class="relative mx-auto grid max-w-4xl gap-10 md:grid-cols-[minmax(0,1fr)_20rem] md:items-end"
+      class="relative mx-auto grid w-full max-w-[59rem] gap-10 px-6 md:grid-cols-[minmax(0,1fr)_20rem] md:items-end"
     >
       <div>
-        <div class="flex items-center gap-3">
-          <img src={osaLogoPub.src} alt={osaLogoPub.alt} class="h-12 w-12">
-          <span class="ui-mono text-xs tracking-widest text-muted-fg"
-            >HITSZ · OPEN SOURCE ASSOCIATION</span
-          >
-        </div>
+        <p class="ui-mono text-xs tracking-widest text-muted-fg">
+          HITSZ · OPEN SOURCE ASSOCIATION
+        </p>
         <h1
           aria-label="HITSZ 开源技术协会"
           class="mt-7 text-4xl font-bold tracking-tight text-page-fg md:text-6xl"
@@ -155,7 +180,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
         </div>
       </div>
       <figure
-        class="m-0 rounded-lg border border-surface-border bg-surface/90 p-4"
+        class="m-0 rounded-lg border border-surface-border bg-surface/90 p-4 self-center"
         aria-labelledby="update-map-caption"
       >
         <figcaption
@@ -197,7 +222,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
             >{heatmapStart.toLocaleDateString('zh-CN', {
                 month: 'short',
               })}</span
-          ><span>动态归档</span>
+          ><span>动态</span>
         </div>
       </figure>
     </div>
@@ -215,7 +240,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
           href="/rss.xml"
           aria-label="订阅 HITSZ OSA RSS"
           class="ui-mono text-xs text-primary no-underline hover:underline"
-          >RSS</a
+          >RSS →</a
         >
         <a
           href="/updates"
@@ -335,7 +360,67 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
     </div>
   </section>
 
+  <script>
+  const revealLogoEasterEgg = () => {
+    const background = document.querySelector<SVGSVGElement>(
+      '[data-easter-egg-logos]',
+    );
+    if (
+      !background ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      return;
+    }
+
+    const logos = JSON.parse(
+      background.dataset.easterEggLogos ?? '[]',
+    ) as string[];
+    const nodes = Array.from(
+      background.querySelectorAll<SVGGElement>('[data-moving-node]'),
+    );
+    const namespace = 'http://www.w3.org/2000/svg';
+
+    for (const node of nodes) {
+      if (Math.random() >= 0.9) continue;
+
+      const logo = logos[Math.floor(Math.random() * logos.length)];
+      const visual = node.querySelector('[data-node-visual]');
+      if (!logo || !visual) continue;
+
+      const logoGroup = document.createElementNS(namespace, 'g');
+      logoGroup.setAttribute('opacity', '0.8');
+
+      const image = document.createElementNS(namespace, 'image');
+      image.setAttribute('href', logo);
+      image.setAttribute('x', '-17');
+      image.setAttribute('y', '-17');
+      image.setAttribute('width', '34');
+      image.setAttribute('height', '34');
+      image.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+
+      const rotation = document.createElementNS(namespace, 'animateTransform');
+      rotation.setAttribute('attributeName', 'transform');
+      rotation.setAttribute('type', 'rotate');
+      rotation.setAttribute('from', '0 0 0');
+      rotation.setAttribute('to', '360 0 0');
+      rotation.setAttribute('dur', '96s');
+      rotation.setAttribute('repeatCount', 'indefinite');
+
+      logoGroup.append(image, rotation);
+      visual.replaceWith(logoGroup);
+    }
+  };
+
+  revealLogoEasterEgg();
+  </script>
   <style>
+  .hero-branch {
+    vector-effect: non-scaling-stroke;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    shape-rendering: geometricPrecision;
+  }
+
   .title-ruby {
     ruby-position: over;
   }

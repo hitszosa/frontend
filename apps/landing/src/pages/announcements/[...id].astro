@@ -3,11 +3,16 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/LandingLayout.astro';
 import Badge from '../../components/Badge.astro';
 import RelatedLink from '../../components/content/RelatedLink.astro';
+import ContentImage from '../../components/content/ContentImage.astro';
+import { contentPath } from '../../lib/content';
 
 export async function getStaticPaths() {
-  const announcements = await getCollection('announcements');
+  const announcements = await getCollection(
+    'announcements',
+    ({ data }) => !data.hide,
+  );
   return announcements.map((announcement) => ({
-    params: { id: announcement.id },
+    params: { id: contentPath(announcement.id) },
     props: { announcement },
   }));
 }
@@ -18,7 +23,7 @@ interface Props {
 
 const { announcement } = Astro.props;
 const { Content } = await render(announcement);
-const { title, summary, date, level } = announcement.data;
+const { title, summary, date, level, cover, coverAlt } = announcement.data;
 const dateLabel = new Intl.DateTimeFormat('zh-CN', {
   year: 'numeric',
   month: 'long',
@@ -34,6 +39,15 @@ const dateLabel = new Intl.DateTimeFormat('zh-CN', {
       class="ui-mono text-sm text-primary no-underline hover:underline"
       >← 返回动态</a
     >
+
+    {cover && (
+      <ContentImage
+        src={cover}
+        alt={coverAlt ?? title}
+        class="mx-auto mt-8 block h-auto max-h-[80vh] w-auto max-w-full rounded-xl border border-surface-border"
+        loading="eager"
+      />
+    )}
 
     <header class="mt-8 border-b border-surface-border pb-10">
       <div
@@ -94,6 +108,7 @@ const dateLabel = new Intl.DateTimeFormat('zh-CN', {
   .announcement-content :global(ul),
   .announcement-content :global(ol) {
     margin-top: 1rem;
+    list-style: revert;
     padding-left: 1.4rem;
   }
   .announcement-content :global(li + li) {
@@ -119,6 +134,13 @@ const dateLabel = new Intl.DateTimeFormat('zh-CN', {
     margin: 1.75rem 0;
     border-left: 2px solid var(--ui-primary);
     padding-left: 1rem;
+  }
+  .announcement-content :global(img) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 2rem auto;
+    border-radius: 0.75rem;
   }
   </style>
 </Layout>

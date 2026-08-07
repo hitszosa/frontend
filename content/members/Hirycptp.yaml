@@ -1,0 +1,12 @@
+name: Hirycptp
+github: clockparadox
+order: 100
+image: /member-images/hirycptp.webp
+projects:
+  - name: Hirycptp 的个人主页
+    description: ''
+    href: https://hirycptp.top/profile
+    type: website
+  - name: lyric
+    description: 使用图数据库存储二级上下文，支持 MCP 的 QQ / Telegram Bot
+    href: https://github.com/clockparadox/lyric

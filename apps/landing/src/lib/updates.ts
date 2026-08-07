@@ -1,4 +1,5 @@
 import { getCollection } from 'astro:content';
+import { contentPath, type ContentImageSource } from './content';
 
 export type UpdateKind = 'announcement' | 'event' | 'article';
 
@@ -14,15 +15,15 @@ export interface UpdateEntry {
   warning: boolean;
   upcoming: boolean;
   meta?: string;
-  cover?: string;
+  cover?: ContentImageSource;
   coverAlt?: string;
 }
 
 export async function getUpdates(now = new Date()): Promise<UpdateEntry[]> {
   const [announcements, events, articles] = await Promise.all([
-    getCollection('announcements'),
-    getCollection('events'),
-    getCollection('articles'),
+    getCollection('announcements', ({ data }) => !data.hide),
+    getCollection('events', ({ data }) => !data.hide),
+    getCollection('articles', ({ data }) => !data.hide),
   ]);
 
   return [
@@ -34,7 +35,7 @@ export async function getUpdates(now = new Date()): Promise<UpdateEntry[]> {
         title: entry.data.title,
         summary: entry.data.summary,
         date: entry.data.date,
-        href: `/announcements/${entry.id}/`,
+        href: `/announcements/${contentPath(entry.id)}/`,
         pinned: entry.data.pinned,
         importance: entry.data.importance,
         warning: entry.data.level === 'warn',
@@ -48,7 +49,7 @@ export async function getUpdates(now = new Date()): Promise<UpdateEntry[]> {
       title: entry.data.title,
       summary: entry.data.summary,
       date: entry.data.date,
-      href: `/events/${entry.id}/`,
+      href: `/events/${contentPath(entry.id)}/`,
       pinned: entry.data.pinned,
       importance: entry.data.importance,
       warning: false,
@@ -63,7 +64,7 @@ export async function getUpdates(now = new Date()): Promise<UpdateEntry[]> {
       title: entry.data.title,
       summary: entry.data.summary,
       date: entry.data.date,
-      href: `/articles/${entry.id}/`,
+      href: `/articles/${contentPath(entry.id)}/`,
       pinned: entry.data.pinned,
       importance: entry.data.importance,
       warning: false,

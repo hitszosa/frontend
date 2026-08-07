@@ -2,21 +2,66 @@
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/LandingLayout.astro';
 import FriendLinkCard from '../components/FriendLinkCard.astro';
+import GithubMemberCard from '../components/GithubMemberCard.astro';
+import MemberLink from '../components/MemberLink.astro';
+import { getGithubOrgMembers, getGithubRepositoryStats } from '../lib/github';
 
 const friendLinks = (await getCollection('friendLinks')).sort(
   (a, b) => a.data.order - b.data.order,
+);
+const githubMembers = await getGithubOrgMembers();
+const alphabetical = new Intl.Collator('en', {
+  sensitivity: 'base',
+  numeric: true,
+});
+const memberEntries = (await getCollection('members')).filter(
+  (member) => member.data.projects.length > 0,
+);
+const memberLinkItems = memberEntries.flatMap((member) =>
+  member.data.projects.map((link) => ({
+    link,
+    author: member.data.name,
+    github: member.data.github,
+    image:
+      link.logo ?? (link.type === 'website' ? member.data.image : undefined),
+  })),
+);
+const byLinkName = (
+  a: (typeof memberLinkItems)[number],
+  b: (typeof memberLinkItems)[number],
+) => alphabetical.compare(a.link.name, b.link.name);
+const memberBlogs = memberLinkItems
+  .filter(({ link }) => link.type === 'website')
+  .sort(byLinkName);
+const memberProjects = await Promise.all(
+  memberLinkItems
+    .filter(({ link }) => link.type !== 'website')
+    .map(async (item) => ({
+      ...item,
+      repository: await getGithubRepositoryStats(item.link.href),
+    })),
+);
+memberProjects.sort(
+  (a, b) =>
+    (b.repository?.stars ?? -1) - (a.repository?.stars ?? -1) ||
+    (b.repository?.updatedAt.getTime() ?? -Infinity) -
+      (a.repository?.updatedAt.getTime() ?? -Infinity) ||
+    byLinkName(a, b),
 );
 ---
 
 <Layout title="友情链接 | HITSZ OSA" description="HITSZ OSA 友情链接">
   <div class="py-14">
     <div class="flex items-baseline justify-between">
-      <h1 class="ui-mono text-xs tracking-widest text-muted-fg">
+      <h1 class="ui-mono text-xs font-semibold tracking-widest text-surface-fg">
         LINKS / 友情链接
       </h1>
-      <span class="ui-mono text-xs text-muted-fg">{friendLinks.length} 个</span>
+      <span class="ui-mono text-xs font-medium text-surface-fg/70">
+        {friendLinks.length}
+        个
+      </span>
     </div>
-    <p class="mt-6 max-w-xl text-sm leading-relaxed text-muted-fg">
+    <p class="mt-5 max-w-xl text-sm leading-relaxed text-surface-fg/80">
       开源让彼此连接——欢迎
       <a
         href="https://github.com/hitszosa/osa-moe-landing-page/issues/new"
@@ -30,5 +75,70 @@ const friendLinks = (await getCollection('friendLinks')).sort(
     <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {friendLinks.map((link) => <FriendLinkCard link={link} />)}
     </div>
+
+    {memberBlogs.length > 0 && (
+      <section class="mt-14 border-t border-surface-border pt-8">
+        <div class="flex items-baseline justify-between gap-4">
+          <h2 class="ui-mono text-xs font-semibold tracking-widest text-surface-fg">
+            BLOGS / 博客与个人站点
+          </h2>
+          <span class="ui-mono text-xs font-medium text-surface-fg/70">
+            {memberBlogs.length} 个
+          </span>
+        </div>
+        <div class="mt-3 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
+          {memberBlogs.map(({ link, author, github, image }) => (
+            <MemberLink link={link} author={author} github={github} image={image} />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="mt-10 border-t border-surface-border pt-8">
+      <div class="flex items-baseline justify-between gap-4">
+        <h2
+          class="ui-mono text-xs font-semibold tracking-widest text-surface-fg"
+        >
+          PROJECTS / 成员项目
+        </h2>
+        <span class="ui-mono text-xs font-medium text-surface-fg/70">
+          {memberProjects.length}
+          个
+        </span>
+      </div>
+      <div class="mt-3 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
+        {memberProjects.map(({ link, author, github, image }) => (
+          <MemberLink link={link} author={author} github={github} image={image} />
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10 border-t border-surface-border pt-8">
+      <div class="flex items-baseline justify-between gap-4">
+        <h2
+          class="ui-mono text-xs font-semibold tracking-widest text-surface-fg"
+        >
+          MEMBERS / GitHub 组织成员
+        </h2>
+        <span class="ui-mono text-xs font-medium text-surface-fg/70">
+          {githubMembers.length}
+          位
+        </span>
+      </div>
+      <p class="mt-3 text-sm text-surface-fg/80">
+        <a
+          href="https://github.com/hitszosa"
+          target="_blank"
+          rel="noreferrer noopener"
+          class="text-primary underline decoration-dotted underline-offset-4"
+        >
+          hitszosa
+        </a>
+        组织的公开成员
+      </p>
+      <div class="mt-4 flex max-w-4xl flex-wrap gap-2.5">
+        {githubMembers.map((member) => <GithubMemberCard member={member} />)}
+      </div>
+    </section>
   </div>
 </Layout>

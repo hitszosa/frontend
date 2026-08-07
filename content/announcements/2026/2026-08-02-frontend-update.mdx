@@ -1,0 +1,43 @@
+---
+title: 协会门户网站更新公告
+summary: HITSZ OSA 门户网站、镜像站已完成新一轮前端更新，统一站点设计与内容结构，并改善移动端和深色模式体验。
+date: 2026-08-07
+level: info
+pinned: true
+importance: important
+cover: ./frontend-update.png 
+---
+
+> Rewrite it in Astro!
+
+HITSZ OSA 门户网站已完成新一轮前端更新。本次更新以统一协会各站点的设计和内容结构为目标，将[落地页](https://osa.moe) 和 [镜像站主页](https://mirrors.osa.moe)迁移至 Astro，并重写了[镜像站帮助页](https://mirrors.osa.moe/help)。
+
+## 背景
+
+原OSA落地页、镜像站和镜像站帮助页，分别使用了`pub`、`vue`和`React`三种技术搭建，且“采用的编程范式和依赖较旧，因此维护成本比较高”，存在长时间缺少维护、设计风格不统一等问题。在进行了多次方法迭代后，我们选择用`Astro + Vue`来重写我们的前端。
+> 
+
+## 本次更新
+
+新的网站设计参考了一些lug社团的主页，更多地展示了我们的社团风采、社员风貌。此外在架构上也有诸多调整：
+
+- 统一前端设计与框架，使用monorepo组织前端页面；
+- 提供协会站点和开源项目入口，[展示社员项目](https://osa.moe/links)；
+- 增加统一的[动态列表](https://osa.moe/updates)与独立内容详情页；
+- 公告、活动和文章在首页与动态页统一展示；
+- [RSS 支持](https://osa.moe/rss.xml) （欢迎订阅）
+- 改善移动端布局、键盘导航和深色模式体验；
+- 重写镜像站帮助页，将镜像站和镜像站帮助合并到一个站点。
+
+现阶段UI仍在继续完善中。如果遇到内容错误、链接失效或显示异常问题，欢迎通过 GitHub 提交反馈。
+
+
+<RelatedLink
+  href="https://github.com/hitszosa/frontend"
+  description="欢迎向我们反馈bug、贡献内容。"
+  label="github:hitszosa/frontend"
+/>
+
+开源技术协会
+
+2026 年 8 月 2 日

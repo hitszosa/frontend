@@ -1,0 +1,8 @@
+name: xuchen-w
+github: xuchen-w
+order: 100
+projects:
+  - name: xuchen-w 的个人主页
+    description: ''
+    href: https://xuchen-w.github.io/
+    type: website

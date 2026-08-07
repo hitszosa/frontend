@@ -1,0 +1,8 @@
+name: pupydodo
+github: pupydodo
+order: 100
+image: /member-images/pupydodo.webp
+projects:
+  - name: Arknights Passport ePaper
+    description: '明日方舟通行证（全彩墨水屏版）'
+    href: https://github.com/pupydodo/Arknights-Passport-ePaper

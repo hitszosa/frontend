@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { title, description, immersive = false } = Astro.props;
-const services = (await getCollection('services'))
+const services = (await getCollection('services', ({ data }) => !data.hide))
   .sort((a, b) => a.data.order - b.data.order)
   .map((entry) => ({
     name: entry.data.name,

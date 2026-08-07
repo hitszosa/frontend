@@ -1,0 +1,19 @@
+---
+import { Image } from 'astro:assets';
+import type { ContentImageSource } from '../../lib/content';
+
+interface Props {
+  src: ContentImageSource;
+  alt: string;
+  class?: string;
+  loading?: 'eager' | 'lazy';
+}
+
+const { src, alt, class: className, loading = 'lazy' } = Astro.props;
+---
+
+{typeof src === 'string' ? (
+    <img src={src} alt={alt} class={className} loading={loading} decoding="async" />
+  ) : (
+    <Image src={src} alt={alt} class={className} loading={loading} />
+  )}

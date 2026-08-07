@@ -1,0 +1,8 @@
+name: lawrence1918
+github: lawrence1918
+order: 100
+projects:
+  - name: HITSZ-Connect
+    description: 开源版 aTrust
+    href: https://github.com/lawrence1918/HITSZ-Connect
+    logo: https://raw.githubusercontent.com/lawrence1918/HITSZ-Connect/main/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png

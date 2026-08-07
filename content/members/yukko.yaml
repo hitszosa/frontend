@@ -1,0 +1,9 @@
+name: yukko
+github: yukkodesu
+order: 100
+image: /member-images/yukko.webp
+projects:
+  - name: "yukko's blog"
+    description: 好久没更新了，不如写小黄油测评
+    href: https://yukkodesu.github.io
+    type: website

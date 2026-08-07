@@ -1,0 +1,7 @@
+name: "111"
+github: 0702hjj
+order: 100
+projects:
+  - name: AI_IFC
+    description: 用于 AI 生成建筑行业格式 IFC
+    href: https://github.com/0702hjj/AI_IFC

@@ -10,12 +10,12 @@ const external = /^https?:\/\//.test(href);
 ---
 
 <aside class="my-8 rounded-lg border border-surface-border bg-surface p-5">
-  <p class="m-0 text-sm leading-7 text-muted-fg">{description}</p>
+  <p class="m-0! text-sm leading-7 text-muted-fg">{description}</p>
   <a
     href={href}
     target={external ? '_blank' : undefined}
     rel={external ? 'noreferrer noopener' : undefined}
-    class="mt-3 inline-flex font-medium text-primary no-underline hover:underline"
+    class="inline-flex font-medium text-primary no-underline hover:underline"
   >
     {label}{external ? ' ↗' : ' →'}
   </a>

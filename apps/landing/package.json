@@ -17,9 +17,11 @@
   },
   "dependencies": {
     "@astrojs/mdx": "catalog:",
+    "@astrojs/rss": "^4.0.19",
     "@hitszosa/ui": "workspace:*",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "catalog:",
+    "sharp": "^0.34.5",
     "tailwindcss": "catalog:"
   },
   "license": "ISC",

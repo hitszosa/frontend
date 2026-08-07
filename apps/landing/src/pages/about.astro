@@ -1,10 +1,13 @@
 ---
 import Layout from '../layouts/LandingLayout.astro';
+import GithubMemberCard from '../components/GithubMemberCard.astro';
 import { getCollection } from 'astro:content';
+import { getGithubOrgMembers } from '../lib/github';
 
-const services = (await getCollection('services')).sort(
-  (a, b) => a.data.order - b.data.order,
-);
+const services = (
+  await getCollection('services', ({ data }) => !data.hide)
+).sort((a, b) => a.data.order - b.data.order);
+const githubMembers = await getGithubOrgMembers();
 
 const socialLinks = [
   {
@@ -50,6 +53,34 @@ const campusResources = [
         PR。
       </p>
     </div>
+
+    <section class="mt-14">
+      <div class="flex items-baseline justify-between gap-4">
+        <h2
+          class="ui-mono text-xs font-semibold tracking-widest text-surface-fg"
+        >
+          MEMBERS / GitHub 组织成员
+        </h2>
+        <span class="ui-mono text-xs font-medium text-surface-fg/70">
+          {githubMembers.length}
+          位
+        </span>
+      </div>
+      <p class="mt-3 text-sm text-surface-fg/80">
+        <a
+          href="https://github.com/hitszosa"
+          target="_blank"
+          rel="noreferrer noopener"
+          class="text-primary underline decoration-dotted underline-offset-4"
+        >
+          hitszosa
+        </a>
+        组织的公开成员
+      </p>
+      <div class="mt-5 flex max-w-4xl flex-wrap gap-3">
+        {githubMembers.map((member) => <GithubMemberCard member={member} />)}
+      </div>
+    </section>
 
     <!-- 在运营的服务与产品 -->
     <section class="mt-14">

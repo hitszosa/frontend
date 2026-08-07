@@ -2,9 +2,9 @@
 import { getCollection } from 'astro:content';
 import LandingLayout from '../layouts/LandingLayout.astro';
 
-const services = (await getCollection('services')).sort(
-  (a, b) => a.data.order - b.data.order,
-);
+const services = (
+  await getCollection('services', ({ data }) => !data.hide)
+).sort((a, b) => a.data.order - b.data.order);
 const featuredServices = services.filter((entry) => entry.data.featured);
 const additionalServices = services.filter((entry) => !entry.data.featured);
 

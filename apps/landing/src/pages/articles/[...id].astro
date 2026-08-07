@@ -3,11 +3,13 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/LandingLayout.astro';
 import Badge from '../../components/Badge.astro';
 import RelatedLink from '../../components/content/RelatedLink.astro';
+import ContentImage from '../../components/content/ContentImage.astro';
+import { contentPath } from '../../lib/content';
 
 export async function getStaticPaths() {
-  const articles = await getCollection('articles');
+  const articles = await getCollection('articles', ({ data }) => !data.hide);
   return articles.map((article) => ({
-    params: { id: article.id },
+    params: { id: contentPath(article.id) },
     props: { article },
   }));
 }
@@ -35,6 +37,15 @@ const dateLabel = new Intl.DateTimeFormat('zh-CN', {
       >← 返回动态</a
     >
 
+    {cover && (
+      <ContentImage
+        src={cover}
+        alt={coverAlt ?? title}
+        class="mx-auto mt-8 block h-auto max-h-[80vh] w-auto max-w-full rounded-xl border border-surface-border"
+        loading="eager"
+      />
+    )}
+
     <header class="mt-8 border-b border-surface-border pb-10">
       <div
         class="flex flex-wrap items-center gap-2 ui-mono text-xs text-muted-fg"
@@ -50,14 +61,6 @@ const dateLabel = new Intl.DateTimeFormat('zh-CN', {
       </h1>
       <p class="mt-5 max-w-2xl text-lg leading-8 text-muted-fg">{summary}</p>
     </header>
-
-    {cover && (
-        <img
-          src={cover}
-          alt={coverAlt ?? title}
-          class="mt-10 aspect-video w-full rounded-xl border border-surface-border object-cover"
-        />
-      )}
 
     <div class="article-content mt-10">
       <Content components={{ RelatedLink }} />
@@ -101,6 +104,7 @@ const dateLabel = new Intl.DateTimeFormat('zh-CN', {
   .article-content :global(ul),
   .article-content :global(ol) {
     margin-top: 1rem;
+    list-style: revert;
     padding-left: 1.4rem;
   }
   .article-content :global(li + li) {
@@ -126,6 +130,13 @@ const dateLabel = new Intl.DateTimeFormat('zh-CN', {
     margin: 1.75rem 0;
     border-left: 2px solid var(--ui-primary);
     padding-left: 1rem;
+  }
+  .article-content :global(img) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 2rem auto;
+    border-radius: 0.75rem;
   }
   </style>
 </Layout>

@@ -1,0 +1,13 @@
+name: Fun10165
+github: Fun10165
+order: 100
+projects:
+  - name: hitsz-autonet
+    description: 跨平台的校园网自动登录器
+    href: https://github.com/Fun10165/hitsz-autonet
+  - name: hitsz-info-fetcher
+    description: 获取校园资讯
+    href: https://github.com/Fun10165/hitsz-info-fetcher
+  - name: anki-open-template
+    description: 开源的 Anki 记忆卡片模板
+    href: https://github.com/Fun10165/anki-open-template

@@ -1,0 +1,45 @@
+---
+title: 镜像站前端更新公告
+summary: HITSZ OSA 开源软件镜像站完成前端重构，统一镜像主页与使用帮助的界面和导航，并改善搜索、移动端及深色模式体验。
+date: 2026-08-07
+tags:
+  - 镜像站
+level: info
+pinned: true
+importance: important
+cover: ./mirrors-frontend-update.webp
+coverAlt: HITSZ OSA 开源软件镜像站新版首页
+---
+
+> Mirrors, rewritten in Astro.
+
+HITSZ OSA 开源软件镜像站已完成新一轮前端更新。本次更新重新组织了镜像主页和使用帮助，在保留镜像服务原有访问方式的基础上，统一站点设计、导航和内容结构。
+
+## 背景
+
+此前，镜像主页与镜像使用帮助为不同站点，技术栈、页面结构和交互方式均不相同。
+
+镜像主页采用Vue编写，而镜像站帮助站点fork自 [MirrorZ-help](https://github.com/mirrorz-org/mirrorz-help) ，较丑陋且不便维护。
+
+本次更新以 Astro 为统一基础，将需要交互的镜像列表保留为 Vue 组件，并重写了mirrorz的文档解析器，将镜像使用帮助整合至镜像站内。
+
+## 本次更新
+
+- 重写[镜像站主页](https://mirrors.osa.moe/)，统一协会站点的标题栏、导航和主题；
+- 保留镜像列表搜索与排序，并集中展示同步状态和使用帮助入口；
+- 将[镜像使用帮助](https://mirrors.osa.moe/help/)整合至镜像站，减少跨站切换；
+- 将镜像站公告迁移至主站，镜像站只作跳转；
+- 改善移动端布局、深色模式和键盘导航体验；
+- 使用 Monorepo 共享设计组件和内容，降低后续维护成本。
+
+此次调整仅涉及网页前端和帮助内容的呈现，不改变镜像数据路径、同步策略以及现有的软件源配置方式。如果遇到页面显示、链接或帮助内容问题，欢迎通过 GitHub 反馈。
+
+<RelatedLink
+  href="https://github.com/hitszosa/frontend"
+  description="欢迎反馈问题、补充镜像使用帮助或参与前端维护。"
+  label="github:hitszosa/frontend"
+/>
+
+开源技术协会
+
+2026 年 8 月 7 日
