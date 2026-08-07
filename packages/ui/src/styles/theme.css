@@ -1,11 +1,11 @@
 :root {
   --ui-page-bg: #f8fafc;
   --ui-page-fg: #1e293b;
-  --ui-muted-fg: #94a3b8;
-  --ui-primary: #576edb;
+  --ui-muted-fg: #64748b;
+  --ui-primary: #4f63d1;
   --ui-secondary: #6f46bf;
   --ui-osa-fg: #373da9;
-  --ui-osa-hover: #576edb;
+  --ui-osa-hover: #4f63d1;
   --ui-surface: #ffffff;
   --ui-surface-fg: #161a4d;
   --ui-surface-border: #e2e8f0;
@@ -24,7 +24,7 @@
   /* Semantic accents for community content and data visualisation. */
   --ui-activity: #d97706;
   --ui-activity-fg: #92400e;
-  --ui-success: #059669;
+  --ui-success: #04704f;
   --ui-warn: #d97706;
   --ui-danger: #dc2626;
   --ui-graph-primary: #576edb;
