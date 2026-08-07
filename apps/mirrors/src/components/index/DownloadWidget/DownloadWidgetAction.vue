@@ -1,10 +1,13 @@
 <template>
   <button
     type="button"
-    class="inline-flex h-9 w-full items-center justify-center gap-2 rounded-lg bg-surface px-4 text-base font-medium text-surface-fg shadow-sm ring-1 ring-surface-border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:border-primary/50 hocus:bg-page-bg hocus:text-primary hover:cursor-pointer"
+    class="group ml-auto flex w-fit items-center gap-2 rounded-sm text-sm font-medium text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-osa-hover hover:cursor-pointer"
     @click="onToggleModal"
   >
-    Get LiveCD & Software
+    Download
+    <span class="transition-transform group-hover:translate-x-0.5 group-focus-visible:translate-x-0.5">
+      →
+    </span>
   </button>
   <AppModal v-model="isOpen" aria-labelledby="download-modal-title">
     <IndexDownloadModal @close="onCloseModal" />

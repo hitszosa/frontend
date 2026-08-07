@@ -14,7 +14,7 @@
         role="dialog"
         :aria-modal="modelValue ? 'true' : undefined"
         tabindex="-1"
-        class="h-[calc(100vh-4em)] max-h-full w-full max-w-4xl overflow-hidden overscroll-contain rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        class="h-[calc(100vh-4em)] max-h-full w-full max-w-4xl overflow-hidden overscroll-contain rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       >
         <slot />
       </div>

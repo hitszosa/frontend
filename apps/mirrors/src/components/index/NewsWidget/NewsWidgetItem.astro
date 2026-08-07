@@ -6,13 +6,13 @@ interface Props {
 }
 
 const { digest } = Astro.props
-const dateString = new Date(digest.date)
-  .toISOString()
-  .slice(0, 10)
+const dateString = new Date(digest.date).toISOString().slice(0, 10)
 ---
 
-<li class="flex items-center justify-between gap-4 text-muted-fg">
-  <div class="flex min-w-0 items-center text-page-fg">
+<li
+  class="flex items-center justify-between gap-4 py-2 text-muted-fg first:pt-0"
+>
+  <div class="flex min-w-0 items-center text-page-fg text-[15px]">
     <a
       href={digest._path}
       class="relative inline-block truncate decoration-dotted underline-offset-4 transition-colors hocus:cursor-pointer hocus:text-primary hocus:underline"
