@@ -1,6 +1,6 @@
 <template>
   <span
-    class="inline-flex shrink-0 items-center rounded px-1.5 py-0.5 text-[11px] font-medium capitalize"
+    class="inline-flex w-[8.8ch] shrink-0 items-center justify-center rounded py-0.5 font-mono text-[11px] font-medium capitalize"
     :style="badgeStyle"
   >
     {{ status }}
