@@ -1,5 +1,6 @@
 ---
 import Badge from './Badge.astro';
+import TagBadges from './TagBadges.astro';
 import type { UpdateEntry } from '../lib/updates';
 
 interface Props {
@@ -49,6 +50,7 @@ const badgeTone = entry.warning
         {dateLabel}
       </time>
       <Badge tone={badgeTone}>{entry.label}</Badge>
+      <TagBadges tags={entry.tags} />
       {entry.pinned && (
           <Badge tone="primary" mono>
             置顶

@@ -1,6 +1,7 @@
 ---
 import type { UpdateEntry } from '../lib/updates';
 import Badge from './Badge.astro';
+import TagBadges from './TagBadges.astro';
 import ContentImage from './content/ContentImage.astro';
 
 interface Props {
@@ -47,6 +48,7 @@ const getTone = (entry: UpdateEntry): BadgeTone =>
         <div class="flex min-w-0 flex-1 flex-col p-6 sm:p-8">
           <div class="flex flex-wrap items-center gap-2 text-xs text-muted-fg">
             <Badge tone={getTone(primaryUpdate)}>{primaryUpdate.label}</Badge>
+            <TagBadges tags={primaryUpdate.tags} />
             {primaryUpdate.meta && (
               <Badge tone="muted">{primaryUpdate.meta}</Badge>
             )}
@@ -93,6 +95,7 @@ const getTone = (entry: UpdateEntry): BadgeTone =>
               <div class="min-w-0 flex-1 p-4">
                 <div class="flex flex-wrap items-center gap-1.5">
                   <Badge tone={getTone(entry)}>{entry.label}</Badge>
+                  <TagBadges tags={entry.tags} />
                   {entry.meta && <Badge tone="muted">{entry.meta}</Badge>}
                   <time
                     class="ui-mono text-[11px] text-muted-fg"

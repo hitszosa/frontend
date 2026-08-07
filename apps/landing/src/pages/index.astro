@@ -9,6 +9,7 @@ import {
 } from '@hitszosa/ui';
 import Layout from '../layouts/LandingLayout.astro';
 import Badge from '../components/Badge.astro';
+import TagBadges from '../components/TagBadges.astro';
 import UpdateBoard from '../components/UpdateBoard.astro';
 import FriendLinkCard from '../components/FriendLinkCard.astro';
 import { getUpdates } from '../lib/updates';
@@ -272,6 +273,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
               >
                 {entry.pinned ? `置顶 · ${entry.label}` : entry.label}
               </Badge>
+              <TagBadges tags={entry.tags} />
               <a
                 href={entry.href}
                 class="min-w-0 flex-1 truncate text-surface-fg no-underline hover:text-primary"

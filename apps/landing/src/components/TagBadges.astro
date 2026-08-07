@@ -1,0 +1,14 @@
+---
+import Badge from './Badge.astro';
+
+interface Props {
+  tags: string[];
+  size?: 'sm' | 'md';
+}
+
+const { tags, size = 'sm' } = Astro.props;
+---
+
+{tags.includes('镜像站') && (
+  <Badge tone="info" size={size} mono>镜像站</Badge>
+)}

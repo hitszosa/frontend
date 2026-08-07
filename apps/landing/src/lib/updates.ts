@@ -14,6 +14,7 @@ export interface UpdateEntry {
   importance: 'normal' | 'important';
   warning: boolean;
   upcoming: boolean;
+  tags: string[];
   meta?: string;
   cover?: ContentImageSource;
   coverAlt?: string;
@@ -40,6 +41,7 @@ export async function getUpdates(now = new Date()): Promise<UpdateEntry[]> {
         importance: entry.data.importance,
         warning: entry.data.level === 'warn',
         upcoming: false,
+        tags: entry.data.tags,
         cover: entry.data.cover,
         coverAlt: entry.data.coverAlt,
       })),
@@ -54,6 +56,7 @@ export async function getUpdates(now = new Date()): Promise<UpdateEntry[]> {
       importance: entry.data.importance,
       warning: false,
       upcoming: entry.data.upcoming,
+      tags: [],
       meta: entry.data.type,
       cover: entry.data.cover,
       coverAlt: entry.data.coverAlt,
@@ -69,6 +72,7 @@ export async function getUpdates(now = new Date()): Promise<UpdateEntry[]> {
       importance: entry.data.importance,
       warning: false,
       upcoming: false,
+      tags: [],
       meta: entry.data.author,
       cover: entry.data.cover,
       coverAlt: entry.data.coverAlt,

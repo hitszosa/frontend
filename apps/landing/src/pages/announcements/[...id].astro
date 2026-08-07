@@ -2,6 +2,7 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/LandingLayout.astro';
 import Badge from '../../components/Badge.astro';
+import TagBadges from '../../components/TagBadges.astro';
 import RelatedLink from '../../components/content/RelatedLink.astro';
 import ContentImage from '../../components/content/ContentImage.astro';
 import { contentPath } from '../../lib/content';
@@ -23,7 +24,8 @@ interface Props {
 
 const { announcement } = Astro.props;
 const { Content } = await render(announcement);
-const { title, summary, date, level, cover, coverAlt } = announcement.data;
+const { title, summary, date, tags, level, cover, coverAlt } =
+  announcement.data;
 const dateLabel = new Intl.DateTimeFormat('zh-CN', {
   year: 'numeric',
   month: 'long',
@@ -56,6 +58,7 @@ const dateLabel = new Intl.DateTimeFormat('zh-CN', {
         <Badge tone={level === 'warn' ? 'warning' : 'primary'} size="md">
           {level === 'warn' ? '维护公告' : '公告'}
         </Badge>
+        <TagBadges tags={tags} size="md" />
         <time datetime={date.toISOString()}>{dateLabel}</time>
       </div>
       <h1
