@@ -15,31 +15,27 @@
       :error-message="errorMessage"
     >
       <template #name-data="{ row }">
-        <div
-          class="flex w-full min-w-0 items-center justify-between gap-2 whitespace-nowrap sm:justify-start"
+        <a
+          v-if="row.files"
+          :href="row.files"
+          target="_blank"
+          rel="noreferrer noopener"
+          class="whitespace-nowrap rounded-sm text-surface-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary"
         >
-          <a
-            v-if="row.files"
-            :href="row.files"
-            target="_blank"
-            rel="noreferrer noopener"
-            class="min-w-0 rounded-sm text-surface-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary"
-          >
-            {{ row.name }}
-          </a>
-          <span v-else class="min-w-0">
-            {{ row.name }}
-          </span>
-          <a
-            v-if="isShowHelp(row.name)"
-            :href="getHelpUrl(row.name)"
-            :aria-label="`${row.name} 镜像使用帮助`"
-            :title="`${row.name} 镜像使用帮助`"
-            class="shrink-0 rounded-sm text-sm text-muted-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary"
-          >
-            <IconifyIcon icon="icon-park-outline:help" />
-          </a>
-        </div>
+          {{ row.name }}
+        </a>
+        <span v-else class="whitespace-nowrap">
+          {{ row.name }}
+        </span>
+      </template>
+      <template #help-data="{ row }">
+        <a
+          v-if="isShowHelp(row.name)"
+          :href="getHelpUrl(row.name)"
+          class="text-osa-fg after:w-0 hover:text-primary hover:after:w-full hover:after:bg-osa-fg/40"
+        >
+          Help
+        </a>
       </template>
       <template #lastUpdate-data="{ row }">
         <relative-time
@@ -59,7 +55,6 @@
 </template>
 
 <script setup lang="ts">
-import { Icon as IconifyIcon } from '@iconify/vue'
 import '@github/relative-time-element'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
@@ -90,6 +85,10 @@ const createColumns = () => {
       key: 'lastUpdate',
       label: 'Last Update',
       sortable: true,
+    },
+    {
+      key: 'help',
+      label: 'Help',
     },
   ]
 }
