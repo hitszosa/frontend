@@ -1,21 +1,25 @@
 <template>
-  <div
-    v-show="modelValue"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 px-4 py-8 backdrop-blur-sm"
-    :aria-hidden="modelValue ? undefined : 'true'"
-    @click="onBackdropClick"
-  >
+  <Teleport to="body">
     <div
-      ref="dialogRef"
-      v-bind="$attrs"
-      role="dialog"
-      :aria-modal="modelValue ? 'true' : undefined"
-      tabindex="-1"
-      class="h-[calc(100vh-4em)] max-h-full w-full max-w-4xl overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      v-show="modelValue"
+      class="fixed inset-0 z-100 flex overscroll-contain items-center justify-center bg-slate-950/60 px-4 pt-20 pb-8 backdrop-blur-sm"
+      :aria-hidden="modelValue ? undefined : 'true'"
+      @click="onBackdropClick"
+      @wheel.stop
+      @touchmove.stop
     >
-      <slot />
+      <div
+        ref="dialogRef"
+        v-bind="$attrs"
+        role="dialog"
+        :aria-modal="modelValue ? 'true' : undefined"
+        tabindex="-1"
+        class="h-[calc(100vh-4em)] max-h-full w-full max-w-4xl overflow-hidden overscroll-contain rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      >
+        <slot />
+      </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -35,6 +39,27 @@ const emit = defineEmits<{
 
 const dialogRef = ref<HTMLDivElement | null>(null)
 const previousActiveElement = ref<HTMLElement | null>(null)
+let previousRootOverflow = ''
+let pageScrollLocked = false
+
+const lockPageScroll = () => {
+  if (pageScrollLocked) {
+    return
+  }
+
+  previousRootOverflow = document.documentElement.style.overflow
+  document.documentElement.style.overflow = 'hidden'
+  pageScrollLocked = true
+}
+
+const unlockPageScroll = () => {
+  if (!pageScrollLocked) {
+    return
+  }
+
+  document.documentElement.style.overflow = previousRootOverflow
+  pageScrollLocked = false
+}
 
 const focusableSelector = [
   'a[href]',
@@ -123,6 +148,7 @@ watch(
         document.activeElement instanceof HTMLElement
           ? document.activeElement
           : null
+      lockPageScroll()
       window.addEventListener('keydown', onKeydown)
       nextTick(() => {
         focusFirstElement()
@@ -130,6 +156,7 @@ watch(
       return
     }
 
+    unlockPageScroll()
     window.removeEventListener('keydown', onKeydown)
     if (previousActiveElement.value?.isConnected) {
       previousActiveElement.value.focus()
@@ -142,6 +169,7 @@ watch(
 onBeforeUnmount(() => {
   if (typeof window !== 'undefined') {
     window.removeEventListener('keydown', onKeydown)
+    unlockPageScroll()
   }
 })
 </script>

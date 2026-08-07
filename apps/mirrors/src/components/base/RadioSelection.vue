@@ -2,7 +2,7 @@
   <ul
     role="radiogroup"
     aria-orientation="vertical"
-    class="flex flex-col h-full p-2 overflow-y-auto list-none rounded-lg border border-surface-border bg-page-bg whitespace-nowrap"
+    class="flex flex-col h-full p-2 overflow-y-auto overscroll-contain list-none rounded-lg border border-surface-border bg-page-bg whitespace-nowrap"
   >
     <li v-for="(item, idx) in $props.items" :key="item" role="presentation">
       <button

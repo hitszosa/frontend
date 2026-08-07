@@ -15,36 +15,34 @@
       :error-message="errorMessage"
     >
       <template #name-data="{ row }">
-        <a
-          v-if="isShowHelp(row.name)"
-          class="group flex gap-1 items-center cursor-pointer rounded-sm text-surface-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary"
-          :href="getHelpUrl(row.name)"
+        <div
+          class="flex w-full min-w-0 items-center justify-between gap-2 sm:justify-start"
         >
-          <span>
+          <a
+            v-if="row.files"
+            :href="row.files"
+            target="_blank"
+            rel="noreferrer noopener"
+            class="min-w-0 rounded-sm text-surface-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary"
+          >
+            {{ row.name }}
+          </a>
+          <span v-else class="min-w-0">
             {{ row.name }}
           </span>
-          <IconifyIcon
-            class="text-sm transition text-muted-fg group-hover:text-primary group-focus:text-primary"
-            icon="icon-park-outline:help"
-          />
-        </a>
-        <span v-else>
-          {{ row.name }}
-        </span>
+          <a
+            v-if="isShowHelp(row.name)"
+            :href="getHelpUrl(row.name)"
+            :aria-label="`${row.name} 镜像使用帮助`"
+            :title="`${row.name} 镜像使用帮助`"
+            class="shrink-0 rounded-sm text-sm text-muted-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary"
+          >
+            <IconifyIcon icon="icon-park-outline:help" />
+          </a>
+        </div>
       </template>
       <template #status-data="{ row }">
         <StatusBadge :status="row.status" />
-      </template>
-      <template #files-data="{ row }">
-        <a
-          v-if="row.files"
-          :href="row.files"
-          target="_blank"
-          rel="noreferrer noopener"
-          class="rounded-sm text-lg text-muted-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary"
-        >
-          <IconifyIcon icon="icon-park-outline:folder-open" />
-        </a>
       </template>
     </AppTable>
   </section>
@@ -70,10 +68,6 @@ const createColumns = () => {
       key: 'name',
       label: 'Name',
       sortable: true,
-    },
-    {
-      key: 'files',
-      label: 'Files',
     },
     {
       key: 'lastUpdate',
