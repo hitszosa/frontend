@@ -81,13 +81,14 @@ const createColumns = () => {
       sortable: true,
     },
     {
-      key: 'lastUpdate',
-      label: 'Last Update',
+      key: 'status',
+      label: 'Status',
+      smVisible: true,
       sortable: true,
     },
     {
-      key: 'status',
-      label: 'Status',
+      key: 'lastUpdate',
+      label: 'Last Update',
       sortable: true,
     },
   ]
