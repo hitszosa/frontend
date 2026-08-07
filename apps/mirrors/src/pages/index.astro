@@ -28,7 +28,7 @@ const news = sortNewsByDateDesc(await getMirrorNews())
       <MirrorList client:load />
     </div>
     <div
-      class="order-first flex h-min min-w-[20em] flex-col space-y-10 mb-4 md:order-last md:sticky md:top-24 md:w-[32vw] md:max-w-[30em]"
+      class="mb-4 flex h-min w-full min-w-0 flex-col space-y-10 md:order-last md:sticky md:top-24 md:min-w-[20em] md:w-[32vw] md:max-w-[30em]"
     >
       <a
         href="/help/"
