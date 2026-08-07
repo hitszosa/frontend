@@ -18,7 +18,7 @@ const news = sortNewsByDateDesc(await getMirrorNews())
 
 <Layout activeSite="mirrors">
   <div
-    class="flex w-full max-w-screen-xl flex-col space-y-12 md:items-start md:flex-row md:space-x-12 md:space-y-0"
+    class="flex w-full flex-col space-y-12 md:items-start md:flex-row md:space-x-8 lg:space-x-12 md:space-y-0"
   >
     <div class="grow space-y-4 md:order-first">
       <SectionHeading>
@@ -28,7 +28,7 @@ const news = sortNewsByDateDesc(await getMirrorNews())
       <MirrorList client:load />
     </div>
     <div
-      class="order-first flex h-min min-w-[20em] flex-col space-y-10 mb-4 md:order-last md:sticky md:top-24 md:w-[32vw] md:max-w-[30em]"
+      class="order-first flex h-min md:min-w-[18em] flex-col space-y-10 mb-4 md:order-last md:sticky md:top-24 md:w-[32%] md:max-w-[30em]"
     >
       <a
         href="/help/"
