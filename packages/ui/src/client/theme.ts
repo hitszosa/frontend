@@ -9,6 +9,11 @@ export const themeIcons: Record<ThemeMode, string> = {
   system: 'material-symbols:brightness-auto',
 }
 
+const themeColors: Record<Exclude<ThemeMode, 'system'>, string> = {
+  light: '#f8fafc',
+  dark: '#0f172a',
+}
+
 export const isThemeMode = (
   value: string | null | undefined,
 ): value is ThemeMode =>
@@ -25,6 +30,9 @@ export const applyTheme = (mode: ThemeMode) => {
   const resolvedTheme = resolveThemeMode(mode)
   document.documentElement.classList.toggle('dark', resolvedTheme === 'dark')
   document.documentElement.dataset.theme = mode
+  document
+    .querySelector<HTMLMetaElement>('meta[name="theme-color"]')
+    ?.setAttribute('content', themeColors[resolvedTheme])
 }
 
 export const getStoredThemeMode = (
