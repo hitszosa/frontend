@@ -11,7 +11,7 @@
             :class="[
               'px-4 py-3 text-left text-sm font-medium text-muted-fg',
               column.hiddenOnSmall && 'hidden sm:table-cell',
-              column.indentedOnSmall && 'pl-[1.875rem] sm:pl-4',
+              column.indentedOnSmall && 'pl-6 sm:pl-4',
             ]"
           >
             <button
@@ -36,7 +36,7 @@
         <tr v-if="loading || errorMessage">
           <td
             :colspan="columns.length"
-            class="px-4 py-6 text-center text-sm text-muted-fg"
+            class="px-2 sm:px-4 py-6 text-center text-sm text-muted-fg"
           >
             {{ loading ? '正在加载…' : errorMessage }}
           </td>
@@ -59,7 +59,7 @@
               v-for="column in columns"
               :key="column.key"
               :class="[
-                'px-4 py-3 align-middle',
+                'px-2 sm:px-4 py-3 align-middle',
                 column.hiddenOnSmall && 'hidden sm:table-cell',
               ]"
             >

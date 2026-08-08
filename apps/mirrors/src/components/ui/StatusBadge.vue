@@ -12,7 +12,7 @@
         aria-hidden="true"
       />
       <span
-        class="hidden w-[8.8ch] items-center justify-center rounded py-0.5 font-mono text-[11px] font-medium capitalize sm:inline-flex"
+        class="hidden w-12 items-center justify-center rounded py-0.5 font-mono text-[11px] font-medium capitalize sm:inline-flex"
         :style="badgeStyle"
         aria-hidden="true"
       >
