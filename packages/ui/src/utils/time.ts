@@ -8,6 +8,12 @@ const relativeTimeFormatter = new Intl.RelativeTimeFormat('zh-CN', {
   numeric: 'auto',
 })
 
+const formatRelativeTime = (value: number, unit: Intl.RelativeTimeFormatUnit) =>
+  relativeTimeFormatter
+    .formatToParts(value, unit)
+    .map((part) => (part.type === 'integer' ? `${part.value} ` : part.value))
+    .join('')
+
 const asDate = (value: DateInput) =>
   value instanceof Date ? value : new Date(value)
 
@@ -37,16 +43,13 @@ export const formatRelativeDate = (
   if (difference < 0) return formatLocalDate(value)
   if (difference < minute) return '刚刚'
   if (difference < hour) {
-    return relativeTimeFormatter.format(
-      -Math.floor(difference / minute),
-      'minute',
-    )
+    return formatRelativeTime(-Math.floor(difference / minute), 'minute')
   }
   if (difference < day) {
-    return relativeTimeFormatter.format(-Math.floor(difference / hour), 'hour')
+    return formatRelativeTime(-Math.floor(difference / hour), 'hour')
   }
   if (difference < 7 * day) {
-    return relativeTimeFormatter.format(-Math.floor(difference / day), 'day')
+    return formatRelativeTime(-Math.floor(difference / day), 'day')
   }
 
   return formatLocalDate(value)
