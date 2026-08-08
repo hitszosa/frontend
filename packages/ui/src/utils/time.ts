@@ -24,11 +24,16 @@ export const formatLocalDate = (value: DateInput, locale = 'zh-CN') =>
     day: 'numeric',
   }).format(asDate(value))
 
-export const formatLocalMonthDay = (value: DateInput, locale = 'zh-CN') =>
-  new Intl.DateTimeFormat(locale, {
+export const formatLocalMonthDay = (value: DateInput, locale = 'zh-CN') => {
+  const date = asDate(value)
+  const includeYear = date.getFullYear() !== new Date().getFullYear()
+
+  return new Intl.DateTimeFormat(locale, {
+    ...(includeYear && { year: 'numeric' }),
     month: 'long',
     day: 'numeric',
-  }).format(asDate(value))
+  }).format(date)
+}
 
 export const formatLocalDateTime = (value: DateInput, locale = 'zh-CN') =>
   new Intl.DateTimeFormat(locale, {
