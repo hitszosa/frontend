@@ -22,7 +22,7 @@
             :href="row.files"
             target="_blank"
             rel="noreferrer noopener"
-            class="whitespace-nowrap rounded-sm text-surface-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary"
+            class="whitespace-nowrap rounded-sm text-surface-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary text-ellipsis"
           >
             {{ row.name }}
           </a>
@@ -47,7 +47,13 @@
         >
           <time
             :datetime="formatDateTime(row.lastUpdate)"
-            class="whitespace-nowrap"
+            class="whitespace-nowrap inline sm:hidden"
+          >
+            {{ formatRelativeDate(row.lastUpdate * 1000, undefined, formatLocalMonthDay) }}
+          </time>
+          <time
+            :datetime="formatDateTime(row.lastUpdate)"
+            class="whitespace-nowrap hidden sm:inline"
           >
             {{ formatRelativeDate(row.lastUpdate * 1000) }}
           </time>
@@ -64,6 +70,7 @@
 import Tooltip from '@hitszosa/ui/components/Tooltip.vue'
 import {
   formatLocalDateTime,
+  formatLocalMonthDay,
   formatRelativeDate,
 } from '@hitszosa/ui/utils/time'
 import { storeToRefs } from 'pinia'
@@ -98,7 +105,7 @@ const columns = [
   },
   {
     key: 'help',
-    label: '帮助',
+    label: '',
   },
 ]
 const mirrorFilter = ref('')

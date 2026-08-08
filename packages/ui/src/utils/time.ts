@@ -24,6 +24,12 @@ export const formatLocalDate = (value: DateInput, locale = 'zh-CN') =>
     day: 'numeric',
   }).format(asDate(value))
 
+export const formatLocalMonthDay = (value: DateInput, locale = 'zh-CN') =>
+  new Intl.DateTimeFormat(locale, {
+    month: 'long',
+    day: 'numeric',
+  }).format(asDate(value))
+
 export const formatLocalDateTime = (value: DateInput, locale = 'zh-CN') =>
   new Intl.DateTimeFormat(locale, {
     year: 'numeric',
@@ -37,10 +43,11 @@ export const formatLocalDateTime = (value: DateInput, locale = 'zh-CN') =>
 export const formatRelativeDate = (
   value: DateInput,
   now: DateInput = new Date(),
+  formatDate: typeof formatLocalDate = formatLocalDate,
 ) => {
   const difference = asDate(now).getTime() - asDate(value).getTime()
 
-  if (difference < 0) return formatLocalDate(value)
+  if (difference < 0) return formatDate(value)
   if (difference < minute) return '刚刚'
   if (difference < hour) {
     return formatRelativeTime(-Math.floor(difference / minute), 'minute')
@@ -52,5 +59,5 @@ export const formatRelativeDate = (
     return formatRelativeTime(-Math.floor(difference / day), 'day')
   }
 
-  return formatLocalDate(value)
+  return formatDate(value)
 }
