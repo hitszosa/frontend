@@ -1,8 +1,5 @@
 <script setup lang="ts">
-const {
-  href,
-  type = 'button',
-} = defineProps<{
+const { href, type = 'button' } = defineProps<{
   href?: string
   type?: 'button' | 'submit' | 'reset'
 }>()

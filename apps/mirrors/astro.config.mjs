@@ -15,11 +15,6 @@ export default defineConfig({
     mdx(),
     vue({
       appEntrypoint: '/src/vue/setup',
-      template: {
-        compilerOptions: {
-          isCustomElement: (tag) => tag === 'relative-time',
-        },
-      },
     }),
     icon({
       include: {

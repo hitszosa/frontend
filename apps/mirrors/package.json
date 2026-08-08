@@ -39,7 +39,6 @@
   },
   "dependencies": {
     "@astrojs/mdx": "catalog:",
-    "@github/relative-time-element": "^5.3.1",
     "@hitszosa/mirrorz-parser": "workspace:*",
     "@hitszosa/ui": "workspace:*",
     "@iconify-json/icon-park-outline": "^1.2.4",

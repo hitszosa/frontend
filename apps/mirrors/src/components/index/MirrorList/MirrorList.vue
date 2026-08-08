@@ -15,37 +15,43 @@
       :error-message="errorMessage"
     >
       <template #name-data="{ row }">
-        <a
-          v-if="row.files"
-          :href="row.files"
-          target="_blank"
-          rel="noreferrer noopener"
-          class="whitespace-nowrap rounded-sm text-surface-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary"
-        >
-          {{ row.name }}
-        </a>
-        <span v-else class="whitespace-nowrap">
-          {{ row.name }}
-        </span>
+        <div class="flex items-center gap-1.5">
+          <StatusBadge :status="row.status" class="sm:hidden" />
+          <a
+            v-if="row.files"
+            :href="row.files"
+            target="_blank"
+            rel="noreferrer noopener"
+            class="whitespace-nowrap rounded-sm text-surface-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary"
+          >
+            {{ row.name }}
+          </a>
+          <span v-else class="whitespace-nowrap">
+            {{ row.name }}
+          </span>
+        </div>
       </template>
       <template #help-data="{ row }">
         <a
           v-if="isShowHelp(row.name)"
           :href="getHelpUrl(row.name)"
-          class="text-osa-fg after:w-0 hover:text-primary hover:after:w-full hover:after:bg-osa-fg/40"
+          class="text-muted-fg after:w-0 hover:text-primary hover:after:w-full hover:after:bg-osa-fg/40"
         >
           Help
         </a>
       </template>
       <template #lastUpdate-data="{ row }">
-        <relative-time
-          :datetime="formatDateTime(row.lastUpdate)"
-          format="relative"
-          lang="en"
-          class="whitespace-nowrap"
+        <Tooltip
+          :content="formatLocalDateTime(row.lastUpdate * 1000)"
+          placement="top"
         >
-          {{ formatFallbackDate(row.lastUpdate) }}
-        </relative-time>
+          <time
+            :datetime="formatDateTime(row.lastUpdate)"
+            class="whitespace-nowrap"
+          >
+            {{ formatRelativeDate(row.lastUpdate * 1000) }}
+          </time>
+        </Tooltip>
       </template>
       <template #status-data="{ row }">
         <StatusBadge :status="row.status" />
@@ -55,7 +61,11 @@
 </template>
 
 <script setup lang="ts">
-import '@github/relative-time-element'
+import Tooltip from '@hitszosa/ui/components/Tooltip.vue'
+import {
+  formatLocalDateTime,
+  formatRelativeDate,
+} from '@hitszosa/ui/utils/time'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import AppTable from '@components/ui/AppTable.vue'
@@ -68,31 +78,29 @@ const { helpList } = storeToRefs(useHelpListStore())
 
 const helpSet = computed(() => new Set(helpList.value))
 
-const createColumns = () => {
-  return [
-    {
-      key: 'name',
-      label: 'Name',
-      sortable: true,
-    },
-    {
-      key: 'status',
-      label: 'Status',
-      smVisible: true,
-      sortable: true,
-    },
-    {
-      key: 'lastUpdate',
-      label: 'Last Update',
-      sortable: true,
-    },
-    {
-      key: 'help',
-      label: 'Help',
-    },
-  ]
-}
-const columns = ref(createColumns())
+const columns = [
+  {
+    key: 'name',
+    label: 'Name',
+    indentedOnSmall: true,
+    sortable: true,
+  },
+  {
+    key: 'status',
+    label: 'Status',
+    hiddenOnSmall: true,
+    sortable: true,
+  },
+  {
+    key: 'lastUpdate',
+    label: 'Last Update',
+    sortable: true,
+  },
+  {
+    key: 'help',
+    label: 'Help',
+  },
+]
 const mirrorFilter = ref('')
 
 const filteredRows = computed(() => {
@@ -116,10 +124,6 @@ const getHelpUrl = (mirror: string) => {
 
 const formatDateTime = (timestamp: number) => {
   return new Date(timestamp * 1000).toISOString()
-}
-
-const formatFallbackDate = (timestamp: number) => {
-  return formatDateTime(timestamp).slice(0, 10)
 }
 
 const onSearchInput = (event: Event) => {

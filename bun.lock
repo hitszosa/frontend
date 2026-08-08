@@ -39,7 +39,6 @@
       "name": "@hitszosa/mirrors",
       "dependencies": {
         "@astrojs/mdx": "catalog:",
-        "@github/relative-time-element": "^5.3.1",
         "@hitszosa/mirrorz-parser": "workspace:*",
         "@hitszosa/ui": "workspace:*",
         "@iconify-json/icon-park-outline": "^1.2.4",
@@ -109,9 +108,11 @@
       "dependencies": {
         "@tailwindcss/typography": "^0.5.19",
         "iconify-icon": "^3.0.2",
+        "vue": "^3.5.33",
       },
       "devDependencies": {
         "@astrojs/check": "catalog:",
+        "@astrojs/vue": "^6.0.1",
         "@biomejs/biome": "catalog:",
         "@eslint/js": "catalog:",
         "@hitszosa/eslint-config": "workspace:*",
@@ -336,8 +337,6 @@
     "@eslint/object-schema": ["@eslint/object-schema@2.1.7", "", {}, "sha512-VtAOaymWVfZcmZbp6E2mympDIHvyjXs/12LqWYjVw6qjrfF+VK+fyG33kChz3nnK+SU5/NeHOqrTEHS8sXO3OA=="],
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.4.1", "", { "dependencies": { "@eslint/core": "^0.17.0", "levn": "^0.4.1" } }, "sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA=="],
-
-    "@github/relative-time-element": ["@github/relative-time-element@5.3.1", "", {}, "sha512-f++QCIXxGH7rMbpTASRfLyCyPydd4HqwOmATBb/sAUCq72HEZN0MX9znmJSp7NKYxuQxF8j0Mv3ez9P32c70vw=="],
 
     "@hitszosa/eslint-config": ["@hitszosa/eslint-config@workspace:packages/eslint-config"],
 

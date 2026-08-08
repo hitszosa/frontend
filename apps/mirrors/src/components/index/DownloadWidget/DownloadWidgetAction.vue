@@ -1,9 +1,5 @@
 <template>
-  <ArrowAction
-    type="button"
-    class="ml-auto"
-    @click="onToggleModal"
-  >
+  <ArrowAction type="button" class="ml-auto" @click="onToggleModal">
     Download
   </ArrowAction>
   <AppModal v-model="isOpen" aria-labelledby="download-modal-title">

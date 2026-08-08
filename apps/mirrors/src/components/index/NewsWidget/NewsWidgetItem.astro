@@ -1,4 +1,5 @@
 ---
+import RelativeDate from '@hitszosa/ui/components/RelativeDate.astro'
 import type { ArticleDigest } from '../../news/ArticleDigest'
 
 interface Props {
@@ -6,8 +7,7 @@ interface Props {
 }
 
 const { digest } = Astro.props
-const dateTime = new Date(digest.date).toISOString()
-const dateString = dateTime.slice(0, 10)
+const date = new Date(digest.date)
 ---
 
 <li
@@ -22,17 +22,6 @@ const dateString = dateTime.slice(0, 10)
     </a>
   </div>
   <div class="flex shrink-0 self-stretch items-center text-sm">
-    <relative-time
-      datetime={dateTime}
-      format="relative"
-      lang="en"
-      class="inline-block whitespace-nowrap"
-    >
-      {dateString}
-    </relative-time>
+    <RelativeDate value={date} hover class="inline-block whitespace-nowrap" />
   </div>
 </li>
-
-<script>
-import '@github/relative-time-element'
-</script>

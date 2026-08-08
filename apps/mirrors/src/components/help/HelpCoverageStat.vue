@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 
 import generatedHelpPages from '@generated/help/help-list.json'
-import Tooltip from '@components/ui/Tooltip.vue'
+import Tooltip from '@hitszosa/ui/components/Tooltip.vue'
 
 type MirrorStatusItem = {
   name: string

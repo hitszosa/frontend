@@ -29,6 +29,11 @@ const pagesDir = path.join(outputDir, 'pages')
 const upstreamRoutes = JSON.parse(
   await readFile(path.join(upstreamDir, 'src/routes.json'), 'utf8'),
 ) as Record<string, UpstreamRoute>
+const publishedHelpPageIds = new Set(
+  JSON.parse(
+    await readFile(path.join(appDir, 'mock/help_list.json'), 'utf8'),
+  ) as string[],
+)
 
 const overrideEntries = await readdir(localDocsDir, {
   withFileTypes: true,
@@ -48,10 +53,14 @@ const addedPageIds = overridePageIds.filter(
   (pageId) => !upstreamPageIds.has(pageId),
 )
 const baseRoutes: GeneratedRoute[] = [
-  ...Object.entries(upstreamRoutes).map(([route, value]) => ({
-    ...value,
-    slug: route.replace(/^\/+|\/+$/g, ''),
-  })),
+  ...Object.entries(upstreamRoutes)
+    .filter(([, route]) =>
+      publishedHelpPageIds.has(route.cname) || overridePageIds.includes(route.cname),
+    )
+    .map(([route, value]) => ({
+      ...value,
+      slug: route.replace(/^\/+|\/+$/g, ''),
+    })),
   ...addedPageIds.map((pageId) => ({
     cname: pageId,
     title: pageId,
