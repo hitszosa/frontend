@@ -3,7 +3,7 @@
     <input
       :value="mirrorFilter"
       id="mirror-search-input"
-      placeholder="Press '/' key to search for mirrors..."
+      placeholder="按 / 键搜索镜像…"
       class="text-sm form-input w-full rounded-lg border border-surface-border bg-surface px-4 py-2 text-surface-fg outline-none transition placeholder:text-muted-fg focus:border-primary focus:ring-2 focus:ring-primary"
       @input="onSearchInput"
     >
@@ -37,7 +37,7 @@
           :href="getHelpUrl(row.name)"
           class="text-muted-fg after:w-0 hover:text-primary hover:after:w-full hover:after:bg-osa-fg/40"
         >
-          Help
+          帮助
         </a>
       </template>
       <template #lastUpdate-data="{ row }">
@@ -81,24 +81,24 @@ const helpSet = computed(() => new Set(helpList.value))
 const columns = [
   {
     key: 'name',
-    label: 'Name',
+    label: '名称',
     indentedOnSmall: true,
     sortable: true,
   },
   {
     key: 'status',
-    label: 'Status',
+    label: '状态',
     hiddenOnSmall: true,
     sortable: true,
   },
   {
     key: 'lastUpdate',
-    label: 'Last Update',
+    label: '最近同步',
     sortable: true,
   },
   {
     key: 'help',
-    label: 'Help',
+    label: '帮助',
   },
 ]
 const mirrorFilter = ref('')

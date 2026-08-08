@@ -1,9 +1,9 @@
 <template>
-  <Tooltip :content="resolvedStatus" placement="top" align="start">
+  <Tooltip :content="statusLabel" placement="top" align="start">
     <span
       class="inline-flex shrink-0 items-center justify-center"
       role="status"
-      :aria-label="`Mirror status: ${resolvedStatus}`"
+      :aria-label="`镜像状态：${statusLabel}`"
     >
       <span
         class="h-2 w-2 rounded-full sm:hidden"
@@ -16,7 +16,7 @@
         :style="badgeStyle"
         aria-hidden="true"
       >
-        {{ status }}
+        {{ statusLabel }}
       </span>
     </span>
   </Tooltip>
@@ -48,6 +48,15 @@ const toneMap = {
   failed: { bg: 'var(--ui-danger)', fg: 'var(--ui-danger-fg)' },
   unknown: { bg: 'var(--ui-muted-fg)', fg: 'var(--ui-muted-fg)' },
 } as const
+
+const statusLabels: Record<Status, string> = {
+  success: '正常',
+  syncing: '同步中',
+  failed: '失败',
+  unknown: '未知',
+}
+
+const statusLabel = computed(() => statusLabels[resolvedStatus.value])
 
 const badgeStyle = computed(() => {
   const tone = toneMap[resolvedStatus.value]

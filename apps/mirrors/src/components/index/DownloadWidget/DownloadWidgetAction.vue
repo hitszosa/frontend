@@ -1,6 +1,6 @@
 <template>
   <ArrowAction type="button" class="ml-auto" @click="onToggleModal">
-    Download
+    下载
   </ArrowAction>
   <AppModal v-model="isOpen" aria-labelledby="download-modal-title">
     <IndexDownloadModal @close="onCloseModal" />

@@ -38,7 +38,7 @@
             :colspan="columns.length"
             class="px-4 py-6 text-center text-sm text-muted-fg"
           >
-            {{ loading ? 'Loading...' : errorMessage }}
+            {{ loading ? '正在加载…' : errorMessage }}
           </td>
         </tr>
         <tr v-else-if="sortedRows.length === 0">
@@ -46,7 +46,7 @@
             :colspan="columns.length"
             class="px-4 py-6 text-center text-sm text-muted-fg"
           >
-            No results found.
+            没有匹配结果
           </td>
         </tr>
         <template v-else>
