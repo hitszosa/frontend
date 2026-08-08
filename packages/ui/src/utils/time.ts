@@ -32,10 +32,10 @@ export const formatRelativeDate = (
 
   if (difference < 0) return formatLocalDate(value)
   if (difference < minute) return '刚刚'
-  if (difference < hour) return `${Math.floor(difference / minute)} 分钟前`
-  if (difference < day) return `${Math.floor(difference / hour)} 小时前`
+  if (difference < hour) return `${Math.floor(difference / minute)}分钟前`
+  if (difference < day) return `${Math.floor(difference / hour)}小时前`
   if (difference < 2 * day) return '昨天'
-  if (difference < 7 * day) return `${Math.floor(difference / day)} 天前`
+  if (difference < 7 * day) return `${Math.floor(difference / day)}天前`
 
   return formatLocalDate(value)
 }
