@@ -1,25 +1,31 @@
 <template>
-  <Tooltip :content="statusLabel" placement="top" align="start">
+  <Tooltip
+    class="sm:hidden"
+    :content="statusLabel"
+    placement="top"
+    align="start"
+  >
     <span
       class="inline-flex shrink-0 items-center justify-center"
       role="status"
       :aria-label="`镜像状态：${statusLabel}`"
     >
       <span
-        class="h-2 w-2 rounded-full sm:hidden"
+        class="h-2 w-2 rounded-full"
         :class="resolvedStatus === 'syncing' && 'status-breathe'"
         :style="dotStyle"
         aria-hidden="true"
       />
-      <span
-        class="hidden w-12 items-center justify-center rounded py-0.5 font-mono text-[11px] font-medium capitalize sm:inline-flex"
-        :style="badgeStyle"
-        aria-hidden="true"
-      >
-        {{ statusLabel }}
-      </span>
     </span>
   </Tooltip>
+  <span
+    class="hidden w-12 items-center justify-center rounded py-0.5 font-mono text-[11px] font-medium sm:inline-flex"
+    :style="badgeStyle"
+    role="status"
+    :aria-label="`镜像状态：${statusLabel}`"
+  >
+    {{ statusLabel }}
+  </span>
 </template>
 
 <script setup lang="ts">
