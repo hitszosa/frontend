@@ -1,0 +1,27 @@
+---
+import Tooltip from './Tooltip.vue'
+import {
+  formatLocalDate,
+  formatRelativeDate,
+  type DateInput,
+} from '../utils/time'
+
+interface Props {
+  value: DateInput
+  hover?: boolean
+  class?: string
+}
+
+const { value, hover = false, class: className } = Astro.props
+const date = value instanceof Date ? value : new Date(value)
+const relativeDate = formatRelativeDate(date)
+const fullDate = formatLocalDate(date)
+---
+
+{hover ? (
+  <Tooltip client:load content={fullDate} placement="top">
+    <time datetime={date.toISOString()} class={className}>{relativeDate}</time>
+  </Tooltip>
+) : (
+  <time datetime={date.toISOString()} class={className}>{relativeDate}</time>
+)}

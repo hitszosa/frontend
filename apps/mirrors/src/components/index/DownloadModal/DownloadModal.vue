@@ -12,12 +12,12 @@
             id="download-modal-title"
             class="transition-colors after:transition-all relative inline-block z-10 after:block after:absolute after:bg-accent-100/80 after:rounded-md after:w-4 after:h-1 after:-right-5 after:bottom-1 after:-z-10 hocus:after:w-full hocus:after:h-2 hocus:after:right-0 hover:cursor-pointer"
           >
-            Get LiveCD & Software
+            获取 LiveCD 与软件
           </span>
         </h2>
         <button
           type="button"
-          aria-label="Close dialog"
+          aria-label="关闭弹窗"
           class="inline-flex min-h-8 items-center justify-center gap-2 rounded-full bg-transparent px-3 text-sm text-muted-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:bg-page-bg hocus:text-primary"
           @click="$emit('close')"
         >

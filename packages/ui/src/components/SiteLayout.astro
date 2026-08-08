@@ -80,7 +80,7 @@ const feedUrl = new URL('/rss.xml', Astro.site ?? site.origin)
   </head>
   <body
     class:list={[
-      'ui-sans m-0 flex min-h-screen flex-col bg-page-bg text-page-fg transition-colors duration-300 ease-in-out',
+      'ui-sans m-0 flex min-h-screen flex-col bg-page-bg text-page-fg transition-colors duration-300 ease-in-out [text-autospace:normal]',
       immersive && 'h-dvh overflow-hidden',
     ]}
   >
