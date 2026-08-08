@@ -74,7 +74,7 @@ onMounted(async () => {
 
 <template>
   <div class="flex w-full flex-col gap-6">
-    <div class="flex items-start justify-between gap-4">
+    <div class="flex items-baseline justify-between gap-4">
       <p class="ui-mono m-0 text-xs tracking-[0.18em] text-primary uppercase">
         Mirror Help
       </p>
