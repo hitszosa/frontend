@@ -7,6 +7,7 @@
     >
       <span
         class="h-2 w-2 rounded-full sm:hidden"
+        :class="resolvedStatus === 'syncing' && 'status-breathe'"
         :style="dotStyle"
         aria-hidden="true"
       />
@@ -57,3 +58,28 @@ const dotStyle = computed(
   () => `background-color: ${toneMap[resolvedStatus.value].bg};`,
 )
 </script>
+
+<style scoped>
+@keyframes status-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    box-shadow: 0 0 0 color-mix(in srgb, var(--ui-info) 0%, transparent);
+  }
+
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 0.45rem color-mix(in srgb, var(--ui-info) 75%, transparent);
+  }
+}
+
+.status-breathe {
+  animation: status-breathe 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-breathe {
+    animation: none;
+  }
+}
+</style>

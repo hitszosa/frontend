@@ -82,7 +82,6 @@ const columns = [
   {
     key: 'name',
     label: 'Name',
-    indentedOnSmall: true,
     sortable: true,
   },
   {

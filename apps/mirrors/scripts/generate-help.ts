@@ -54,8 +54,10 @@ const addedPageIds = overridePageIds.filter(
 )
 const baseRoutes: GeneratedRoute[] = [
   ...Object.entries(upstreamRoutes)
-    .filter(([, route]) =>
-      publishedHelpPageIds.has(route.cname) || overridePageIds.includes(route.cname),
+    .filter(
+      ([, route]) =>
+        publishedHelpPageIds.has(route.cname) ||
+        overridePageIds.includes(route.cname),
     )
     .map(([route, value]) => ({
       ...value,
