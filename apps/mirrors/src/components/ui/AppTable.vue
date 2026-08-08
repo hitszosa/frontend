@@ -11,6 +11,7 @@
             :class="[
               'px-4 py-3 text-left text-sm font-medium text-muted-fg',
               column.hiddenOnSmall && 'hidden sm:table-cell',
+              column.indentedOnSmall && 'pl-[1.875rem] sm:pl-4',
             ]"
           >
             <button
@@ -87,6 +88,7 @@ interface TableColumn {
   sortable?: boolean
   smVisible?: boolean
   hiddenOnSmall?: boolean
+  indentedOnSmall?: boolean
 }
 
 interface TableSort {

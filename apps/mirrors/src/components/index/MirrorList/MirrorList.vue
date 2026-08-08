@@ -15,7 +15,7 @@
       :error-message="errorMessage"
     >
       <template #name-data="{ row }">
-        <div class="flex items-center gap-1.5">
+        <div class="flex items-baseline gap-1.5">
           <StatusBadge :status="row.status" class="sm:hidden" />
           <a
             v-if="row.files"
@@ -82,6 +82,7 @@ const columns = [
   {
     key: 'name',
     label: 'Name',
+    indentedOnSmall: true,
     sortable: true,
   },
   {

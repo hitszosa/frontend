@@ -64,12 +64,10 @@ const dotStyle = computed(
   0%,
   100% {
     opacity: 0.55;
-    box-shadow: 0 0 0 color-mix(in srgb, var(--ui-info) 0%, transparent);
   }
 
   50% {
     opacity: 1;
-    box-shadow: 0 0 0.45rem color-mix(in srgb, var(--ui-info) 75%, transparent);
   }
 }
 
