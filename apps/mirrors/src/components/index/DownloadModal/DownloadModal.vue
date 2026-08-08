@@ -1,6 +1,6 @@
 <template>
   <section
-    class="flex flex-col h-full overflow-hidden rounded-2xl bg-surface text-surface-fg shadow-xl ring-1 ring-surface-border"
+    class="flex flex-col h-full overflow-hidden rounded-lg bg-surface text-surface-fg shadow-xl ring-1 ring-surface-border"
   >
     <header class="p-6">
       <div class="flex flex-row justify-between">

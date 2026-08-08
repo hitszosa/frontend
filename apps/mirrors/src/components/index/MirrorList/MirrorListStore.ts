@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia'
-import dayjs from 'dayjs'
 import { onMounted, ref } from 'vue'
 
 type RowData = {
   id: number
   name: string
   files: string
-  lastUpdate: string
+  lastUpdate: number
   status: string
 }
 
@@ -47,9 +46,7 @@ export const useMirrorListStore = defineStore('mirror-list', () => {
             id: idx,
             name: item.name,
             files: `/${item.name}/`,
-            lastUpdate: dayjs
-              .unix(item.last_update_ts)
-              .format('YYYY-MM-DD HH:mm'),
+            lastUpdate: item.last_update_ts,
             status: item.status,
           }
         })

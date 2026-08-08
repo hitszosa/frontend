@@ -1,6 +1,6 @@
 <template>
   <div
-    class="overflow-auto rounded-2xl border border-surface-border bg-surface"
+    class="overflow-auto rounded-lg border border-surface-border bg-surface"
   >
     <table class="min-w-full divide-y divide-surface-border">
       <thead class="bg-page-bg/80">
@@ -15,15 +15,18 @@
             <button
               v-if="column.sortable"
               type="button"
-              class="inline-flex items-center gap-1 rounded-sm transition-colors hocus-visible:outline-none hocus-visible:ring-2 hocus-visible:ring-primary hocus:text-primary hover:cursor-pointer"
+              :class="column.smVisible ? 'hidden sm:inline-flex' : 'inline-flex'"
+              class="items-center gap-1 rounded-sm transition-colors hocus-visible:outline-none hocus-visible:ring-2 hocus-visible:ring-primary hocus:text-primary hover:cursor-pointer"
               @click="toggleSort(column.key)"
             >
               <span>{{ column.label }}</span>
-              <span class="text-xs text-muted-fg"
-                >{{ sortIndicator(column.key) }}</span
-              >
+              <span class="text-[8px] text-muted-fg">
+                {{ sortIndicator(column.key) }}
+              </span>
             </button>
-            <span v-else>{{ column.label }}</span>
+            <span v-else :class="column.smVisible ? 'hidden md:inline' : ''">
+              {{ column.label }}
+            </span>
           </th>
         </tr>
       </thead>
@@ -78,6 +81,7 @@ interface TableColumn {
   key: string
   label: string
   sortable?: boolean
+  smVisible?: boolean
 }
 
 interface TableSort {

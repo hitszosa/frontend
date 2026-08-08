@@ -1,5 +1,4 @@
 ---
-import Icon from '../../Icon.astro'
 import type { ArticleDigest } from '../../news/ArticleDigest'
 
 interface Props {
@@ -7,19 +6,14 @@ interface Props {
 }
 
 const { digest } = Astro.props
-const dateString = new Intl.DateTimeFormat('zh-CN', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-  timeZone: 'UTC',
-}).format(new Date(digest.date))
+const dateTime = new Date(digest.date).toISOString()
+const dateString = dateTime.slice(0, 10)
 ---
 
-<li class="flex items-center justify-between gap-4 text-sm text-muted-fg">
-  <div class="flex min-w-0 items-center text-page-fg">
-    <div class="flex items-center justify-center pr-2 text-primary">
-      <Icon name="icon-park-outline:align-text-left" />
-    </div>
+<li
+  class="flex items-center justify-between gap-4 py-2 text-muted-fg first:pt-0"
+>
+  <div class="flex min-w-0 items-center text-page-fg text-[15px]">
     <a
       href={digest._path}
       class="relative inline-block truncate decoration-dotted underline-offset-4 transition-colors hocus:cursor-pointer hocus:text-primary hocus:underline"
@@ -27,9 +21,18 @@ const dateString = new Intl.DateTimeFormat('zh-CN', {
       {digest.title}
     </a>
   </div>
-  <div class="shrink-0">
-    <span class="inline-block">
+  <div class="flex shrink-0 self-stretch items-center text-sm">
+    <relative-time
+      datetime={dateTime}
+      format="relative"
+      lang="en"
+      class="inline-block whitespace-nowrap"
+    >
       {dateString}
-    </span>
+    </relative-time>
   </div>
 </li>
+
+<script>
+import '@github/relative-time-element'
+</script>

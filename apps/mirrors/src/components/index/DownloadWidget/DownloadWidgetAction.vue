@@ -1,11 +1,11 @@
 <template>
-  <button
+  <ArrowAction
     type="button"
-    class="inline-flex h-9 w-full items-center justify-center gap-2 rounded-lg bg-surface px-4 text-base font-medium text-surface-fg shadow-sm ring-1 ring-surface-border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:border-primary/50 hocus:bg-page-bg hocus:text-primary hover:cursor-pointer"
+    class="ml-auto"
     @click="onToggleModal"
   >
-    Get LiveCD & Software
-  </button>
+    Download
+  </ArrowAction>
   <AppModal v-model="isOpen" aria-labelledby="download-modal-title">
     <IndexDownloadModal @close="onCloseModal" />
   </AppModal>
@@ -14,6 +14,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import AppModal from '@components/ui/AppModal.vue'
+import ArrowAction from '@components/ui/ArrowAction.vue'
 import IndexDownloadModal from '../DownloadModal/DownloadModal.vue'
 
 const isOpen = ref(false)

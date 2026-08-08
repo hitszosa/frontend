@@ -8,11 +8,11 @@ const { compact = false } = Astro.props
 
 <h2
   class:list={[
-    'flex flex-nowrap space-x-1.5 font-medium text-surface-fg',
+    'flex flex-nowrap space-x-1 font-medium text-surface-fg',
     compact ? 'text-xl' : 'text-2xl',
   ]}
 >
-  <span class="inline-block translate-y-[3px]">
+  <span class="px-1 inline-block translate-y-[3px]">
     <slot name="icon" />
   </span>
   <span

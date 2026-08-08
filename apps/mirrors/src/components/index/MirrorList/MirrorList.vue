@@ -1,10 +1,10 @@
 <template>
-  <section class="space-y-4 my-4">
+  <section class="min-w-0 space-y-4 my-4">
     <input
       :value="mirrorFilter"
       id="mirror-search-input"
       placeholder="Press '/' key to search for mirrors..."
-      class="form-input w-full rounded-lg border border-surface-border bg-surface px-4 py-2 text-surface-fg outline-none transition placeholder:text-muted-fg focus:border-primary focus:ring-2 focus:ring-primary"
+      class="text-sm form-input w-full rounded-lg border border-surface-border bg-surface px-4 py-2 text-surface-fg outline-none transition placeholder:text-muted-fg focus:border-primary focus:ring-2 focus:ring-primary"
       @input="onSearchInput"
     >
     <AppTable
@@ -15,31 +15,37 @@
       :error-message="errorMessage"
     >
       <template #name-data="{ row }">
-        <div
-          class="flex w-full min-w-0 items-center justify-between gap-2 sm:justify-start"
+        <a
+          v-if="row.files"
+          :href="row.files"
+          target="_blank"
+          rel="noreferrer noopener"
+          class="whitespace-nowrap rounded-sm text-surface-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary"
         >
-          <a
-            v-if="row.files"
-            :href="row.files"
-            target="_blank"
-            rel="noreferrer noopener"
-            class="min-w-0 rounded-sm text-surface-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary"
-          >
-            {{ row.name }}
-          </a>
-          <span v-else class="min-w-0">
-            {{ row.name }}
-          </span>
-          <a
-            v-if="isShowHelp(row.name)"
-            :href="getHelpUrl(row.name)"
-            :aria-label="`${row.name} 镜像使用帮助`"
-            :title="`${row.name} 镜像使用帮助`"
-            class="shrink-0 rounded-sm text-sm text-muted-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary"
-          >
-            <IconifyIcon icon="icon-park-outline:help" />
-          </a>
-        </div>
+          {{ row.name }}
+        </a>
+        <span v-else class="whitespace-nowrap">
+          {{ row.name }}
+        </span>
+      </template>
+      <template #help-data="{ row }">
+        <a
+          v-if="isShowHelp(row.name)"
+          :href="getHelpUrl(row.name)"
+          class="text-osa-fg after:w-0 hover:text-primary hover:after:w-full hover:after:bg-osa-fg/40"
+        >
+          Help
+        </a>
+      </template>
+      <template #lastUpdate-data="{ row }">
+        <relative-time
+          :datetime="formatDateTime(row.lastUpdate)"
+          format="relative"
+          lang="en"
+          class="whitespace-nowrap"
+        >
+          {{ formatFallbackDate(row.lastUpdate) }}
+        </relative-time>
       </template>
       <template #status-data="{ row }">
         <StatusBadge :status="row.status" />
@@ -49,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { Icon as IconifyIcon } from '@iconify/vue'
+import '@github/relative-time-element'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import AppTable from '@components/ui/AppTable.vue'
@@ -70,14 +76,19 @@ const createColumns = () => {
       sortable: true,
     },
     {
+      key: 'status',
+      label: 'Status',
+      smVisible: true,
+      sortable: true,
+    },
+    {
       key: 'lastUpdate',
       label: 'Last Update',
       sortable: true,
     },
     {
-      key: 'status',
-      label: 'Status',
-      sortable: true,
+      key: 'help',
+      label: 'Help',
     },
   ]
 }
@@ -101,6 +112,14 @@ const isNameMatched = (mirror: string, filter: string) => {
 
 const getHelpUrl = (mirror: string) => {
   return `/help/${encodeURIComponent(mirror)}/`
+}
+
+const formatDateTime = (timestamp: number) => {
+  return new Date(timestamp * 1000).toISOString()
+}
+
+const formatFallbackDate = (timestamp: number) => {
+  return formatDateTime(timestamp).slice(0, 10)
 }
 
 const onSearchInput = (event: Event) => {
