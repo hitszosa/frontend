@@ -16,7 +16,7 @@
     >
       <template #name-data="{ row }">
         <div class="flex items-baseline gap-1.5">
-          <StatusBadge :status="row.status" class="sm:hidden" />
+          <StatusBadge :status="row.status" compact />
           <a
             v-if="row.files"
             :href="row.files"

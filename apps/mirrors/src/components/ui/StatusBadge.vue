@@ -1,14 +1,14 @@
 <template>
   <Tooltip
     class="sm:hidden"
-    :content="statusLabel"
+    :content="displayStatus"
     placement="top"
     align="start"
   >
     <span
       class="inline-flex shrink-0 items-center justify-center"
       role="status"
-      :aria-label="`镜像状态：${statusLabel}`"
+      :aria-label="`镜像状态：${displayStatus}`"
     >
       <span
         class="h-2 w-2 rounded-full"
@@ -19,12 +19,15 @@
     </span>
   </Tooltip>
   <span
-    class="hidden w-12 items-center justify-center rounded py-0.5 font-mono text-[11px] font-medium sm:inline-flex"
+    :class="[
+      'w-14 items-center justify-center rounded py-0.5 font-mono text-[11px] font-medium',
+      compact ? 'hidden' : 'hidden sm:inline-flex',
+    ]"
     :style="badgeStyle"
     role="status"
-    :aria-label="`镜像状态：${statusLabel}`"
+    :aria-label="`镜像状态：${displayStatus}`"
   >
-    {{ statusLabel }}
+    {{ displayStatus }}
   </span>
 </template>
 
@@ -36,6 +39,7 @@ type Status = 'success' | 'syncing' | 'failed' | 'unknown'
 
 const props = defineProps<{
   status: string
+  compact?: boolean
 }>()
 
 const statusMap: Record<string, Status> = {
@@ -55,14 +59,7 @@ const toneMap = {
   unknown: { bg: 'var(--ui-muted-fg)', fg: 'var(--ui-muted-fg)' },
 } as const
 
-const statusLabels: Record<Status, string> = {
-  success: '正常',
-  syncing: '同步中',
-  failed: '失败',
-  unknown: '未知',
-}
-
-const statusLabel = computed(() => statusLabels[resolvedStatus.value])
+const displayStatus = computed(() => props.status || 'unknown')
 
 const badgeStyle = computed(() => {
   const tone = toneMap[resolvedStatus.value]
