@@ -33,6 +33,8 @@
   --ui-info: #0284c7;
   --ui-info-fg: #075985;
   --ui-danger-fg: #991b1b;
+
+  scrollbar-gutter: stable;
 }
 
 .dark {
