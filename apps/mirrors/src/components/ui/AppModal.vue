@@ -2,7 +2,7 @@
   <Teleport to="body">
     <div
       v-show="modelValue"
-      class="fixed inset-0 z-100 flex overscroll-contain items-center justify-center bg-slate-950/60 px-4 pt-20 pb-8 backdrop-blur-sm"
+      class="fixed inset-0 z-100 flex overscroll-contain items-center justify-center bg-slate-950/60 p-2 backdrop-blur-sm sm:p-4 md:p-8"
       :aria-hidden="modelValue ? undefined : 'true'"
       @click="onBackdropClick"
       @wheel.stop
@@ -14,7 +14,7 @@
         role="dialog"
         :aria-modal="modelValue ? 'true' : undefined"
         tabindex="-1"
-        class="h-[calc(100vh-4em)] max-h-full w-full max-w-4xl overflow-hidden overscroll-contain rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        class="h-[calc(100dvh-1rem)] max-h-[52rem] w-full max-w-5xl overflow-hidden overscroll-contain rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:h-[calc(100dvh-2rem)] md:h-[min(48rem,calc(100dvh-4rem))]"
       >
         <slot />
       </div>
