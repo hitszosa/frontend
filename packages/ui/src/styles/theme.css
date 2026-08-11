@@ -112,6 +112,25 @@
   background-color: var(--ui-scrollbar-thumb-active);
 }
 
+html:has([role="dialog"][aria-modal="true"]) {
+  overflow: hidden;
+  scrollbar-gutter: auto;
+}
+
+html:has([role="dialog"][aria-modal="true"]),
+html:has([role="dialog"][aria-modal="true"]) body {
+  scrollbar-width: none;
+}
+
+html:has([role="dialog"][aria-modal="true"])::-webkit-scrollbar,
+html:has([role="dialog"][aria-modal="true"]) body::-webkit-scrollbar {
+  display: none;
+}
+
+html:has([role="dialog"][aria-modal="true"]) body {
+  overflow: hidden;
+}
+
 .ui-sans {
   font-family: var(
     --ui-font-sans,

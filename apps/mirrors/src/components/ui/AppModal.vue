@@ -39,27 +39,6 @@ const emit = defineEmits<{
 
 const dialogRef = ref<HTMLDivElement | null>(null)
 const previousActiveElement = ref<HTMLElement | null>(null)
-let previousRootOverflow = ''
-let pageScrollLocked = false
-
-const lockPageScroll = () => {
-  if (pageScrollLocked) {
-    return
-  }
-
-  previousRootOverflow = document.documentElement.style.overflow
-  document.documentElement.style.overflow = 'hidden'
-  pageScrollLocked = true
-}
-
-const unlockPageScroll = () => {
-  if (!pageScrollLocked) {
-    return
-  }
-
-  document.documentElement.style.overflow = previousRootOverflow
-  pageScrollLocked = false
-}
 
 const focusableSelector = [
   'a[href]',
@@ -148,7 +127,6 @@ watch(
         document.activeElement instanceof HTMLElement
           ? document.activeElement
           : null
-      lockPageScroll()
       window.addEventListener('keydown', onKeydown)
       nextTick(() => {
         focusFirstElement()
@@ -156,7 +134,6 @@ watch(
       return
     }
 
-    unlockPageScroll()
     window.removeEventListener('keydown', onKeydown)
     if (previousActiveElement.value?.isConnected) {
       previousActiveElement.value.focus()
@@ -169,7 +146,6 @@ watch(
 onBeforeUnmount(() => {
   if (typeof window !== 'undefined') {
     window.removeEventListener('keydown', onKeydown)
-    unlockPageScroll()
   }
 })
 </script>
