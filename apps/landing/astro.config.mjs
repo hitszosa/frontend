@@ -5,6 +5,13 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://www.osa.moe',
   integrations: [mdx()],
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'hover',
+  },
+  experimental: {
+    clientPrerender: true,
+  },
   vite: {
     plugins: [tailwindcss()],
   },
