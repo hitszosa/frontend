@@ -15,7 +15,7 @@
       :error-message="errorMessage"
     >
       <template #name-data="{ row }">
-        <div class="flex items-baseline gap-1.5">
+        <div class="ml-1 flex items-baseline gap-2">
           <StatusBadge :status="row.status" compact />
           <a
             v-if="row.files"

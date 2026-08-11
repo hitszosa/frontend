@@ -1,9 +1,9 @@
 <template>
   <section
-    class="flex h-full flex-col overflow-hidden rounded-lg border border-surface-border bg-surface text-surface-fg shadow-xl"
+    class="flex h-full flex-col overflow-hidden sm:rounded-lg sm:border sm:border-surface-border bg-surface text-surface-fg shadow-xl"
   >
     <header
-      class="flex shrink-0 items-center justify-between gap-4 border-b border-surface-border px-4 py-3 sm:px-5 sm:py-4"
+      class="flex shrink-0 items-center justify-between gap-4 border-b border-surface-border px-2 py-3 sm:px-4 sm:py-4"
     >
       <div class="flex min-w-0 items-center gap-2">
         <button
@@ -14,20 +14,30 @@
           :aria-expanded="categoryDrawerOpen"
           :aria-label="categoryDrawerOpen ? '折叠资源分类' : '展开资源分类'"
           :title="categoryDrawerOpen ? '折叠资源分类' : '展开资源分类'"
-          class="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-lg text-lg text-muted-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:bg-page-bg hocus:text-surface-fg"
+          class="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-lg text-lg text-muted-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hover:bg-page-bg hover:text-surface-fg"
           @click="toggleCategorySidebar"
         >
-          <IconifyIcon
-            :icon="
-              categoryDrawerOpen
-                ? 'icon-park-outline:menu-unfold-one'
-                : 'icon-park-outline:menu-fold-one'
-            "
-            aria-hidden="true"
-          />
+          <span class="relative block size-5" aria-hidden="true">
+            <Transition
+              enter-active-class="transition duration-150 ease-out motion-reduce:transition-none"
+              enter-from-class="opacity-0"
+              leave-active-class="transition duration-150 ease-out motion-reduce:transition-none"
+              leave-to-class="opacity-0"
+            >
+              <IconifyIcon
+                :key="categoryDrawerOpen ? 'unfold' : 'fold'"
+                :icon="
+                  categoryDrawerOpen
+                    ? 'icon-park-outline:menu-unfold-one'
+                    : 'icon-park-outline:menu-fold-one'
+                "
+                class="absolute inset-0 size-full"
+              />
+            </Transition>
+          </span>
         </button>
         <h2
-          class="flex min-w-0 flex-nowrap space-x-1.5 text-xl font-medium translate-y-[2px]"
+          class="flex min-w-0 flex-nowrap space-x-1.5 text-xl font-medium translate-y-[1px]"
         >
           <span class="inline-block shrink-0 translate-y-[3px]">
             <IconifyIcon icon="icon-park-outline:record-disc" />
@@ -44,7 +54,7 @@
         type="button"
         aria-label="关闭下载弹窗"
         title="关闭"
-        class="flex cursor-pointer size-9 shrink-0 items-center justify-center rounded-lg text-lg text-muted-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:bg-page-bg hocus:text-surface-fg"
+        class="flex cursor-pointer size-9 shrink-0 items-center justify-center rounded-lg text-lg text-muted-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hover:bg-page-bg hover:text-surface-fg"
         @click="$emit('close')"
       >
         <IconifyIcon icon="icon-park-outline:close" />
@@ -133,7 +143,7 @@
             role="radio"
             :aria-checked="collectionIndex === index"
             :tabindex="collectionIndex === index ? 0 : -1"
-            class="flex h-10 shrink-0 items-center justify-between gap-3 rounded-md px-3 text-left text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            class="flex h-11 md:h-10 shrink-0 items-center justify-between gap-3 rounded-md px-3 text-left text-base md:text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             :class="
               collectionIndex === index
                 ? 'bg-surface font-medium text-primary ring-1 ring-surface-border'
@@ -155,7 +165,7 @@
         <div
           class="shrink-0 border-b border-surface-border px-4 py-3 sm:px-5 sm:py-4"
         >
-          <div class="mb-3 flex items-center justify-between gap-4">
+          <div class="mb-2 flex items-center justify-between gap-4">
             <h3 class="truncate font-medium text-surface-fg">
               {{ currentCollectionName }}
             </h3>
