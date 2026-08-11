@@ -30,13 +30,11 @@ const initial = Array.from(link.name)[0] ?? '↗';
     class="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-md bg-primary/10 text-sm font-semibold text-primary ring-1 ring-surface-border"
   >
     {showGithubIcon ? (
-      <svg
-        viewBox="0 0 16 16"
+      <iconify-icon
+        icon="simple-icons:github"
         aria-hidden="true"
-        class="h-5 w-5 fill-current text-surface-fg"
-      >
-        <path d="M8 0C3.58 0 0 3.64 0 8.13a8.15 8.15 0 0 0 5.47 7.71c.4.08.55-.17.55-.39l-.01-1.52c-2.23.49-2.7-1.09-2.7-1.09-.36-.94-.89-1.19-.89-1.19-.73-.5.05-.5.05-.5.81.06 1.23.84 1.23.84.72 1.25 1.88.89 2.34.68.07-.53.28-.89.51-1.09-1.78-.2-3.65-.9-3.65-4.02 0-.89.31-1.61.82-2.18-.08-.2-.36-1.03.08-2.15 0 0 .67-.22 2.2.83A7.5 7.5 0 0 1 8 3.79a7.5 7.5 0 0 1 2 .27c1.53-1.05 2.2-.83 2.2-.83.44 1.12.16 1.95.08 2.15.51.57.82 1.29.82 2.18 0 3.13-1.88 3.81-3.66 4.01.29.25.54.74.54 1.5l-.01 2.38c0 .22.15.47.55.39A8.15 8.15 0 0 0 16 8.13C16 3.64 12.42 0 8 0Z" />
-      </svg>
+        class="text-xl text-surface-fg"
+      ></iconify-icon>
     ) : (
       <>
         <span aria-hidden="true">{initial}</span>
@@ -76,7 +74,18 @@ const initial = Array.from(link.name)[0] ?? '↗';
     >
       <span class="shrink-0 font-semibold text-surface-fg">{author}</span>
       <span aria-hidden="true">·</span>
-      <span class="ui-mono truncate">{hostname}</span>
+      {hostname === 'github.com' ? (
+        <span class="inline-flex shrink-0 items-center" title="GitHub">
+          <iconify-icon
+            icon="simple-icons:github"
+            aria-hidden="true"
+            class="text-sm"
+          ></iconify-icon>
+          <span class="sr-only">GitHub</span>
+        </span>
+      ) : (
+        <span class="ui-mono truncate">{hostname}</span>
+      )}
       {github && <span class="ui-mono hidden truncate sm:inline">@{github}</span>}
     </span>
   </span>
