@@ -9,7 +9,7 @@ const {
 } = defineProps<{
   content: string
   placement?: 'top' | 'bottom'
-  align?: 'center' | 'start'
+  align?: 'center' | 'start' | 'end'
   delay?: number
 }>()
 
@@ -104,8 +104,12 @@ onUnmounted(() => {
       :id="tooltipId"
       role="tooltip"
       :class="[
-        'pointer-events-none absolute z-30 w-max max-w-64 rounded-lg border border-surface-border bg-surface px-2.5 py-1.5 text-center text-xs text-surface-fg shadow-sm transition-opacity',
-        align === 'start' ? 'left-0' : 'left-1/2 -translate-x-1/2',
+        'pointer-events-none absolute z-30 w-max max-w-64 rounded-lg border border-surface-border bg-surface px-2.5 py-1.5 text-center text-xs text-surface-fg transition-opacity',
+        align === 'start'
+          ? 'left-0'
+          : align === 'end'
+            ? 'right-0'
+            : 'left-1/2 -translate-x-1/2',
         isVisible ? 'opacity-100' : 'opacity-0',
         placement === 'top' ? 'bottom-full mb-2' : 'top-full mt-2',
       ]"

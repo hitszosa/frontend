@@ -33,7 +33,7 @@ const emit = defineEmits<{
 
 const getButtonStyle = (idx: number) => {
   return idx === props.index
-    ? 'bg-surface text-primary shadow-sm ring-1 ring-surface-border'
+    ? 'bg-surface text-primary ring-1 ring-surface-border'
     : 'hocus:text-surface-fg cursor-pointer'
 }
 
