@@ -5,16 +5,27 @@ import { formatLocalDate, type DateInput } from '../utils/time'
 interface Props {
   value: DateInput
   hover?: boolean
+  tooltipAlign?: 'center' | 'start' | 'end'
   class?: string
 }
 
-const { value, hover = false, class: className } = Astro.props
+const {
+  value,
+  hover = false,
+  tooltipAlign = 'center',
+  class: className,
+} = Astro.props
 const date = value instanceof Date ? value : new Date(value)
 const fullDate = formatLocalDate(date)
 ---
 
 {hover ? (
-  <Tooltip client:load content={fullDate} placement="top">
+  <Tooltip
+    client:load
+    content={fullDate}
+    placement="top"
+    align={tooltipAlign}
+  >
     <time datetime={date.toISOString()} data-relative-date class={className}>{fullDate}</time>
   </Tooltip>
 ) : (

@@ -22,6 +22,11 @@ const date = new Date(digest.date)
     </a>
   </div>
   <div class="flex shrink-0 self-stretch items-center text-sm">
-    <RelativeDate value={date} hover class="inline-block whitespace-nowrap" />
+    <RelativeDate
+      value={date}
+      hover
+      tooltipAlign="end"
+      class="inline-block whitespace-nowrap"
+    />
   </div>
 </li>
