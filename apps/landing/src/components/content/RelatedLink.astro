@@ -17,7 +17,8 @@ const external = /^https?:\/\//.test(href);
     rel={external ? 'noreferrer noopener' : undefined}
     class="group inline-flex font-medium text-primary no-underline"
   >
-    <span class="decoration-dotted underline-offset-4 group-hover:underline"
+    <span
+      class="underline decoration-transparent decoration-dotted underline-offset-4 transition-colors duration-200 group-hover:decoration-current"
       >{label}</span
     >{external ? ' ↗' : ' →'}
   </a>

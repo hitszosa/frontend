@@ -19,7 +19,7 @@ const updates = await getUpdates();
         <a
           href="/rss.xml"
           aria-label="订阅 HITSZ OSA RSS"
-          class="ui-mono text-xs text-primary no-underline hover:underline decoration-dotted underline-offset-2"
+          class="ui-mono text-xs text-primary underline decoration-transparent decoration-dotted underline-offset-2 transition-colors duration-200 hover:decoration-current"
           >RSS</a
         >
         <span class="ui-mono text-xs text-muted-fg">{updates.length} 条</span>
