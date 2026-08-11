@@ -264,8 +264,11 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
         class="mt-7 overflow-hidden rounded-lg border border-surface-border bg-surface"
       >
         {feed.map((entry, index) => (
-          <li class="flex items-center gap-3 border-b border-surface-border px-4 py-4 text-base last:border-0 hover:bg-page-bg sm:px-5">
-            <>
+          <li class="border-b border-surface-border text-base last:border-0">
+            <a
+              href={entry.href}
+              class="flex items-center gap-3 px-4 py-4 text-surface-fg no-underline hover:bg-page-bg hover:text-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-[-2px] sm:px-5"
+            >
               <span class="ui-mono hidden text-xs text-muted-fg sm:inline">
                 {['97eda1b', '34b7bd9', '15bf5b6'][index] ?? '0a3f712'}
               </span>
@@ -284,19 +287,16 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
                 {entry.pinned ? `置顶 · ${entry.label}` : entry.label}
               </Badge>
               <TagBadges tags={entry.tags} />
-              <a
-                href={entry.href}
-                class="min-w-0 flex-1 truncate text-surface-fg no-underline hover:text-primary"
-              >
+              <span class="min-w-0 flex-1 truncate">
                 {entry.title}
-              </a>
+              </span>
               <time
                 class="ui-mono shrink-0 text-xs text-muted-fg"
                 datetime={entry.date.toISOString()}
               >
                 {formatDate(entry.date)}
               </time>
-            </>
+            </a>
           </li>
         ))}
       </ul>
