@@ -20,7 +20,7 @@
   </Tooltip>
   <span
     :class="[
-      'w-14 items-center justify-center rounded py-0.5 font-mono text-[11px] font-medium',
+      'w-[8.5ch] items-center justify-center rounded py-0.5 font-mono text-[11px] font-medium',
       compact ? 'hidden' : 'hidden sm:inline-flex',
     ]"
     :style="badgeStyle"
