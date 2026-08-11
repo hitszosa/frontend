@@ -4,7 +4,7 @@
       :value="mirrorFilter"
       id="mirror-search-input"
       placeholder="按 / 键搜索镜像…"
-      class="text-sm form-input w-full rounded-lg border border-surface-border bg-surface px-4 py-2 text-surface-fg outline-none transition placeholder:text-muted-fg focus:border-primary focus:ring-2 focus:ring-primary"
+      class="text-base sm:text-sm form-input w-full rounded-lg border border-surface-border bg-surface px-4 py-2 text-surface-fg outline-none transition placeholder:text-muted-fg focus:border-primary focus:ring-2 focus:ring-primary"
       @input="onSearchInput"
     >
     <AppTable

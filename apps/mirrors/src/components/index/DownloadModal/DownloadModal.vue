@@ -5,15 +5,41 @@
     <header
       class="flex shrink-0 items-center justify-between gap-4 border-b border-surface-border px-4 py-3 sm:px-5 sm:py-4"
     >
-      <h2 class="flex flex-nowrap space-x-1.5 text-xl font-medium translate-y-[2px]">
-        <span class="inline-block translate-y-[3px]">
-          <IconifyIcon icon="icon-park-outline:record-disc" />
-        </span>
-        <span id="download-modal-title"
-          class="transition-colors after:transition-all relative inline-block z-10 after:block after:absolute after:bg-accent-100/80 after:rounded-md after:w-4 after:h-1 after:-right-5 after:bottom-1 after:-z-10 hocus:after:w-full hocus:after:h-2 hocus:after:right-0">
-          LiveCD & Software
-        </span>
-      </h2>
+      <div class="flex min-w-0 items-center gap-2">
+        <button
+          v-if="!loading && !errorMessage"
+          ref="categoryTriggerRef"
+          type="button"
+          aria-controls="download-category-sidebar"
+          :aria-expanded="categoryDrawerOpen"
+          :aria-label="categoryDrawerOpen ? '折叠资源分类' : '展开资源分类'"
+          :title="categoryDrawerOpen ? '折叠资源分类' : '展开资源分类'"
+          class="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-lg text-lg text-muted-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:bg-page-bg hocus:text-surface-fg"
+          @click="toggleCategorySidebar"
+        >
+          <IconifyIcon
+            :icon="
+              categoryDrawerOpen
+                ? 'icon-park-outline:menu-unfold-one'
+                : 'icon-park-outline:menu-fold-one'
+            "
+            aria-hidden="true"
+          />
+        </button>
+        <h2
+          class="flex min-w-0 flex-nowrap space-x-1.5 text-xl font-medium translate-y-[2px]"
+        >
+          <span class="inline-block shrink-0 translate-y-[3px]">
+            <IconifyIcon icon="icon-park-outline:record-disc" />
+          </span>
+          <span
+            id="download-modal-title"
+            class="transition-colors after:transition-all relative inline-block truncate z-10 after:block after:absolute after:bg-accent-100/80 after:rounded-md after:w-4 after:h-1 after:-right-5 after:bottom-1 after:-z-10 hocus:after:w-full hocus:after:h-2 hocus:after:right-0"
+          >
+            LiveCD & Software
+          </span>
+        </h2>
+      </div>
       <button
         type="button"
         aria-label="关闭下载弹窗"
@@ -25,14 +51,14 @@
       </button>
     </header>
 
-    <div v-if="loading" class="flex min-h-0 grow flex-col md:flex-row">
+    <div v-if="loading" class="flex min-h-0 grow">
       <div
-        class="flex shrink-0 gap-2 border-b border-surface-border bg-page-bg/50 p-3 md:w-52 md:flex-col md:border-r md:border-b-0"
+        class="hidden w-52 shrink-0 flex-col gap-2 border-r border-surface-border bg-page-bg p-3 md:flex"
       >
         <div
           v-for="item in 6"
           :key="item"
-          class="h-9 w-24 shrink-0 animate-pulse rounded-lg bg-surface-border/70 md:w-full"
+          class="h-9 w-full shrink-0 animate-pulse rounded-lg bg-surface-border/70"
         />
       </div>
       <div class="grow space-y-3 p-4 sm:p-5">
@@ -65,15 +91,40 @@
       </button>
     </div>
 
-    <div v-else class="flex min-h-0 grow flex-col md:flex-row">
+    <div v-else class="relative flex min-h-0 grow overflow-hidden">
+      <Transition
+        enter-active-class="transition-opacity duration-200"
+        enter-from-class="opacity-0"
+        leave-active-class="transition-opacity duration-200"
+        leave-to-class="opacity-0"
+      >
+        <button
+          v-if="categoryDrawerOpen"
+          type="button"
+          aria-label="关闭资源分类"
+          class="absolute inset-0 z-10 cursor-default bg-slate-950/40 md:hidden"
+          @click="closeCategoryDrawer"
+        />
+      </Transition>
+
       <nav
+        id="download-category-sidebar"
+        ref="categorySidebarRef"
         aria-label="资源分类"
-        class="shrink-0 overflow-x-auto border-b border-surface-border bg-page-bg/50 p-2 md:w-52 md:overflow-y-auto md:border-r md:border-b-0 md:p-3"
+        :inert="!categoryDrawerOpen"
+        tabindex="-1"
+        class="absolute inset-y-0 left-0 z-20 flex w-[min(18rem,85%)] shrink-0 flex-col overflow-hidden border-r border-surface-border bg-page-bg shadow-xl transition-[translate,visibility,width] duration-200 ease-out focus:outline-none md:static md:z-auto md:translate-x-0 md:shadow-none"
+        :class="
+          categoryDrawerOpen
+            ? 'visible translate-x-0 md:w-[max(13rem,25%)] max-w-60'
+            : 'invisible -translate-x-full md:visible md:w-0 md:translate-x-0'
+        "
+        @keydown.esc.stop.prevent="closeCategoryDrawer"
       >
         <div
           role="radiogroup"
           aria-label="选择资源分类"
-          class="flex min-w-max gap-1 md:min-w-0 md:flex-col"
+          class="flex min-h-0 grow flex-col gap-1 overflow-y-auto p-3"
         >
           <button
             v-for="(collection, index) in collections"
@@ -82,11 +133,11 @@
             role="radio"
             :aria-checked="collectionIndex === index"
             :tabindex="collectionIndex === index ? 0 : -1"
-            class="flex h-10 items-center justify-between gap-3 rounded-md px-3 text-left text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            class="flex h-10 shrink-0 items-center justify-between gap-3 rounded-md px-3 text-left text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             :class="
               collectionIndex === index
                 ? 'bg-surface font-medium text-primary ring-1 ring-surface-border'
-                : 'text-muted-fg hocus:bg-surface/70 hocus:text-surface-fg cursor-pointer'
+                : 'cursor-pointer text-muted-fg hocus:bg-surface/70 hocus:text-surface-fg'
             "
             @click="onCollectionUpdate(index)"
           >
@@ -104,7 +155,7 @@
         <div
           class="shrink-0 border-b border-surface-border px-4 py-3 sm:px-5 sm:py-4"
         >
-          <div class="mb-3 flex items-baseline justify-between gap-4">
+          <div class="mb-3 flex items-center justify-between gap-4">
             <h3 class="truncate font-medium text-surface-fg">
               {{ currentCollectionName }}
             </h3>
@@ -124,7 +175,7 @@
               v-model="query"
               type="search"
               :placeholder="`在 ${currentCollectionName} 中搜索...`"
-              class="h-10 w-full rounded-lg border border-surface-border bg-page-bg/60 pr-4 pl-8.5 text-sm text-surface-fg outline-none transition placeholder:text-muted-fg focus:border-primary focus:ring-2 focus:ring-primary"
+              class="h-10 w-full rounded-lg border border-surface-border bg-page-bg/60 pr-4 pl-8.5 text-base sm:text-sm text-surface-fg outline-none transition placeholder:text-muted-fg focus:border-primary focus:ring-2 focus:ring-primary"
             >
           </label>
         </div>
@@ -179,7 +230,7 @@
 <script setup lang="ts">
 import { Icon as IconifyIcon } from '@iconify/vue'
 import { storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useDownloadStore } from './DownloadStore'
 
 const store = useDownloadStore()
@@ -192,6 +243,11 @@ defineEmits<{
 
 const collectionIndex = ref(0)
 const query = ref('')
+const categoryDrawerOpen = ref(false)
+const isDesktop = ref(false)
+const categoryTriggerRef = ref<HTMLButtonElement | null>(null)
+const categorySidebarRef = ref<HTMLElement | null>(null)
+let desktopMediaQuery: MediaQueryList | undefined
 
 const collections = computed(() => Object.keys(resourceCollection.value))
 const currentCollectionName = computed(
@@ -217,5 +273,51 @@ const filteredCollection = computed(() => {
 const onCollectionUpdate = (index: number) => {
   collectionIndex.value = index
   query.value = ''
+  if (!isDesktop.value) {
+    closeCategoryDrawer()
+  }
 }
+
+const openCategoryDrawer = () => {
+  categoryDrawerOpen.value = true
+  if (!isDesktop.value) {
+    nextTick(() => {
+      categorySidebarRef.value?.focus()
+    })
+  }
+}
+
+const closeCategoryDrawer = () => {
+  categoryDrawerOpen.value = false
+  nextTick(() => {
+    if (categoryTriggerRef.value?.offsetParent !== null) {
+      categoryTriggerRef.value?.focus()
+    }
+  })
+}
+
+const toggleCategorySidebar = () => {
+  if (categoryDrawerOpen.value) {
+    closeCategoryDrawer()
+    return
+  }
+
+  openCategoryDrawer()
+}
+
+const onDesktopChange = (event: MediaQueryListEvent) => {
+  isDesktop.value = event.matches
+  categoryDrawerOpen.value = event.matches
+}
+
+onMounted(() => {
+  desktopMediaQuery = window.matchMedia('(min-width: 768px)')
+  isDesktop.value = desktopMediaQuery.matches
+  categoryDrawerOpen.value = desktopMediaQuery.matches
+  desktopMediaQuery.addEventListener('change', onDesktopChange)
+})
+
+onBeforeUnmount(() => {
+  desktopMediaQuery?.removeEventListener('change', onDesktopChange)
+})
 </script>
