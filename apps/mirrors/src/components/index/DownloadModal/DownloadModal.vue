@@ -192,12 +192,12 @@
 
         <ul
           v-if="filteredCollection.length > 0"
-          class="min-h-0 grow overflow-y-auto overscroll-contain"
+          class="min-h-0 grow overflow-y-auto overscroll-contain bg-page-bg"
         >
           <li
             v-for="resource in filteredCollection"
             :key="resource.link"
-            class="border-b border-surface-border"
+            class="border-b border-surface-border bg-surface"
           >
             <a
               :href="resource.link"
