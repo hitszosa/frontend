@@ -35,7 +35,7 @@
         <a
           v-if="isShowHelp(row.name)"
           :href="getHelpUrl(row.name)"
-          class="text-muted-fg after:w-0 hover:text-primary hover:after:w-full hover:after:bg-osa-fg/40"
+          class="rounded-sm text-muted-fg transition-colors after:w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary hocus:after:w-full hocus:after:bg-osa-fg/40"
         >
           帮助
         </a>
