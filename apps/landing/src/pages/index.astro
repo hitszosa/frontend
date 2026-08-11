@@ -1,23 +1,23 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection } from "astro:content";
 import {
   osaLogoAlt,
   osaLogoMono,
   osaLogoPub,
   osaLogoVtuber,
   osaLogoDefault,
-} from '@hitszosa/ui';
-import Layout from '../layouts/LandingLayout.astro';
-import Badge from '../components/Badge.astro';
-import TagBadges from '../components/TagBadges.astro';
-import UpdateBoard from '../components/UpdateBoard.astro';
-import FriendLinkCard from '../components/FriendLinkCard.astro';
-import { getUpdates } from '../lib/updates';
+} from "@hitszosa/ui";
+import Layout from "../layouts/LandingLayout.astro";
+import Badge from "../components/Badge.astro";
+import TagBadges from "../components/TagBadges.astro";
+import UpdateBoard from "../components/UpdateBoard.astro";
+import FriendLinkCard from "../components/FriendLinkCard.astro";
+import { getUpdates } from "../lib/updates";
 
-const services = (await getCollection('services', ({ data }) => !data.hide))
+const services = (await getCollection("services", ({ data }) => !data.hide))
   .filter((item) => item.data.featured)
   .sort((a, b) => a.data.order - b.data.order);
-const friendLinks = (await getCollection('friendLinks')).sort(
+const friendLinks = (await getCollection("friendLinks")).sort(
   (a, b) => a.data.order - b.data.order,
 );
 const easterEggLogos = [
@@ -31,9 +31,9 @@ const now = new Date();
 const updates = await getUpdates(now);
 const feed = updates.slice(0, 6);
 const formatDate = (date: Date) =>
-  new Intl.DateTimeFormat('zh-CN', {
-    month: '2-digit',
-    day: '2-digit',
+  new Intl.DateTimeFormat("zh-CN", {
+    month: "2-digit",
+    day: "2-digit",
   }).format(date);
 const updateRecords = updates;
 const earliestRecord = updateRecords.length
@@ -77,8 +77,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
         d="M-120 84 C220 15 650 245 1120 150"
         fill="none"
         stroke="#e8c95c"
-        stroke-width="2"
-      ></path>
+        stroke-width="2"></path>
       <g class="moving-node" data-moving-node>
         <g data-node-visual>
           <circle r="5" fill="#e6c24f"></circle>
@@ -99,8 +98,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
         d="M-120 300 C260 195 690 170 1120 55"
         fill="none"
         stroke="#94a4e7"
-        stroke-width="2"
-      ></path>
+        stroke-width="2"></path>
       <g class="moving-node" data-moving-node>
         <g data-node-visual>
           <circle r="12" fill="none" stroke="#94a4e7" stroke-width="2"></circle>
@@ -122,8 +120,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
         d="M-120 270 C260 165 700 280 1120 220"
         fill="none"
         stroke="#c2b7e2"
-        stroke-width="2"
-      ></path>
+        stroke-width="2"></path>
       <g class="moving-node" data-moving-node>
         <g data-node-visual>
           <circle r="5" fill="#bcaee0"></circle>
@@ -204,7 +201,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
               >动态</a
             ><a
               href="/about"
-              class="group px-4 py-2.5 text-sm text-muted-fg no-underline transition-colors hover:text-primary"
+              class="group px-4 py-2.5 text-sm text-muted-fg no-underline hover:underline transition-colors hover:text-primary"
               >关于 →</a
             >
           </div>
@@ -230,30 +227,34 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
             class="mt-4 grid grid-flow-col grid-rows-7 gap-1"
             aria-label="2026 年动态记录热力图"
           >
-            {heatmapDays.map((day, index) => (
-              <span
-                title={`${day.date.toLocaleDateString('zh-CN')}：${day.count} 条记录`}
-                style={`--heat-index: ${index}`}
-                class:list={[
-                  'aspect-square rounded-[2px]',
-                  day.count === 0
-                    ? 'bg-inset'
-                    : day.count === 1
-                      ? 'bg-primary/45'
-                      : day.count === 2
-                        ? 'bg-primary/70'
-                        : 'bg-primary',
-                ]}
-              />
-            ))}
+            {
+              heatmapDays.map((day, index) => (
+                <span
+                  title={`${day.date.toLocaleDateString("zh-CN")}：${day.count} 条记录`}
+                  style={`--heat-index: ${index}`}
+                  class:list={[
+                    "aspect-square rounded-[2px]",
+                    day.count === 0
+                      ? "bg-inset"
+                      : day.count === 1
+                        ? "bg-primary/45"
+                        : day.count === 2
+                          ? "bg-primary/70"
+                          : "bg-primary",
+                  ]}
+                />
+              ))
+            }
           </div>
           <div
             class="mt-3 flex items-center justify-between text-[10px] text-muted-fg"
           >
             <span class="ui-mono"
-              >{heatmapStart.toLocaleDateString('zh-CN', {
-                month: 'short',
-              })}</span
+              >{
+                heatmapStart.toLocaleDateString("zh-CN", {
+                  month: "short",
+                })
+              }</span
             ><span>动态</span>
           </div>
         </figure>
@@ -286,42 +287,42 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
         data-home-reveal
         data-home-stagger
       >
-        {feed.map((entry, index) => (
-          <li class="border-b border-surface-border text-base last:border-0">
-            <a
-              href={entry.href}
-              class="flex items-center gap-3 px-4 py-4 text-surface-fg no-underline hover:bg-page-bg hover:text-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-[-2px] sm:px-5"
-            >
-              <span class="ui-mono hidden text-xs text-muted-fg sm:inline">
-                {['97eda1b', '34b7bd9', '15bf5b6'][index] ?? '0a3f712'}
-              </span>
-              <Badge
-                tone={
-                  entry.warning
-                    ? 'warning'
-                    : entry.kind === 'event'
-                      ? 'secondary'
-                      : entry.kind === 'article'
-                        ? 'success'
-                        : 'primary'
-                }
-                mono
+        {
+          feed.map((entry, index) => (
+            <li class="border-b border-surface-border text-base last:border-0">
+              <a
+                href={entry.href}
+                class="flex items-center gap-3 px-4 py-4 text-surface-fg no-underline hover:bg-page-bg hover:text-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-[-2px] sm:px-5"
               >
-                {entry.pinned ? `置顶 · ${entry.label}` : entry.label}
-              </Badge>
-              <TagBadges tags={entry.tags} />
-              <span class="min-w-0 flex-1 truncate">
-                {entry.title}
-              </span>
-              <time
-                class="ui-mono shrink-0 text-xs text-muted-fg"
-                datetime={entry.date.toISOString()}
-              >
-                {formatDate(entry.date)}
-              </time>
-            </a>
-          </li>
-        ))}
+                <span class="ui-mono hidden text-xs text-muted-fg sm:inline">
+                  {["97eda1b", "34b7bd9", "15bf5b6"][index] ?? "0a3f712"}
+                </span>
+                <Badge
+                  tone={
+                    entry.warning
+                      ? "warning"
+                      : entry.kind === "event"
+                        ? "secondary"
+                        : entry.kind === "article"
+                          ? "success"
+                          : "primary"
+                  }
+                  mono
+                >
+                  {entry.pinned ? `置顶 · ${entry.label}` : entry.label}
+                </Badge>
+                <TagBadges tags={entry.tags} />
+                <span class="min-w-0 flex-1 truncate">{entry.title}</span>
+                <time
+                  class="ui-mono shrink-0 text-xs text-muted-fg"
+                  datetime={entry.date.toISOString()}
+                >
+                  {formatDate(entry.date)}
+                </time>
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </section>
 
@@ -340,44 +341,44 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
         <ul
           class="mt-6 divide-y divide-surface-border border-y border-surface-border"
         >
-          {services.map((item) => (
-            <li>
-              <a
-                href={item.data.href}
-                target="_blank"
-                rel="noreferrer noopener"
-                class="group flex items-center justify-between gap-4 py-3 no-underline transition-colors duration-200"
-              >
-                <span class="flex min-w-0 items-center gap-3">
-                  <span
-                    class="ui-mono shrink-0 rounded px-1.5 py-0.5 text-[10px]"
-                    style={
-                      item.data.category === 'service'
-                        ? 'background: color-mix(in srgb, var(--ui-success, var(--ui-secondary)) 14%, transparent); color: var(--ui-success, var(--ui-secondary));'
-                        : 'background: color-mix(in srgb, var(--ui-primary) 14%, transparent); color: var(--ui-primary);'
-                    }
-                  >
-                    {item.data.category === 'service' ? '服务' : '项目'}
-                  </span>
-                  <span class="font-medium text-surface-fg group-hover:text-primary">
-                    {item.data.name}
-                  </span>
-                </span>
-                <span
-                  class="ui-mono shrink-0 text-xs text-muted-fg transition-transform duration-200 group-hover:translate-x-1 group-focus-visible:translate-x-1"
+          {
+            services.map((item) => (
+              <li>
+                <a
+                  href={item.data.href}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  class="group flex items-center justify-between gap-4 py-3 no-underline transition-colors duration-200"
                 >
-                  {item.data.scope === 'campus'
-                    ? '校内 '
-                    : item.data.status === 'developing'
-                      ? '开发中 '
-                      : item.data.status === 'beta'
-                        ? 'Beta '
-                        : ''}
-                  ↗
-                </span>
-              </a>
-            </li>
-          ))}
+                  <span class="flex min-w-0 items-center gap-3">
+                    <span
+                      class="ui-mono shrink-0 rounded px-1.5 py-0.5 text-[10px]"
+                      style={
+                        item.data.category === "service"
+                          ? "background: color-mix(in srgb, var(--ui-success, var(--ui-secondary)) 14%, transparent); color: var(--ui-success, var(--ui-secondary));"
+                          : "background: color-mix(in srgb, var(--ui-primary) 14%, transparent); color: var(--ui-primary);"
+                      }
+                    >
+                      {item.data.category === "service" ? "服务" : "项目"}
+                    </span>
+                    <span class="font-medium text-surface-fg group-hover:text-primary">
+                      {item.data.name}
+                    </span>
+                  </span>
+                  <span class="ui-mono shrink-0 text-xs text-muted-fg transition-transform duration-200 group-hover:translate-x-1 group-focus-visible:translate-x-1">
+                    {item.data.scope === "campus"
+                      ? "校内 "
+                      : item.data.status === "developing"
+                        ? "开发中 "
+                        : item.data.status === "beta"
+                          ? "Beta "
+                          : ""}
+                    ↗
+                  </span>
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </div>
       <div data-home-reveal style="--reveal-delay: 90ms">
@@ -398,370 +399,373 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
     </section>
   </div>
   <script>
-  const setupHomeReveals = () => {
-    const page = document.querySelector<HTMLElement>('[data-home-motion]');
-    if (!page || page.dataset.motionInitialized === 'true') return;
+    const setupHomeReveals = () => {
+      const page = document.querySelector<HTMLElement>("[data-home-motion]");
+      if (!page || page.dataset.motionInitialized === "true") return;
 
-    page.dataset.motionInitialized = 'true';
-    const items = Array.from(
-      page.querySelectorAll<HTMLElement>('[data-home-reveal]'),
-    );
-    const reduceMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches;
+      page.dataset.motionInitialized = "true";
+      const items = Array.from(
+        page.querySelectorAll<HTMLElement>("[data-home-reveal]"),
+      );
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
 
-    if (reduceMotion || !('IntersectionObserver' in window)) {
-      for (const item of items) item.classList.add('is-visible');
-      return;
-    }
+      if (reduceMotion || !("IntersectionObserver" in window)) {
+        for (const item of items) item.classList.add("is-visible");
+        return;
+      }
 
-    page.classList.add('home-motion-ready');
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
-        }
-      },
-      { rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
-    );
+      page.classList.add("home-motion-ready");
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        },
+        { rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
+      );
 
-    for (const item of items) observer.observe(item);
-    document.addEventListener(
-      'astro:before-swap',
-      () => observer.disconnect(),
-      {
-        once: true,
-      },
-    );
-  };
+      for (const item of items) observer.observe(item);
+      document.addEventListener(
+        "astro:before-swap",
+        () => observer.disconnect(),
+        {
+          once: true,
+        },
+      );
+    };
 
-  const revealLogoEasterEgg = () => {
-    const background = document.querySelector<SVGSVGElement>(
-      '[data-easter-egg-logos]',
-    );
-    if (
-      !background ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
-      return;
-    }
+    const revealLogoEasterEgg = () => {
+      const background = document.querySelector<SVGSVGElement>(
+        "[data-easter-egg-logos]",
+      );
+      if (
+        !background ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        return;
+      }
 
-    if (background.dataset.logoInitialized === 'true') return;
-    background.dataset.logoInitialized = 'true';
+      if (background.dataset.logoInitialized === "true") return;
+      background.dataset.logoInitialized = "true";
 
-    const logos = JSON.parse(
-      background.dataset.easterEggLogos ?? '[]',
-    ) as string[];
-    const nodes = Array.from(
-      background.querySelectorAll<SVGGElement>('[data-moving-node]'),
-    );
-    const namespace = 'http://www.w3.org/2000/svg';
+      const logos = JSON.parse(
+        background.dataset.easterEggLogos ?? "[]",
+      ) as string[];
+      const nodes = Array.from(
+        background.querySelectorAll<SVGGElement>("[data-moving-node]"),
+      );
+      const namespace = "http://www.w3.org/2000/svg";
 
-    for (const node of nodes) {
-      if (Math.random() >= 0.1) continue;
+      for (const node of nodes) {
+        if (Math.random() >= 0.1) continue;
 
-      const logo = logos[Math.floor(Math.random() * logos.length)];
-      const visual = node.querySelector('[data-node-visual]');
-      if (!logo || !visual) continue;
+        const logo = logos[Math.floor(Math.random() * logos.length)];
+        const visual = node.querySelector("[data-node-visual]");
+        if (!logo || !visual) continue;
 
-      const logoGroup = document.createElementNS(namespace, 'g');
-      logoGroup.setAttribute('opacity', '0.8');
+        const logoGroup = document.createElementNS(namespace, "g");
+        logoGroup.setAttribute("opacity", "0.8");
 
-      const image = document.createElementNS(namespace, 'image');
-      image.setAttribute('href', logo);
-      image.setAttribute('x', '-17');
-      image.setAttribute('y', '-17');
-      image.setAttribute('width', '34');
-      image.setAttribute('height', '34');
-      image.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+        const image = document.createElementNS(namespace, "image");
+        image.setAttribute("href", logo);
+        image.setAttribute("x", "-17");
+        image.setAttribute("y", "-17");
+        image.setAttribute("width", "34");
+        image.setAttribute("height", "34");
+        image.setAttribute("preserveAspectRatio", "xMidYMid meet");
 
-      const rotation = document.createElementNS(namespace, 'animateTransform');
-      rotation.setAttribute('attributeName', 'transform');
-      rotation.setAttribute('type', 'rotate');
-      rotation.setAttribute('from', '0 0 0');
-      rotation.setAttribute('to', '360 0 0');
-      rotation.setAttribute('dur', '96s');
-      rotation.setAttribute('repeatCount', 'indefinite');
+        const rotation = document.createElementNS(
+          namespace,
+          "animateTransform",
+        );
+        rotation.setAttribute("attributeName", "transform");
+        rotation.setAttribute("type", "rotate");
+        rotation.setAttribute("from", "0 0 0");
+        rotation.setAttribute("to", "360 0 0");
+        rotation.setAttribute("dur", "96s");
+        rotation.setAttribute("repeatCount", "indefinite");
 
-      logoGroup.append(image, rotation);
-      visual.replaceWith(logoGroup);
-    }
-  };
-
-  const setupHeroParallax = () => {
-    const background = document.querySelector<SVGSVGElement>(
-      '[data-hero-parallax]',
-    );
-    if (
-      !background ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
-      return;
-    }
-
-    if (background.dataset.parallaxInitialized === 'true') return;
-    background.dataset.parallaxInitialized = 'true';
-
-    const layers = Array.from(
-      background.querySelectorAll<SVGGElement>('[data-parallax-speed]'),
-    );
-    let frameId = 0;
-
-    const update = () => {
-      frameId = 0;
-      const distance = window.scrollY;
-      for (const layer of layers) {
-        const speed = Number(layer.dataset.parallaxSpeed);
-        const offset = -distance * speed;
-        layer.style.setProperty('--hero-layer-offset', `${offset}px`);
+        logoGroup.append(image, rotation);
+        visual.replaceWith(logoGroup);
       }
     };
 
-    const requestUpdate = () => {
-      if (frameId === 0) frameId = window.requestAnimationFrame(update);
+    const setupHeroParallax = () => {
+      const background = document.querySelector<SVGSVGElement>(
+        "[data-hero-parallax]",
+      );
+      if (
+        !background ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        return;
+      }
+
+      if (background.dataset.parallaxInitialized === "true") return;
+      background.dataset.parallaxInitialized = "true";
+
+      const layers = Array.from(
+        background.querySelectorAll<SVGGElement>("[data-parallax-speed]"),
+      );
+      let frameId = 0;
+
+      const update = () => {
+        frameId = 0;
+        const distance = window.scrollY;
+        for (const layer of layers) {
+          const speed = Number(layer.dataset.parallaxSpeed);
+          const offset = -distance * speed;
+          layer.style.setProperty("--hero-layer-offset", `${offset}px`);
+        }
+      };
+
+      const requestUpdate = () => {
+        if (frameId === 0) frameId = window.requestAnimationFrame(update);
+      };
+
+      window.addEventListener("scroll", requestUpdate, { passive: true });
+      requestUpdate();
+
+      document.addEventListener(
+        "astro:before-swap",
+        () => {
+          window.removeEventListener("scroll", requestUpdate);
+          if (frameId !== 0) window.cancelAnimationFrame(frameId);
+        },
+        { once: true },
+      );
     };
 
-    window.addEventListener('scroll', requestUpdate, { passive: true });
-    requestUpdate();
+    const initializeHomePage = () => {
+      setupHomeReveals();
+      revealLogoEasterEgg();
+      setupHeroParallax();
+    };
 
-    document.addEventListener(
-      'astro:before-swap',
-      () => {
-        window.removeEventListener('scroll', requestUpdate);
-        if (frameId !== 0) window.cancelAnimationFrame(frameId);
-      },
-      { once: true },
-    );
-  };
-
-  const initializeHomePage = () => {
-    setupHomeReveals();
-    revealLogoEasterEgg();
-    setupHeroParallax();
-  };
-
-  initializeHomePage();
-  document.addEventListener('astro:page-load', initializeHomePage);
+    initializeHomePage();
+    document.addEventListener("astro:page-load", initializeHomePage);
   </script>
   <style is:global>
-  .hero-enter {
-    animation: hero-enter 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: calc(var(--enter-order, 0) * 90ms + 80ms);
-  }
-
-  @keyframes hero-enter {
-    from {
-      opacity: 0;
-      transform: translateY(1rem);
+    .hero-enter {
+      animation: hero-enter 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-delay: calc(var(--enter-order, 0) * 90ms + 80ms);
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
+
+    @keyframes hero-enter {
+      from {
+        opacity: 0;
+        transform: translateY(1rem);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-  }
 
-  .update-map {
-    transform-origin: 70% 50%;
-  }
-
-  .update-map [style*="--heat-index"] {
-    animation: heat-cell-enter 360ms ease-out both;
-    animation-delay: calc(340ms + var(--heat-index) * 5ms);
-    transform-origin: center;
-  }
-
-  @keyframes heat-cell-enter {
-    from {
-      opacity: 0;
-      transform: scale(0.35);
+    .update-map {
+      transform-origin: 70% 50%;
     }
-  }
 
-  [data-home-motion].home-motion-ready [data-home-reveal] {
-    opacity: 0;
-    transform: translateY(1.25rem);
-  }
-
-  [data-home-motion].home-motion-ready [data-home-reveal].is-visible {
-    animation: home-reveal 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: var(--reveal-delay, 0ms);
-  }
-
-  [data-home-motion].home-motion-ready
-    [data-home-stagger][data-home-reveal]
-    > *,
-  [data-home-motion].home-motion-ready
-    [data-home-reveal]
-    [data-home-stagger]
-    > * {
-    opacity: 0;
-    transform: translateY(0.65rem);
-  }
-
-  [data-home-motion].home-motion-ready
-    [data-home-stagger][data-home-reveal].is-visible
-    > *,
-  [data-home-motion].home-motion-ready
-    [data-home-reveal].is-visible
-    [data-home-stagger]
-    > * {
-    animation: home-stagger-reveal 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-
-  @keyframes home-reveal {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes home-stagger-reveal {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  [data-home-stagger] > :nth-child(2) {
-    animation-delay: 55ms;
-  }
-
-  [data-home-stagger] > :nth-child(3) {
-    animation-delay: 110ms;
-  }
-
-  [data-home-stagger] > :nth-child(4) {
-    animation-delay: 165ms;
-  }
-
-  [data-home-stagger] > :nth-child(5) {
-    animation-delay: 220ms;
-  }
-
-  [data-home-stagger] > :nth-child(n + 6) {
-    animation-delay: 275ms;
-  }
-
-  .hero-background {
-    transform: translate3d(-50%, 0, 0);
-  }
-
-  .hero-parallax-layer {
-    --hero-layer-offset: 0px;
-    transform: translate3d(0, var(--hero-layer-offset), 0);
-    will-change: transform;
-  }
-
-  .hero-branch {
-    vector-effect: non-scaling-stroke;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    shape-rendering: geometricPrecision;
-  }
-
-  .title-ruby {
-    ruby-position: over;
-  }
-
-  .title-expansion {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(0.4rem);
-    transition:
-      opacity 280ms ease-out,
-      transform 280ms ease-out;
-  }
-
-  .title-ruby:hover .title-expansion,
-  .title-ruby:focus-visible .title-expansion {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .github-handle {
-    position: relative;
-    display: inline-block;
-    width: 9ch;
-    white-space: nowrap;
-  }
-
-  .github-handle-text {
-    display: block;
-  }
-
-  .github-handle::after {
-    position: absolute;
-    top: 0.05em;
-    bottom: 0.05em;
-    left: 100%;
-    border-left: 1px solid currentColor;
-    content: '';
-    opacity: 0;
-  }
-
-  .github-link:hover .github-handle-text,
-  .github-link:focus-visible .github-handle-text {
-    animation: github-handle-type 640ms steps(9, end);
-  }
-
-  .github-link:hover .github-handle::after,
-  .github-link:focus-visible .github-handle::after {
-    animation: github-handle-caret 640ms steps(9, end);
-  }
-
-  @keyframes github-handle-type {
-    from {
-      clip-path: inset(0 100% 0 0);
-    }
-    to {
-      clip-path: inset(0 0 0 0);
-    }
-  }
-
-  @keyframes github-handle-caret {
-    0% {
-      left: 0;
-      opacity: 1;
-    }
-    88% {
-      opacity: 1;
-    }
-    100% {
-      left: 100%;
-      opacity: 0;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero-enter,
     .update-map [style*="--heat-index"] {
-      animation: none;
+      animation: heat-cell-enter 360ms ease-out both;
+      animation-delay: calc(340ms + var(--heat-index) * 5ms);
+      transform-origin: center;
     }
 
-    [data-home-motion] [data-home-reveal],
-    [data-home-motion] [data-home-stagger] > * {
-      animation: none;
-      opacity: 1;
-      transform: none;
+    @keyframes heat-cell-enter {
+      from {
+        opacity: 0;
+        transform: scale(0.35);
+      }
+    }
+
+    [data-home-motion].home-motion-ready [data-home-reveal] {
+      opacity: 0;
+      transform: translateY(1.25rem);
+    }
+
+    [data-home-motion].home-motion-ready [data-home-reveal].is-visible {
+      animation: home-reveal 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-delay: var(--reveal-delay, 0ms);
+    }
+
+    [data-home-motion].home-motion-ready
+      [data-home-stagger][data-home-reveal]
+      > *,
+    [data-home-motion].home-motion-ready
+      [data-home-reveal]
+      [data-home-stagger]
+      > * {
+      opacity: 0;
+      transform: translateY(0.65rem);
+    }
+
+    [data-home-motion].home-motion-ready
+      [data-home-stagger][data-home-reveal].is-visible
+      > *,
+    [data-home-motion].home-motion-ready
+      [data-home-reveal].is-visible
+      [data-home-stagger]
+      > * {
+      animation: home-stagger-reveal 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes home-reveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes home-stagger-reveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    [data-home-stagger] > :nth-child(2) {
+      animation-delay: 55ms;
+    }
+
+    [data-home-stagger] > :nth-child(3) {
+      animation-delay: 110ms;
+    }
+
+    [data-home-stagger] > :nth-child(4) {
+      animation-delay: 165ms;
+    }
+
+    [data-home-stagger] > :nth-child(5) {
+      animation-delay: 220ms;
+    }
+
+    [data-home-stagger] > :nth-child(n + 6) {
+      animation-delay: 275ms;
+    }
+
+    .hero-background {
+      transform: translate3d(-50%, 0, 0);
+    }
+
+    .hero-parallax-layer {
+      --hero-layer-offset: 0px;
+      transform: translate3d(0, var(--hero-layer-offset), 0);
+      will-change: transform;
+    }
+
+    .hero-branch {
+      vector-effect: non-scaling-stroke;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      shape-rendering: geometricPrecision;
+    }
+
+    .title-ruby {
+      ruby-position: over;
     }
 
     .title-expansion {
-      transform: none;
-      transition: none;
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(0.4rem);
+      transition:
+        opacity 280ms ease-out,
+        transform 280ms ease-out;
+    }
+
+    .title-ruby:hover .title-expansion,
+    .title-ruby:focus-visible .title-expansion {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .github-handle {
+      position: relative;
+      display: inline-block;
+      width: 9ch;
+      white-space: nowrap;
+    }
+
+    .github-handle-text {
+      display: block;
+    }
+
+    .github-handle::after {
+      position: absolute;
+      top: 0.05em;
+      bottom: 0.05em;
+      left: 100%;
+      border-left: 1px solid currentColor;
+      content: "";
+      opacity: 0;
     }
 
     .github-link:hover .github-handle-text,
-    .github-link:focus-visible .github-handle-text,
-    .github-link:hover .github-handle::after,
-    .github-link:focus-visible .github-handle::after {
-      animation: none;
+    .github-link:focus-visible .github-handle-text {
+      animation: github-handle-type 640ms steps(9, end);
     }
 
-    .moving-node {
-      display: none;
+    .github-link:hover .github-handle::after,
+    .github-link:focus-visible .github-handle::after {
+      animation: github-handle-caret 640ms steps(9, end);
     }
-  }
+
+    @keyframes github-handle-type {
+      from {
+        clip-path: inset(0 100% 0 0);
+      }
+      to {
+        clip-path: inset(0 0 0 0);
+      }
+    }
+
+    @keyframes github-handle-caret {
+      0% {
+        left: 0;
+        opacity: 1;
+      }
+      88% {
+        opacity: 1;
+      }
+      100% {
+        left: 100%;
+        opacity: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-enter,
+      .update-map [style*="--heat-index"] {
+        animation: none;
+      }
+
+      [data-home-motion] [data-home-reveal],
+      [data-home-motion] [data-home-stagger] > * {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
+
+      .title-expansion {
+        transform: none;
+        transition: none;
+      }
+
+      .github-link:hover .github-handle-text,
+      .github-link:focus-visible .github-handle-text,
+      .github-link:hover .github-handle::after,
+      .github-link:focus-visible .github-handle::after {
+        animation: none;
+      }
+
+      .moving-node {
+        display: none;
+      }
+    }
   </style>
 </Layout>
