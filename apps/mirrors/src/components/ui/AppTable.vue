@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="overflow-auto rounded-lg border border-surface-border bg-surface"
-  >
+  <div class="overflow-auto rounded-lg border border-surface-border bg-surface">
     <table class="min-w-full divide-y divide-surface-border">
       <thead class="bg-page-bg/80">
         <tr>
@@ -10,7 +8,11 @@
             :key="column.key"
             scope="col"
             :aria-sort="getAriaSort(column)"
-            class="px-4 py-3 text-left text-sm font-medium text-muted-fg"
+            :class="[
+              'px-4 py-3 text-left text-sm font-medium text-muted-fg',
+              column.hiddenOnSmall && 'hidden sm:table-cell',
+              column.indentedOnSmall && 'pl-6 sm:pl-4',
+            ]"
           >
             <button
               v-if="column.sortable"
@@ -34,9 +36,9 @@
         <tr v-if="loading || errorMessage">
           <td
             :colspan="columns.length"
-            class="px-4 py-6 text-center text-sm text-muted-fg"
+            class="px-2 sm:px-4 py-6 text-center text-sm text-muted-fg"
           >
-            {{ loading ? 'Loading...' : errorMessage }}
+            {{ loading ? '正在加载…' : errorMessage }}
           </td>
         </tr>
         <tr v-else-if="sortedRows.length === 0">
@@ -44,7 +46,7 @@
             :colspan="columns.length"
             class="px-4 py-6 text-center text-sm text-muted-fg"
           >
-            No results found.
+            没有匹配结果
           </td>
         </tr>
         <template v-else>
@@ -56,7 +58,10 @@
             <td
               v-for="column in columns"
               :key="column.key"
-              class="px-4 py-3 align-middle"
+              :class="[
+                'px-2 sm:px-4 py-3 align-middle',
+                column.hiddenOnSmall && 'hidden sm:table-cell',
+              ]"
             >
               <slot
                 v-if="hasSlot(column.key)"
@@ -82,6 +87,8 @@ interface TableColumn {
   label: string
   sortable?: boolean
   smVisible?: boolean
+  hiddenOnSmall?: boolean
+  indentedOnSmall?: boolean
 }
 
 interface TableSort {

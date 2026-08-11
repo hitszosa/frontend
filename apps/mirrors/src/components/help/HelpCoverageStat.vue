@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 
 import generatedHelpPages from '@generated/help/help-list.json'
-import Tooltip from '@components/ui/Tooltip.vue'
+import Tooltip from '@hitszosa/ui/components/Tooltip.vue'
 
 type MirrorStatusItem = {
   name: string
@@ -35,13 +35,13 @@ onMounted(async () => {
 <template>
   <Tooltip
     class="help-coverage-stat items-center rounded-full border border-surface-border bg-surface px-3 py-1.5 text-sm text-muted-fg"
-    content="可用文档数 / 镜像总数"
+    content="有帮助文档的镜像数 / 镜像总数"
     aria-live="polite"
-    aria-label="可用文档数 / 镜像总数"
+    aria-label="有帮助文档的镜像数 / 镜像总数"
   >
     <span class="ui-mono font-medium text-surface-fg">
       {{ availableHelpCount ?? '—' }}
-      / {{ totalMirrorCount ?? '—' }} 篇帮助文档
+      / {{ totalMirrorCount ?? '—' }} 个镜像有帮助文档
     </span>
   </Tooltip>
 </template>

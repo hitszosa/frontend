@@ -533,10 +533,6 @@
     url = "https://registry.npmjs.org/@eslint/plugin-kit/-/plugin-kit-0.4.1.tgz";
     hash = "sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==";
   };
-  "@github/relative-time-element@5.3.1" = fetchurl {
-    url = "https://registry.npmjs.org/@github/relative-time-element/-/relative-time-element-5.3.1.tgz";
-    hash = "sha512-f++QCIXxGH7rMbpTASRfLyCyPydd4HqwOmATBb/sAUCq72HEZN0MX9znmJSp7NKYxuQxF8j0Mv3ez9P32c70vw==";
-  };
   "@hitszosa/eslint-config" = copyPathToStore ./packages/eslint-config;
   "@hitszosa/landing" = copyPathToStore ./apps/landing;
   "@hitszosa/mirrors" = copyPathToStore ./apps/mirrors;

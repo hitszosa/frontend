@@ -26,14 +26,17 @@
     "./client/theme": "./src/client/theme.ts",
     "./client/theme-init": "./src/client/theme-init.ts",
     "./components/*": "./src/components/*",
+    "./utils/*": "./src/utils/*",
     "./assets/*": "./src/assets/*",
     ".": "./src/index.ts"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.19",
+    "vue": "^3.5.33",
     "iconify-icon": "^3.0.2"
   },
   "devDependencies": {
+    "@astrojs/vue": "^6.0.1",
     "@astrojs/check": "catalog:",
     "@biomejs/biome": "catalog:",
     "@eslint/js": "catalog:",

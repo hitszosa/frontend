@@ -5,7 +5,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 
 import { useHelpListStore } from '@components/index/MirrorList/HelpListStore'
 import { useMirrorListStore } from '@components/index/MirrorList/MirrorListStore'
-import Tooltip from '@components/ui/Tooltip.vue'
+import Tooltip from '@hitszosa/ui/components/Tooltip.vue'
 
 const props = defineProps<{
   activePageId: string
