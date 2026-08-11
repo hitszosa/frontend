@@ -24,6 +24,10 @@ export default defineConfig({
     }),
     ...(useMockData ? [mockDataIntegration()] : []),
   ],
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'hover',
+  },
   vite: {
     define: {
       'import.meta.env.PUBLIC_MOCK': JSON.stringify(useMockData),

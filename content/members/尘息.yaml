@@ -1,7 +1,7 @@
 name: 尘息
 github: chenx-dust
 order: 100
-image: /member-images/chenxi.webp
+image: /member-images/chenx.webp
 projects:
   - name: EZ4Connect
     description: 第三方 aTrust / EasyConnect 客户端
@@ -10,3 +10,7 @@ projects:
   - name: hitsz-srun-login
     description: 校园网无头登录程序
     href: https://github.com/DustinChen04/hitsz-srun-login
+  - name: "尘息的个人主页"
+    description: Hi there 👋, I am Chenx Dust.
+    href: https://chenx.cc
+    type: website

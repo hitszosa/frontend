@@ -34,7 +34,7 @@ const getTone = (entry: UpdateEntry): BadgeTone =>
 
 {primaryUpdate && (
     <section id="featured" class="border-b border-surface-border py-14">
-      <article class="mt-7 flex flex-col overflow-hidden rounded-xl border border-surface-border bg-surface md:flex-row">
+      <article data-home-reveal class="mt-7 flex flex-col overflow-hidden rounded-xl border border-surface-border bg-surface transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md focus-within:border-primary/50 focus-within:shadow-md md:flex-row">
         {primaryUpdate.cover && (
           <div class="flex shrink-0 items-center justify-center border-b border-surface-border bg-inset md:max-w-[60%] md:border-r md:border-b-0">
             <ContentImage
@@ -62,7 +62,12 @@ const getTone = (entry: UpdateEntry): BadgeTone =>
             </time>
           </div>
           <h2 class="mt-5 text-2xl font-semibold tracking-tight text-surface-fg">
-            {primaryUpdate.title}
+            <a
+              href={primaryUpdate.href}
+              class="no-underline transition-colors hover:text-primary focus-visible:text-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+            >
+              {primaryUpdate.title}
+            </a>
           </h2>
           <p class="mt-4 leading-7 text-muted-fg">{primaryUpdate.summary}</p>
           <div class="mt-auto pt-8">
@@ -77,11 +82,16 @@ const getTone = (entry: UpdateEntry): BadgeTone =>
       </article>
 
       {secondaryUpdates.length > 0 && (
-        <div class="mt-4 grid gap-4 sm:grid-cols-2">
+        <div
+          class="mt-4 grid gap-4 sm:grid-cols-2"
+          data-home-reveal
+          data-home-stagger
+          style="--reveal-delay: 80ms"
+        >
           {secondaryUpdates.map((entry) => (
             <a
               href={entry.href}
-              class="group flex min-h-28 overflow-hidden rounded-lg border border-surface-border bg-surface no-underline hover:border-primary/50"
+              class="group flex min-h-28 overflow-hidden rounded-lg border border-surface-border bg-surface no-underline transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md focus-visible:border-primary/50 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 focus-visible:shadow-md"
             >
               {entry.cover && (
                 <div class="flex shrink-0 max-w-2/5 items-center justify-center border-r border-surface-border bg-inset">

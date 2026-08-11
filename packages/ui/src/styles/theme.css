@@ -22,7 +22,7 @@
   --ui-font-latin: "Ubuntu", "Noto Sans", sans-serif;
   --ui-font-mono:
     "JetBrains Mono", "Cascadia Code", "SFMono-Regular",
-    "Noto Sans Mono CJK SC", "Sarasa Mono SC", monospace;
+    "Noto Sans Mono CJK SC", "Sarasa Mono SC", "Microsoft YaHei", monospace;
 
   /* Semantic accents for community content and data visualisation. */
   --ui-activity: #d97706;
@@ -63,7 +63,7 @@
   --ui-font-latin: "Ubuntu", "Noto Sans", sans-serif;
   --ui-font-mono:
     "JetBrains Mono", "Cascadia Code", "SFMono-Regular",
-    "Noto Sans Mono CJK SC", "Sarasa Mono SC", monospace;
+    "Noto Sans Mono CJK SC", "Sarasa Mono SC", "Microsoft YaHei", monospace;
 
   --ui-activity: #fbbf24;
   --ui-activity-fg: #fcd34d;
@@ -154,6 +154,7 @@ html:has([role="dialog"][aria-modal="true"]) body {
     "SFMono-Regular",
     "Noto Sans Mono CJK SC",
     "Sarasa Mono SC",
+    "Microsoft YaHei",
     monospace
   );
 }
