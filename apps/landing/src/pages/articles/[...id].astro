@@ -33,8 +33,11 @@ const dateLabel = new Intl.DateTimeFormat('zh-CN', {
   <article class="mx-auto max-w-3xl py-12 md:py-16">
     <a
       href="/updates"
-      class="ui-mono text-sm text-primary no-underline hover:underline"
-      >← 返回动态</a
+      class="group ui-mono text-sm text-primary no-underline"
+      >← <span
+        class="decoration-dotted underline-offset-4 group-hover:underline"
+        >返回动态</span
+      ></a
     >
 
     {cover && (
@@ -69,8 +72,11 @@ const dateLabel = new Intl.DateTimeFormat('zh-CN', {
     <footer class="mt-12 border-t border-surface-border pt-8">
       <a
         href="/updates"
-        class="text-sm text-primary no-underline hover:underline"
-        >查看全部动态 →</a
+        class="group text-sm text-primary no-underline"
+        ><span
+          class="decoration-dotted underline-offset-4 group-hover:underline"
+          >查看全部动态</span
+        > →</a
       >
     </footer>
   </article>

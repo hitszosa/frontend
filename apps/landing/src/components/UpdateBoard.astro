@@ -73,9 +73,12 @@ const getTone = (entry: UpdateEntry): BadgeTone =>
           <div class="mt-auto pt-8">
             <a
               href={primaryUpdate.href}
-              class="font-medium text-primary no-underline hover:underline"
+              class="group font-medium text-primary no-underline"
             >
-              查看详情 →
+              <span
+                class="decoration-dotted underline-offset-4 group-hover:underline"
+                >查看详情</span
+              > →
             </a>
           </div>
         </div>
