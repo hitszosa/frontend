@@ -127,6 +127,64 @@ document.addEventListener('astro:page-load', setupLandingMotion);
 </script>
 
 <style is:global>
+.landing-link {
+  color: var(--ui-primary);
+  text-decoration: none;
+}
+
+.landing-link-label {
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.25rem;
+  transition: text-decoration-color 200ms ease;
+}
+
+.landing-link:hover .landing-link-label,
+.landing-link:focus-visible .landing-link-label {
+  text-decoration-color: currentColor;
+}
+
+.landing-action {
+  text-decoration: none;
+  transition:
+    translate 200ms ease,
+    color 200ms ease,
+    background-color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.landing-action:hover {
+  translate: 0 -0.125rem;
+}
+
+.landing-action:focus-visible,
+.landing-link:focus-visible,
+.landing-surface:focus-visible {
+  outline: 2px solid var(--ui-primary);
+  outline-offset: 2px;
+}
+
+.landing-surface {
+  border: 1px solid var(--ui-surface-border);
+  background: var(--ui-surface);
+  transition:
+    translate 300ms ease,
+    border-color 300ms ease,
+    box-shadow 300ms ease;
+  will-change: translate;
+}
+
+.landing-surface:hover,
+.landing-surface:focus-within {
+  border-color: color-mix(in srgb, var(--ui-primary) 50%, transparent);
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 10%),
+    0 2px 4px -2px rgb(0 0 0 / 10%);
+  translate: 0 -0.125rem;
+}
+
 .landing-motion-root.landing-motion-ready [data-landing-reveal] {
   opacity: 0;
   transform: translateY(1.25rem);
@@ -196,6 +254,17 @@ document.addEventListener('astro:page-load', setupLandingMotion);
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .landing-action,
+  .landing-surface {
+    transition: none;
+  }
+
+  .landing-action:hover,
+  .landing-surface:hover,
+  .landing-surface:focus-within {
+    translate: none;
+  }
+
   .landing-motion-root [data-landing-reveal],
   .landing-motion-root [data-landing-stagger] > * {
     animation: none;

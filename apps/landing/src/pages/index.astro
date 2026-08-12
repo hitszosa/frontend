@@ -186,7 +186,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
           >
             <a
               href="https://github.com/hitszosa/"
-              class="github-link inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 ui-mono text-sm font-medium text-white no-underline transition-[background-color,box-shadow,translate] duration-200 hover:-translate-y-0.5 hover:bg-osa-600 hover:shadow-md dark:text-slate-900 dark:hover:bg-osa-300"
+              class="github-link landing-action inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 ui-mono text-sm font-medium text-white hover:bg-osa-600 hover:shadow-md dark:text-slate-900 dark:hover:bg-osa-300"
               ><iconify-icon
                 icon="simple-icons:github"
                 aria-hidden="true"
@@ -196,20 +196,20 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
               ></a
             ><a
               href="/updates"
-              class="rounded-md border border-surface-border bg-surface px-5 py-2.5 text-sm text-surface-fg no-underline transition-[border-color,color,box-shadow,translate] duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:text-primary hover:shadow-sm"
+              class="landing-action rounded-md border border-surface-border bg-surface px-5 py-2.5 text-sm text-surface-fg hover:border-primary/50 hover:text-primary hover:shadow-sm"
               >动态</a
             ><a
               href="/about"
-              class="group px-4 py-2.5 text-sm text-muted-fg no-underline transition-colors hover:text-primary"
+              class="landing-link group px-4 py-2.5 text-sm text-muted-fg hover:text-primary"
               ><span
-                class="underline decoration-transparent decoration-dotted underline-offset-4 transition-colors duration-200 group-hover:decoration-current"
+                class="landing-link-label"
                 >关于</span
               > →</a
             >
           </div>
         </div>
         <figure
-          class="hero-enter update-map hidden md:block m-0 w-full max-w-[24em] self-center justify-self-center rounded-lg border border-surface-border bg-surface p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md"
+          class="hero-enter update-map landing-surface hidden md:block m-0 w-full max-w-[24em] self-center justify-self-center rounded-lg p-4"
           style="--enter-order: 2"
           aria-labelledby="update-map-caption"
         >
@@ -274,17 +274,17 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
           <a
             href="/rss.xml"
             aria-label="订阅 HITSZ OSA RSS"
-            class="group ui-mono text-xs text-primary no-underline"
+            class="landing-link group ui-mono text-xs"
             ><span
-              class="underline decoration-transparent decoration-dotted underline-offset-4 transition-colors duration-200 group-hover:decoration-current"
+              class="landing-link-label"
               >RSS</span
             > →</a
           >
           <a
             href="/updates"
-            class="group ui-mono text-xs text-primary no-underline"
+            class="landing-link group ui-mono text-xs"
             ><span
-              class="underline decoration-transparent decoration-dotted underline-offset-4 transition-colors duration-200 group-hover:decoration-current"
+              class="landing-link-label"
               >全部</span
             > →</a
           >
@@ -342,9 +342,9 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
           </h2>
           <a
             href="/services"
-            class="group ui-mono text-xs text-primary no-underline"
+            class="landing-link group ui-mono text-xs"
             ><span
-              class="underline decoration-transparent decoration-dotted underline-offset-4 transition-colors duration-200 group-hover:decoration-current"
+              class="landing-link-label"
               >更多</span
             > →</a
           >
@@ -399,9 +399,9 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
           </h2>
           <a
             href="/links"
-            class="group ui-mono text-xs text-primary no-underline"
+            class="landing-link group ui-mono text-xs"
             ><span
-              class="underline decoration-transparent decoration-dotted underline-offset-4 transition-colors duration-200 group-hover:decoration-current"
+              class="landing-link-label"
               >全部</span
             > →</a
           >

@@ -14,7 +14,7 @@ const { name, href, description, logo } = link.data;
   target="_blank"
   rel="noreferrer noopener"
   aria-label={`${name}（外部链接）`}
-  class="friend-link-card group flex items-center gap-3 rounded-xl border border-surface-border bg-surface p-4 no-underline transition-all duration-300 will-change-transform hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2"
+  class="friend-link-card landing-surface group flex items-center gap-3 rounded-xl p-4 no-underline"
 >
   {logo ? (
     <img
@@ -39,11 +39,7 @@ const { name, href, description, logo } = link.data;
     </h3>
     {description && <p class="mt-0.5 truncate text-xs text-muted-fg">{description}</p>}
   </div>
-  <span
-    aria-hidden="true"
-    class="shrink-0 text-primary transition-transform group-hover:translate-x-0.5"
-    >↗</span
-  >
+  <span aria-hidden="true" class="shrink-0 text-primary">↗</span>
 </a>
 
 <style>
@@ -56,7 +52,7 @@ const { name, href, description, logo } = link.data;
   );
 }
 .friend-link-card:focus-visible {
-  --tw-ring-color: var(--ui-activity, var(--ui-secondary));
+  outline-color: var(--ui-activity, var(--ui-secondary));
 }
 .friend-link-card:hover .friend-link-name {
   color: var(--ui-activity-fg, var(--ui-secondary));

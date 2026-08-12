@@ -83,7 +83,9 @@ const campusResources = [
       <h2 class="ui-mono text-xs tracking-widest text-muted-fg">
         SERVICES &amp; PRODUCTS / 我们在运营与维护
       </h2>
-      <ul class="mt-7 max-w-2xl space-y-1">
+      <ul
+        class="mt-6 max-w-2xl divide-y divide-surface-border border-y border-surface-border"
+      >
         {
           services.map((item) => (
             <li>
@@ -91,7 +93,7 @@ const campusResources = [
                 href={item.data.href}
                 target="_blank"
                 rel="noreferrer noopener"
-                class="group flex items-center justify-between gap-3 rounded-lg px-3 py-2.5 no-underline hover:bg-surface"
+                class="group flex items-center justify-between gap-4 py-3 no-underline transition-colors duration-200"
               >
                 <span class="flex min-w-0 items-center gap-3">
                   <span
@@ -108,7 +110,7 @@ const campusResources = [
                     {item.data.name}
                   </span>
                 </span>
-                <span class="ui-mono shrink-0 text-xs text-muted-fg">
+                <span class="ui-mono shrink-0 text-xs text-muted-fg transition-transform duration-200 group-hover:translate-x-1 group-focus-visible:translate-x-1">
                   {item.data.scope === "campus"
                     ? "校内 "
                     : item.data.status === "developing"
@@ -116,7 +118,7 @@ const campusResources = [
                       : item.data.status === "beta"
                         ? "Beta "
                         : ""}
-                  →
+                  ↗
                 </span>
               </a>
             </li>
@@ -141,7 +143,7 @@ const campusResources = [
               href={href}
               target="_blank"
               rel="noreferrer noopener"
-              class="inline-flex items-center gap-2 rounded-md border border-surface-border bg-surface px-4 py-2.5 text-surface-fg no-underline transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:text-primary"
+              class="landing-action inline-flex items-center gap-2 rounded-md border border-surface-border bg-surface px-4 py-2.5 text-surface-fg hover:border-primary/50 hover:text-primary"
             >
               <iconify-icon
                 icon={icon}
@@ -160,14 +162,14 @@ const campusResources = [
       <h2 class="ui-mono text-xs tracking-widest text-muted-fg">
         CAMPUS / 常用校园资源
       </h2>
-      <div class="mt-6 flex flex-wrap gap-3">
+      <div class="ui-mono mt-7 flex flex-wrap gap-3 text-sm">
         {
           campusResources.map(({ name, href }) => (
             <a
               href={href}
               target="_blank"
               rel="noreferrer noopener"
-              class="ui-mono rounded-md border border-surface-border bg-surface px-4 py-2 text-sm text-muted-fg no-underline transition-colors hover:border-primary/40 hover:text-primary"
+              class="landing-action inline-flex items-center gap-2 rounded-md border border-surface-border bg-surface px-4 py-2.5 text-surface-fg hover:border-primary/50 hover:text-primary"
             >
               {name}
             </a>
