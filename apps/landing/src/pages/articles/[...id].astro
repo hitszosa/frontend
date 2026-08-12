@@ -1,9 +1,9 @@
 ---
-import { getCollection, render, type CollectionEntry } from 'astro:content';
-import Layout from '../../layouts/LandingLayout.astro';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
 import Badge from '../../components/Badge.astro';
-import RelatedLink from '../../components/content/RelatedLink.astro';
 import ContentImage from '../../components/content/ContentImage.astro';
+import RelatedLink from '../../components/content/RelatedLink.astro';
+import Layout from '../../layouts/LandingLayout.astro';
 import { contentPath } from '../../lib/content';
 
 export async function getStaticPaths() {
@@ -31,10 +31,9 @@ const dateLabel = new Intl.DateTimeFormat('zh-CN', {
 
 <Layout title={`${title} | HITSZ OSA`} description={summary}>
   <article class="mx-auto max-w-3xl py-12 md:py-16">
-    <a
-      href="/updates"
-      class="group ui-mono text-sm text-primary no-underline"
-      >← <span
+    <a href="/updates" class="group ui-mono text-sm text-primary no-underline"
+      >←
+      <span
         class="underline decoration-transparent decoration-dotted underline-offset-4 transition-colors duration-200 group-hover:decoration-current"
         >返回动态</span
       ></a
@@ -70,13 +69,12 @@ const dateLabel = new Intl.DateTimeFormat('zh-CN', {
     </div>
 
     <footer class="mt-12 border-t border-surface-border pt-8">
-      <a
-        href="/updates"
-        class="group text-sm text-primary no-underline"
+      <a href="/updates" class="group text-sm text-primary no-underline"
         ><span
           class="underline decoration-transparent decoration-dotted underline-offset-4 transition-colors duration-200 group-hover:decoration-current"
           >查看全部动态</span
-        > →</a
+        >
+        →</a
       >
     </footer>
   </article>

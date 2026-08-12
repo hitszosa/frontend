@@ -1,20 +1,20 @@
 ---
-import { getCollection } from "astro:content";
-import Layout from "../layouts/LandingLayout.astro";
-import FriendLinkCard from "../components/FriendLinkCard.astro";
-import GithubMemberCard from "../components/GithubMemberCard.astro";
-import MemberLink from "../components/MemberLink.astro";
-import { getGithubOrgMembers, getGithubRepositoryStats } from "../lib/github";
+import { getCollection } from 'astro:content';
+import FriendLinkCard from '../components/FriendLinkCard.astro';
+import GithubMemberCard from '../components/GithubMemberCard.astro';
+import MemberLink from '../components/MemberLink.astro';
+import Layout from '../layouts/LandingLayout.astro';
+import { getGithubOrgMembers, getGithubRepositoryStats } from '../lib/github';
 
-const friendLinks = (await getCollection("friendLinks")).sort(
+const friendLinks = (await getCollection('friendLinks')).sort(
   (a, b) => a.data.order - b.data.order,
 );
 const githubMembers = await getGithubOrgMembers();
-const alphabetical = new Intl.Collator("en", {
-  sensitivity: "base",
+const alphabetical = new Intl.Collator('en', {
+  sensitivity: 'base',
   numeric: true,
 });
-const memberEntries = (await getCollection("members")).filter(
+const memberEntries = (await getCollection('members')).filter(
   (member) => member.data.projects.length > 0,
 );
 const memberLinkItems = memberEntries.flatMap((member) =>
@@ -23,7 +23,7 @@ const memberLinkItems = memberEntries.flatMap((member) =>
     author: member.data.name,
     github: member.data.github,
     image:
-      link.logo ?? (link.type === "website" ? member.data.image : undefined),
+      link.logo ?? (link.type === 'website' ? member.data.image : undefined),
   })),
 );
 const byLinkName = (
@@ -31,11 +31,11 @@ const byLinkName = (
   b: (typeof memberLinkItems)[number],
 ) => alphabetical.compare(a.link.name, b.link.name);
 const memberBlogs = memberLinkItems
-  .filter(({ link }) => link.type === "website")
+  .filter(({ link }) => link.type === 'website')
   .sort(byLinkName);
 const memberProjects = await Promise.all(
   memberLinkItems
-    .filter(({ link }) => link.type !== "website")
+    .filter(({ link }) => link.type !== 'website')
     .map(async (item) => ({
       ...item,
       repository: await getGithubRepositoryStats(item.link.href),
@@ -76,8 +76,7 @@ memberProjects.sort(
       {friendLinks.map((link) => <FriendLinkCard link={link} />)}
     </div>
 
-    {
-      memberBlogs.length > 0 && (
+    {memberBlogs.length > 0 && (
         <section class="mt-14 border-t border-surface-border pt-8">
           <div class="flex items-baseline justify-between gap-4">
             <h2 class="ui-mono text-xs font-semibold tracking-widest text-surface-fg">
@@ -98,8 +97,7 @@ memberProjects.sort(
             ))}
           </div>
         </section>
-      )
-    }
+      )}
 
     <section class="mt-10 border-t border-surface-border pt-8">
       <div class="flex items-baseline justify-between gap-4">
@@ -114,16 +112,14 @@ memberProjects.sort(
         </span>
       </div>
       <div class="mt-3 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
-        {
-          memberProjects.map(({ link, author, github, image }) => (
+        {memberProjects.map(({ link, author, github, image }) => (
             <MemberLink
               link={link}
               author={author}
               github={github}
               image={image}
             />
-          ))
-        }
+          ))}
       </div>
     </section>
 
@@ -145,7 +141,8 @@ memberProjects.sort(
           target="_blank"
           rel="noreferrer noopener"
           class="text-primary underline decoration-dotted underline-offset-4"
-        >@hitszosa</a>
+          >@hitszosa</a
+        >
         组织的公开成员
       </p>
       <div class="mt-4 flex flex-wrap gap-2.5">

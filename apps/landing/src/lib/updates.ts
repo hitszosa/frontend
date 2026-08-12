@@ -1,5 +1,5 @@
 import { getCollection } from 'astro:content';
-import { contentPath, type ContentImageSource } from './content';
+import { type ContentImageSource, contentPath } from './content';
 
 export type UpdateKind = 'announcement' | 'event' | 'article';
 
