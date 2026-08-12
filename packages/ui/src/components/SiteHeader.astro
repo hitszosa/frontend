@@ -186,7 +186,6 @@ const navLinkClass = (active: boolean) => [
           <li class="service-menu-group relative">
             <a
               href={contextualHref(servicesPageHref)}
-              aria-haspopup="menu"
               aria-current={isServicesPage ? 'page' : undefined}
               class:list={navLinkClass(isServicesPage)}
             >
@@ -195,16 +194,14 @@ const navLinkClass = (active: boolean) => [
               >
             </a>
             <div
-              role="menu"
               class="service-menu absolute top-full right-0 w-72 rounded-lg border border-surface-border bg-surface p-2 shadow-lg"
             >
               {featuredServices.map((item) => (
                   <a
-                    role="menuitem"
                     href={contextualHref(item.href)}
                     target={isCurrentSiteHref(item.href) ? undefined : '_blank'}
                     rel={isCurrentSiteHref(item.href) ? undefined : 'noreferrer noopener'}
-                    class="group/item flex items-center gap-2 rounded-md px-3 py-2 text-sm text-surface-fg no-underline hover:bg-page-bg hover:text-primary focus:bg-page-bg"
+                    class="group/item flex items-center gap-2 rounded-md px-3 py-2 text-sm text-surface-fg no-underline hover:bg-page-bg hover:text-primary focus-visible:bg-page-bg focus-visible:outline-2 focus-visible:outline-primary"
                   >
                     <span
                       class:list={[
