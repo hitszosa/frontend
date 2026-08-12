@@ -1,4 +1,4 @@
-import { getCollection, type CollectionEntry } from 'astro:content'
+import { type CollectionEntry, getCollection } from 'astro:content'
 import type { ArticleDigest } from '../components/news/ArticleDigest'
 
 const MIRRORS_TAG = '镜像站'

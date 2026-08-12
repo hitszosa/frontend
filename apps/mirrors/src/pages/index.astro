@@ -1,15 +1,15 @@
 ---
-import Layout from '@hitszosa/ui/components/SiteLayout.astro'
-import MirrorList from '@components/index/MirrorList/MirrorList.vue'
+import SectionHeading from '@components/base/SectionHeading.astro'
 import DownloadWidget from '@components/index/DownloadWidget/DownloadWidget.astro'
+import MirrorList from '@components/index/MirrorList/MirrorList.vue'
 import NewsWidget from '@components/index/NewsWidget/NewsWidget.astro'
+import Layout from '@hitszosa/ui/components/SiteLayout.astro'
+import { Icon } from 'astro-icon/components'
 import {
   getMirrorNews,
   sortNewsByDateDesc,
   toArticleDigest,
 } from '../utils/news'
-import SectionHeading from '@components/base/SectionHeading.astro'
-import { Icon } from 'astro-icon/components'
 
 const news = sortNewsByDateDesc(await getMirrorNews())
   .map(toArticleDigest)

@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-
 import generatedHelpPages from '@generated/help/help-list.json'
 import Tooltip from '@hitszosa/ui/components/Tooltip.vue'
+import { onMounted, ref } from 'vue'
 
 type MirrorStatusItem = {
   name: string

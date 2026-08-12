@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { Icon as IconifyIcon } from '@iconify/vue'
-import { storeToRefs } from 'pinia'
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-
 import { useHelpListStore } from '@components/index/MirrorList/HelpListStore'
 import { useMirrorListStore } from '@components/index/MirrorList/MirrorListStore'
 import Tooltip from '@hitszosa/ui/components/Tooltip.vue'
+import { Icon as IconifyIcon } from '@iconify/vue'
+import { storeToRefs } from 'pinia'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 
 const props = defineProps<{
   activePageId: string

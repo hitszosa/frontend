@@ -8,9 +8,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import AppModal from '@components/ui/AppModal.vue'
 import ArrowAction from '@components/ui/ArrowAction.vue'
+import { ref } from 'vue'
 import IndexDownloadModal from '../DownloadModal/DownloadModal.vue'
 
 const isOpen = ref(false)
