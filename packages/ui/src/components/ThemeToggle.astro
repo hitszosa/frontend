@@ -56,15 +56,15 @@ const currentSize = sizeClasses[size]
 
 <script>
 import 'iconify-icon'
+import type { ThemeMode } from '../client/theme'
 import {
   applyTheme,
   cycleThemeMode,
   getStoredThemeMode,
-  saveThemeMode,
   isThemeMode,
+  saveThemeMode,
   themeIcons,
 } from '../client/theme'
-import type { ThemeMode } from '../client/theme'
 
 class OsaThemeToggleElement extends HTMLElement {
   connectedCallback() {

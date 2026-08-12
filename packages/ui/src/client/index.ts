@@ -1,2 +1,2 @@
-export * from './theme.js'
 export * from './shiki.js'
+export * from './theme.js'

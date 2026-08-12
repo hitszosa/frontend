@@ -79,41 +79,41 @@ const feedUrl = new URL('/rss.xml', Astro.site ?? site.origin)
       data-dark-color="#0f172a"
     >
     <script is:inline>
-      // Run synchronously before the first paint to avoid a light-theme flash.
-      const root = document.documentElement
-      const isThemeMode = (value) =>
-        value === 'light' || value === 'dark' || value === 'system'
-      const storageKey = root.dataset.themeStorageKey ?? 'theme-preference'
-      const defaultMode = isThemeMode(root.dataset.defaultThemeMode)
-        ? root.dataset.defaultThemeMode
-        : 'system'
-      let mode = defaultMode
+    // Run synchronously before the first paint to avoid a light-theme flash.
+    const root = document.documentElement
+    const isThemeMode = (value) =>
+      value === 'light' || value === 'dark' || value === 'system'
+    const storageKey = root.dataset.themeStorageKey ?? 'theme-preference'
+    const defaultMode = isThemeMode(root.dataset.defaultThemeMode)
+      ? root.dataset.defaultThemeMode
+      : 'system'
+    let mode = defaultMode
 
-      try {
-        const storedMode = localStorage.getItem(storageKey)
-        if (isThemeMode(storedMode)) mode = storedMode
-      } catch {
-        const domMode = root.dataset.theme
-        if (isThemeMode(domMode)) mode = domMode
-      }
+    try {
+      const storedMode = localStorage.getItem(storageKey)
+      if (isThemeMode(storedMode)) mode = storedMode
+    } catch {
+      const domMode = root.dataset.theme
+      if (isThemeMode(domMode)) mode = domMode
+    }
 
-      const resolvedMode =
-        mode === 'system'
-          ? window.matchMedia('(prefers-color-scheme: dark)').matches
-            ? 'dark'
-            : 'light'
-          : mode
+    const resolvedMode =
+      mode === 'system'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+        : mode
 
-      root.classList.toggle('dark', resolvedMode === 'dark')
-      root.dataset.theme = mode
-      root.style.colorScheme = resolvedMode
-      const themeColor = document.querySelector('meta[name="theme-color"]')
-      themeColor?.setAttribute(
-        'content',
-        resolvedMode === 'dark'
-          ? themeColor.dataset.darkColor
-          : themeColor.dataset.lightColor,
-      )
+    root.classList.toggle('dark', resolvedMode === 'dark')
+    root.dataset.theme = mode
+    root.style.colorScheme = resolvedMode
+    const themeColor = document.querySelector('meta[name="theme-color"]')
+    themeColor?.setAttribute(
+      'content',
+      resolvedMode === 'dark'
+        ? themeColor.dataset.darkColor
+        : themeColor.dataset.lightColor,
+    )
     </script>
     <slot name="head" />
   </head>

@@ -1,17 +1,17 @@
 import osaLogo from './assets/logos/osa-logo.svg'
-import osaLogoMonoAsset from './assets/logos/osa-logo-mono.svg'
-import osaLogoPubAsset from './assets/logos/osa-logo-pub.svg'
-import osaLogoAltAsset from './assets/logos/osa-logo-alt.svg'
-import osaLogoVtuberAsset from './assets/logos/osa-logo-vtuber.svg'
-import osaLogoOldAsset from './assets/logos/osa-logo-old.svg'
 import osaLogo01Asset from './assets/logos/osa-logo-01.svg'
+import osaLogoAltAsset from './assets/logos/osa-logo-alt.svg'
+import osaLogoMonoAsset from './assets/logos/osa-logo-mono.svg'
+import osaLogoOldAsset from './assets/logos/osa-logo-old.svg'
+import osaLogoPubAsset from './assets/logos/osa-logo-pub.svg'
+import osaLogoVtuberAsset from './assets/logos/osa-logo-vtuber.svg'
 
-export { default as tailwindPreset } from './tailwind/preset.js'
-export { default as ThemeToggle } from './components/ThemeToggle.astro'
-export { default as SiteHeader } from './components/SiteHeader.astro'
-export { default as SiteFooter } from './components/SiteFooter.astro'
-export * from './client/theme.js'
 export * from './client/shiki.js'
+export * from './client/theme.js'
+export { default as SiteFooter } from './components/SiteFooter.astro'
+export { default as SiteHeader } from './components/SiteHeader.astro'
+export { default as ThemeToggle } from './components/ThemeToggle.astro'
+export { default as tailwindPreset } from './tailwind/preset.js'
 
 export const osaLogoDefault = {
   src: osaLogo.src,

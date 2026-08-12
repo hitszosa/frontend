@@ -1,12 +1,12 @@
-import colors from 'tailwindcss/colors'
-import type { Config } from 'tailwindcss'
 import typography from '@tailwindcss/typography'
+import type { Config } from 'tailwindcss'
+import colors from 'tailwindcss/colors'
 import plugin from 'tailwindcss/plugin'
 
 export default {
   darkMode: 'class',
   plugins: [
-    plugin(function ({ addVariant }) {
+    plugin(({ addVariant }) => {
       addVariant('hocus', ['&:hover', '&:focus'])
     }),
     typography,
