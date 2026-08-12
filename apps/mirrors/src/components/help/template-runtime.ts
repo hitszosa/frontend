@@ -1,6 +1,5 @@
-import Hogan from 'hogan.js'
-
 import type { MenuValue } from '@hitszosa/mirrorz-parser/runtime'
+import Hogan from 'hogan.js'
 
 export const helpGlobalVariablesEvent = 'hitszosa:help-global-variables'
 export const helpProtocolEvent = 'hitszosa:help-protocol'
@@ -15,10 +14,7 @@ export interface HelpGlobalVariablesDetail {
 export function flattenGlobalVariables(
   values: Record<string, MenuValue>,
 ): MenuValue {
-  return Object.values(values).reduce<MenuValue>(
-    (result, value) => ({ ...result, ...value }),
-    {},
-  )
+  return Object.assign({}, ...Object.values(values))
 }
 export function readHelpProtocol(): HelpProtocol {
   if (typeof document === 'undefined') return 'https'

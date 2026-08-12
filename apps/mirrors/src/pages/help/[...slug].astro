@@ -1,12 +1,13 @@
 ---
-import SiteFooter from '@hitszosa/ui/components/SiteFooter.astro'
-import HelpSidebar from '@components/help/HelpSidebar.vue'
 import HelpPageHeader from '@components/help/HelpPageHeader.vue'
-import { helpManifest } from '@/utils/help'
+import HelpSidebar from '@components/help/HelpSidebar.vue'
+import SiteFooter from '@hitszosa/ui/components/SiteFooter.astro'
 import Layout from '@hitszosa/ui/components/SiteLayout.astro'
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js'
+import { helpManifest } from '@/utils/help'
 
 interface GeneratedMdxModule {
-  default: any
+  default: AstroComponentFactory
 }
 
 const pageModules = import.meta.glob<GeneratedMdxModule>(

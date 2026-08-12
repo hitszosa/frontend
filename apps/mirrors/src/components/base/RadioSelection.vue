@@ -1,10 +1,11 @@
 <template>
-  <ul
+  <div
     role="radiogroup"
     aria-orientation="vertical"
     class="flex flex-col h-full p-2 overflow-y-auto overscroll-contain list-none rounded-lg border border-surface-border bg-page-bg whitespace-nowrap"
   >
-    <li v-for="(item, idx) in $props.items" :key="item" role="presentation">
+    <div v-for="(item, idx) in $props.items" :key="item" role="presentation">
+      <!-- biome-ignore lint/a11y/useSemanticElements: the styled button implements the WAI-ARIA roving-tabindex radio pattern. -->
       <button
         type="button"
         role="radio"
@@ -16,8 +17,8 @@
       >
         {{ item }}
       </button>
-    </li>
-  </ul>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">

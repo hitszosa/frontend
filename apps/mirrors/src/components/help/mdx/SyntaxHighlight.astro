@@ -5,7 +5,7 @@ interface Props {
   meta?: string
 }
 
-const { code, language = 'text', meta } = Astro.props
+const { language = 'text', meta } = Astro.props
 ---
 
 <section
@@ -19,5 +19,5 @@ const { code, language = 'text', meta } = Astro.props
   </header>
   <pre
     class="m-0 overflow-x-auto bg-inset p-4 text-sm leading-6 text-surface-fg"
-  ><code>{code}</code></pre>
+  ><code>{Astro.props.code}</code></pre>
 </section>

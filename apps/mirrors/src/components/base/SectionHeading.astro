@@ -6,6 +6,7 @@ interface Props {
 const { compact = false } = Astro.props
 ---
 
+<!-- biome-ignore lint/a11y/useHeadingContent: heading text is supplied through the default Astro slot. -->
 <h2
   class:list={[
     'flex flex-nowrap space-x-1 font-medium text-surface-fg',

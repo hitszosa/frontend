@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
 import Tooltip from '@hitszosa/ui/components/Tooltip.vue'
+import { computed, onMounted, ref } from 'vue'
 
 import {
-  helpProtocolEvent,
   type HelpProtocol,
+  helpProtocolEvent,
   helpSudoEvent,
 } from './template-runtime'
 
@@ -123,11 +123,10 @@ onMounted(async () => {
         >
           <div>
             <span class="mb-2 block text-xs text-muted-fg">访问协议</span>
-            <div
+            <fieldset
               class="inline-flex rounded-lg border border-surface-border bg-surface p-1"
-              role="group"
-              aria-label="镜像访问协议"
             >
+              <legend class="sr-only">镜像访问协议</legend>
               <button
                 v-for="value in (['http', 'https'] as const)"
                 :key="value"
@@ -143,7 +142,7 @@ onMounted(async () => {
               >
                 {{ value }}
               </button>
-            </div>
+            </fieldset>
           </div>
 
           <label

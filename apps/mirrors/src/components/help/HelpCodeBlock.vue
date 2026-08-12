@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
+import type { InputType, MenuValue } from '@hitszosa/mirrorz-parser/runtime'
 
 import { createInitialState } from '@hitszosa/mirrorz-parser/runtime'
-import type { InputType, MenuValue } from '@hitszosa/mirrorz-parser/runtime'
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import type {
   HelpGlobalVariablesDetail,
   HelpProtocol,
@@ -51,12 +51,7 @@ const globalVariables = reactive<Record<string, MenuValue>>({
 const copied = ref(false)
 const protocol = ref<HelpProtocol>('https')
 const sudoEnabled = ref(true)
-const localVariables = computed(() =>
-  menuValues.reduce<MenuValue>(
-    (result, value) => ({ ...result, ...value }),
-    {},
-  ),
-)
+const localVariables = computed(() => Object.assign({}, ...menuValues))
 const renderedCode = computed(() =>
   renderHelpTemplate(
     props.template,

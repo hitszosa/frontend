@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue'
+import type { InputType, MenuValue } from '@hitszosa/mirrorz-parser/runtime'
 
 import { createInitialState } from '@hitszosa/mirrorz-parser/runtime'
-import type { InputType, MenuValue } from '@hitszosa/mirrorz-parser/runtime'
+import { onMounted, reactive } from 'vue'
 import {
-  helpGlobalVariablesEvent,
   type HelpGlobalVariablesDetail,
+  helpGlobalVariablesEvent,
 } from './template-runtime'
 
 const props = defineProps<{
@@ -18,10 +18,7 @@ const menuValues = reactive<MenuValue[]>(
 )
 
 const publish = () => {
-  const value = menuValues.reduce<MenuValue>(
-    (result, current) => ({ ...result, ...current }),
-    {},
-  )
+  const value: MenuValue = Object.assign({}, ...menuValues)
   window.dispatchEvent(
     new CustomEvent<HelpGlobalVariablesDetail>(helpGlobalVariablesEvent, {
       detail: { id: props.id, value },

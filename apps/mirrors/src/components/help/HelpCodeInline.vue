@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
-
 import type { MenuValue } from '@hitszosa/mirrorz-parser/runtime'
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import {
-  helpGlobalVariablesEvent,
   type HelpGlobalVariablesDetail,
   type HelpProtocol,
+  helpGlobalVariablesEvent,
   helpProtocolEvent,
   helpSudoEvent,
   readHelpProtocol,
@@ -19,7 +18,7 @@ const props = defineProps<{
   globalVariables: Record<string, MenuValue>
 }>()
 
-const globalVariables = reactive<Record<string, MenuValue>>({
+const resolvedGlobalVariables = reactive<Record<string, MenuValue>>({
   ...props.globalVariables,
 })
 const protocol = ref<HelpProtocol>('https')
@@ -29,7 +28,7 @@ const renderedCode = computed(() =>
     props.template,
     props.pageId,
     {},
-    globalVariables,
+    resolvedGlobalVariables,
     protocol.value,
     sudoEnabled.value,
   ),
@@ -37,7 +36,7 @@ const renderedCode = computed(() =>
 
 const onGlobalVariables = (event: Event) => {
   const { id, value } = (event as CustomEvent<HelpGlobalVariablesDetail>).detail
-  globalVariables[id] = value
+  resolvedGlobalVariables[id] = value
 }
 const onProtocol = (event: Event) => {
   protocol.value = (event as CustomEvent<HelpProtocol>).detail
