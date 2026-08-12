@@ -91,7 +91,7 @@ const statusLabel = (status: (typeof services)[number]['data']['status']) => {
               <span
                 aria-hidden="true"
                 class="text-primary transition-transform group-hover:translate-x-1"
-                >↗</span
+                >↗︎</span
               >
             </span>
           </a>
@@ -137,7 +137,7 @@ const statusLabel = (status: (typeof services)[number]['data']['status']) => {
                   <span
                     >{entry.data.scope === 'campus' ? '校内 · ' : ''}{statusLabel(entry.data.status)}</span
                   >
-                  <span aria-hidden="true">↗</span>
+                  <span aria-hidden="true">↗︎</span>
                 </span>
               </a>
             </li>
