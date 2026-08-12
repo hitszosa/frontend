@@ -28,6 +28,7 @@
     "build": "turbo run build",
     "build:mock": "MOCK=true turbo run build",
     "build:landing": "turbo run build --filter=@hitszosa/landing...",
+    "build:landing:refresh": "GITHUB_CACHE_REFRESH=true turbo run build --filter=@hitszosa/landing... --force",
     "build:landing:mock": "MOCK=true turbo run build --filter=@hitszosa/landing...",
     "build:mirrors": "turbo run build --filter=@hitszosa/mirrors...",
     "build:mirrors:mock": "MOCK=true turbo run build --filter=@hitszosa/mirrors...",

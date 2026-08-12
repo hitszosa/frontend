@@ -5,11 +5,13 @@
     "build": {
       "dependsOn": ["^build", "lint", "check"],
       "env": ["MOCK"],
+      "passThroughEnv": ["GITHUB_CACHE_REFRESH", "GITHUB_TOKEN"],
       "outputs": ["dist/**"]
     },
     "dev": {
       "dependsOn": ["^build"],
       "env": ["MOCK"],
+      "passThroughEnv": ["GITHUB_CACHE_REFRESH", "GITHUB_TOKEN"],
       "cache": false,
       "persistent": true
     },
