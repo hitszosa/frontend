@@ -1,4 +1,20 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.6/schema.json",
-  "extends": "//"
+  "$schema": "https://biomejs.dev/schemas/2.5.7/schema.json",
+  "extends": "//",
+  "overrides": [
+    {
+      "includes": ["src/components/Tooltip.vue"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "noNoninteractiveTabindex": "off",
+            "noStaticElementInteractions": "off"
+          },
+          "style": {
+            "useVueMultiWordComponentNames": "off"
+          }
+        }
+      }
+    }
+  ]
 }
