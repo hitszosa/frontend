@@ -29,11 +29,6 @@ const socialLinks = [
     icon: "simple-icons:bilibili",
   },
 ];
-
-const campusResources = [
-  { name: "上网认证", href: "http://10.248.98.2/" },
-  { name: "课程录播平台", href: "http://219.223.238.14:88/ve/" },
-];
 ---
 
 <Layout
@@ -58,10 +53,8 @@ const campusResources = [
     </div>
 
     <section class="mt-14">
-      <h2
-        class="ui-mono text-xs font-semibold tracking-widest text-surface-fg"
-      >
-        MEMBERS / GitHub 组织成员
+      <h2 class="ui-mono text-xs tracking-widest text-muted-fg">
+        MEMBERS / 成员
       </h2>
       <p class="mt-3 text-sm text-surface-fg/80">
         <a
@@ -73,15 +66,15 @@ const campusResources = [
         >
         组织的公开成员
       </p>
-      <div class="mt-5 flex max-w-4xl flex-wrap gap-3">
+      <div class="mt-5 flex max-w-2xl flex-wrap gap-3">
         {githubMembers.map((member) => <GithubMemberCard member={member} />)}
       </div>
     </section>
 
-    <!-- 在运营的服务与产品 -->
+    <!-- 在运营的服务与项目 -->
     <section class="mt-14">
       <h2 class="ui-mono text-xs tracking-widest text-muted-fg">
-        SERVICES &amp; PRODUCTS / 我们在运营与维护
+        SERVICES &amp; PROJECTS / 我们在运营与维护
       </h2>
       <ul
         class="mt-6 max-w-2xl divide-y divide-surface-border border-y border-surface-border"
@@ -132,7 +125,7 @@ const campusResources = [
       <h2 class="ui-mono text-xs tracking-widest text-muted-fg">
         JOIN / 加入我们
       </h2>
-      <p class="mt-6 max-w-2xl leading-relaxed text-muted-fg">
+      <p class="mt-6 max-w-2xl leading-relaxed">
         无论你是零基础的萌新，还是身经百战的老鸟，只要对开源有兴趣，都欢迎。
         我们没有面试，只有一起折腾的热情。
       </p>
@@ -151,27 +144,6 @@ const campusResources = [
                 class="shrink-0 text-base"
               />
               <span>{label}</span>
-            </a>
-          ))
-        }
-      </div>
-    </section>
-
-    <!-- 常用校园资源 -->
-    <section class="mt-14">
-      <h2 class="ui-mono text-xs tracking-widest text-muted-fg">
-        CAMPUS / 常用校园资源
-      </h2>
-      <div class="ui-mono mt-7 flex flex-wrap gap-3 text-sm">
-        {
-          campusResources.map(({ name, href }) => (
-            <a
-              href={href}
-              target="_blank"
-              rel="noreferrer noopener"
-              class="landing-action inline-flex items-center gap-2 rounded-md border border-surface-border bg-surface px-4 py-2.5 text-surface-fg hover:border-primary/50 hover:text-primary"
-            >
-              {name}
             </a>
           ))
         }
