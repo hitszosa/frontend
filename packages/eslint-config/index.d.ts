@@ -1,13 +1,15 @@
+import type { Linter } from 'eslint'
+
 export const sharedIgnores: string[]
 
 interface AstroConfigDependencies {
-  js: any
-  astro: any
-  tsParser: any
-  tsPlugin: any
+  js: unknown
+  astro: unknown
+  tsParser: unknown
+  tsPlugin: unknown
   globals?: Record<string, string>
 }
 
 export function createAstroConfig(
   dependencies: AstroConfigDependencies,
-): any[]
+): Linter.Config[]
