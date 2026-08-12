@@ -1,5 +1,6 @@
 <template>
   <section class="min-w-0 space-y-4 my-4">
+    <label for="mirror-search-input" class="sr-only">搜索镜像</label>
     <input
       :value="mirrorFilter"
       id="mirror-search-input"
