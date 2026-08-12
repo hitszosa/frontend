@@ -30,11 +30,12 @@ const initial = Array.from(link.name)[0] ?? '↗';
     class="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-md bg-primary/10 text-sm font-semibold text-primary ring-1 ring-surface-border"
   >
     {showGithubIcon ? (
-      <iconify-icon
-        icon="simple-icons:github"
-        aria-hidden="true"
-        class="text-xl text-surface-fg"
-      ></iconify-icon>
+      <span aria-hidden="true" class="inline-flex">
+        <iconify-icon
+          icon="simple-icons:github"
+          class="text-xl text-surface-fg"
+        ></iconify-icon>
+      </span>
     ) : (
       <>
         <span aria-hidden="true">{initial}</span>
@@ -76,11 +77,9 @@ const initial = Array.from(link.name)[0] ?? '↗';
       <span aria-hidden="true">·</span>
       {hostname === 'github.com' ? (
         <span class="inline-flex shrink-0 items-center" title="GitHub">
-          <iconify-icon
-            icon="simple-icons:github"
-            aria-hidden="true"
-            class="text-sm"
-          ></iconify-icon>
+          <span aria-hidden="true" class="inline-flex">
+            <iconify-icon icon="simple-icons:github" class="text-sm"></iconify-icon>
+          </span>
           <span class="sr-only">GitHub</span>
         </span>
       ) : (
