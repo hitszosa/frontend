@@ -182,18 +182,17 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
           >
             <a
               href="https://github.com/hitszosa/"
-              class="github-link inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 ui-mono text-sm font-medium text-white no-underline transition-[background-color,box-shadow] duration-200 hover:bg-osa-600 hover:shadow-md dark:text-slate-900 dark:hover:bg-osa-300"
+              class="github-link inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 ui-mono text-sm font-medium text-white no-underline transition-[background-color,box-shadow,translate] duration-200 hover:-translate-y-0.5 hover:bg-osa-600 hover:shadow-md dark:text-slate-900 dark:hover:bg-osa-300"
               ><iconify-icon
                 icon="simple-icons:github"
                 aria-hidden="true"
-                class="text-base"
-              ></iconify-icon>
+                class="text-base"></iconify-icon>
               <span class="github-handle"
                 ><span class="github-handle-text">@hitszosa</span></span
               ></a
             ><a
               href="/updates"
-              class="rounded-md border border-surface-border bg-surface px-5 py-2.5 text-sm text-surface-fg no-underline transition-[border-color,color,box-shadow] duration-200 hover:border-primary/50 hover:text-primary hover:shadow-sm"
+              class="rounded-md border border-surface-border bg-surface px-5 py-2.5 text-sm text-surface-fg no-underline transition-[border-color,color,box-shadow,translate] duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:text-primary hover:shadow-sm"
               >动态</a
             ><a
               href="/about"
@@ -428,15 +427,30 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
       }
 
       page.classList.add("home-motion-ready");
+      const revealSequenceStartedAt = performance.now();
+      const heroEntranceDuration = 400;
+      const delayInitialReveals = window.scrollY <= 1;
       const observer = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
             if (!entry.isIntersecting) continue;
-            entry.target.classList.add("is-visible");
+            const item = entry.target as HTMLElement;
+            const heroTimeRemaining = delayInitialReveals
+              ? Math.max(
+                  0,
+                  heroEntranceDuration -
+                    (performance.now() - revealSequenceStartedAt),
+                )
+              : 0;
+            item.style.setProperty(
+              "--initial-reveal-delay",
+              `${Math.round(heroTimeRemaining)}ms`,
+            );
+            item.classList.add("is-visible");
             observer.unobserve(entry.target);
           }
         },
-        { rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
+        { rootMargin: "0px 0px -8% 0px", threshold: 0.05 },
       );
 
       for (const item of items) observer.observe(item);
@@ -601,7 +615,9 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
 
     [data-home-motion].home-motion-ready [data-home-reveal].is-visible {
       animation: home-reveal 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
-      animation-delay: var(--reveal-delay, 0ms);
+      animation-delay: calc(
+        var(--reveal-delay, 0ms) + var(--initial-reveal-delay, 0ms)
+      );
     }
 
     [data-home-motion].home-motion-ready
