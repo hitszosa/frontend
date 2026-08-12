@@ -36,16 +36,11 @@ const formatDate = (date: Date) =>
     day: "2-digit",
   }).format(date);
 const updateRecords = updates;
-const earliestRecord = updateRecords.length
-  ? new Date(Math.min(...updateRecords.map((entry) => entry.date.getTime())))
-  : new Date(
-      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 125),
-    );
 const heatmapStart = new Date(
   Date.UTC(
-    earliestRecord.getUTCFullYear(),
-    earliestRecord.getUTCMonth(),
-    earliestRecord.getUTCDate() - earliestRecord.getUTCDay(),
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate() - now.getUTCDay() - 17 * 7,
   ),
 );
 const recordsByDay = new Map<string, number>();
