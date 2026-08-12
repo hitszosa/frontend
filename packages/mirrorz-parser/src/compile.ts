@@ -4,9 +4,9 @@ import { mystPlugin } from 'markdown-it-myst'
 import { gfmTableToMarkdown } from 'mdast-util-gfm-table'
 import { mdxToMarkdown } from 'mdast-util-mdx'
 import { toMarkdown } from 'mdast-util-to-markdown'
-import { toString } from 'mdast-util-to-string'
+import { toString as mdastToString } from 'mdast-util-to-string'
 import { tokensToMyst } from 'myst-parser'
-import { visit, SKIP } from 'unist-util-visit'
+import { SKIP, visit } from 'unist-util-visit'
 import { VFile } from 'vfile'
 
 import { createInitialState, transpileInputs } from './input'
@@ -126,8 +126,8 @@ export async function compileMirrorzPage({
           ? customIdPattern.exec(lastChild.value ?? '')
           : null
       const content = customIdMatch
-        ? toString(node as never).slice(0, customIdMatch.index)
-        : toString(node as never)
+        ? mdastToString(node as never).slice(0, customIdMatch.index)
+        : mdastToString(node as never)
       const id = customIdMatch?.groups?.id ?? slugger.slug(content)
 
       if (customIdMatch?.groups?.id) {

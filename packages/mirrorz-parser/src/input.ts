@@ -85,9 +85,14 @@ export function transpileInputs(
     return missingInput
   }
 
-  return inputNames.map((inputName) =>
-    transpileInput(inputName, inputSettings[inputName]!),
-  )
+  return inputNames.map((inputName) => {
+    const input = inputSettings[inputName]
+    if (input === undefined) {
+      throw new Error(`Missing input settings for ${inputName}`)
+    }
+
+    return transpileInput(inputName, input)
+  })
 }
 
 export function createInitialState(menus: InputType[]): MenuValue {
@@ -101,6 +106,7 @@ export function createInitialState(menus: InputType[]): MenuValue {
             }
           : { [menu.name]: menu.defaultValue || '' }
 
-    return { ...values, ...initial }
+    Object.assign(values, initial)
+    return values
   }, {})
 }
