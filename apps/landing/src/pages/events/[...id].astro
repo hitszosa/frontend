@@ -39,7 +39,7 @@ const formatLongDate = (value: Date) =>
     timeZone: 'UTC',
   }).format(value);
 const dateLabel = endDate
-  ? `${formatLongDate(date)} — ${formatLongDate(endDate)}`
+  ? `${formatLongDate(date)} - ${formatLongDate(endDate)}`
   : formatLongDate(date);
 ---
 

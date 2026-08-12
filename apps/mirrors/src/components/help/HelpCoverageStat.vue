@@ -40,8 +40,8 @@ onMounted(async () => {
     aria-label="有帮助文档的镜像数 / 镜像总数"
   >
     <span class="ui-mono font-medium text-surface-fg">
-      {{ availableHelpCount ?? '—' }}
-      / {{ totalMirrorCount ?? '—' }} 个镜像有帮助文档
+      {{ availableHelpCount ?? '-' }}
+      / {{ totalMirrorCount ?? '-' }} 个镜像有帮助文档
     </span>
   </Tooltip>
 </template>
