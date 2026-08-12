@@ -61,7 +61,11 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
 });
 ---
 
-<Layout title="HITSZ 开源技术协会">
+<Layout
+  title="HITSZ 开源技术协会"
+  motionMode="marked"
+  motionHeroDelay={400}
+>
   <svg
     data-easter-egg-logos={JSON.stringify(easterEggLogos)}
     data-hero-parallax
@@ -135,7 +139,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
       </g>
     </g>
   </svg>
-  <div class="relative z-10" data-home-motion>
+  <div class="relative z-10">
     <section
       id="top"
       class="w-full isolate overflow-x-clip border-b border-surface-border py-16 md:py-24"
@@ -262,7 +266,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
     <UpdateBoard updates={updates} />
 
     <section id="updates" class="border-b border-surface-border py-14">
-      <div class="flex items-baseline justify-between" data-home-reveal>
+      <div class="flex items-baseline justify-between" data-landing-reveal>
         <h2 class="ui-mono text-xs tracking-widest text-muted-fg">
           UPDATES / 动态
         </h2>
@@ -288,8 +292,8 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
       </div>
       <ul
         class="mt-7 overflow-hidden rounded-lg border border-surface-border bg-surface"
-        data-home-reveal
-        data-home-stagger
+        data-landing-reveal
+        data-landing-stagger
       >
         {
           feed.map((entry, index) => (
@@ -331,7 +335,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
     </section>
 
     <section id="services" class="grid gap-12 py-14 md:grid-cols-2">
-      <div data-home-reveal>
+      <div data-landing-reveal>
         <div class="flex items-baseline justify-between">
           <h2 class="ui-mono text-xs tracking-widest text-muted-fg">
             SERVICES &amp; PRODUCTS / 服务与产品
@@ -388,7 +392,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
           }
         </ul>
       </div>
-      <div data-home-reveal style="--reveal-delay: 90ms">
+      <div data-landing-reveal style="--landing-reveal-delay: 90ms">
         <div class="flex items-baseline justify-between">
           <h2 class="ui-mono text-xs tracking-widest text-muted-fg">
             LINKS / 友链
@@ -402,67 +406,13 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
             > →</a
           >
         </div>
-        <div class="mt-6 grid gap-3 sm:grid-cols-2" data-home-stagger>
+        <div class="mt-6 grid gap-3 sm:grid-cols-2" data-landing-stagger>
           {friendLinks.map((link) => <FriendLinkCard link={link} />)}
         </div>
       </div>
     </section>
   </div>
   <script>
-    const setupHomeReveals = () => {
-      const page = document.querySelector<HTMLElement>("[data-home-motion]");
-      if (!page || page.dataset.motionInitialized === "true") return;
-
-      page.dataset.motionInitialized = "true";
-      const items = Array.from(
-        page.querySelectorAll<HTMLElement>("[data-home-reveal]"),
-      );
-      const reduceMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-
-      if (reduceMotion || !("IntersectionObserver" in window)) {
-        for (const item of items) item.classList.add("is-visible");
-        return;
-      }
-
-      page.classList.add("home-motion-ready");
-      const revealSequenceStartedAt = performance.now();
-      const heroEntranceDuration = 400;
-      const delayInitialReveals = window.scrollY <= 1;
-      const observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (!entry.isIntersecting) continue;
-            const item = entry.target as HTMLElement;
-            const heroTimeRemaining = delayInitialReveals
-              ? Math.max(
-                  0,
-                  heroEntranceDuration -
-                    (performance.now() - revealSequenceStartedAt),
-                )
-              : 0;
-            item.style.setProperty(
-              "--initial-reveal-delay",
-              `${Math.round(heroTimeRemaining)}ms`,
-            );
-            item.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        },
-        { rootMargin: "0px 0px -8% 0px", threshold: 0.05 },
-      );
-
-      for (const item of items) observer.observe(item);
-      document.addEventListener(
-        "astro:before-swap",
-        () => observer.disconnect(),
-        {
-          once: true,
-        },
-      );
-    };
-
     const revealLogoEasterEgg = () => {
       const background = document.querySelector<SVGSVGElement>(
         "[data-easter-egg-logos]",
@@ -566,7 +516,6 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
     };
 
     const initializeHomePage = () => {
-      setupHomeReveals();
       revealLogoEasterEgg();
       setupHeroParallax();
     };
@@ -606,73 +555,6 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
         opacity: 0;
         transform: scale(0.35);
       }
-    }
-
-    [data-home-motion].home-motion-ready [data-home-reveal] {
-      opacity: 0;
-      transform: translateY(1.25rem);
-    }
-
-    [data-home-motion].home-motion-ready [data-home-reveal].is-visible {
-      animation: home-reveal 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
-      animation-delay: calc(
-        var(--reveal-delay, 0ms) + var(--initial-reveal-delay, 0ms)
-      );
-    }
-
-    [data-home-motion].home-motion-ready
-      [data-home-stagger][data-home-reveal]
-      > *,
-    [data-home-motion].home-motion-ready
-      [data-home-reveal]
-      [data-home-stagger]
-      > * {
-      opacity: 0;
-      transform: translateY(0.65rem);
-    }
-
-    [data-home-motion].home-motion-ready
-      [data-home-stagger][data-home-reveal].is-visible
-      > *,
-    [data-home-motion].home-motion-ready
-      [data-home-reveal].is-visible
-      [data-home-stagger]
-      > * {
-      animation: home-stagger-reveal 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-
-    @keyframes home-reveal {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes home-stagger-reveal {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    [data-home-stagger] > :nth-child(2) {
-      animation-delay: 55ms;
-    }
-
-    [data-home-stagger] > :nth-child(3) {
-      animation-delay: 110ms;
-    }
-
-    [data-home-stagger] > :nth-child(4) {
-      animation-delay: 165ms;
-    }
-
-    [data-home-stagger] > :nth-child(5) {
-      animation-delay: 220ms;
-    }
-
-    [data-home-stagger] > :nth-child(n + 6) {
-      animation-delay: 275ms;
     }
 
     .hero-background {
@@ -769,13 +651,6 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
       .hero-enter,
       .update-map [style*="--heat-index"] {
         animation: none;
-      }
-
-      [data-home-motion] [data-home-reveal],
-      [data-home-motion] [data-home-stagger] > * {
-        animation: none;
-        opacity: 1;
-        transform: none;
       }
 
       .title-expansion {

@@ -34,7 +34,7 @@ const getTone = (entry: UpdateEntry): BadgeTone =>
 
 {primaryUpdate && (
     <section id="featured" class="border-b border-surface-border py-14">
-      <article data-home-reveal class="mt-7 flex flex-col overflow-hidden rounded-xl border border-surface-border bg-surface transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md focus-within:border-primary/50 focus-within:shadow-md md:flex-row">
+      <article data-landing-reveal class="mt-7 flex flex-col overflow-hidden rounded-xl border border-surface-border bg-surface transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md focus-within:border-primary/50 focus-within:shadow-md md:flex-row">
         {primaryUpdate.cover && (
           <div class="flex shrink-0 items-center justify-center border-b border-surface-border bg-inset md:max-w-[60%] md:border-r md:border-b-0">
             <ContentImage
@@ -87,9 +87,9 @@ const getTone = (entry: UpdateEntry): BadgeTone =>
       {secondaryUpdates.length > 0 && (
         <div
           class="mt-4 grid gap-4 sm:grid-cols-2"
-          data-home-reveal
-          data-home-stagger
-          style="--reveal-delay: 80ms"
+          data-landing-reveal
+          data-landing-stagger
+          style="--landing-reveal-delay: 80ms"
         >
           {secondaryUpdates.map((entry) => (
             <a
