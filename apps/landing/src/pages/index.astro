@@ -150,7 +150,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
             style="--enter-order: 1"
           >
             HITSZ
-            <ruby class="title-ruby whitespace-nowrap outline-none" tabindex="0"
+            <ruby class="title-ruby whitespace-nowrap"
               >开源技术协会<rt
                 ><span
                   class="title-expansion whitespace-nowrap ui-mono text-xs font-medium tracking-[0.16em] text-muted-fg"
@@ -218,6 +218,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
           </figcaption>
           <div
             class="mt-4 grid grid-flow-col grid-rows-7 gap-1"
+            role="img"
             aria-label="2026 年动态记录热力图"
           >
             {
@@ -647,8 +648,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
         transform 280ms ease-out;
     }
 
-    .title-ruby:hover .title-expansion,
-    .title-ruby:focus-visible .title-expansion {
+    .title-ruby:hover .title-expansion {
       opacity: 1;
       transform: translateY(0);
     }

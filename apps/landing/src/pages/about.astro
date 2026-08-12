@@ -143,11 +143,9 @@ const campusResources = [
               rel="noreferrer noopener"
               class="inline-flex items-center gap-2 rounded-md border border-surface-border bg-surface px-4 py-2.5 text-surface-fg no-underline transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:text-primary"
             >
-              <iconify-icon
-                icon={icon}
-                aria-hidden="true"
-                class="shrink-0 text-base"
-              />
+              <span aria-hidden="true" class="inline-flex shrink-0">
+                <iconify-icon icon={icon} class="text-base" />
+              </span>
               <span>{label}</span>
             </a>
           ))
