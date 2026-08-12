@@ -713,8 +713,14 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
         animation: none;
       }
 
-      [data-home-motion] [data-home-reveal],
-      [data-home-motion] [data-home-stagger] > * {
+      [data-home-motion].home-motion-ready [data-home-reveal],
+      [data-home-motion].home-motion-ready
+        [data-home-stagger][data-home-reveal]
+        > *,
+      [data-home-motion].home-motion-ready
+        [data-home-reveal]
+        [data-home-stagger]
+        > * {
         animation: none;
         opacity: 1;
         transform: none;
