@@ -1,7 +1,7 @@
 import js from '@eslint/js'
 import { sharedIgnores } from '@hitszosa/eslint-config'
-import tsParser from '@typescript-eslint/parser'
 import tsPlugin from '@typescript-eslint/eslint-plugin'
+import tsParser from '@typescript-eslint/parser'
 
 export default [
   { ignores: sharedIgnores },

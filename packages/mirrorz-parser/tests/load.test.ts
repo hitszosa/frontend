@@ -1,8 +1,7 @@
+import { afterEach, describe, expect, test } from 'bun:test'
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
-
-import { afterEach, describe, expect, test } from 'bun:test'
 
 import { loadMirrorzPageSource } from '../src/index'
 

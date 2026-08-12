@@ -1,8 +1,7 @@
+import { expect, test } from 'bun:test'
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-
-import { expect, test } from 'bun:test'
 import { compile as compileMdx } from '@mdx-js/mdx'
 
 import { compileMirrorzPage, loadMirrorzPageSource } from '../src/index'

@@ -1,15 +1,15 @@
 export { compileMirrorzPage } from './compile'
 export { mergeConfig } from './config'
-export { loadMirrorzPageSource } from './load'
 export { createInitialState, transpileInput, transpileInputs } from './input'
+export { loadMirrorzPageSource } from './load'
 export type {
   BooleanInput,
   CompiledMirrorzPage,
   CompileMirrorzPageOptions,
   InputCommon,
   InputType,
-  Menu,
   LoadMirrorzPageOptions,
+  Menu,
   MenuValue,
   SourceBlock,
   TextInput,
