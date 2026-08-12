@@ -136,6 +136,7 @@
           aria-label="选择资源分类"
           class="flex min-h-0 grow flex-col gap-1 overflow-y-auto p-3"
         >
+          <!-- biome-ignore lint/a11y/useSemanticElements: the styled button implements the WAI-ARIA roving-tabindex radio pattern. -->
           <button
             v-for="(collection, index) in collections"
             :key="collection"
@@ -175,6 +176,7 @@
             </span>
           </div>
           <label class="relative block">
+            <span class="sr-only">搜索资源</span>
             <span
               class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-muted-fg"
               aria-hidden="true"

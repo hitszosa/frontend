@@ -1,5 +1,6 @@
 <template>
   <Teleport to="body">
+    <!-- biome-ignore lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: backdrop clicks dismiss the modal; keyboard users dismiss it with Escape. -->
     <div
       v-show="modelValue"
       class="fixed inset-0 z-100 flex overscroll-contain items-center justify-center bg-slate-950/60 sm:p-2 backdrop-blur-sm sm:p-4 md:p-8"
