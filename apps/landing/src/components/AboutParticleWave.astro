@@ -202,7 +202,15 @@ document.addEventListener('astro:page-load', setupParticleWaves);
   left: calc(50% - 50vw);
   z-index: -1;
   width: 100vw;
+  overflow: clip;
   pointer-events: none;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black 7rem,
+    black calc(100% - 10rem),
+    transparent 100%
+  );
 }
 
 .particle-wave {
@@ -210,13 +218,6 @@ document.addEventListener('astro:page-load', setupParticleWaves);
   inset: 0;
   overflow: hidden;
   will-change: transform;
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    black 3rem,
-    black calc(100% - 4rem),
-    transparent 100%
-  );
 }
 
 canvas {
