@@ -59,13 +59,12 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
 <Layout title="HITSZ 开源技术协会">
   <svg
     data-easter-egg-logos={JSON.stringify(easterEggLogos)}
-    data-hero-parallax
     aria-hidden="true"
     viewBox="0 0 1000 310"
     preserveAspectRatio="xMidYMid meet"
     class="hero-background pointer-events-none fixed left-1/2 top-16 z-0 w-[max(100vw,72rem)] max-w-none opacity-65 dark:opacity-35"
   >
-    <g class="hero-parallax-layer" data-parallax-speed="0.04">
+    <g class="hero-parallax-layer" style="--hero-layer-distance: -4rem">
       <path
         id="branch-yellow"
         class="hero-branch"
@@ -86,7 +85,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
         </animateMotion>
       </g>
     </g>
-    <g class="hero-parallax-layer" data-parallax-speed="0.08">
+    <g class="hero-parallax-layer" style="--hero-layer-distance: -8rem">
       <path
         id="branch-blue"
         class="hero-branch"
@@ -108,7 +107,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
         </animateMotion>
       </g>
     </g>
-    <g class="hero-parallax-layer" data-parallax-speed="0.12">
+    <g class="hero-parallax-layer" style="--hero-layer-distance: -12rem">
       <path
         id="branch-violet"
         class="hero-branch"
@@ -500,56 +499,9 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
       }
     };
 
-    const setupHeroParallax = () => {
-      const background = document.querySelector<SVGSVGElement>(
-        "[data-hero-parallax]",
-      );
-      if (
-        !background ||
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      ) {
-        return;
-      }
-
-      if (background.dataset.parallaxInitialized === "true") return;
-      background.dataset.parallaxInitialized = "true";
-
-      const layers = Array.from(
-        background.querySelectorAll<SVGGElement>("[data-parallax-speed]"),
-      );
-      let frameId = 0;
-
-      const update = () => {
-        frameId = 0;
-        const distance = window.scrollY;
-        for (const layer of layers) {
-          const speed = Number(layer.dataset.parallaxSpeed);
-          const offset = -distance * speed;
-          layer.style.setProperty("--hero-layer-offset", `${offset}px`);
-        }
-      };
-
-      const requestUpdate = () => {
-        if (frameId === 0) frameId = window.requestAnimationFrame(update);
-      };
-
-      window.addEventListener("scroll", requestUpdate, { passive: true });
-      requestUpdate();
-
-      document.addEventListener(
-        "astro:before-swap",
-        () => {
-          window.removeEventListener("scroll", requestUpdate);
-          if (frameId !== 0) window.cancelAnimationFrame(frameId);
-        },
-        { once: true },
-      );
-    };
-
     const initializeHomePage = () => {
       setupHomeReveals();
       revealLogoEasterEgg();
-      setupHeroParallax();
     };
 
     initializeHomePage();
@@ -659,9 +611,20 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
     }
 
     .hero-parallax-layer {
-      --hero-layer-offset: 0px;
-      transform: translate3d(0, var(--hero-layer-offset), 0);
-      will-change: transform;
+      transform: translate3d(0, 0, 0);
+    }
+
+    @supports (animation-timeline: scroll()) {
+      .hero-parallax-layer {
+        animation: hero-layer-parallax linear both;
+        animation-timeline: scroll(root block);
+      }
+
+      @keyframes hero-layer-parallax {
+        to {
+          transform: translate3d(0, var(--hero-layer-distance), 0);
+        }
+      }
     }
 
     .hero-branch {
@@ -771,6 +734,11 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
 
       .moving-node {
         display: none;
+      }
+
+      .hero-parallax-layer {
+        animation: none;
+        transform: none;
       }
     }
   </style>
