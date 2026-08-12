@@ -1,7 +1,7 @@
 :root {
   --ui-page-bg: #f8fafc;
   --ui-page-fg: #1e293b;
-  --ui-muted-fg: #94a3b8;
+  --ui-muted-fg: #8492a6;
   --ui-primary: #576edb;
   --ui-secondary: #6f46bf;
   --ui-osa-fg: #373da9;
@@ -43,7 +43,7 @@
 .dark {
   --ui-page-bg: #0f172a;
   --ui-page-fg: #f8fafc;
-  --ui-muted-fg: #94a3b8;
+  --ui-muted-fg: #8492a6;
   --ui-primary: #c2dbf9;
   --ui-secondary: #dad6f8;
   --ui-osa-fg: #97b9f0;

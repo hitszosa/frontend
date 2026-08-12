@@ -1,12 +1,13 @@
 ---
 interface Props {
+  as?: 'h1' | 'h2'
   compact?: boolean
 }
 
-const { compact = false } = Astro.props
+const { as: Tag = 'h2', compact = false }: Props = Astro.props
 ---
 
-<h2
+<Tag
   class:list={[
     'flex flex-nowrap space-x-1 font-medium text-surface-fg',
     compact ? 'text-xl' : 'text-2xl',
@@ -20,4 +21,4 @@ const { compact = false } = Astro.props
   >
     <slot />
   </span>
-</h2>
+</Tag>

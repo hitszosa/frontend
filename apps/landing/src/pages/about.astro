@@ -1,33 +1,33 @@
 ---
-import Layout from "../layouts/LandingLayout.astro";
-import GithubMemberCard from "../components/GithubMemberCard.astro";
-import AboutParticleWave from "../components/AboutParticleWave.astro";
-import { getCollection } from "astro:content";
-import { getGithubOrgMembers } from "../lib/github";
+import Layout from '../layouts/LandingLayout.astro';
+import GithubMemberCard from '../components/GithubMemberCard.astro';
+import AboutParticleWave from '../components/AboutParticleWave.astro';
+import { getCollection } from 'astro:content';
+import { getGithubOrgMembers } from '../lib/github';
 
 const services = (
-  await getCollection("services", ({ data }) => !data.hide)
+  await getCollection('services', ({ data }) => !data.hide)
 ).sort((a, b) => a.data.order - b.data.order);
 const githubMembers = await getGithubOrgMembers();
 
 const socialLinks = [
   {
-    name: "GitHub",
-    href: "https://github.com/hitszosa",
-    label: "@hitszosa",
-    icon: "simple-icons:github",
+    name: 'GitHub',
+    href: 'https://github.com/hitszosa',
+    label: '@hitszosa',
+    icon: 'simple-icons:github',
   },
   {
-    name: "QQ 群",
-    href: "https://qm.qq.com/cgi-bin/qm/qr?k=EmOyWeZrOaOeSoVrVLoozyKYdvjOia_t",
-    label: "群 811633021",
-    icon: "simple-icons:qq",
+    name: 'QQ 群',
+    href: 'https://qm.qq.com/cgi-bin/qm/qr?k=EmOyWeZrOaOeSoVrVLoozyKYdvjOia_t',
+    label: '群 811633021',
+    icon: 'simple-icons:qq',
   },
   {
-    name: "BiliBili",
-    href: "https://space.bilibili.com/1124374292",
-    label: "HITSZ开源技术协会",
-    icon: "simple-icons:bilibili",
+    name: 'BiliBili',
+    href: 'https://space.bilibili.com/1124374292',
+    label: 'HITSZ开源技术协会',
+    icon: 'simple-icons:bilibili',
   },
 ];
 ---
@@ -81,8 +81,7 @@ const socialLinks = [
       <ul
         class="mt-6 divide-y divide-surface-border border-y border-surface-border"
       >
-        {
-          services.map((item) => (
+        {services.map((item) => (
             <li>
               <a
                 href={item.data.href}
@@ -117,8 +116,7 @@ const socialLinks = [
                 </span>
               </a>
             </li>
-          ))
-        }
+          ))}
       </ul>
     </section>
 
@@ -132,8 +130,7 @@ const socialLinks = [
         我们没有面试，只有一起折腾的热情。
       </p>
       <div class="ui-mono mt-7 flex flex-wrap gap-3 text-sm">
-        {
-          socialLinks.map(({ href, label, icon }) => (
+        {socialLinks.map(({ href, label, icon }) => (
             <a
               href={href}
               target="_blank"
@@ -147,8 +144,7 @@ const socialLinks = [
               />
               <span>{label}</span>
             </a>
-          ))
-        }
+          ))}
       </div>
     </section>
   </div>
