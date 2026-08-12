@@ -18,7 +18,7 @@
               v-if="column.sortable"
               type="button"
               :class="column.smVisible ? 'hidden sm:inline-flex' : 'inline-flex'"
-              class="items-center gap-1 rounded-sm transition-colors hocus-visible:outline-none hocus-visible:ring-2 hocus-visible:ring-primary hocus:text-primary hover:cursor-pointer"
+              class="items-center gap-1 rounded-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hocus:text-primary hover:cursor-pointer"
               @click="toggleSort(column.key)"
             >
               <span>{{ column.label }}</span>
