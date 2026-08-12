@@ -17,7 +17,7 @@ const { link, author, github, image } = Astro.props;
 const hostname = new URL(link.href).hostname.replace(/^www\./, '');
 const showGithubIcon = hostname === 'github.com' && !image;
 const iconUrl = image ?? new URL('/favicon.ico', link.href).href;
-const initial = Array.from(link.name)[0] ?? '↗';
+const initial = Array.from(link.name)[0] ?? '↗︎';
 ---
 
 <a
@@ -62,7 +62,7 @@ const initial = Array.from(link.name)[0] ?? '↗';
       >
         {link.name}
       </span>
-      <span aria-hidden="true" class="shrink-0 text-sm text-primary">↗</span>
+      <span aria-hidden="true" class="shrink-0 text-sm text-primary">↗︎</span>
     </span>
     {link.description && (
       <span class="mt-1 block truncate text-sm text-surface-fg/80">

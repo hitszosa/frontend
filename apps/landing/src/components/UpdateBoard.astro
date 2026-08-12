@@ -34,7 +34,7 @@ const getTone = (entry: UpdateEntry): BadgeTone =>
 
 {primaryUpdate && (
     <section id="featured" class="border-b border-surface-border py-14">
-      <article data-home-reveal class="mt-7 flex flex-col overflow-hidden rounded-xl border border-surface-border bg-surface transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md focus-within:border-primary/50 focus-within:shadow-md md:flex-row">
+      <article data-landing-reveal class="landing-surface mt-7 flex flex-col overflow-hidden rounded-xl md:flex-row">
         {primaryUpdate.cover && (
           <div class="flex shrink-0 items-center justify-center border-b border-surface-border bg-inset md:max-w-[60%] md:border-r md:border-b-0">
             <ContentImage
@@ -73,10 +73,10 @@ const getTone = (entry: UpdateEntry): BadgeTone =>
           <div class="mt-auto pt-8">
             <a
               href={primaryUpdate.href}
-              class="group font-medium text-primary no-underline"
+              class="landing-link group font-medium"
             >
               <span
-                class="underline decoration-transparent decoration-dotted underline-offset-4 transition-colors duration-200 group-hover:decoration-current"
+                class="landing-link-label"
                 >查看详情</span
               > →
             </a>
@@ -87,14 +87,14 @@ const getTone = (entry: UpdateEntry): BadgeTone =>
       {secondaryUpdates.length > 0 && (
         <div
           class="mt-4 grid gap-4 sm:grid-cols-2"
-          data-home-reveal
-          data-home-stagger
-          style="--reveal-delay: 80ms"
+          data-landing-reveal
+          data-landing-stagger
+          style="--landing-reveal-delay: 80ms"
         >
           {secondaryUpdates.map((entry) => (
             <a
               href={entry.href}
-              class="group flex min-h-28 overflow-hidden rounded-lg border border-surface-border bg-surface no-underline transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md focus-visible:border-primary/50 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 focus-visible:shadow-md"
+              class="landing-surface group flex min-h-28 overflow-hidden rounded-lg no-underline"
             >
               {entry.cover && (
                 <div class="flex shrink-0 max-w-2/5 items-center justify-center border-r border-surface-border bg-inset">

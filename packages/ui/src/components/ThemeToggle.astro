@@ -15,7 +15,7 @@ const {
 
 const sizeClasses = {
   sm: {
-    button: 'h-8 w-8',
+    button: 'h-10 w-10',
     icon: 'text-base',
   },
   md: {
@@ -38,12 +38,12 @@ const currentSize = sizeClasses[size]
 >
   <button
     class:list={[
-      'theme-toggle inline-flex items-center justify-center leading-none p-[1em] rounded-full border border-transparent bg-surface/55 text-muted-fg opacity-60 shadow-[rgba(0,0,0,0.06)_0px_2px_8px_-4px] backdrop-blur-sm transition-all duration-300 ease-in-out hover:-translate-y-[1px] hover:border-surface-border hover:bg-surface/85 hover:text-primary hover:opacity-100 focus-visible:opacity-100 focus-visible:border-surface-border focus-visible:outline-none hover:cursor-pointer',
+      'theme-toggle inline-flex items-center justify-center leading-none rounded-full border border-transparent bg-surface/75 text-muted-fg shadow-[rgba(0,0,0,0.06)_0px_2px_8px_-4px] backdrop-blur-sm transition-all duration-300 ease-in-out hover:-translate-y-[1px] hover:border-surface-border hover:bg-surface hover:text-primary focus-visible:border-surface-border focus-visible:outline-2 focus-visible:outline-primary hover:cursor-pointer',
       currentSize.button,
     ]}
     type="button"
-    aria-label="Switch theme mode"
-    title="Switch theme mode"
+    aria-label="切换主题模式"
+    title="切换主题模式"
   >
     <iconify-icon
       class:list={['block leading-none', currentSize.icon]}
@@ -67,6 +67,10 @@ import {
 import type { ThemeMode } from '../client/theme'
 
 class OsaThemeToggleElement extends HTMLElement {
+  private media: MediaQueryList | null = null
+  private handleClick: (() => void) | null = null
+  private handleSystemThemeChange: (() => void) | null = null
+
   connectedCallback() {
     const button = this.querySelector('.theme-toggle')
     const icon = this.querySelector('iconify-icon')
@@ -76,13 +80,18 @@ class OsaThemeToggleElement extends HTMLElement {
       : 'system'
 
     const syncActiveState = (mode: ThemeMode) => {
+      const modeLabels: Record<ThemeMode, string> = {
+        light: '浅色',
+        dark: '深色',
+        system: '跟随系统',
+      }
       icon?.setAttribute('icon', themeIcons[mode] ?? themeIcons.system)
       button?.setAttribute('data-mode', mode)
       button?.setAttribute(
         'aria-label',
-        `Theme mode: ${mode}. Click to cycle modes`,
+        `当前为${modeLabels[mode]}主题。点击切换主题模式`,
       )
-      button?.setAttribute('title', `Theme mode: ${mode}`)
+      button?.setAttribute('title', `当前主题：${modeLabels[mode]}`)
     }
 
     const savedMode = getStoredThemeMode(storageKey, defaultMode)
@@ -90,23 +99,33 @@ class OsaThemeToggleElement extends HTMLElement {
     applyTheme(savedMode)
     syncActiveState(savedMode)
 
-    button?.addEventListener('click', () => {
+    this.handleClick = () => {
       const currentMode = getStoredThemeMode(storageKey, defaultMode)
       const nextMode = cycleThemeMode(currentMode)
 
       saveThemeMode(nextMode, storageKey)
       applyTheme(nextMode)
       syncActiveState(nextMode)
-    })
+    }
+    button?.addEventListener('click', this.handleClick)
 
-    const media = window.matchMedia('(prefers-color-scheme: dark)')
-    media.addEventListener('change', () => {
+    this.media = window.matchMedia('(prefers-color-scheme: dark)')
+    this.handleSystemThemeChange = () => {
       const mode = getStoredThemeMode(storageKey, defaultMode)
       if (mode === 'system') {
         applyTheme(mode)
         syncActiveState(mode)
       }
-    })
+    }
+    this.media.addEventListener('change', this.handleSystemThemeChange)
+  }
+
+  disconnectedCallback() {
+    const button = this.querySelector('.theme-toggle')
+    if (this.handleClick) button?.removeEventListener('click', this.handleClick)
+    if (this.handleSystemThemeChange) {
+      this.media?.removeEventListener('change', this.handleSystemThemeChange)
+    }
   }
 }
 

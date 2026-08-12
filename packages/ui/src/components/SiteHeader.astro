@@ -178,7 +178,7 @@ const navLinkClass = (active: boolean) => [
                     class:list={navLinkClass(isActive(item))}
                   >
                     {item.label}
-                    {showArrow && <span class="text-xs ml-0.5" aria-hidden="true">↗</span>}
+                    {showArrow && <span class="text-xs ml-0.5" aria-hidden="true">↗︎</span>}
                   </a>
                 </li>
               )
@@ -190,7 +190,7 @@ const navLinkClass = (active: boolean) => [
               aria-current={isServicesPage ? 'page' : undefined}
               class:list={navLinkClass(isServicesPage)}
             >
-              服务与产品<span class="ml-1 text-[10px]" aria-hidden="true"
+              服务与项目<span class="ml-1 text-[10px]" aria-hidden="true"
                 >⌄</span
               >
             </a>
@@ -219,7 +219,7 @@ const navLinkClass = (active: boolean) => [
                     <span class="min-w-0 flex-1 truncate">{item.name}</span>
                     {showServiceArrow(item.href) && (
                       <span class="text-xs text-muted-fg group-hover/item:text-primary">
-                        ↗
+                        ↗︎
                       </span>
                     )}
                   </a>
@@ -261,7 +261,7 @@ const navLinkClass = (active: boolean) => [
                         ]}
                       >
                         {item.label}
-                        {showArrow && <span class="text-xs ml-0.5" aria-hidden="true">↗</span>}
+                        {showArrow && <span class="text-xs ml-0.5" aria-hidden="true">↗︎</span>}
                       </a>
                     </li>
                   )
@@ -273,7 +273,7 @@ const navLinkClass = (active: boolean) => [
               href={contextualHref(servicesPageHref)}
               aria-current={isServicesPage ? 'page' : undefined}
               class="ui-mono mb-1 block px-3 pb-1 text-[10px] tracking-wider text-primary no-underline hover:underline"
-              >服务与产品</a
+              >服务与项目</a
             >
             <div class="grid gap-1 sm:grid-cols-2">
               {featuredServices.map((item) => {
@@ -301,7 +301,7 @@ const navLinkClass = (active: boolean) => [
                           aria-hidden="true"
                           class="shrink-0 text-xs text-muted-fg group-hover/item:text-primary"
                         >
-                          ↗
+                          ↗︎
                         </span>
                       )}
                     </a>

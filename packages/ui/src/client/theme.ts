@@ -25,6 +25,10 @@ export const applyTheme = (mode: ThemeMode) => {
   const resolvedTheme = resolveThemeMode(mode)
   document.documentElement.classList.toggle('dark', resolvedTheme === 'dark')
   document.documentElement.dataset.theme = mode
+  document.documentElement.style.colorScheme = resolvedTheme
+  document
+    .querySelector('meta[name="theme-color"]')
+    ?.setAttribute('content', resolvedTheme === 'dark' ? '#1e293b' : '#ffffff')
 }
 
 export const getStoredThemeMode = (

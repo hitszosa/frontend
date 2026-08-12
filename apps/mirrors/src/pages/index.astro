@@ -21,7 +21,7 @@ const news = sortNewsByDateDesc(await getMirrorNews())
     class="flex w-full flex-col lg:items-start lg:flex-row lg:space-x-8 lg:space-x-12"
   >
     <div class="min-w-0 grow space-y-4 lg:order-first">
-      <SectionHeading>
+      <SectionHeading as="h1">
         <Icon slot="icon" name="icon-park-outline:dropbox" />
         Index of Mirrors
       </SectionHeading>

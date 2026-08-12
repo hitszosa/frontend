@@ -9,9 +9,10 @@ const updates = await getUpdates();
 <Layout
   title="动态 | HITSZ OSA"
   description="HITSZ OSA 动态：协会公告、活动信息与技术文章。"
+  motionMode="marked"
 >
   <div class="py-14">
-    <div class="flex items-baseline justify-between">
+    <div class="flex items-baseline justify-between" data-landing-reveal>
       <h1 class="ui-mono text-xs tracking-widest text-muted-fg">
         UPDATES / 动态
       </h1>
@@ -19,8 +20,8 @@ const updates = await getUpdates();
         <a
           href="/rss.xml"
           aria-label="订阅 HITSZ OSA RSS"
-          class="ui-mono text-xs text-primary underline decoration-transparent decoration-dotted underline-offset-2 transition-colors duration-200 hover:decoration-current"
-          >RSS</a
+          class="landing-link ui-mono text-xs"
+          ><span class="landing-link-label">RSS</span></a
         >
         <span class="ui-mono text-xs text-muted-fg">{updates.length} 条</span>
       </div>
@@ -33,7 +34,9 @@ const updates = await getUpdates();
           ))}
         </ul>
       ) : (
-        <p class="ui-mono mt-10 text-sm text-muted-fg"># 暂无动态</p>
+        <p class="ui-mono mt-10 text-sm text-muted-fg" data-landing-reveal>
+          # 暂无动态
+        </p>
       )}
   </div>
 </Layout>

@@ -1,0 +1,226 @@
+<div class="particle-wave-shell" data-particle-wave-shell aria-hidden="true">
+  <div class="particle-wave">
+    <canvas data-particle-wave></canvas>
+  </div>
+</div>
+
+<script>
+const setupParticleWaves = () => {
+  const canvases = document.querySelectorAll<HTMLCanvasElement>(
+    '[data-particle-wave]',
+  );
+
+  for (const canvas of canvases) {
+    if (canvas.dataset.particleWaveInitialized === 'true') continue;
+    canvas.dataset.particleWaveInitialized = 'true';
+
+    const context = canvas.getContext('2d');
+    if (!context) continue;
+
+    const container = canvas.parentElement;
+    if (!container) continue;
+    const shell = container.parentElement;
+    if (!shell) continue;
+
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let frameId = 0;
+    let width = 0;
+    let height = 0;
+    let visible = true;
+    let lastFrameAt = 0;
+    let primary = '#576edb';
+    let secondary = '#6f46bf';
+
+    const readTheme = () => {
+      const styles = getComputedStyle(document.documentElement);
+      primary = styles.getPropertyValue('--ui-primary').trim() || primary;
+      secondary = styles.getPropertyValue('--ui-secondary').trim() || secondary;
+    };
+
+    const resize = () => {
+      const bounds = container.getBoundingClientRect();
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+      width = Math.max(1, bounds.width);
+      height = Math.max(1, bounds.height);
+      canvas.width = Math.round(width * pixelRatio);
+      canvas.height = Math.round(height * pixelRatio);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      draw(motionQuery.matches ? 6 : performance.now() / 1000);
+    };
+
+    const draw = (time: number) => {
+      context.clearRect(0, 0, width, height);
+
+      const compact = width < 640;
+      const xCenter = width - (compact ? 80 : 360);
+      let baseY = 24;
+      let row = 0;
+
+      while (baseY < height + 64 && row < 80) {
+        const depth = baseY / 1100;
+        const pointSpacing = (compact ? 32 : 30) + depth * 28;
+        const firstColumn = Math.floor(-80 / pointSpacing);
+        const lastColumn = Math.ceil((width + 80) / pointSpacing);
+
+        for (let column = firstColumn; column <= lastColumn; column += 1) {
+          const baseX = column * pointSpacing;
+          const xUnit = (baseX - xCenter) / 360;
+          const phase = xUnit * 2.35 + depth * 6.2 - time * 0.46;
+          const crossWave = Math.sin(phase) * (25 + depth * 18);
+          const fineWave =
+            Math.cos(xUnit * 7.6 - depth * 3.8 + time * 0.28) * 10;
+          const waveOffset = crossWave + fineWave;
+          const x =
+            baseX +
+            Math.sin(depth * 4.5 + time * 0.18) * 8;
+          const y = baseY + waveOffset;
+
+          const edgeFade = Math.max(
+            0.12,
+            1 - Math.abs(baseX - xCenter) / 1500,
+          );
+          const verticalFade = Math.sin(depth * Math.PI) * 0.7 + 0.3;
+          const alpha = (0.13 + depth * 0.21) * edgeFade * verticalFade;
+          const crest = Math.max(0, Math.min(1, 0.5 - waveOffset / 100));
+          const perspectiveScale = depth * 1. + 0.4;
+          const radius = (1.1 + crest * 3) * perspectiveScale;
+
+          context.beginPath();
+          context.arc(x, y, radius, 0, Math.PI * 2);
+          context.globalAlpha = alpha;
+          context.fillStyle = column % 5 === 0 ? secondary : primary;
+          context.fill();
+        }
+
+        baseY += 13 + depth * 34;
+        row += 1;
+      }
+
+      context.globalAlpha = 1;
+    };
+
+    const animate = (now: number) => {
+      if (!visible || document.hidden || motionQuery.matches) {
+        frameId = 0;
+        return;
+      }
+
+      updateParallax();
+      if (now - lastFrameAt >= 1000 / 30) {
+        draw(now / 1000);
+        lastFrameAt = now;
+      }
+      frameId = window.requestAnimationFrame(animate);
+    };
+
+    const start = () => {
+      if (
+        frameId === 0 &&
+        visible &&
+        !document.hidden &&
+        !motionQuery.matches
+      ) {
+        frameId = window.requestAnimationFrame(animate);
+      }
+    };
+
+    const stop = () => {
+      if (frameId !== 0) window.cancelAnimationFrame(frameId);
+      frameId = 0;
+    };
+
+    const handleMotionChange = () => {
+      stop();
+      draw(motionQuery.matches ? 6 : performance.now() / 1000);
+      updateParallax();
+      start();
+    };
+    const handleVisibilityChange = () => {
+      if (document.hidden) stop();
+      else start();
+    };
+
+    const updateParallax = () => {
+      const offset = motionQuery.matches
+        ? 0
+        : window.scrollY * 0.5;
+      container.style.transform = `translate3d(0, ${offset}px, 0)`;
+    };
+
+    const resizeObserver = new ResizeObserver(resize);
+    const visibilityObserver = new IntersectionObserver(([entry]) => {
+      visible = entry?.isIntersecting ?? true;
+      if (visible) start();
+      else stop();
+    });
+    const themeObserver = new MutationObserver(() => {
+      readTheme();
+      draw(motionQuery.matches ? 6 : performance.now() / 1000);
+    });
+
+    readTheme();
+    resizeObserver.observe(container);
+    visibilityObserver.observe(canvas);
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class', 'data-theme'],
+    });
+    motionQuery.addEventListener('change', handleMotionChange);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    updateParallax();
+    start();
+
+    document.addEventListener(
+      'astro:before-swap',
+      () => {
+        stop();
+        resizeObserver.disconnect();
+        visibilityObserver.disconnect();
+        themeObserver.disconnect();
+        motionQuery.removeEventListener('change', handleMotionChange);
+        document.removeEventListener(
+          'visibilitychange',
+          handleVisibilityChange,
+        );
+      },
+      { once: true },
+    );
+  }
+};
+
+setupParticleWaves();
+document.addEventListener('astro:page-load', setupParticleWaves);
+</script>
+
+<style>
+.particle-wave-shell {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 50vw);
+  z-index: -1;
+  width: 100vw;
+  overflow: clip;
+  pointer-events: none;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black 7rem,
+    black calc(100% - 10rem),
+    transparent 100%
+  );
+}
+
+.particle-wave {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  will-change: transform;
+}
+
+canvas {
+  display: block;
+}
+</style>

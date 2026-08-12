@@ -15,11 +15,11 @@ const external = /^https?:\/\//.test(href);
     href={href}
     target={external ? '_blank' : undefined}
     rel={external ? 'noreferrer noopener' : undefined}
-    class="group inline-flex font-medium text-primary no-underline"
+    class="landing-link group inline-flex font-medium"
   >
     <span
-      class="underline decoration-transparent decoration-dotted underline-offset-4 transition-colors duration-200 group-hover:decoration-current"
+      class="landing-link-label"
       >{label}</span
-    >{external ? ' ↗' : ' →'}
+    >{external ? ' ↗︎' : ' →'}
   </a>
 </aside>

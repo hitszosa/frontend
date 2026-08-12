@@ -1,48 +1,46 @@
 ---
-import { getCollection } from 'astro:content';
-import LandingLayout from '../layouts/LandingLayout.astro';
+import { getCollection } from "astro:content";
+import LandingLayout from "../layouts/LandingLayout.astro";
 
 const services = (
-  await getCollection('services', ({ data }) => !data.hide)
+  await getCollection("services", ({ data }) => !data.hide)
 ).sort((a, b) => a.data.order - b.data.order);
 const featuredServices = services.filter((entry) => entry.data.featured);
 const additionalServices = services.filter((entry) => !entry.data.featured);
 
-const statusLabel = (status: (typeof services)[number]['data']['status']) => {
+const statusLabel = (status: (typeof services)[number]["data"]["status"]) => {
   switch (status) {
-    case 'beta':
-      return 'Beta';
-    case 'developing':
-      return '开发中';
-    case 'maintaining':
-      return '维护中';
-    case 'active':
-      return '活跃';
+    case "beta":
+      return "Beta";
+    case "developing":
+      return "开发中";
+    case "maintaining":
+      return "维护中";
+    case "active":
+      return "活跃";
     default:
-      return '在线';
+      return "在线";
   }
 };
 ---
 
 <LandingLayout
-  title="服务与产品 | HITSZ OSA"
+  title="服务与项目 | HITSZ OSA"
   description="HITSZ OSA 提供的开源基础设施、校园服务与开源项目。"
 >
   <div class="py-14">
     <div class="flex items-end justify-between gap-4">
-      <div>
-        <h1 class="ui-mono text-xs tracking-widest text-muted-fg">
-          SERVICES &amp; PRODUCTS / 服务与产品
-        </h1>
-        <p class="mt-5 max-w-2xl text-lg leading-relaxed text-surface-fg">
-          我们维护校园开源基础设施，也把实用工具和技术项目开放给更多人。
-        </p>
-      </div>
+      <h1 class="ui-mono text-xs tracking-widest text-muted-fg">
+        SERVICES &amp; PROJECTS / 服务与项目
+      </h1>
       <span class="ui-mono shrink-0 text-xs text-muted-fg"
         >{services.length}
         项</span
       >
     </div>
+    <p class="mt-5 max-w-2xl text-lg leading-relaxed text-surface-fg">
+      我们维护校园开源基础设施，也把实用工具和技术项目开放给更多人。
+    </p>
 
     <section class="mt-12">
       <div class="flex items-baseline justify-between gap-4">
@@ -57,93 +55,97 @@ const statusLabel = (status: (typeof services)[number]['data']['status']) => {
       <div
         class="mt-5 divide-y divide-surface-border border-y border-surface-border"
       >
-        {featuredServices.map((entry) => (
-          <a
-            href={entry.data.href}
-            target="_blank"
-            rel="noreferrer noopener"
-            class="group flex items-start gap-3 px-1 py-3 no-underline transition-colors hover:bg-surface sm:px-4"
-          >
-            <span
-              class="ui-mono mt-0.5 shrink-0 rounded px-1.5 py-0.5 text-[10px]"
-              style={
-                entry.data.category === 'service'
-                  ? 'background: color-mix(in srgb, var(--ui-success, var(--ui-secondary)) 14%, transparent); color: var(--ui-success, var(--ui-secondary));'
-                  : 'background: color-mix(in srgb, var(--ui-primary) 14%, transparent); color: var(--ui-primary);'
-              }
-            >
-              {entry.data.category === 'service' ? '服务' : '项目'}
-            </span>
-            <span class="min-w-0 flex-1">
-              <span class="block break-words font-medium text-surface-fg group-hover:text-primary"
-                >{entry.data.name}</span
-              >
-              <span class="mt-1 block text-sm leading-relaxed text-muted-fg"
-                >{entry.data.description}</span
-              >
-            </span>
-            <span
-              class="ui-mono flex shrink-0 items-center gap-3 pt-0.5 text-[10px] text-muted-fg"
+        {
+          featuredServices.map((entry) => (
+            <a
+              href={entry.data.href}
+              target="_blank"
+              rel="noreferrer noopener"
+              class="group flex items-start gap-3 px-1 py-3 no-underline transition-colors sm:px-4"
             >
               <span
-                >{entry.data.scope === 'campus' ? '校内 · ' : ''}{statusLabel(entry.data.status)}</span
+                class="ui-mono mt-0.5 shrink-0 rounded px-1.5 py-0.5 text-[10px]"
+                style={
+                  entry.data.category === "service"
+                    ? "background: color-mix(in srgb, var(--ui-success, var(--ui-secondary)) 14%, transparent); color: var(--ui-success, var(--ui-secondary));"
+                    : "background: color-mix(in srgb, var(--ui-primary) 14%, transparent); color: var(--ui-primary);"
+                }
               >
-              <span
-                aria-hidden="true"
-                class="text-primary transition-transform group-hover:translate-x-1"
-                >↗</span
-              >
-            </span>
-          </a>
-        ))}
+                {entry.data.category === "service" ? "服务" : "项目"}
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="block break-words font-medium text-surface-fg group-hover:text-primary">
+                  {entry.data.name}
+                </span>
+                <span class="mt-1 block text-sm leading-relaxed text-muted-fg">
+                  {entry.data.description}
+                </span>
+              </span>
+              <span class="ui-mono flex shrink-0 items-center gap-2 pt-0.5 text-xs text-muted-fg transition-transform group-hover:translate-x-1">
+                <span>
+                  {entry.data.scope === "campus" ? "校内 · " : ""}
+                  {statusLabel(entry.data.status)}
+                </span>
+                <span aria-hidden="true" class="text-primary ">
+                  ↗︎
+                </span>
+              </span>
+            </a>
+          ))
+        }
       </div>
     </section>
-    {additionalServices.length > 0 && (
-      <section class="mt-12">
-        <div class="flex items-baseline justify-between gap-4">
-          <h2 class="ui-mono text-xs tracking-widest text-muted-fg">
-            MORE / 更多服务与项目
-          </h2>
-          <span class="ui-mono text-xs text-muted-fg"
-            >{additionalServices.length} 项</span
-          >
-        </div>
-        <ul class="mt-5 divide-y divide-surface-border border-y border-surface-border">
-          {additionalServices.map((entry) => (
-            <li>
+    {
+      additionalServices.length > 0 && (
+        <section class="mt-12">
+          <div class="flex items-baseline justify-between gap-4">
+            <h2 class="ui-mono text-xs tracking-widest text-muted-fg">
+              MORE / 更多服务与项目
+            </h2>
+            <span class="ui-mono text-xs text-muted-fg">
+              {additionalServices.length} 项
+            </span>
+          </div>
+          <div class="mt-5 divide-y divide-surface-border border-y border-surface-border">
+            {additionalServices.map((entry) => (
               <a
                 href={entry.data.href}
                 target="_blank"
                 rel="noreferrer noopener"
-                class="group grid gap-1 py-3 no-underline transition-colors hover:bg-surface sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:px-4"
+                class="group flex items-start gap-3 px-1 py-3 no-underline transition-colors sm:px-4"
               >
-                <span class="min-w-0">
-                  <span class="flex items-center gap-2">
-                    <span
-                      class="break-words font-medium text-surface-fg group-hover:text-primary"
-                      >{entry.data.name}</span
-                    >
-                    <span class="ui-mono shrink-0 text-[10px] text-muted-fg"
-                      >{entry.data.category === 'service' ? '服务' : '项目'}</span
-                    >
-                  </span>
-                  <span class="mt-1 block text-xs leading-relaxed text-muted-fg"
-                    >{entry.data.description}</span
-                  >
-                </span>
                 <span
-                  class="ui-mono flex shrink-0 items-center justify-between gap-4 text-xs text-muted-fg"
+                  class="ui-mono mt-0.5 shrink-0 rounded px-1.5 py-0.5 text-[10px]"
+                  style={
+                    entry.data.category === "service"
+                      ? "background: color-mix(in srgb, var(--ui-success, var(--ui-secondary)) 14%, transparent); color: var(--ui-success, var(--ui-secondary));"
+                      : "background: color-mix(in srgb, var(--ui-primary) 14%, transparent); color: var(--ui-primary);"
+                  }
                 >
-                  <span
-                    >{entry.data.scope === 'campus' ? '校内 · ' : ''}{statusLabel(entry.data.status)}</span
-                  >
-                  <span aria-hidden="true">↗</span>
+                  {entry.data.category === "service" ? "服务" : "项目"}
+                </span>
+                <span class="min-w-0 flex-1">
+                  <span class="block break-words font-medium text-surface-fg group-hover:text-primary">
+                    {entry.data.name}
+                  </span>
+                  <span class="mt-1 block text-sm leading-relaxed text-muted-fg">
+                    {entry.data.description}
+                  </span>
+                </span>
+                <span class="ui-mono flex shrink-0 items-center gap-2 pt-0.5 text-xs text-muted-fg transition-transform group-hover:translate-x-1">
+                  <span>
+                    {entry.data.scope === "campus" ? "校内 · " : ""}
+                    {statusLabel(entry.data.status)}
+                  </span>
+                  <span aria-hidden="true" class="text-primary ">
+                    ↗︎
+                  </span>
                 </span>
               </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
+            ))}
+          </div>
+        </section>
+      )
+    }
   </div>
 </LandingLayout>
