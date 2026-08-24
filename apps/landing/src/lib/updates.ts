@@ -73,7 +73,7 @@ export async function getUpdates(now = new Date()): Promise<UpdateEntry[]> {
       warning: false,
       upcoming: false,
       tags: [],
-      meta: entry.data.author,
+      meta: `@${entry.data.author}`,
       cover: entry.data.cover,
       coverAlt: entry.data.coverAlt,
     })),
