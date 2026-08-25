@@ -2,9 +2,41 @@ name: nix
 
 on:
   pull_request:
+    paths:
+      - '.github/workflows/nix.yml'
+      - 'apps/mirrors/**'
+      - 'packages/eslint-config/**'
+      - 'packages/mirrorz-parser/**'
+      - 'packages/ui/**'
+      - 'content/announcements/**'
+      - 'content/mirrors/**'
+      - 'vendor/mirrorz-help/**'
+      - 'bun.lock'
+      - 'bun.nix'
+      - 'default.nix'
+      - 'flake.lock'
+      - 'flake.nix'
+      - 'package.json'
+      - 'turbo.json'
   push:
     branches:
       - main
+    paths:
+      - '.github/workflows/nix.yml'
+      - 'apps/mirrors/**'
+      - 'packages/eslint-config/**'
+      - 'packages/mirrorz-parser/**'
+      - 'packages/ui/**'
+      - 'content/announcements/**'
+      - 'content/mirrors/**'
+      - 'vendor/mirrorz-help/**'
+      - 'bun.lock'
+      - 'bun.nix'
+      - 'default.nix'
+      - 'flake.lock'
+      - 'flake.nix'
+      - 'package.json'
+      - 'turbo.json'
   workflow_dispatch:
 
 permissions:
