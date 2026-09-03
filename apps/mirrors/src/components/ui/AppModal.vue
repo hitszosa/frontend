@@ -1,33 +1,20 @@
 <template>
-  <Teleport to="body">
-    <div
-      v-show="modelValue"
-      class="fixed inset-0 z-100 flex overscroll-contain items-center justify-center bg-slate-950/60 sm:p-2 backdrop-blur-sm sm:p-4 md:p-8"
-      :aria-hidden="modelValue ? undefined : 'true'"
-      @click="onBackdropClick"
-      @wheel.stop
-      @touchmove.stop
-    >
-      <div
-        ref="dialogRef"
-        v-bind="$attrs"
-        role="dialog"
-        :aria-modal="modelValue ? 'true' : undefined"
-        tabindex="-1"
-        class="h-full sm:h-[calc(100dvh-2rem)] md:h-[calc(100dvh-4rem)] sm:max-h-[max(52rem,85dvh)] w-full max-w-5xl overflow-hidden overscroll-contain sm:rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-      >
-        <slot />
-      </div>
-    </div>
-  </Teleport>
+  <dialog
+    ref="dialogRef"
+    role="dialog"
+    :aria-modal="modelValue ? 'true' : undefined"
+    class="fixed inset-0 m-auto h-full max-h-none w-full max-w-5xl overflow-hidden overscroll-contain border-0 bg-transparent p-0 sm:h-[calc(100dvh-2rem)] sm:max-h-[max(52rem,85dvh)] sm:rounded-lg md:h-[calc(100dvh-4rem)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary backdrop:bg-slate-950/60 backdrop:backdrop-blur-sm"
+    @click="onBackdropClick"
+    @close="close"
+    @wheel.stop
+    @touchmove.stop
+  >
+    <slot />
+  </dialog>
 </template>
 
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
-
-defineOptions({
-  inheritAttrs: false,
-})
+import { ref, watchEffect } from 'vue'
 
 const props = defineProps<{
   modelValue: boolean
@@ -37,115 +24,30 @@ const emit = defineEmits<{
   'update:modelValue': [value: boolean]
 }>()
 
-const dialogRef = ref<HTMLDivElement | null>(null)
-const previousActiveElement = ref<HTMLElement | null>(null)
-
-const focusableSelector = [
-  'a[href]',
-  'button:not([disabled])',
-  'input:not([disabled])',
-  'select:not([disabled])',
-  'textarea:not([disabled])',
-  '[tabindex]:not([tabindex="-1"])',
-].join(', ')
-
-const close = () => {
-  emit('update:modelValue', false)
-}
+const dialogRef = ref<HTMLDialogElement | null>(null)
+const close = () => emit('update:modelValue', false)
 
 const onBackdropClick = (event: MouseEvent) => {
-  if (event.target === event.currentTarget) {
-    close()
-  }
-}
-
-const getFocusableElements = () => {
-  if (!dialogRef.value) {
-    return [] as HTMLElement[]
-  }
-
-  return Array.from(
-    dialogRef.value.querySelectorAll<HTMLElement>(focusableSelector),
-  ).filter(
-    (element) => !element.hasAttribute('disabled') && element.tabIndex !== -1,
-  )
-}
-
-const focusFirstElement = () => {
-  const focusableElements = getFocusableElements()
-  const focusTarget = focusableElements[0] ?? dialogRef.value
-  focusTarget?.focus()
-}
-
-const trapFocus = (event: KeyboardEvent) => {
-  const focusableElements = getFocusableElements()
-  if (focusableElements.length === 0) {
-    event.preventDefault()
-    dialogRef.value?.focus()
-    return
-  }
-
-  const firstElement = focusableElements[0]
-  const lastElement = focusableElements[focusableElements.length - 1]
-  const activeElement = document.activeElement
-
+  const dialog = dialogRef.value
+  if (!dialog || event.target !== dialog) return
+  const { left, right, top, bottom } = dialog.getBoundingClientRect()
   if (
-    event.shiftKey &&
-    (activeElement === firstElement || activeElement === dialogRef.value)
+    event.clientX < left ||
+    event.clientX > right ||
+    event.clientY < top ||
+    event.clientY > bottom
   ) {
-    event.preventDefault()
-    lastElement.focus()
-    return
-  }
-
-  if (!event.shiftKey && activeElement === lastElement) {
-    event.preventDefault()
-    firstElement.focus()
-  }
-}
-
-const onKeydown = (event: KeyboardEvent) => {
-  if (event.key === 'Tab' && props.modelValue) {
-    trapFocus(event)
-    return
-  }
-
-  if (event.key === 'Escape' && props.modelValue) {
     close()
   }
 }
 
-watch(
-  () => props.modelValue,
-  (isOpen) => {
-    if (typeof window === 'undefined') {
-      return
-    }
-
-    if (isOpen) {
-      previousActiveElement.value =
-        document.activeElement instanceof HTMLElement
-          ? document.activeElement
-          : null
-      window.addEventListener('keydown', onKeydown)
-      nextTick(() => {
-        focusFirstElement()
-      })
-      return
-    }
-
-    window.removeEventListener('keydown', onKeydown)
-    if (previousActiveElement.value?.isConnected) {
-      previousActiveElement.value.focus()
-    }
-    previousActiveElement.value = null
+watchEffect(
+  () => {
+    const dialog = dialogRef.value
+    if (!dialog) return
+    if (props.modelValue && !dialog.open) dialog.showModal()
+    else if (!props.modelValue && dialog.open) dialog.close()
   },
-  { immediate: true },
+  { flush: 'post' },
 )
-
-onBeforeUnmount(() => {
-  if (typeof window !== 'undefined') {
-    window.removeEventListener('keydown', onKeydown)
-  }
-})
 </script>
