@@ -77,13 +77,12 @@ import { storeToRefs } from 'pinia'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import AppTable from '@components/ui/AppTable.vue'
 import StatusBadge from '@components/ui/StatusBadge.vue'
-import { useHelpListStore } from './HelpListStore'
+import helpList from '@generated/help/help-list.json'
 import { useMirrorListStore } from './MirrorListStore'
 
 const { rows, loading, errorMessage } = storeToRefs(useMirrorListStore())
-const { helpList } = storeToRefs(useHelpListStore())
 
-const helpSet = computed(() => new Set(helpList.value))
+const helpSet = new Set(helpList)
 
 const columns = [
   {
@@ -118,7 +117,7 @@ const filteredRows = computed(() => {
 })
 
 const isShowHelp = (mirror: string) => {
-  return helpSet.value.has(mirror)
+  return helpSet.has(mirror)
 }
 
 const isNameMatched = (mirror: string, filter: string) => {
