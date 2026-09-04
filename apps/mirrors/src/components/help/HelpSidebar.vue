@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon as IconifyIcon } from '@iconify/vue'
 import { storeToRefs } from 'pinia'
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, useTemplateRef } from 'vue'
 
 import helpList from '@generated/help/help-list.json'
 import { useMirrorListStore } from '@components/index/MirrorList/MirrorListStore'
@@ -13,6 +13,8 @@ const props = defineProps<{
 
 const { rows, loading, errorMessage } = storeToRefs(useMirrorListStore())
 const filter = ref('')
+const searchInput = useTemplateRef<HTMLInputElement>('search-input')
+const sidebarNav = useTemplateRef<HTMLElement>('sidebar-nav')
 const helpSet = new Set(helpList)
 const fallbackRows = computed(() =>
   helpList.map((name, id) => ({
@@ -49,27 +51,27 @@ const onKeydown = (event: KeyboardEvent) => {
     return
   }
   event.preventDefault()
-  document.getElementById('help-sidebar-search')?.focus()
+  searchInput.value?.focus()
 }
 
-let positionedActivePage = false
-watch(
-  rows,
-  async () => {
-    if (positionedActivePage) return
-    await nextTick()
-    const activeLink = document.querySelector<HTMLElement>(
-      '#help-sidebar-nav [aria-current="page"]',
-    )
-    if (!activeLink) return
-    activeLink.scrollIntoView({ block: 'center' })
-    positionedActivePage = true
-  },
-  { flush: 'post' },
-)
+let sidebarScrollTop = 0
+const saveScrollPosition = () => {
+  sidebarScrollTop = sidebarNav.value?.scrollTop ?? 0
+}
+const restoreScrollPosition = () => {
+  if (sidebarNav.value) sidebarNav.value.scrollTop = sidebarScrollTop
+}
 
-onMounted(() => window.addEventListener('keydown', onKeydown))
-onUnmounted(() => window.removeEventListener('keydown', onKeydown))
+onMounted(() => {
+  window.addEventListener('keydown', onKeydown)
+  document.addEventListener('astro:before-swap', saveScrollPosition)
+  document.addEventListener('astro:page-load', restoreScrollPosition)
+})
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeydown)
+  document.removeEventListener('astro:before-swap', saveScrollPosition)
+  document.removeEventListener('astro:page-load', restoreScrollPosition)
+})
 </script>
 
 <template>
@@ -85,6 +87,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
         />
         <input
           id="help-sidebar-search"
+          ref="search-input"
           :value="filter"
           type="search"
           placeholder="搜索镜像…"
@@ -96,6 +99,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 
     <nav
       id="help-sidebar-nav"
+      ref="sidebar-nav"
       class="min-h-0 flex-1 overflow-y-auto overscroll-contain p-2"
       aria-label="镜像帮助列表"
     >
