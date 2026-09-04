@@ -17,8 +17,7 @@
             <button
               v-if="column.sortable"
               type="button"
-              :class="column.smVisible ? 'hidden sm:inline-flex' : 'inline-flex'"
-              class="items-center gap-1 rounded-sm transition-colors hocus-visible:outline-none hocus-visible:ring-2 hocus-visible:ring-primary hocus:text-primary hover:cursor-pointer"
+              class="inline-flex items-center gap-1 rounded-sm transition-colors hocus-visible:outline-none hocus-visible:ring-2 hocus-visible:ring-primary hocus:text-primary hover:cursor-pointer"
               @click="toggleSort(column.key)"
             >
               <span>{{ column.label }}</span>
@@ -26,7 +25,7 @@
                 {{ sortIndicator(column.key) }}
               </span>
             </button>
-            <span v-else :class="column.smVisible ? 'hidden md:inline' : ''">
+            <span v-else>
               {{ column.label }}
             </span>
           </th>
@@ -51,8 +50,8 @@
         </tr>
         <template v-else>
           <tr
-            v-for="(row, rowIndex) in sortedRows"
-            :key="getRowKey(row, rowIndex)"
+            v-for="row in sortedRows"
+            :key="row.name"
             class="text-sm text-surface-fg transition-colors hocus:bg-page-bg/60"
           >
             <td
@@ -63,12 +62,7 @@
                 column.hiddenOnSmall && 'hidden sm:table-cell',
               ]"
             >
-              <slot
-                v-if="hasSlot(column.key)"
-                :name="`${column.key}-data`"
-                :row="row"
-              />
-              <span v-else>{{ getCellText(row, column.key) }}</span>
+              <slot :name="`${column.key}-data`" :row="row" />
             </td>
           </tr>
         </template>
@@ -78,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, useSlots, watch } from 'vue'
+import { computed, ref } from 'vue'
 
 type SortDirection = 'asc' | 'desc'
 
@@ -86,7 +80,6 @@ interface TableColumn {
   key: string
   label: string
   sortable?: boolean
-  smVisible?: boolean
   hiddenOnSmall?: boolean
   indentedOnSmall?: boolean
 }
@@ -98,35 +91,13 @@ interface TableSort {
 
 const props = defineProps<{
   columns: TableColumn[]
-  rows: Record<string, unknown>[]
+  rows: (Record<string, unknown> & { name: string })[]
   sort?: TableSort
   loading?: boolean
   errorMessage?: string
 }>()
 
-const slots = useSlots()
 const activeSort = ref<TableSort | null>(props.sort ? { ...props.sort } : null)
-
-watch(
-  () => props.sort,
-  (sort) => {
-    activeSort.value = sort ? { ...sort } : null
-  },
-  { deep: true },
-)
-
-const hasSlot = (key: string) => {
-  return Boolean(slots[`${key}-data`])
-}
-
-const getCellValue = (row: Record<string, unknown>, key: string) => {
-  return row[key]
-}
-
-const getCellText = (row: Record<string, unknown>, key: string) => {
-  const value = getCellValue(row, key)
-  return value == null ? '' : String(value)
-}
 
 const compareValues = (left: unknown, right: unknown) => {
   if (left == null && right == null) {
@@ -152,10 +123,7 @@ const sortedRows = computed(() => {
 
   const { column, direction } = activeSort.value
   return renderedRows.sort((left, right) => {
-    const result = compareValues(
-      getCellValue(left, column),
-      getCellValue(right, column),
-    )
+    const result = compareValues(left[column], right[column])
     return direction === 'asc' ? result : -result
   })
 })
@@ -192,9 +160,5 @@ const getAriaSort = (column: TableColumn) => {
   }
 
   return activeSort.value.direction === 'asc' ? 'ascending' : 'descending'
-}
-
-const getRowKey = (row: Record<string, unknown>, index: number) => {
-  return String(row.name ?? row.id ?? index)
 }
 </script>

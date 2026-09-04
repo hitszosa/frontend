@@ -28,9 +28,4 @@ export default defineConfig({
     prefetchAll: true,
     defaultStrategy: 'hover',
   },
-  vite: {
-    define: {
-      'import.meta.env.PUBLIC_MOCK': JSON.stringify(useMockData),
-    },
-  },
 })

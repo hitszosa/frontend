@@ -1,4 +1,5 @@
 ---
+import '../../styles/content.css';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/LandingLayout.astro';
 import Badge from '../../components/Badge.astro';
@@ -45,13 +46,8 @@ const dateLabel = endDate
 
 <Layout title={`${title} | HITSZ OSA`} description={summary}>
   <article class="mx-auto max-w-3xl py-12 md:py-16">
-    <a
-      href="/updates"
-      class="landing-link group ui-mono text-sm"
-      >← <span
-        class="landing-link-label"
-        >返回动态</span
-      ></a
+    <a href="/updates" class="landing-link group ui-mono text-sm"
+      >← <span class="landing-link-label">返回动态</span></a
     >
 
     {cover && (
@@ -97,84 +93,15 @@ const dateLabel = endDate
       </dl>
     </header>
 
-    <div class="event-content mt-10">
+    <div class="content-body mt-10">
       <Content components={{ RelatedLink }} />
     </div>
 
     <footer class="mt-12 border-t border-surface-border pt-8">
-      <a
-        href="/updates"
-        class="landing-link group text-sm"
-        ><span
-          class="landing-link-label"
-          >查看全部动态</span
-        > →</a
+      <a href="/updates" class="landing-link group text-sm"
+        ><span class="landing-link-label">查看全部动态</span>
+        →</a
       >
     </footer>
   </article>
-
-  <style>
-  .event-content :global(h2) {
-    margin-top: 2.75rem;
-    color: var(--ui-surface-fg);
-    font-size: 1.375rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-  }
-
-  .event-content :global(h3) {
-    margin-top: 2rem;
-    color: var(--ui-surface-fg);
-    font-size: 1.05rem;
-    font-weight: 650;
-  }
-
-  .event-content :global(p),
-  .event-content :global(li) {
-    color: var(--ui-page-fg);
-    font-size: 1rem;
-    line-height: 1.9;
-  }
-
-  .event-content :global(p) {
-    margin-top: 1.1rem;
-  }
-  .event-content :global(ul),
-  .event-content :global(ol) {
-    margin-top: 1rem;
-    list-style: revert;
-    padding-left: 1.4rem;
-  }
-  .event-content :global(li + li) {
-    margin-top: 0.45rem;
-  }
-  .event-content :global(strong) {
-    color: var(--ui-surface-fg);
-    font-weight: 650;
-  }
-  .event-content :global(a) {
-    color: var(--ui-primary);
-    text-underline-offset: 0.2em;
-  }
-  .event-content :global(code) {
-    border-radius: 0.25rem;
-    background: var(--ui-inset);
-    padding: 0.15em 0.4em;
-    font-family: var(--ui-font-mono, ui-monospace, monospace);
-    font-size: 0.9em;
-    color: var(--ui-inset-fg);
-  }
-  .event-content :global(blockquote) {
-    margin: 1.75rem 0;
-    border-left: 2px solid var(--ui-primary);
-    padding-left: 1rem;
-  }
-  .event-content :global(img) {
-    display: block;
-    max-width: 100%;
-    height: auto;
-    margin: 2rem auto;
-    border-radius: 0.75rem;
-  }
-  </style>
 </Layout>

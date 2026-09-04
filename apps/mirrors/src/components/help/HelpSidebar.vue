@@ -3,7 +3,7 @@ import { Icon as IconifyIcon } from '@iconify/vue'
 import { storeToRefs } from 'pinia'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 
-import { useHelpListStore } from '@components/index/MirrorList/HelpListStore'
+import helpList from '@generated/help/help-list.json'
 import { useMirrorListStore } from '@components/index/MirrorList/MirrorListStore'
 import Tooltip from '@hitszosa/ui/components/Tooltip.vue'
 
@@ -12,11 +12,10 @@ const props = defineProps<{
 }>()
 
 const { rows, loading, errorMessage } = storeToRefs(useMirrorListStore())
-const { helpList } = storeToRefs(useHelpListStore())
 const filter = ref('')
-const helpSet = computed(() => new Set(helpList.value))
+const helpSet = new Set(helpList)
 const fallbackRows = computed(() =>
-  helpList.value.map((name, id) => ({
+  helpList.map((name, id) => ({
     id,
     name,
     files: `/${name}/`,
