@@ -195,6 +195,10 @@ document.addEventListener('astro:page-load', setupParticleWaves);
 </script>
 
 <style>
+:global(html) {
+  overflow-x: clip;
+}
+
 .particle-wave-shell {
   position: absolute;
   top: 0;
