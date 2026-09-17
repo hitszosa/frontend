@@ -36,7 +36,12 @@ const commonRoutes = commonPageIds
     <aside
       class="hidden min-h-0 overflow-hidden border-r border-surface-border bg-surface md:block"
     >
-      <HelpSidebar client:load transition:persist activePageId="" />
+      <HelpSidebar
+        client:load
+        transition:persist="help-side-bar"
+        transition:animate="none"
+        activePageId=""
+      />
     </aside>
 
     <section
