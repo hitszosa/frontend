@@ -1,51 +1,48 @@
 ---
-import { ClientRouter } from "astro:transitions";
-import "../styles/global.css";
-import SiteFooter from "./SiteFooter.astro";
+import { ClientRouter } from 'astro:transitions'
+import '../styles/global.css'
+import SiteFooter from './SiteFooter.astro'
 import SiteHeader, {
   type SiteId,
   type SiteServiceLink,
-} from "./SiteHeader.astro";
+} from './SiteHeader.astro'
 
 interface Props {
-  activeSite?: SiteId;
-  title?: string;
-  description?: string;
-  immersive?: boolean;
-  services?: SiteServiceLink[];
+  activeSite?: SiteId
+  title?: string
+  description?: string
+  immersive?: boolean
+  services?: SiteServiceLink[]
 }
 
 const {
-  activeSite = "landing",
+  activeSite = 'landing',
   title: providedTitle,
   description: providedDescription,
   immersive = false,
   services: serviceLinks,
-} = Astro.props;
+} = Astro.props
 
 const site =
-  activeSite === "landing"
+  activeSite === 'landing'
     ? {
-        origin: "https://www.osa.moe",
-        title: "HITSZ OSA — 哈尔滨工业大学（深圳）开源技术协会",
+        origin: 'https://www.osa.moe',
+        title: 'HITSZ OSA — 哈尔滨工业大学（深圳）开源技术协会',
         description:
-          "哈尔滨工业大学（深圳）开源技术协会：运营开源软件镜像站、技术 Wiki 与 Weekly，举办讲座、沙龙与开源活动。",
+          '哈尔滨工业大学（深圳）开源技术协会：运营开源软件镜像站、技术 Wiki 与 Weekly，举办讲座、沙龙与开源活动。',
       }
     : {
-        origin: "https://mirrors.osa.moe",
-        title: "HITSZ OSA Mirrors",
-        description: "哈尔滨工业大学（深圳）开源技术协会开源软件镜像站",
-      };
+        origin: 'https://mirrors.osa.moe',
+        title: 'HITSZ OSA Mirrors',
+        description: '哈尔滨工业大学（深圳）开源技术协会开源软件镜像站',
+      }
 
-const title = providedTitle ?? site.title;
-const description = providedDescription ?? site.description;
-const currentPath = Astro.url.pathname;
-const canonicalUrl = new URL(currentPath, Astro.site ?? site.origin);
-const feedUrl = new URL("/rss.xml", Astro.site ?? site.origin);
-const socialImageUrl = new URL(
-  "/icons/icon-512x512.png",
-  "https://www.osa.moe",
-);
+const title = providedTitle ?? site.title
+const description = providedDescription ?? site.description
+const currentPath = Astro.url.pathname
+const canonicalUrl = new URL(currentPath, Astro.site ?? site.origin)
+const feedUrl = new URL('/rss.xml', Astro.site ?? site.origin)
+const socialImageUrl = new URL('/icons/icon-512x512.png', 'https://www.osa.moe')
 ---
 
 <!doctype html>
@@ -55,73 +52,68 @@ const socialImageUrl = new URL(
   data-theme-storage-key="theme-preference"
 >
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="x-ua-compatible" content="IE=edge" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
     <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalUrl} />
-    {
-      activeSite === "landing" && (
+    <meta name="description" content={description}>
+    <link rel="canonical" href={canonicalUrl}>
+    {activeSite === "landing" && (
         <link
           rel="alternate"
           type="application/rss+xml"
           title="HITSZ OSA 动态"
           href={feedUrl}
         />
-      )
-    }
-    <link rel="icon" href="/favicon.ico" />
+      )}
+    <link rel="icon" href="/favicon.ico">
     {activeSite === "landing" && <link rel="manifest" href="/manifest.json" />}
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:site_name" content="HITSZ OSA" />
-    <meta property="og:image" content={socialImageUrl} />
-    <meta property="og:image:width" content="512" />
-    <meta property="og:image:height" content="512" />
-    <meta property="og:image:alt" content="HITSZ OSA 标志" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={socialImageUrl} />
-    <meta name="theme-color" content="#f8fafc" />
+    <meta property="og:type" content="website">
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+    <meta property="og:url" content={canonicalUrl}>
+    <meta property="og:site_name" content="HITSZ OSA">
+    <meta property="og:image" content={socialImageUrl}>
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:image:alt" content="HITSZ OSA 标志">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content={title}>
+    <meta name="twitter:description" content={description}>
+    <meta name="twitter:image" content={socialImageUrl}>
+    <meta name="theme-color" content="#f8fafc">
     <script is:inline>
-      // Run synchronously before the first paint to avoid a light-theme flash.
-      const root = document.documentElement;
-      const isThemeMode = (value) =>
-        value === "light" || value === "dark" || value === "system";
-      const storageKey = root.dataset.themeStorageKey ?? "theme-preference";
-      const defaultMode = isThemeMode(root.dataset.defaultThemeMode)
-        ? root.dataset.defaultThemeMode
-        : "system";
-      let mode = defaultMode;
+    // Run synchronously before the first paint to avoid a light-theme flash.
+    const root = document.documentElement
+    const isThemeMode = (value) =>
+      value === 'light' || value === 'dark' || value === 'system'
+    const storageKey = root.dataset.themeStorageKey ?? 'theme-preference'
+    const defaultMode = isThemeMode(root.dataset.defaultThemeMode)
+      ? root.dataset.defaultThemeMode
+      : 'system'
+    let mode = defaultMode
 
-      try {
-        const storedMode = localStorage.getItem(storageKey);
-        if (isThemeMode(storedMode)) mode = storedMode;
-      } catch {
-        const domMode = root.dataset.theme;
-        if (isThemeMode(domMode)) mode = domMode;
-      }
+    try {
+      const storedMode = localStorage.getItem(storageKey)
+      if (isThemeMode(storedMode)) mode = storedMode
+    } catch {
+      const domMode = root.dataset.theme
+      if (isThemeMode(domMode)) mode = domMode
+    }
 
-      const resolvedMode =
-        mode === "system"
-          ? window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light"
-          : mode;
+    const resolvedMode =
+      mode === 'system'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+        : mode
 
-      root.classList.toggle("dark", resolvedMode === "dark");
-      root.dataset.theme = mode;
-      root.style.colorScheme = resolvedMode;
-      document
-        .querySelector('meta[name="theme-color"]')
-        ?.setAttribute(
-          "content",
-          resolvedMode === "dark" ? "#1e293b" : "#ffffff",
-        );
+    root.classList.toggle('dark', resolvedMode === 'dark')
+    root.dataset.theme = mode
+    root.style.colorScheme = resolvedMode
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', resolvedMode === 'dark' ? '#1e293b' : '#ffffff')
     </script>
     <slot name="head" />
   </head>

@@ -22,8 +22,8 @@
     "@hitszosa/ui": "workspace:*",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "catalog:",
-    "sharp": "^0.34.5",
-    "tailwindcss": "catalog:"
+    "tailwindcss": "catalog:",
+    "remark-gfm": "^4.0.1"
   },
   "license": "ISC",
   "devDependencies": {

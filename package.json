@@ -38,10 +38,13 @@
     "postinstall": "bun run nix:generate-deps",
     "nix:generate-deps": "bunx bun2nix --output-file bun.nix",
     "format": "turbo run format",
-    "format:check": "turbo run format:check"
+    "format:check": "turbo run format:check",
+    "images:compress": "bun scripts/compress-images.mjs",
+    "images:check": "bun scripts/compress-images.mjs --check"
   },
   "devDependencies": {
     "bun2nix": "2.1.2",
+    "sharp": "^0.35.4",
     "sherif": "1.13.0",
     "turbo": "^2.5.0"
   }

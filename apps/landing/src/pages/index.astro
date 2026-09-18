@@ -1,23 +1,23 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection } from 'astro:content';
 import {
   osaLogoAlt,
   osaLogoMono,
   osaLogoPub,
   osaLogoVtuber,
   osaLogoDefault,
-} from "@hitszosa/ui";
-import Layout from "../layouts/LandingLayout.astro";
-import Badge from "../components/Badge.astro";
-import TagBadges from "../components/TagBadges.astro";
-import UpdateBoard from "../components/UpdateBoard.astro";
-import FriendLinkCard from "../components/FriendLinkCard.astro";
-import { getUpdates } from "../lib/updates";
+} from '@hitszosa/ui';
+import Layout from '../layouts/LandingLayout.astro';
+import Badge from '../components/Badge.astro';
+import TagBadges from '../components/TagBadges.astro';
+import UpdateBoard from '../components/UpdateBoard.astro';
+import FriendLinkCard from '../components/FriendLinkCard.astro';
+import { getUpdates } from '../lib/updates';
 
-const services = (await getCollection("services", ({ data }) => !data.hide))
+const services = (await getCollection('services', ({ data }) => !data.hide))
   .filter((item) => item.data.featured)
   .sort((a, b) => a.data.order - b.data.order);
-const friendLinks = (await getCollection("friendLinks")).sort(
+const friendLinks = (await getCollection('friendLinks')).sort(
   (a, b) => a.data.order - b.data.order,
 );
 const easterEggLogos = [
@@ -31,21 +31,33 @@ const now = new Date();
 const updates = await getUpdates(now);
 const feed = updates.slice(0, 6);
 const formatDate = (date: Date) =>
-  new Intl.DateTimeFormat("zh-CN", {
-    month: "2-digit",
-    day: "2-digit",
+  new Intl.DateTimeFormat('zh-CN', {
+    month: '2-digit',
+    day: '2-digit',
   }).format(date);
 const updateRecords = updates;
-const earliestRecord = updateRecords.length
-  ? new Date(Math.min(...updateRecords.map((entry) => entry.date.getTime())))
-  : new Date(
-      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 125),
-    );
+// Anchor at the latest record, but never in the future (upcoming events may
+// be dated ahead of now). heatmapEnd is the exclusive next-Sunday boundary.
+const anchor = updateRecords.length
+  ? new Date(
+      Math.min(
+        Math.max(...updateRecords.map((entry) => entry.date.getTime())),
+        now.getTime(),
+      ),
+    )
+  : now;
+const heatmapEnd = new Date(
+  Date.UTC(
+    anchor.getUTCFullYear(),
+    anchor.getUTCMonth(),
+    anchor.getUTCDate() + (7 - anchor.getUTCDay()),
+  ),
+);
 const heatmapStart = new Date(
   Date.UTC(
-    earliestRecord.getUTCFullYear(),
-    earliestRecord.getUTCMonth(),
-    earliestRecord.getUTCDate() - earliestRecord.getUTCDay(),
+    heatmapEnd.getUTCFullYear(),
+    heatmapEnd.getUTCMonth(),
+    heatmapEnd.getUTCDate() - 126,
   ),
 );
 const recordsByDay = new Map<string, number>();
@@ -77,7 +89,8 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
         d="M-120 84 C220 15 650 245 1120 150"
         fill="none"
         stroke="#e8c95c"
-        stroke-width="2"></path>
+        stroke-width="2"
+      ></path>
       <g class="moving-node" data-moving-node>
         <g data-node-visual>
           <circle r="5" fill="#e6c24f"></circle>
@@ -98,7 +111,8 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
         d="M-120 300 C260 195 690 170 1120 55"
         fill="none"
         stroke="#94a4e7"
-        stroke-width="2"></path>
+        stroke-width="2"
+      ></path>
       <g class="moving-node" data-moving-node>
         <g data-node-visual>
           <circle r="12" fill="none" stroke="#94a4e7" stroke-width="2"></circle>
@@ -120,7 +134,8 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
         d="M-120 270 C260 165 700 280 1120 220"
         fill="none"
         stroke="#c2b7e2"
-        stroke-width="2"></path>
+        stroke-width="2"
+      ></path>
       <g class="moving-node" data-moving-node>
         <g data-node-visual>
           <circle r="5" fill="#bcaee0"></circle>
@@ -156,7 +171,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
             style="--enter-order: 1"
           >
             HITSZ
-            <ruby class="title-ruby whitespace-nowrap outline-none" tabindex="0"
+            <ruby class="title-ruby whitespace-nowrap outline-none"
               >开源技术协会<rt
                 ><span
                   class="title-expansion whitespace-nowrap ui-mono text-xs font-medium tracking-[0.16em] text-muted-fg"
@@ -186,7 +201,8 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
               ><iconify-icon
                 icon="simple-icons:github"
                 aria-hidden="true"
-                class="text-base"></iconify-icon>
+                class="text-base"
+              ></iconify-icon>
               <span class="github-handle"
                 ><span class="github-handle-text">@hitszosa</span></span
               ></a
@@ -219,12 +235,8 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
               records</span
             >
           </figcaption>
-          <div
-            class="mt-4 grid grid-flow-col grid-rows-7 gap-1"
-            aria-label="2026 年动态记录热力图"
-          >
-            {
-              heatmapDays.map((day, index) => (
+          <div class="mt-4 grid grid-flow-col grid-rows-7 gap-1">
+            {heatmapDays.map((day, index) => (
                 <span
                   title={`${day.date.toLocaleDateString("zh-CN")}：${day.count} 条记录`}
                   style={`--heat-index: ${index}`}
@@ -239,18 +251,15 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
                           : "bg-primary",
                   ]}
                 />
-              ))
-            }
+              ))}
           </div>
           <div
             class="mt-3 flex items-center justify-between text-[10px] text-muted-fg"
           >
             <span class="ui-mono"
-              >{
-                heatmapStart.toLocaleDateString("zh-CN", {
+              >{heatmapStart.toLocaleDateString("zh-CN", {
                   month: "short",
-                })
-              }</span
+                })}</span
             ><span>动态</span>
           </div>
         </figure>
@@ -283,8 +292,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
         data-landing-reveal
         data-landing-stagger
       >
-        {
-          feed.map((entry, index) => (
+        {feed.map((entry, index) => (
             <li class="border-b border-surface-border text-base last:border-0">
               <a
                 href={entry.href}
@@ -317,8 +325,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
                 </time>
               </a>
             </li>
-          ))
-        }
+          ))}
       </ul>
     </section>
 
@@ -329,14 +336,14 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
             SERVICES &amp; PROJECTS / 服务与项目
           </h2>
           <a href="/services" class="landing-link group ui-mono text-xs"
-            ><span class="landing-link-label">更多</span> →</a
+            ><span class="landing-link-label">更多</span>
+            →</a
           >
         </div>
         <ul
           class="mt-6 divide-y divide-surface-border border-y border-surface-border"
         >
-          {
-            services.map((item) => (
+          {services.map((item) => (
               <li>
                 <a
                   href={item.data.href}
@@ -371,8 +378,7 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
                   </span>
                 </a>
               </li>
-            ))
-          }
+            ))}
         </ul>
       </div>
       <div data-landing-reveal style="--landing-reveal-delay: 90ms">
@@ -381,7 +387,8 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
             LINKS / 友链
           </h2>
           <a href="/links" class="landing-link group ui-mono text-xs"
-            ><span class="landing-link-label">全部</span> →</a
+            ><span class="landing-link-label">全部</span>
+            →</a
           >
         </div>
         <div class="mt-6 grid gap-3 sm:grid-cols-2" data-landing-stagger>
@@ -391,261 +398,258 @@ const heatmapDays = Array.from({ length: 126 }, (_, index) => {
     </section>
   </div>
   <script>
-    const revealLogoEasterEgg = () => {
-      const background = document.querySelector<SVGSVGElement>(
-        "[data-easter-egg-logos]",
-      );
-      if (
-        !background ||
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      ) {
-        return;
-      }
+  const revealLogoEasterEgg = () => {
+    const background = document.querySelector<SVGSVGElement>(
+      '[data-easter-egg-logos]',
+    );
+    if (
+      !background ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      return;
+    }
 
-      if (background.dataset.logoInitialized === "true") return;
-      background.dataset.logoInitialized = "true";
+    if (background.dataset.logoInitialized === 'true') return;
+    background.dataset.logoInitialized = 'true';
 
-      const logos = JSON.parse(
-        background.dataset.easterEggLogos ?? "[]",
-      ) as string[];
-      const nodes = Array.from(
-        background.querySelectorAll<SVGGElement>("[data-moving-node]"),
-      );
-      const namespace = "http://www.w3.org/2000/svg";
+    const logos = JSON.parse(
+      background.dataset.easterEggLogos ?? '[]',
+    ) as string[];
+    const nodes = Array.from(
+      background.querySelectorAll<SVGGElement>('[data-moving-node]'),
+    );
+    const namespace = 'http://www.w3.org/2000/svg';
 
-      for (const node of nodes) {
-        if (Math.random() >= 0.1) continue;
+    for (const node of nodes) {
+      if (Math.random() >= 0.1) continue;
 
-        const logo = logos[Math.floor(Math.random() * logos.length)];
-        const visual = node.querySelector("[data-node-visual]");
-        if (!logo || !visual) continue;
+      const logo = logos[Math.floor(Math.random() * logos.length)];
+      const visual = node.querySelector('[data-node-visual]');
+      if (!logo || !visual) continue;
 
-        const logoGroup = document.createElementNS(namespace, "g");
-        logoGroup.setAttribute("opacity", "0.8");
+      const logoGroup = document.createElementNS(namespace, 'g');
+      logoGroup.setAttribute('opacity', '0.8');
 
-        const image = document.createElementNS(namespace, "image");
-        image.setAttribute("href", logo);
-        image.setAttribute("x", "-17");
-        image.setAttribute("y", "-17");
-        image.setAttribute("width", "34");
-        image.setAttribute("height", "34");
-        image.setAttribute("preserveAspectRatio", "xMidYMid meet");
+      const image = document.createElementNS(namespace, 'image');
+      image.setAttribute('href', logo);
+      image.setAttribute('x', '-17');
+      image.setAttribute('y', '-17');
+      image.setAttribute('width', '34');
+      image.setAttribute('height', '34');
+      image.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 
-        const rotation = document.createElementNS(
-          namespace,
-          "animateTransform",
-        );
-        rotation.setAttribute("attributeName", "transform");
-        rotation.setAttribute("type", "rotate");
-        rotation.setAttribute("from", "0 0 0");
-        rotation.setAttribute("to", "360 0 0");
-        rotation.setAttribute("dur", "96s");
-        rotation.setAttribute("repeatCount", "indefinite");
+      const rotation = document.createElementNS(namespace, 'animateTransform');
+      rotation.setAttribute('attributeName', 'transform');
+      rotation.setAttribute('type', 'rotate');
+      rotation.setAttribute('from', '0 0 0');
+      rotation.setAttribute('to', '360 0 0');
+      rotation.setAttribute('dur', '96s');
+      rotation.setAttribute('repeatCount', 'indefinite');
 
-        logoGroup.append(image, rotation);
-        visual.replaceWith(logoGroup);
+      logoGroup.append(image, rotation);
+      visual.replaceWith(logoGroup);
+    }
+  };
+
+  const setupHeroParallax = () => {
+    const background = document.querySelector<SVGSVGElement>(
+      '[data-hero-parallax]',
+    );
+    if (
+      !background ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      return;
+    }
+
+    if (background.dataset.parallaxInitialized === 'true') return;
+    background.dataset.parallaxInitialized = 'true';
+
+    const layers = Array.from(
+      background.querySelectorAll<SVGGElement>('[data-parallax-speed]'),
+    );
+    let frameId = 0;
+
+    const update = () => {
+      frameId = 0;
+      const distance = window.scrollY;
+      for (const layer of layers) {
+        const speed = Number(layer.dataset.parallaxSpeed);
+        const offset = -distance * speed;
+        layer.style.setProperty('--hero-layer-offset', `${offset}px`);
       }
     };
 
-    const setupHeroParallax = () => {
-      const background = document.querySelector<SVGSVGElement>(
-        "[data-hero-parallax]",
-      );
-      if (
-        !background ||
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      ) {
-        return;
-      }
-
-      if (background.dataset.parallaxInitialized === "true") return;
-      background.dataset.parallaxInitialized = "true";
-
-      const layers = Array.from(
-        background.querySelectorAll<SVGGElement>("[data-parallax-speed]"),
-      );
-      let frameId = 0;
-
-      const update = () => {
-        frameId = 0;
-        const distance = window.scrollY;
-        for (const layer of layers) {
-          const speed = Number(layer.dataset.parallaxSpeed);
-          const offset = -distance * speed;
-          layer.style.setProperty("--hero-layer-offset", `${offset}px`);
-        }
-      };
-
-      const requestUpdate = () => {
-        if (frameId === 0) frameId = window.requestAnimationFrame(update);
-      };
-
-      window.addEventListener("scroll", requestUpdate, { passive: true });
-      requestUpdate();
-
-      document.addEventListener(
-        "astro:before-swap",
-        () => {
-          window.removeEventListener("scroll", requestUpdate);
-          if (frameId !== 0) window.cancelAnimationFrame(frameId);
-        },
-        { once: true },
-      );
+    const requestUpdate = () => {
+      if (frameId === 0) frameId = window.requestAnimationFrame(update);
     };
 
-    const initializeHomePage = () => {
-      revealLogoEasterEgg();
-      setupHeroParallax();
-    };
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    requestUpdate();
 
-    initializeHomePage();
-    document.addEventListener("astro:page-load", initializeHomePage);
+    document.addEventListener(
+      'astro:before-swap',
+      () => {
+        window.removeEventListener('scroll', requestUpdate);
+        if (frameId !== 0) window.cancelAnimationFrame(frameId);
+      },
+      { once: true },
+    );
+  };
+
+  const initializeHomePage = () => {
+    revealLogoEasterEgg();
+    setupHeroParallax();
+  };
+
+  initializeHomePage();
+  document.addEventListener('astro:page-load', initializeHomePage);
   </script>
   <style is:global>
-    .hero-enter {
-      animation: hero-enter 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
-      animation-delay: calc(var(--enter-order, 0) * 90ms + 80ms);
-    }
+  .hero-enter {
+    animation: hero-enter 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--enter-order, 0) * 90ms + 80ms);
+  }
 
-    @keyframes hero-enter {
-      from {
-        opacity: 0;
-        transform: translateY(1rem);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .update-map {
-      transform-origin: 70% 50%;
-    }
-
-    .update-map [style*="--heat-index"] {
-      animation: heat-cell-enter 360ms ease-out both;
-      animation-delay: calc(340ms + var(--heat-index) * 5ms);
-      transform-origin: center;
-    }
-
-    @keyframes heat-cell-enter {
-      from {
-        opacity: 0;
-        transform: scale(0.35);
-      }
-    }
-
-    .hero-background {
-      transform: translate3d(-50%, 0, 0);
-    }
-
-    .hero-parallax-layer {
-      --hero-layer-offset: 0px;
-      transform: translate3d(0, var(--hero-layer-offset), 0);
-      will-change: transform;
-    }
-
-    .hero-branch {
-      vector-effect: non-scaling-stroke;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      shape-rendering: geometricPrecision;
-    }
-
-    .title-ruby {
-      ruby-position: over;
-    }
-
-    .title-expansion {
-      display: inline-block;
+  @keyframes hero-enter {
+    from {
       opacity: 0;
-      transform: translateY(0.4rem);
-      transition:
-        opacity 280ms ease-out,
-        transform 280ms ease-out;
+      transform: translateY(1rem);
     }
-
-    .title-ruby:hover .title-expansion,
-    .title-ruby:focus-visible .title-expansion {
+    to {
       opacity: 1;
       transform: translateY(0);
     }
+  }
 
-    .github-handle {
-      position: relative;
-      display: inline-block;
-      width: 9ch;
-      white-space: nowrap;
-    }
+  .update-map {
+    transform-origin: 70% 50%;
+  }
 
-    .github-handle-text {
-      display: block;
-    }
+  .update-map [style*="--heat-index"] {
+    animation: heat-cell-enter 360ms ease-out both;
+    animation-delay: calc(340ms + var(--heat-index) * 5ms);
+    transform-origin: center;
+  }
 
-    .github-handle::after {
-      position: absolute;
-      top: 0.05em;
-      bottom: 0.05em;
-      left: 100%;
-      border-left: 1px solid currentColor;
-      content: "";
+  @keyframes heat-cell-enter {
+    from {
       opacity: 0;
+      transform: scale(0.35);
+    }
+  }
+
+  .hero-background {
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  .hero-parallax-layer {
+    --hero-layer-offset: 0px;
+    transform: translate3d(0, var(--hero-layer-offset), 0);
+    will-change: transform;
+  }
+
+  .hero-branch {
+    vector-effect: non-scaling-stroke;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    shape-rendering: geometricPrecision;
+  }
+
+  .title-ruby {
+    ruby-position: over;
+  }
+
+  .title-expansion {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.4rem);
+    transition:
+      opacity 280ms ease-out,
+      transform 280ms ease-out;
+  }
+
+  .title-ruby:hover .title-expansion,
+  .title-ruby:focus-visible .title-expansion {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .github-handle {
+    position: relative;
+    display: inline-block;
+    width: 9ch;
+    white-space: nowrap;
+  }
+
+  .github-handle-text {
+    display: block;
+  }
+
+  .github-handle::after {
+    position: absolute;
+    top: 0.05em;
+    bottom: 0.05em;
+    left: 100%;
+    border-left: 1px solid currentColor;
+    content: "";
+    opacity: 0;
+  }
+
+  .github-link:hover .github-handle-text,
+  .github-link:focus-visible .github-handle-text {
+    animation: github-handle-type 640ms steps(9, end);
+  }
+
+  .github-link:hover .github-handle::after,
+  .github-link:focus-visible .github-handle::after {
+    animation: github-handle-caret 640ms steps(9, end);
+  }
+
+  @keyframes github-handle-type {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes github-handle-caret {
+    0% {
+      left: 0;
+      opacity: 1;
+    }
+    88% {
+      opacity: 1;
+    }
+    100% {
+      left: 100%;
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-enter,
+    .update-map [style*="--heat-index"] {
+      animation: none;
+    }
+
+    .title-expansion {
+      transform: none;
+      transition: none;
     }
 
     .github-link:hover .github-handle-text,
-    .github-link:focus-visible .github-handle-text {
-      animation: github-handle-type 640ms steps(9, end);
-    }
-
+    .github-link:focus-visible .github-handle-text,
     .github-link:hover .github-handle::after,
     .github-link:focus-visible .github-handle::after {
-      animation: github-handle-caret 640ms steps(9, end);
+      animation: none;
     }
 
-    @keyframes github-handle-type {
-      from {
-        clip-path: inset(0 100% 0 0);
-      }
-      to {
-        clip-path: inset(0 0 0 0);
-      }
+    .moving-node {
+      display: none;
     }
-
-    @keyframes github-handle-caret {
-      0% {
-        left: 0;
-        opacity: 1;
-      }
-      88% {
-        opacity: 1;
-      }
-      100% {
-        left: 100%;
-        opacity: 0;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .hero-enter,
-      .update-map [style*="--heat-index"] {
-        animation: none;
-      }
-
-      .title-expansion {
-        transform: none;
-        transition: none;
-      }
-
-      .github-link:hover .github-handle-text,
-      .github-link:focus-visible .github-handle-text,
-      .github-link:hover .github-handle::after,
-      .github-link:focus-visible .github-handle::after {
-        animation: none;
-      }
-
-      .moving-node {
-        display: none;
-      }
-    }
+  }
   </style>
 </Layout>

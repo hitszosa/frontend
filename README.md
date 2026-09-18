@@ -2,6 +2,8 @@
 
 哈尔滨工业大学（深圳）开源技术协会前端 Monorepo。仓库统一维护协会门户、开源软件镜像站和共享 UI，使用 Bun Workspaces 与 Turborepo 管理依赖和任务。
 
+![index](assets/imgs/index.png)
+
 ## 工作区
 
 | 工作区 | 包名 | 说明 | 生产地址 |
