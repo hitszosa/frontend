@@ -57,7 +57,7 @@ const events = defineCollection({
       endDate: z.coerce.date().optional(),
       location: z.string().default(''),
       type: z
-        .enum(['讲座', '沙龙', '比赛', '团建', '例会', '其他'])
+        .enum(['讲座', '沙龙', '比赛', '团建', '例会', '招新', '其他'])
         .default('其他'),
       summary: z.string(),
       hide: z.boolean().default(false),
