@@ -1,0 +1,45 @@
+---
+import Badge from './Badge.astro';
+import { EVENT_STATUS_TONE } from '../lib/updates';
+import { entryHref, type EventEntry, type resolveSeries } from '../lib/series';
+interface Props {
+  events: EventEntry[];
+  data: ReturnType<typeof resolveSeries>;
+}
+const { events, data } = Astro.props;
+const activeIds = new Set(
+  events
+    .filter((event) => event.data.status === '进行中')
+    .map((event) => event.id),
+);
+if (!activeIds.size) {
+  const next = events.find((event) => event.data.status === '未开始');
+  if (next) activeIds.add(next.id);
+}
+const dateLabel = (date: Date) =>
+  date.toISOString().slice(0, 10).replaceAll('-', '.');
+---
+
+<ol
+  class="relative mt-6 before:absolute before:bottom-6 before:left-2 before:top-6 before:w-px before:bg-primary/40"
+>
+  {events.map((event) => {
+    const report = event.data.status === '已结束' ? data.publicReport(event) : undefined;
+    const active = activeIds.has(event.id);
+    return <li class:list={['relative mb-2 ml-8 grid min-w-0 gap-3 rounded-lg border p-4 last:mb-0 lg:grid-cols-[7rem_5rem_minmax(0,1fr)_7rem] lg:items-start lg:gap-5', active ? 'border-graph-primary/40 bg-linear-to-r from-graph-primary/10 to-surface/30' : 'border-surface-border bg-surface/40 lg:border-transparent lg:bg-transparent']}>
+      <span class:list={['absolute -left-[30px] top-6 h-3 w-3 rounded-full border-2 border-page-bg', active ? 'bg-graph-primary ring-4 ring-graph-primary/25' : event.data.status === '已结束' ? 'bg-success' : 'bg-page-bg ring-1 ring-graph-primary']} aria-hidden="true"></span>
+      <div class:list={['ui-mono text-xs leading-6', active ? 'text-graph-primary' : 'text-muted-fg']}><time datetime={event.data.date.toISOString()}>{dateLabel(event.data.date)}</time>{event.data.endDate && <><span class="block">至</span><time datetime={event.data.endDate.toISOString()}>{dateLabel(event.data.endDate)}</time></>}</div>
+      <div><Badge tone={EVENT_STATUS_TONE[event.data.status]}>{event.data.status}</Badge>{active && <p class="mt-2 text-[11px] text-primary">{event.data.status === '进行中' ? '当前活动' : '下一场活动'}</p>}</div>
+      <div class="min-w-0">
+        <h3 class="break-words text-base font-semibold leading-6 text-page-fg">{event.data.title}</h3>
+        <p class="mt-1 break-words text-xs leading-6 text-muted-fg">{event.data.summary}</p>
+        {event.data.location && <p class="mt-1 text-xs text-muted-fg">地点：{event.data.location}</p>}
+        {event.data.resources.length > 0 && <ul class="mt-2 flex flex-wrap gap-x-4 gap-y-2 text-xs" aria-label="活动资料">{event.data.resources.map((resource) => <li><a href={resource.href} class="landing-link break-all"><span class="landing-link-label">{resource.label} ↗</span></a></li>)}</ul>}
+      </div>
+      <div class="flex flex-wrap gap-3 text-xs lg:justify-end lg:pt-1">
+        <a href={entryHref(report ?? event)} class="landing-link whitespace-nowrap"><span class="landing-link-label">{report ? '查看回顾' : '查看活动信息'} →</span></a>
+        {report && <a href={entryHref(event)} class="landing-link"><span class="landing-link-label">活动信息</span></a>}
+      </div>
+    </li>;
+  })}
+</ol>

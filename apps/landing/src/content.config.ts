@@ -17,6 +17,15 @@ const articlesBase = useMockContent
   ? './examples/content/articles'
   : '../../content/articles';
 
+const seriesBase = useMockContent
+  ? './examples/content/series'
+  : '../../content/series';
+
+const associations = {
+  series: z.string().min(1).optional(),
+  event: z.string().min(1).optional(),
+};
+
 const selectedContent = (base: string, pattern: string) => {
   const loader = glob({ base, pattern });
 
@@ -55,6 +64,22 @@ const events = defineCollection({
       title: z.string(),
       date: z.coerce.date(),
       endDate: z.coerce.date().optional(),
+      series: associations.series,
+      report: z.string().min(1).optional(),
+      resources: z
+        .array(
+          z.object({
+            label: z.string().min(1),
+            href: z
+              .string()
+              .refine(
+                (value) =>
+                  /^https?:\/\//.test(value) || /^\/(?!\/)/.test(value),
+                'Use an HTTP(S) URL or an absolute site path',
+              ),
+          }),
+        )
+        .default([]),
       location: z.string().default(''),
       type: z
         .enum(['讲座', '沙龙', '比赛', '团建', '例会', '招新', '其他'])
@@ -79,6 +104,7 @@ const articles = defineCollection({
       hide: z.boolean().default(false),
       pinned: z.boolean().default(false),
       importance: z.enum(['normal', 'important']).default('important'),
+      ...associations,
       author: z.string().optional(),
       cover: z.union([z.url(), z.string().startsWith('/'), image()]).optional(),
       coverAlt: z.string().optional(),
@@ -133,13 +159,33 @@ const announcements = defineCollection({
       pinned: z.boolean().default(false),
       importance: z.enum(['normal', 'important']).default('normal'),
       date: z.coerce.date(),
+      ...associations,
       expires: z.coerce.date().optional(),
       cover: z.union([z.url(), z.string().startsWith('/'), image()]).optional(),
       coverAlt: z.string().optional(),
     }),
 });
 
+const series = defineCollection({
+  loader: selectedContent(seriesBase, '**/[^_]*.{md,mdx}'),
+  schema: z
+    .object({
+      title: z.string(),
+      summary: z.string(),
+      start: z.coerce.date(),
+      end: z.coerce.date().optional(),
+      status: z.enum(['未开始', '进行中', '已结束']).default('未开始'),
+      tags: z.array(z.string()).default([]),
+      hide: z.boolean().default(false),
+    })
+    .refine((data) => !data.end || data.end >= data.start, {
+      message: 'Series end must not precede start',
+      path: ['end'],
+    }),
+});
+
 export const collections = {
+  series,
   services,
   events,
   articles,

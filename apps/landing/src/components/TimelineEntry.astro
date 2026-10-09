@@ -1,0 +1,42 @@
+---
+import Badge from './Badge.astro';
+import { EVENT_STATUS_TONE, type UpdateEntry } from '../lib/updates';
+import { formatSeriesDate } from '../lib/series';
+interface Props {
+  entry: UpdateEntry;
+  nested?: boolean;
+}
+const { entry, nested = false } = Astro.props;
+const tone =
+  entry.kind === 'article'
+    ? 'success'
+    : entry.kind === 'event'
+      ? 'secondary'
+      : entry.warning
+        ? 'warning'
+        : 'primary';
+---
+
+<li
+  class:list={['relative min-w-0', nested ? 'ml-3 grid grid-cols-[4rem_minmax(0,1fr)] gap-x-3 border-l border-graph-secondary/50 pb-3 pl-6 last:pb-0 sm:grid-cols-[5rem_minmax(0,1fr)]' : 'pb-6 pl-7 md:grid md:grid-cols-[9rem_minmax(0,1fr)] md:gap-8 md:pl-0']}
+>
+  <span
+    class:list={['absolute h-3 w-3 rounded-full border-2 border-page-bg', nested ? '-left-1.5 top-2 bg-graph-secondary' : 'left-0 top-2 md:left-[10rem] md:-translate-x-1/2', !nested && (entry.kind === 'article' ? 'bg-success' : entry.kind === 'event' ? 'bg-graph-secondary' : 'bg-graph-primary')]}
+    aria-hidden="true"
+  ></span>
+  <time
+    datetime={entry.date.toISOString()}
+    class="ui-mono text-xs leading-6 text-muted-fg md:pt-0"
+    >{nested ? entry.date.toISOString().slice(5, 10).replace('-', '.') : formatSeriesDate(entry.date)}</time
+  >
+  <div class="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
+    <a
+      href={entry.href}
+      class="min-w-0 break-words text-sm font-medium leading-6 text-surface-fg transition-colors hocus:text-primary"
+      >{entry.title}</a
+    >
+    <Badge tone={tone}>{entry.label}</Badge>
+    {entry.pinned && <Badge tone="primary">置顶</Badge>}
+    {entry.status && !nested && <Badge tone={EVENT_STATUS_TONE[entry.status]}>{entry.status}</Badge>}
+  </div>
+</li>

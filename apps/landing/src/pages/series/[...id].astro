@@ -1,0 +1,108 @@
+---
+import '../../styles/content.css';
+import { render } from 'astro:content';
+import SeriesBackdrop from '../../components/SeriesBackdrop.astro';
+import Layout from '../../layouts/LandingLayout.astro';
+import Badge from '../../components/Badge.astro';
+import RelatedLink from '../../components/content/RelatedLink.astro';
+import EventSchedule from '../../components/EventSchedule.astro';
+import { contentPath } from '../../lib/content';
+import {
+  getSeriesData,
+  entryHref,
+  formatSeriesDate,
+  type SeriesEntry,
+} from '../../lib/series';
+import { EVENT_STATUS_TONE } from '../../lib/updates';
+export async function getStaticPaths() {
+  const data = await getSeriesData();
+  return data.series.map((series) => ({
+    params: { id: contentPath(series.id) },
+    props: { series },
+  }));
+}
+interface Props {
+  series: SeriesEntry;
+}
+const { series } = Astro.props;
+const data = await getSeriesData();
+const { Content } = await render(series);
+const events = data.scheduleFor(series.id);
+const related = data.relatedFor(series.id);
+const current =
+  events.find((event) => event.data.status === '进行中') ??
+  events.find((event) => event.data.status === '未开始');
+const { title, summary, status, start, end, tags } = series.data;
+---
+
+<Layout title={`${title} | HITSZ OSA`} description={summary}>
+  <SeriesBackdrop />
+  <article class="mx-auto max-w-6xl py-8 md:py-10">
+    <a href="/updates/" class="landing-link ui-mono text-sm"
+      ><span class="landing-link-label">← 返回动态</span></a
+    >
+    <header
+      class="mt-6 grid gap-6 border-b border-surface-border pb-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]"
+    >
+      <div>
+        <p class="ui-mono mb-3 text-xs tracking-widest text-muted-fg">
+          SERIES / 系列活动
+        </p>
+        <h1
+          class="flex flex-wrap items-center gap-3 break-words text-3xl font-bold tracking-tight text-page-fg md:text-[2.5rem] md:leading-tight"
+        >
+          <span>{title}</span
+          ><Badge tone={EVENT_STATUS_TONE[status]} size="md">{status}</Badge>
+        </h1>
+        <p class="mt-4 flex flex-wrap items-center gap-2 text-sm text-muted-fg">
+          <svg
+            viewBox="0 0 24 24"
+            class="mr-1 h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"
+          >
+            <rect x="3" y="5" width="18" height="16" rx="2" />
+            <path d="M3 10h18M7 2v6M17 2v6" />
+          </svg>
+          <time datetime={start.toISOString()}>{formatSeriesDate(start)}</time>
+          {end && <> — <time datetime={end.toISOString()}>{formatSeriesDate(end)}</time></>}
+        </p>
+        <p class="mt-5 text-base leading-7 text-muted-fg">{summary}</p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          {tags.map((tag) => <Badge tone="muted" size="md">{tag}</Badge>)}
+        </div>
+      </div>
+      {current && <aside class="self-start rounded-lg border border-surface-border border-l-4 border-l-success bg-linear-to-br from-surface/60 to-surface/20 p-6 relative overflow-hidden" aria-label="当前或下一场活动">
+        <span class="ui-mono pointer-events-none absolute bottom-7 right-6 hidden text-7xl text-graph-secondary/15 sm:block" aria-hidden="true">&gt;_</span>
+        <p class="ui-mono text-xs text-primary">&gt;_ {current.data.status === "进行中" ? "当前活动" : "下一场活动"}</p>
+        <p class="ui-mono mt-4 text-4xl font-semibold text-page-fg">{current.data.date.toISOString().slice(5, 10).replace("-", ".")}</p>
+        <h2 class="relative mt-2 break-words text-lg font-semibold text-page-fg">{current.data.title}</h2>
+        {current.data.location && <p class="mt-3 flex items-center gap-2 text-sm text-muted-fg"><svg viewBox="0 0 24 24" class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="2.5" /></svg>{current.data.location}</p>}
+        <a href={entryHref(current)} class="landing-link relative mt-5 inline-block rounded-lg border border-primary/40 bg-primary/10 px-4 py-2 text-sm"><span class="landing-link-label">查看活动信息 →</span></a>
+      </aside>}
+    </header>
+    <div class="content-body mt-6 max-w-3xl text-sm">
+      <Content components={{ RelatedLink }} />
+    </div>
+    <section class="mt-8" aria-labelledby="schedule-heading">
+      <h2 id="schedule-heading" class="text-xl font-semibold text-page-fg">
+        系列日程
+        <span class="ml-3 text-xs font-normal text-muted-fg"
+          >{events.length}
+          场活动</span
+        >
+      </h2>
+      {events.length ? <EventSchedule events={events} data={data} /> : <p class="mt-4 text-sm text-muted-fg">活动日程待公布。</p>}
+    </section>
+    {related.length > 0 && <section class="mt-8" aria-labelledby="related-heading">
+      <h2 id="related-heading" class="text-xl font-semibold text-page-fg">相关公告与文章</h2>
+      <ul class="mt-6 space-y-4">{related.map((entry) => <li class="min-w-0 border-l-2 border-surface-border pl-4">
+        <div class="flex flex-wrap items-center gap-2 text-xs text-muted-fg"><Badge tone={entry.collection === 'articles' ? 'success' : 'primary'}>{entry.collection === 'articles' ? '文章' : '公告'}</Badge><time datetime={entry.data.date.toISOString()}>{formatSeriesDate(entry.data.date)}</time>{entry.data.pinned && <Badge tone="primary">置顶</Badge>}</div>
+        <a href={entryHref(entry)} class="landing-link mt-2 inline-block break-words font-semibold"><span class="landing-link-label">{entry.data.title}</span></a>
+        <p class="mt-2 break-words text-sm text-muted-fg">{entry.data.summary}</p>
+      </li>)}</ul>
+    </section>}
+  </article>
+</Layout>

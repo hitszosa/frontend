@@ -1,9 +1,16 @@
 ---
+import SeriesBackdrop from '../components/SeriesBackdrop.astro';
 import Layout from '../layouts/LandingLayout.astro';
-import UpdateItem from '../components/UpdateItem.astro';
+import SeriesCards from '../components/SeriesCards.astro';
+import GroupedUpdates from '../components/GroupedUpdates.astro';
+import { getSeriesData, groupUpdates } from '../lib/series';
 import { getUpdates } from '../lib/updates';
 
-const updates = await getUpdates();
+const [updates, seriesData] = await Promise.all([
+  getUpdates(),
+  getSeriesData(),
+]);
+const groups = groupUpdates(updates, seriesData);
 ---
 
 <Layout
@@ -11,32 +18,40 @@ const updates = await getUpdates();
   description="HITSZ OSA 动态：协会公告、活动信息与技术文章。"
   motionMode="marked"
 >
-  <div class="py-14">
-    <div class="flex items-baseline justify-between" data-landing-reveal>
-      <h1 class="ui-mono text-xs tracking-widest text-muted-fg">
-        UPDATES / 动态
-      </h1>
-      <div class="flex items-center gap-4">
-        <a
-          href="/rss.xml"
-          aria-label="订阅 HITSZ OSA RSS"
-          class="landing-link ui-mono text-xs"
-          ><span class="landing-link-label">RSS</span></a
+  <SeriesBackdrop />
+  <div class="py-8 md:py-10">
+    {!seriesData.series.length && <h1 class="sr-only">社区动态</h1>}
+    <SeriesCards series={seriesData.series} />
+    <section class="mt-6" aria-labelledby="timeline-heading">
+      <p class="ui-mono text-xs tracking-[0.3em] text-muted-fg">UPDATES</p>
+      <div class="mt-2 flex items-center justify-between gap-4">
+        <h2 id="timeline-heading" class="text-2xl font-bold text-page-fg">
+          活动动态
+        </h2>
+        <a href="/rss.xml" class="landing-link flex items-center gap-2 text-sm"
+          ><svg
+            viewBox="0 0 24 24"
+            class="h-5 w-5 text-info"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            aria-hidden="true"
+          >
+            <circle cx="5" cy="19" r="1" fill="currentColor" />
+            <path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16" />
+          </svg><span class="landing-link-label">RSS 订阅</span></a
         >
-        <span class="ui-mono text-xs text-muted-fg">{updates.length} 条</span>
       </div>
-    </div>
-
-    {updates.length > 0 ? (
-        <ul class="mt-10">
-          {updates.map((entry) => (
-            <UpdateItem entry={entry} />
-          ))}
-        </ul>
+      <p class="mt-3 text-sm text-muted-fg">
+        关注系列活动的最新动态，了解社区正在发生的事情。
+      </p>
+      {updates.length > 0 ? (
+        <GroupedUpdates groups={groups} />
       ) : (
         <p class="ui-mono mt-10 text-sm text-muted-fg" data-landing-reveal>
           # 暂无动态
         </p>
       )}
+    </section>
   </div>
 </Layout>

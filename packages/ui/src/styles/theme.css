@@ -18,8 +18,9 @@
 
   /* Typography: CJK body, Latin UI, and code/data labels. */
   --ui-font-sans:
-    "Noto Sans SC", "Noto Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
-  --ui-font-latin: "Ubuntu", "Noto Sans", sans-serif;
+    "Noto Sans SC", "Noto Sans", "PingFang SC", "Microsoft YaHei",
+    "WenQuanYi Micro Hei", sans-serif;
+  --ui-font-latin: "Ubuntu", "Noto Sans", "WenQuanYi Micro Hei", sans-serif;
   --ui-font-mono:
     "JetBrains Mono", "Cascadia Code", "SFMono-Regular",
     "Noto Sans Mono CJK SC", "Sarasa Mono SC", "Microsoft YaHei", monospace;
@@ -59,8 +60,9 @@
   --ui-scrollbar-thumb-active: rgb(226 232 240 / 72%);
 
   --ui-font-sans:
-    "Noto Sans SC", "Noto Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
-  --ui-font-latin: "Ubuntu", "Noto Sans", sans-serif;
+    "Noto Sans SC", "Noto Sans", "PingFang SC", "Microsoft YaHei",
+    "WenQuanYi Micro Hei", sans-serif;
+  --ui-font-latin: "Ubuntu", "Noto Sans", "WenQuanYi Micro Hei", sans-serif;
   --ui-font-mono:
     "JetBrains Mono", "Cascadia Code", "SFMono-Regular",
     "Noto Sans Mono CJK SC", "Sarasa Mono SC", "Microsoft YaHei", monospace;
