@@ -1,0 +1,28 @@
+---
+import {
+  getSeriesData,
+  entryHref,
+  type EventEntry,
+  type RelatedEntry,
+} from '../lib/series';
+interface Props {
+  entry: EventEntry | RelatedEntry;
+}
+const { entry } = Astro.props;
+const data = await getSeriesData();
+const series = data.seriesFor(entry);
+const event =
+  entry.collection !== 'events'
+    ? data.publicEvent(entry.data.event)
+    : undefined;
+const report =
+  entry.collection === 'events' ? data.publicReport(entry) : undefined;
+const resources = entry.collection === 'events' ? entry.data.resources : [];
+---
+
+{(series || event || report || resources.length > 0) && <nav aria-label="相关内容与资料" class="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-sm">
+  {series && <a href={entryHref(series)} class="landing-link break-words"><span class="landing-link-label">所属系列：{series.data.title}</span></a>}
+  {event && <a href={entryHref(event)} class="landing-link break-words"><span class="landing-link-label">关联活动：{event.data.title}</span></a>}
+  {report && <a href={entryHref(report)} class="landing-link"><span class="landing-link-label">查看回顾 →</span></a>}
+  {resources.map((resource) => <a href={resource.href} class="landing-link break-all"><span class="landing-link-label">{resource.label}</span></a>)}
+</nav>}

@@ -30,6 +30,7 @@ HITSZ OSA 官方门户：[osa.moe](https://www.osa.moe)。项目使用 Astro、M
   announcements/          # 两个站点共享的正式公告，使用 Markdown 或 MDX
   events/                 # 正式活动详情，使用 Markdown 或 MDX
   articles/               # 正式文章详情，使用 Markdown 或 MDX
+  series/                 # 正式系列介绍，使用 Markdown 或 MDX
   services/               # 正式服务与项目，使用 category 区分
   friend-links/           # 正式友链
 
@@ -37,6 +38,7 @@ examples/content/
   events/                 # 页面开发使用的示例活动
   announcements/          # 页面开发使用的示例公告
   articles/               # 页面开发使用的示例文章
+  series/                 # 页面开发使用的示例系列
 ```
 
 所有正式内容均存放在 Monorepo 根目录 `content/`。公告、活动和文章以同等地位显示在首页和 `/updates` 动态页。
@@ -75,3 +77,51 @@ examples/content/
 - `bun run lint:fix`：自动修复 ESLint 问题
 - `bun run format`：使用 Biome 格式化支持的源码
 - `bun run format:check`：使用 Biome 检查格式但不修改文件
+
+## 系列活动与内容关联
+
+正式系列放在根目录 `content/series/`。本地开发可在 `examples/content/series/` 添加演示系列，仅在 `MOCK=true` 时加载。
+系列使用 Markdown / MDX；`title`、`summary`、`start` 必填，`end` 可选且不能早于开始日期。
+`status` 手动维护为 `未开始`（默认）、`进行中` 或 `已结束`；`tags` 默认空数组，`hide` 默认 `false`。
+正文只维护系列介绍，活动列表由关联自动生成。
+
+```yaml
+---
+title: Linux 101 · 2026 秋
+summary: 从 Linux 入门到开源协作。
+start: 2026-10-12
+end: 2026-11-09
+status: 未开始
+tags: [Linux, 开源, 实践]
+---
+```
+
+活动可增加 `series`（系列 ID）、`report`（主回顾文章 ID）和 `resources`：
+
+```yaml
+series: linux101-2026-autumn
+report: linux101-first-review
+resources:
+  - label: 课件
+    href: https://example.org/slides.pdf
+```
+
+文章、公告可增加 `series` 或 `event`（活动 ID）。单场内容填写 `event`，自动继承活动所属系列；
+系列总预告、总结只填写 `series`。两者同时填写时必须一致。
+引用使用内容集合的完整 ID（例如 `2026/09/example/index`），页面 URL 会按现有约定去掉 `/index`。
+回顾文章的 `event` 如果填写，必须指向引用该文章的活动；系列归属也必须一致。
+不存在的引用、冲突的归属、错误的日期范围会导致构建失败，隐藏内容同样接受校验。
+资料链接支持 HTTP(S) 地址和以 `/` 开头的站内路径。
+
+一场活动只保留一个活动文件。结束后手动更新状态，在原活动添加 `report` 与资料链接；
+发布回顾文章不会增加活动场数。已作为主回顾展示的文章不会在系列页相关内容中重复出现。
+关联导航由详情页自动生成，迁移旧内容时可删除正文中重复的回顾链接。
+旧内容可以逐步添加关联字段，没有关联字段的内容仍保持原有行为。
+
+隐藏系列不生成页面或卡片，其公开关联内容仍作为普通动态展示；隐藏活动、文章不生成公开入口。
+活动回顾隐藏时，日程主入口退回活动信息。公告过期规则沿用动态页逻辑。
+系列状态不会根据当前日期自动变化。
+
+`/updates/` 展示按状态排序的系列卡片，以及默认折叠的系列动态。
+系列详情位于 `/series/<id>/`，展示介绍、按时间升序排列的活动日程与关联内容。
+首页、RSS 保持活动、公告、文章平铺展示，不推送系列本身，也不新增系列主导航。
