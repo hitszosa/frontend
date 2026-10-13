@@ -30,14 +30,9 @@ const groups = (['进行中', '未开始', '已结束'] as const)
 ---
 
 {groups.length > 0 && <section class="border-b border-surface-border pb-5" aria-labelledby="series-heading" id="series-activities">
-  <div class="flex flex-wrap items-start justify-between gap-6">
-  <div>
-  <p class="ui-mono text-xs tracking-[0.3em] text-muted-fg">ACTIVITIES</p>
-  <h1 id="series-heading" class="mt-2 text-3xl font-bold md:text-4xl text-page-fg">系列活动</h1>
+  <p class="ui-mono text-xs tracking-[0.3em] text-muted-fg">SERIES</p>
+  <h2 id="series-heading" class="mt-2 text-2xl font-bold text-page-fg">系列活动</h2>
   <p class="mt-2 text-sm text-muted-fg">围绕开源与技术实践，持续组织交流与学习。</p>
-  </div>
-  <blockquote class="hidden pt-8 text-right text-sm italic leading-7 text-muted-fg lg:block">“ 技术连接彼此，社区创造可能 ”<br /><span class="ui-mono text-xs">— HITSZ OSA</span></blockquote>
-  </div>
   <div class="mt-6 grid gap-4">
   {groups.map(({ status, title, description, entries }) => {
     const visible = status === '已结束' ? entries.slice(0, 3) : entries;

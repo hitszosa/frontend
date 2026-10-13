@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ site }) => {
   );
   return rss({
     title: 'HITSZ OSA 动态',
-    description: '哈尔滨工业大学（深圳）开源技术协会的公告、活动与技术文章。',
+    description: '哈尔滨工业大学（深圳）开源技术协会的公告、活动、系列介绍与技术文章。',
     site: site ?? 'https://www.osa.moe',
     items: updates.map((entry) => ({
       title: entry.title,

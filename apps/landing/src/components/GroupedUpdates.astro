@@ -1,7 +1,7 @@
 ---
 import TimelineEntry from './TimelineEntry.astro';
 import Badge from './Badge.astro';
-import { entryHref, formatSeriesDate, type UpdateGroup } from '../lib/series';
+import { entryHref, type UpdateGroup } from '../lib/series';
 interface Props {
   groups: UpdateGroup[];
 }
@@ -9,25 +9,51 @@ const { groups } = Astro.props;
 ---
 
 <ul
-  class="relative mt-6 before:absolute before:bottom-5 before:left-[5px] before:top-2 before:w-px before:bg-graph-primary/50 md:before:left-[10rem]"
+  class="relative mt-6 [--timeline-axis:0.5rem] md:[--timeline-axis:10rem]"
 >
   {groups.map((group) => group.kind === 'entry' ? <TimelineEntry entry={group.entry} /> :
-    <li class="relative min-w-0 pb-6 pl-7 md:grid md:grid-cols-[9rem_minmax(0,1fr)] md:gap-8 md:pl-0">
-      <span class="absolute left-0 top-1.5 h-4 w-4 rounded-full border-2 border-page-bg bg-graph-primary ring-4 ring-graph-primary/10 md:left-[10rem] md:-translate-x-1/2" aria-hidden="true"></span>
-      <time class="ui-mono text-xs text-muted-fg md:pt-1" datetime={group.date.toISOString()}>{formatSeriesDate(group.date)}</time>
+    <li data-landing-reveal data-landing-sequence class="relative min-w-0 pb-8 pl-7 before:absolute before:left-[calc(var(--timeline-axis)-1px)] before:top-3 before:bottom-[-12px] before:w-0.5 before:bg-graph-primary/50 last:before:hidden last:has-[details[open]]:before:block last:has-[details[open]]:before:bottom-8 md:grid md:grid-cols-[9rem_minmax(0,1fr)] md:gap-8 md:pl-0">
+      <span class="absolute z-10 left-[var(--timeline-axis)] top-1 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-page-bg bg-graph-primary ring-4 ring-graph-primary/10" aria-hidden="true"></span>
+      <time class="ui-mono whitespace-nowrap text-xs leading-6 tabular-nums text-muted-fg md:pr-2 md:text-right" datetime={group.date.toISOString()}>{group.date.toISOString().slice(0, 10).replaceAll('-', '.')}</time>
       <div class="min-w-0">
-        <div class="relative">
-          <details class="group min-w-0">
-            <summary class="flex min-h-6 cursor-pointer list-none flex-wrap items-center gap-x-2 gap-y-1 rounded text-surface-fg focus-visible:outline-2 focus-visible:outline-primary sm:pr-28 [&::-webkit-details-marker]:hidden">
-              <svg viewBox="0 0 16 16" class="h-4 w-4 shrink-0 text-graph-primary transition-transform group-open:rotate-90" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 3 5 5-5 5" /></svg>
-              <span class="break-words text-sm font-semibold">{group.series.data.title}</span>
-              <span class="whitespace-nowrap text-xs text-muted-fg">{group.entries.length} 条动态</span>
-              {group.pinned && <span class="ml-2"><Badge tone="primary">置顶</Badge></span>}
-            </summary>
-            <ul class="relative mt-4 before:absolute before:-left-4 before:top-0 before:h-6 before:w-7 before:rounded-bl-3xl before:border-b-2 before:border-l-2 before:border-graph-primary/60">{group.entries.map((entry) => <TimelineEntry entry={entry} nested />)}</ul>
-          </details>
-          <a href={entryHref(group.series)} class="landing-link ml-6 mt-2 inline-block text-xs sm:absolute sm:right-0 sm:top-0 sm:mt-0"><span class="landing-link-label">查看系列 →</span></a>
+        <div class="flex min-h-6 flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h3 class="break-words text-base font-semibold text-surface-fg"><a href={entryHref(group.series)} class="rounded text-inherit hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-primary">{group.series.data.title} →</a></h3>
+          {group.pinned && <Badge tone="primary">置顶</Badge>}
         </div>
+        <p class="mt-1.5 max-w-3xl text-sm leading-relaxed text-muted-fg">{group.series.data.summary}</p>
+        <details class="group mt-3 min-w-0">
+          <summary class="flex w-fit min-h-6 cursor-pointer list-none items-center gap-2 rounded text-sm text-muted-fg hover:text-primary focus-visible:outline-2 focus-visible:outline-primary [&::-webkit-details-marker]:hidden">
+            <svg viewBox="0 0 16 16" class="h-4 w-4 shrink-0 text-graph-primary transition-transform group-open:rotate-90" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 3 5 5-5 5" /></svg>
+            <span class="group-open:hidden">展开 {group.entries.length} 条动态</span>
+            <span class="hidden group-open:inline">收起 {group.entries.length} 条动态</span>
+          </summary>
+          <ul class="series-updates relative mt-9 md:mt-[30.5px]">
+            {group.entries.map((entry, index) => <TimelineEntry entry={entry} nested branchStart={index === group.entries.length - 1} branchEnd={index === 0 && group.series.data.status === '已结束'} continues={index === 0 && group.series.data.status !== '已结束'} />)}
+          </ul>
+          </details>
       </div>
     </li>)}
 </ul>
+
+<style>
+  details[open] > .series-updates {
+    animation: series-expand 320ms ease-out;
+  }
+
+  @keyframes series-expand {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    details[open] > .series-updates {
+      animation: none;
+    }
+  }
+</style>

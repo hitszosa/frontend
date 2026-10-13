@@ -168,7 +168,7 @@ const announcements = defineCollection({
 
 const series = defineCollection({
   loader: selectedContent(seriesBase, '**/[^_]*.{md,mdx}'),
-  schema: z
+  schema: ({ image }) => z
     .object({
       title: z.string(),
       summary: z.string(),
@@ -177,6 +177,11 @@ const series = defineCollection({
       status: z.enum(['未开始', '进行中', '已结束']).default('未开始'),
       tags: z.array(z.string()).default([]),
       hide: z.boolean().default(false),
+      pinned: z.boolean().default(false),
+      importance: z.enum(['normal', 'important']).default('normal'),
+      cover: z.union([z.url(), z.string().startsWith('/'), image()]).optional(),
+      coverAlt: z.string().optional(),
+      hideCover: z.boolean().default(false),
     })
     .refine((data) => !data.end || data.end >= data.start, {
       message: 'Series end must not precede start',

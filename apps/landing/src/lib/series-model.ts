@@ -165,6 +165,8 @@ export const groupUpdates = (
 ): UpdateGroup[] => {
   const groups = new Map<string, UpdateGroup>();
   for (const entry of updates) {
+    // Series introductions already appear in the cards, not their own branches.
+    if (entry.kind === 'series') continue;
     const series = data.publicSeries(entry.series);
     const key = series ? `series/${series.id}` : `${entry.kind}/${entry.id}`;
     const group = groups.get(key);
@@ -198,7 +200,7 @@ export const groupUpdates = (
     Number(b.pinned) - Number(a.pinned) || b.date.getTime() - a.date.getTime();
   for (const group of groups.values())
     if (group.kind === 'series')
-      group.entries.sort((a, b) => compare(a, b) || a.id.localeCompare(b.id));
+      group.entries.sort((a, b) => b.date.getTime() - a.date.getTime() || a.id.localeCompare(b.id));
   return [...groups.values()].sort(
     (a, b) => compare(a, b) || a.key.localeCompare(b.key),
   );

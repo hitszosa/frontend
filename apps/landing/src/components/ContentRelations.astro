@@ -20,7 +20,7 @@ const report =
 const resources = entry.collection === 'events' ? entry.data.resources : [];
 ---
 
-{(series || event || report || resources.length > 0) && <nav aria-label="相关内容与资料" class="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-sm">
+{(series || event || report || resources.length > 0) && <nav aria-label="相关内容与资料" class="mt-6 flex flex-wrap gap-x-6 gap-y-3 text-md">
   {series && <a href={entryHref(series)} class="landing-link break-words"><span class="landing-link-label">所属系列：{series.data.title}</span></a>}
   {event && <a href={entryHref(event)} class="landing-link break-words"><span class="landing-link-label">关联活动：{event.data.title}</span></a>}
   {report && <a href={entryHref(report)} class="landing-link"><span class="landing-link-label">查看回顾 →</span></a>}

@@ -20,7 +20,7 @@ const groups = groupUpdates(updates, seriesData);
 >
   <SeriesBackdrop />
   <div class="py-8 md:py-10">
-    {!seriesData.series.length && <h1 class="sr-only">社区动态</h1>}
+    <h1 class="sr-only">社区动态</h1>
     <SeriesCards series={seriesData.series} />
     <section class="mt-6" aria-labelledby="timeline-heading">
       <p class="ui-mono text-xs tracking-[0.3em] text-muted-fg">UPDATES</p>
@@ -45,7 +45,7 @@ const groups = groupUpdates(updates, seriesData);
       <p class="mt-3 text-sm text-muted-fg">
         关注系列活动的最新动态，了解社区正在发生的事情。
       </p>
-      {updates.length > 0 ? (
+      {groups.length > 0 ? (
         <GroupedUpdates groups={groups} />
       ) : (
         <p class="ui-mono mt-10 text-sm text-muted-fg" data-landing-reveal>

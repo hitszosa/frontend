@@ -2,7 +2,7 @@ import { getCollection } from 'astro:content';
 import { getSeriesData } from './series';
 import { contentPath, type ContentImageSource } from './content';
 
-export type UpdateKind = 'announcement' | 'event' | 'article';
+export type UpdateKind = 'announcement' | 'event' | 'article' | 'series';
 
 export type EventStatus = '未开始' | '进行中' | '已结束';
 
@@ -19,7 +19,7 @@ export interface UpdateEntry {
   id: string;
   series?: string;
   kind: UpdateKind;
-  label: '公告' | '活动' | '文章';
+  label: '公告' | '活动' | '文章' | '系列';
   title: string;
   summary: string;
   date: Date;
@@ -95,6 +95,21 @@ export async function getUpdates(now = new Date()): Promise<UpdateEntry[]> {
       status: undefined,
       tags: [],
       meta: `@${entry.data.author}`,
+      cover: entry.data.cover,
+      coverAlt: entry.data.coverAlt,
+    })),
+    ...seriesData.series.map((entry) => ({
+      id: entry.id,
+      kind: 'series' as const,
+      label: '系列' as const,
+      title: entry.data.title,
+      summary: entry.data.summary,
+      date: entry.data.start,
+      href: `/series/${contentPath(entry.id)}/`,
+      pinned: entry.data.pinned,
+      importance: entry.data.importance,
+      warning: false,
+      tags: entry.data.tags,
       cover: entry.data.cover,
       coverAlt: entry.data.coverAlt,
     })),
