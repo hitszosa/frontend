@@ -3,6 +3,7 @@ import '../../styles/content.css';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/LandingLayout.astro';
 import Badge from '../../components/Badge.astro';
+import ContentRelations from '../../components/ContentRelations.astro';
 import TagBadges from '../../components/TagBadges.astro';
 import RelatedLink from '../../components/content/RelatedLink.astro';
 import ContentImage from '../../components/content/ContentImage.astro';
@@ -66,6 +67,7 @@ const dateLabel = new Intl.DateTimeFormat('zh-CN', {
         {title}
       </h1>
       <p class="mt-5 max-w-2xl text-lg leading-8 text-muted-fg">{summary}</p>
+      <ContentRelations entry={announcement} />
     </header>
 
     <div class="content-body mt-10">

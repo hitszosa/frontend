@@ -12,12 +12,12 @@ interface Props {
 type BadgeTone = 'primary' | 'secondary' | 'success' | 'warning' | 'muted';
 
 const { updates } = Astro.props;
-// Ended events never take a featured slot regardless of importance; the
-// remaining important updates are curated manually via the importance field.
+// Ended events never take a featured slot. Pins take priority over manually
+// important updates, then newer entries win within each priority.
 const importantUpdates = updates
-  .filter((entry) => entry.importance === 'important')
+  .filter((entry) => entry.pinned || entry.importance === 'important')
   .filter((entry) => entry.status !== '已结束')
-  .sort((a, b) => b.date.getTime() - a.date.getTime())
+  .sort((a, b) => Number(b.pinned) - Number(a.pinned) || b.date.getTime() - a.date.getTime())
   .slice(0, 3);
 const primaryUpdate = importantUpdates[0];
 const secondaryUpdates = importantUpdates.slice(1);

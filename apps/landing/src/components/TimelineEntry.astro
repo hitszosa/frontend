@@ -1,0 +1,56 @@
+---
+import Badge from './Badge.astro';
+import TagBadges from './TagBadges.astro';
+import { EVENT_STATUS_TONE, type UpdateEntry } from '../lib/updates';
+interface Props {
+  entry: UpdateEntry;
+  nested?: boolean;
+  continues?: boolean;
+  branchStart?: boolean;
+  branchEnd?: boolean;
+}
+const { entry, nested = false, continues = false, branchStart = false, branchEnd = false } = Astro.props;
+const tone =
+  entry.kind === 'article'
+    ? 'success'
+    : entry.kind === 'event'
+      ? 'secondary'
+      : entry.warning
+        ? 'warning'
+        : 'primary';
+---
+
+<li
+  class:list={['relative min-w-0', nested ? 'ml-3 grid grid-cols-[3rem_minmax(0,1fr)] gap-x-3 pb-6 pl-6 last:pb-0 sm:grid-cols-[4rem_minmax(0,1fr)] before:absolute before:-left-px before:top-[14px] before:bottom-[-14px] before:w-0.5 before:bg-graph-secondary/50 last:before:hidden' : 'pb-8 pl-7 before:absolute before:left-[calc(var(--timeline-axis)-1px)] before:top-3 before:bottom-[-12px] before:w-0.5 before:bg-graph-primary/50 last:before:hidden md:grid md:grid-cols-[9rem_minmax(0,1fr)] md:gap-8 md:pl-0', nested && continues && 'after:absolute after:-left-px after:top-[-8px] after:h-[22px] after:border-l-2 after:border-dashed after:border-graph-secondary/50']}
+  data-landing-reveal={nested ? undefined : true}
+  data-landing-sequence={nested ? undefined : true}
+>
+  {nested && branchStart && <svg class="pointer-events-none absolute -left-8 top-[14px] h-11 w-8 overflow-visible text-graph-secondary/50 md:-left-7 md:h-[38.5px] md:w-7" viewBox="0 0 32 44" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+    <path d="M32 0 V6 A16 16 0 0 1 16 22 A16 16 0 0 0 0 38 V44" vector-effect="non-scaling-stroke" />
+  </svg>}
+  {nested && branchEnd && <svg class="pointer-events-none absolute -left-8 -top-[30px] h-11 w-8 overflow-visible text-graph-secondary/50 md:-left-7 md:-top-[24.5px] md:h-[38.5px] md:w-7" viewBox="0 0 32 44" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+    <path d="M0 0 V6 A16 16 0 0 0 16 22 A16 16 0 0 1 32 38 V44" vector-effect="non-scaling-stroke" />
+  </svg>}
+  <span
+    class:list={['absolute z-10 h-3 w-3 -translate-x-1/2 rounded-full border-2 border-page-bg', nested ? 'left-0 top-2 bg-graph-secondary' : 'left-[var(--timeline-axis)] top-1.5', !nested && (entry.kind === 'article' ? 'bg-success' : entry.kind === 'event' ? 'bg-graph-secondary' : 'bg-graph-primary')]}
+    aria-hidden="true"
+  ></span>
+  <time
+    datetime={entry.date.toISOString()}
+    class:list={['ui-mono whitespace-nowrap text-xs leading-6 tabular-nums text-muted-fg', !nested && 'md:pr-2 md:text-right']}
+    >{entry.date.toISOString().slice(nested ? 5 : 0, 10).replaceAll('-', '.')}</time
+  >
+  <div class="min-w-0 space-y-1.5">
+    <div class="flex min-h-6 flex-wrap items-center gap-x-3 gap-y-1">
+      <Badge tone={tone}>{entry.label}</Badge>
+      <TagBadges tags={entry.tags} />
+      {entry.pinned && <Badge tone="primary">置顶</Badge>}
+      {entry.status && <Badge tone={EVENT_STATUS_TONE[entry.status]}>{entry.status}</Badge>}
+      {entry.meta && <Badge tone="muted">{entry.meta}</Badge>}
+    </div>
+    <h3 class="break-words text-base font-semibold leading-6 text-surface-fg">
+      <a href={entry.href} class="transition-colors hocus:text-primary">{entry.title}</a>
+    </h3>
+    <p class="max-w-3xl text-sm leading-relaxed text-muted-fg">{entry.summary}</p>
+  </div>
+</li>

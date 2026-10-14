@@ -3,6 +3,7 @@ import '../../styles/content.css';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/LandingLayout.astro';
 import Badge from '../../components/Badge.astro';
+import ContentRelations from '../../components/ContentRelations.astro';
 import RelatedLink from '../../components/content/RelatedLink.astro';
 import ContentImage from '../../components/content/ContentImage.astro';
 import { contentPath } from '../../lib/content';
@@ -92,6 +93,7 @@ const dateLabel = endDate
           </dd>
         </div>
       </dl>
+      <ContentRelations entry={event} />
     </header>
 
     <div class="content-body mt-10">
