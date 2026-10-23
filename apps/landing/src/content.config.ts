@@ -1,4 +1,4 @@
-import { defineCollection } from 'astro:content';
+import { defineCollection, type SchemaContext } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
@@ -26,7 +26,7 @@ const associations = {
   event: z.string().min(1).optional(),
 };
 
-const selectedContent = (base: string, pattern: string) => {
+const selectedContent = (base: string, pattern: string | string[]) => {
   const loader = glob({ base, pattern });
 
   return {
@@ -57,9 +57,7 @@ const services = defineCollection({
   }),
 });
 
-const events = defineCollection({
-  loader: selectedContent(eventsBase, '**/[^_]*.{md,mdx}'),
-  schema: ({ image }) =>
+const eventSchema = ({ image }: SchemaContext) =>
     z.object({
       title: z.string(),
       date: z.coerce.date(),
@@ -91,8 +89,19 @@ const events = defineCollection({
       status: z.enum(['未开始', '进行中', '已结束']).default('未开始'),
       cover: z.union([z.url(), z.string().startsWith('/'), image()]).optional(),
       coverAlt: z.string().optional(),
-    }),
+    });
+
+const events = defineCollection({
+  loader: selectedContent(eventsBase, '**/[^_]*.{md,mdx}'),
+  schema: eventSchema,
 });
+// Numbered lesson directories share the series tree but use event metadata.
+const lessonPattern = '**/[0-9][0-9]/[0-9][0-9]/index.{md,mdx}';
+const lessons = defineCollection({
+  loader: selectedContent(seriesBase, lessonPattern),
+  schema: (context: SchemaContext) => eventSchema(context).extend({ series: z.string().min(1) }),
+});
+
 
 const articles = defineCollection({
   loader: selectedContent(articlesBase, '**/[^_]*.{md,mdx}'),
@@ -167,7 +176,7 @@ const announcements = defineCollection({
 });
 
 const series = defineCollection({
-  loader: selectedContent(seriesBase, '**/[^_]*.{md,mdx}'),
+  loader: selectedContent(seriesBase, ['**/[^_]*.{md,mdx}', `!${lessonPattern}`]),
   schema: ({ image }) => z
     .object({
       title: z.string(),
@@ -191,6 +200,7 @@ const series = defineCollection({
 
 export const collections = {
   series,
+  lessons,
   services,
   events,
   articles,

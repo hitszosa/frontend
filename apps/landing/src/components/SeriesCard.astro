@@ -1,11 +1,12 @@
 ---
 import { entryHref, type SeriesEntry } from '../lib/series';
+import ContentImage from './content/ContentImage.astro';
 interface Props {
   series: SeriesEntry;
   wide?: boolean;
 }
 const { series, wide = false } = Astro.props;
-const { title, summary, start, end, status } = series.data;
+const { title, summary, start, end, status, cover, coverAlt } = series.data;
 const dateLabel = (value: Date) =>
   value.toISOString().slice(0, 10).replaceAll('-', '.');
 ---
@@ -14,6 +15,7 @@ const dateLabel = (value: Date) =>
   href={entryHref(series)}
   class="group flex min-w-0 items-center gap-3 rounded-lg border border-surface-border bg-linear-to-br from-surface/60 to-surface/20 p-3 transition-colors hocus:border-graph-primary hocus:bg-surface/60"
 >
+  {cover ? <ContentImage src={cover} alt={coverAlt ?? title} class="h-24 w-16 shrink-0 rounded object-contain" /> :
   <span
     class:list={["flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border text-2xl", status === "未开始" ? "border-graph-secondary/30 bg-graph-secondary/15 text-graph-secondary" : "border-graph-primary/30 bg-graph-primary/15 text-graph-primary"]}
     aria-hidden="true"
@@ -30,6 +32,7 @@ const dateLabel = (value: Date) =>
       {status === '进行中' ? <><path d="m5 5 6 6-6 6" /><path d="M13 19h6" /></> : status === '未开始' ? <><path d="M12 5v15M12 5C8 2 4 3 2 4v15c3-1 7-1 10 1 3-2 7-2 10-1V4c-2-1-6-2-10 1Z" /></> : <><path d="m12 3 9 5v8l-9 5-9-5V8l9-5Z" /><path d="m3 8 9 5 9-5M12 13v8" /></>}
     </svg></span
   >
+  }
   <div
     class:list={["min-w-0 flex-1", wide && "sm:grid sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-x-5"]}
   >

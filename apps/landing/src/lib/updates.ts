@@ -1,5 +1,5 @@
 import { getCollection } from 'astro:content';
-import { getSeriesData } from './series';
+import { getSeriesData, entryHref } from './series';
 import { contentPath, type ContentImageSource } from './content';
 
 export type UpdateKind = 'announcement' | 'event' | 'article' | 'series';
@@ -62,15 +62,15 @@ export async function getUpdates(now = new Date()): Promise<UpdateEntry[]> {
         cover: entry.data.cover,
         coverAlt: entry.data.coverAlt,
       })),
-    ...events.map((entry) => ({
+    ...[...events, ...seriesData.lessons].filter((entry) => entry.data.status !== '已结束' || !seriesData.publicReport(entry)).map((entry) => ({
       id: entry.id,
-      series: seriesData.membership.get(`events/${entry.id}`),
+      series: seriesData.membership.get(`${entry.collection}/${entry.id}`),
       kind: 'event' as const,
       label: '活动' as const,
       title: entry.data.title,
       summary: entry.data.summary,
       date: entry.data.date,
-      href: `/events/${contentPath(entry.id)}/`,
+      href: entryHref(entry),
       pinned: entry.data.pinned,
       importance: entry.data.importance,
       warning: false,

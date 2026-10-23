@@ -1,0 +1,22 @@
+---
+interface Props {
+  bvid: string;
+  title: string;
+}
+const { bvid, title } = Astro.props;
+const query = new URLSearchParams({ isOutside: 'true', bvid, p: '1', autoplay: '0' });
+---
+<figure class="my-8">
+  <iframe
+    src={`https://player.bilibili.com/player.html?${query}`}
+    title={title}
+    style="display: block; width: 100%; aspect-ratio: 16 / 9; border: 0;"
+    loading="lazy"
+    allow="fullscreen; picture-in-picture"
+    allowfullscreen
+    referrerpolicy="strict-origin-when-cross-origin"
+  ></iframe>
+  <figcaption class="mt-2 text-sm text-muted-fg">
+    <a href={`https://www.bilibili.com/video/${bvid}`} target="_blank" rel="noopener noreferrer">{title} · 在哔哩哔哩观看 ↗</a>
+  </figcaption>
+</figure>

@@ -40,13 +40,34 @@
   color: var(--ui-primary);
   text-underline-offset: 0.2em;
 }
-.content-body code {
+.content-body :not(pre) > code {
   border-radius: 0.25rem;
   background: var(--ui-inset);
   padding: 0.15em 0.4em;
   font-family: var(--ui-font-mono, ui-monospace, monospace);
   font-size: 0.9em;
   color: var(--ui-inset-fg);
+}
+.content-body pre {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  border: 1px solid var(--ui-surface-border);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  font-family: var(--ui-font-mono, ui-monospace, monospace);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.content-body pre > code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+}
+.dark .content-body .astro-code,
+.dark .content-body .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
 }
 .content-body blockquote {
   margin: 1.75rem 0;
