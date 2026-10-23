@@ -2,10 +2,10 @@
 title: Linux 101 · 2026 秋
 summary: 最新一期 Linux 101 带着全新内容回归！六大主题，从自由软件、Linux 发行版到 AI 工具与开源协作，零基础也能参加，更有免费 token 等配套教学资源。
 start: 2026-10-11
-status: 未开始
+status: 进行中
 tags: [Linux, 开源, 实践]
 pinned: true
-cover: ./assets/linux101-2026/poster.svg
+cover: ./assets/poster.svg
 coverAlt: Linux 101 2026 秋季系列讲座海报
 hideCover: true
 ---
@@ -18,7 +18,7 @@ hideCover: true
 
 <div style="max-width: 600px; margin-inline: auto;">
 
-![Linux 101 2026 秋季系列讲座海报](./assets/linux101-2026/poster.svg)
+![Linux 101 2026 秋季系列讲座海报](./assets/poster.svg)
 
 </div>
 
@@ -28,13 +28,23 @@ hideCover: true
 
 课程期间更有 **免费 token** 等丰富的配套教学资源。**配套课程资源须填写在线表格后领取。**
 
-本页面起始日期为报名开放日期（10 月 11 日）。**第一讲将于 10 月 17 日 18:45 在 T3201 举行，由社员寅默主讲请。** 后续场次安排以活动通知为准。
+本页面起始日期为报名开放日期（10 月 11 日）。[第一讲已于 10 月 17 日在 T3201 举行，点击阅读课程内容与现场小记 →](/series/linux101/26/01/)
+
+**[第二讲：从图灵到 Agent——AI、开源与 Linux](/series/linux101/26/02/)** 将于 **10 月 24 日（周六）18:45** 在 **T3201** 举行，由 **Fun10165** 主讲。请带上笔记本电脑，现场体验 DeepSeek Harness。
 
 扫码加入 **2026 Linux101 QQ 群（群号：1129024688）**，获取课程通知并参与交流。
 
 <div style="width: 50%; margin-inline: auto;">
 
-![2026 Linux101 QQ 群二维码，群号 1129024688](./assets/linux101-2026/qq-group.jpg)
+![2026 Linux101 QQ 群二维码，群号 1129024688](./assets/qq-group.jpg)
+
+</div>
+
+没能来到现场的同学们也可以线上参会：
+
+<div style="width: 50%; margin-inline: auto;">
+
+![Linux101 腾讯会议](./assets/meeting.jpg)
 
 </div>
 
@@ -50,16 +60,16 @@ hideCover: true
 - Linux 生态：发行版、软件包、包管理器、桌面环境与服务器；比较 WSL、虚拟机与物理机。
 - **实践**：通过 SSH 登录真实的 Linux 主机，浏览目录、切换路径，并在练习目录中尝试创建和删除文件。
 
-### 第二讲：AI 时代的技术学习与问题解决
+### 第二讲：从图灵到 Agent——AI、开源与 Linux
 
-培养 AI 时代的计算机学习方法，为后续 Linux 学习提供辅助能力。
+从 AI 的历史与生成式模型出发，理解模型、Agent 与开源工具之间的关系，亲手完成一次 Agent 使用。
 
-- AI 基础：LLM、Token、Context、模型差异与 Chat / Agent / API。
-- 如何描述环境、目标、错误信息与已有尝试，为 AI 提供有效上下文。
-- 用 AI 辅助安装软件、分析报错、阅读文档与理解命令。
-- 判断输出是否可靠，理解 sudo、权限与系统修改风险，避免盲目复制命令。
-- 问题解决流程：阅读错误 → 搜索文档 → AI 辅助 → 验证结果；学习 Issue、论坛与社群提问规范。
-- **实践**：分析错误日志、阅读 Linux 文档，比较不同提问方式，并尝试解决环境问题。AI 是辅助工具，不替代独立思考。
+- AI 的演变：图灵测试、感知机、CNN、Transformer 与 AGI；Diffusion、Next Token Prediction 与 AIGC。
+- Scaling Law、训练与推理成本，以及 API Key、Token 和账单。
+- 从 Chat 到 Agent：模型、工具、执行环境与 Harness 如何配合。
+- AI 时代的开源社区：开放权重与开源模型、闭源模型、训推框架、Agent、CVE 与安全风险。
+- Linux 与开源工具如何成为 Agent 的原生家庭，人类如何协作、纠错并判断能力边界。
+- **实践**：在自己的电脑上使用 DeepSeek Harness 完成一次真实的复杂任务，编写 prompt 并纠正模型的异常行为。现场提供免费 DeepSeek-V4.1-Flash-1017 Token。
 
 ### 第三讲：Linux 使用与生态实践
 

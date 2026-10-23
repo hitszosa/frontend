@@ -3,13 +3,13 @@ import { contentPath } from './content';
 import type { UpdateEntry } from './updates';
 
 export type SeriesEntry = CollectionEntry<'series'>;
-export type EventEntry = CollectionEntry<'events'>;
+export type EventEntry = CollectionEntry<'events'> | CollectionEntry<'lessons'>;
 export type RelatedEntry =
   | CollectionEntry<'articles'>
   | CollectionEntry<'announcements'>;
 
 export const entryHref = (entry: SeriesEntry | EventEntry | RelatedEntry) =>
-  `/${entry.collection}/${contentPath(entry.id)}/`;
+  `/${entry.collection === 'lessons' ? 'series' : entry.collection}/${contentPath(entry.id)}/`;
 export const formatSeriesDate = (date: Date) =>
   new Intl.DateTimeFormat('zh-CN', {
     year: 'numeric',
@@ -63,7 +63,7 @@ export const resolveSeries = (collections: {
     membership.set(source, entry.data.series ?? event?.data.series);
   }
   for (const event of collections.events) {
-    membership.set(`events/${event.id}`, event.data.series);
+    membership.set(`${event.collection}/${event.id}`, event.data.series);
     if (!event.data.report) continue;
     const report = requireTarget(
       articlesById,
@@ -97,7 +97,7 @@ export const resolveSeries = (collections: {
       .filter((entry) => !entry.data.hide && entry.data.series === id)
       .sort(
         (a, b) =>
-          a.data.date.getTime() - b.data.date.getTime() ||
+          b.data.date.getTime() - a.data.date.getTime() ||
           a.id.localeCompare(b.id),
       );
   const relatedFor = (id: string, now = new Date()) => {
@@ -139,6 +139,7 @@ export const resolveSeries = (collections: {
     scheduleFor,
     relatedFor,
     series: collections.series.filter((entry) => !entry.data.hide),
+    lessons: collections.events.filter((entry): entry is CollectionEntry<'lessons'> => entry.collection === 'lessons' && !entry.data.hide),
   };
 };
 
